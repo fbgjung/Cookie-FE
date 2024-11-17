@@ -3,6 +3,12 @@ import CookieLogo from "/src/assets/images/Cookie.svg";
 import NotificationIcon from "/src/assets/images/Notification.svg";
 
 const HeaderContainer = styled.header`
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 560px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,6 +16,7 @@ const HeaderContainer = styled.header`
   padding: 10px 20px;
   height: 40px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
 `;
 
 const Logo = styled.div`

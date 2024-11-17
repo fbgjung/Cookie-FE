@@ -3,7 +3,7 @@ import Main from "../pages/main";
 
 export const AppRouteDef = {
   Main: {
-    path: "/main",
+    path: "/",
     element: (
       <PrivateRoute>
         <Main />
