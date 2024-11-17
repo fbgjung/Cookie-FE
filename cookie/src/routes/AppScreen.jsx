@@ -3,9 +3,12 @@ import AppPages from "./AppPages";
 import { BrowserRouter } from "react-router-dom";
 
 const ViewArea = styled.div`
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
   height: 100vh;
-  background: #f5faff;
+  position: relative;
+  background-color: #f9f9f9;
 `;
 
 const AppScreen = () => {
