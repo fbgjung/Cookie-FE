@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✨ 추가: 상세 페이지 이동을 위한 useNavigate 추가
 import styled from "styled-components";
 import Header from "../components/Header"; // Header 컴포넌트 가져오기
 import Navbar from "../components/Navvar"; // Navbar 컴포넌트 가져오기
@@ -58,8 +59,9 @@ const MovieList = styled.ul`
 
 const MovieItem = styled.li`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
+  cursor: pointer; /* ✨ 추가: 클릭 가능하도록 pointer 스타일 추가 */
 
   img {
     width: 80px;
@@ -70,20 +72,25 @@ const MovieItem = styled.li`
   }
 
   div {
-    font-size: 14px;
+    display: flex;
+    flex-direction: column; /* 텍스트를 세로로 배치 */
+    justify-content: flex-start; /* 텍스트를 상단 정렬 */
+    align-items: flex-start; /* 텍스트를 왼쪽 정렬 */
+    font-size: 16px;
     color: #333;
-    line-height: 1.4;
+    line-height: 1.6;
 
     h4 {
-      font-size: 18px;
+      align-self: flex-start;
+      font-size: 20px;
       font-weight: bold;
-      margin-bottom: 5px;
+      margin: 0 0 5px 0;
       color: #04012d;
     }
 
     p {
       margin: 0;
-      font-size: 12px;
+      font-size: 14px;
       color: #555;
     }
   }
@@ -131,6 +138,8 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showTopButton, setShowTopButton] = useState(false);
 
+  const navigate = useNavigate(); // ✨ 추가: useNavigate 훅으로 라우팅 제어
+
   useEffect(() => {
     const handleScroll = () => {
       setShowTopButton(window.scrollY > 200);
@@ -148,13 +157,17 @@ const Search = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleMovieClick = (id) => {
+    navigate(`/movie/${id}`); // ✨ 추가: 영화 클릭 시 상세 페이지로 이동
+  };
+
   return (
     <>
       <Header />
       <Container>
         <SearchBarContainer>
           <SearchInput
-            placeholder="영화 제목, 배우, 감독명을 입력하세요"
+            placeholder="영화 제목 또는 배우/감독명을 입력하세요"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -164,7 +177,10 @@ const Search = () => {
         </SearchBarContainer>
         <MovieList>
           {movies.map((movie) => (
-            <MovieItem key={movie.id}>
+            <MovieItem
+              key={movie.id}
+              onClick={() => handleMovieClick(movie.id)} // ✨ 추가: 클릭 이벤트
+            >
               <img src={movie.imageUrl} alt={movie.title} />
               <div>
                 <h4>{movie.title}</h4>
