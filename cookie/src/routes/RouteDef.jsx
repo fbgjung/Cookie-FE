@@ -17,7 +17,7 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <Search />
-        </PrivateRoute>
+      </PrivateRoute>
     ),
   },
   Login: {

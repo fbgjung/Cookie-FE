@@ -23,7 +23,6 @@ function Login() {
             <img src={googleLogin} alt="googleLogin" />
           </a>
           <a href="#">
-            
             <img src={naverLogin} alt="naverLogin" />
           </a>
         </LoginBtn>
