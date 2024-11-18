@@ -1,6 +1,7 @@
 import PrivateRoute from "./PrivateRoute";
 import Main from "../pages/main";
 import Search from "../pages/search";
+import Login from "../pages/Login";
 
 export const AppRouteDef = {
   Main: {
@@ -16,6 +17,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <Search />
+        </PrivateRoute>
+    ),
+  },
+  Login: {
+    path: "/login",
+    element: (
+      <PrivateRoute>
+        <Login />
       </PrivateRoute>
     ),
   },
