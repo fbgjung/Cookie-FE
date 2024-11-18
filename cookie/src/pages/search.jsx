@@ -103,7 +103,7 @@ const TopButton = styled.button`
   display: ${({ visible }) => (visible ? "flex" : "none")};
   align-items: center;
   justify-content: center;
-  background: white;
+  background: #04012d;
   border: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 50%;
@@ -115,13 +115,13 @@ const TopButton = styled.button`
   &::after {
     content: "↑";
     font-size: 18px;
-    color: #333;
+    color: #ffffff;
     font-weight: bold;
   }
 
   &:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-    background-color: #f1f1f1;
+    background-color: #333;
   }
 `;
 
