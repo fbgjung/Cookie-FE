@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
 
   @font-face {
     font-family: 'Pretendard';
-    src: url('./font/Pretendard-Bold.ttf') format('truetype'); /* Bold */
+    src: url('./font/Pretendard-Bold.otf') format('truetype'); /* Bold */
     font-weight: 700;
     font-style: normal;
   }
