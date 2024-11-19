@@ -2,6 +2,7 @@ import PrivateRoute from "./PrivateRoute";
 import Main from "../pages/main";
 import Search from "../pages/search";
 import MovieDetail from "../pages/MovieDetail";
+import Login from "../pages/Login";
 
 export const AppRouteDef = {
   Main: {
@@ -25,6 +26,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MovieDetail />
+      </PrivateRoute>
+      ),
+  },
+  Login: {
+    path: "/login",
+    element: (
+      <PrivateRoute>
+        <Login />
       </PrivateRoute>
     ),
   },
