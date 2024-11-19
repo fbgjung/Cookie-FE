@@ -8,15 +8,26 @@ const HeaderContainer = styled.header`
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 560px;
+  max-width: 600px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #04012d;
   padding: 10px 20px;
-  height: 40px;
+  height: 60px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   z-index: 100;
+  box-sizing: border-box; /* padding 포함 */
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    height: 50px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+    height: 60px;
+  }
 `;
 
 const Logo = styled.div`
@@ -25,6 +36,14 @@ const Logo = styled.div`
 
   img {
     height: 40px;
+
+    @media (max-width: 768px) {
+      height: 35px;
+    }
+
+    @media (max-width: 480px) {
+      height: 30px;
+    }
   }
 
   span {
@@ -33,6 +52,14 @@ const Logo = styled.div`
     color: #ffffff;
     margin-left: 10px;
     font-family: "Inter", sans-serif;
+
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -40,6 +67,14 @@ const Notification = styled.div`
   img {
     height: 30px;
     cursor: pointer;
+
+    @media (max-width: 768px) {
+      height: 25px;
+    }
+
+    @media (max-width: 480px) {
+      height: 20px;
+    }
   }
 `;
 
