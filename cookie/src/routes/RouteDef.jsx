@@ -1,5 +1,6 @@
 import PrivateRoute from "./PrivateRoute";
 import Main from "../pages/main";
+import MyPage from "../pages/mypage";
 
 export const AppRouteDef = {
   Main: {
@@ -7,6 +8,15 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <Main />
+      </PrivateRoute>
+    ),
+  },
+
+  MyPage: {
+    path: "/mypage",
+    element: (
+      <PrivateRoute>
+        <MyPage />
       </PrivateRoute>
     ),
   },
