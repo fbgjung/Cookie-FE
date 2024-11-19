@@ -70,7 +70,7 @@ const Navbar = () => {
           </Link>
         </NavItem>
         <NavItem>
-          <Link to="/profile">
+          <Link to="/mypage">
             <img src={ProfileIcon} alt="내정보" />
           </Link>
         </NavItem>
