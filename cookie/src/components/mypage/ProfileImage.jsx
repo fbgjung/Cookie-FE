@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -57,8 +58,13 @@ const ProfileImage = ({
   bgColor,
   titleColor,
   textColor,
-  onManageClick,
 }) => {
+  const navigate = useNavigate(); // React Router의 useNavigate 훅 사용
+
+  const handleManageClick = () => {
+    navigate("/manageprofile"); // /manageprofile 경로로 이동
+  };
+
   return (
     <ProfileContainer>
       {title && <Title titleColor={titleColor}>{title}</Title>}
@@ -68,7 +74,7 @@ const ProfileImage = ({
         <ManageProfileIcon
           src="/src/assets/images/mypage/manageprofile.svg"
           alt="Manage Profile"
-          onClick={onManageClick}
+          onClick={handleManageClick}
         />
       </NameContainer>
     </ProfileContainer>
