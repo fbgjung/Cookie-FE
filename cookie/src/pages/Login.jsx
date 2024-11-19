@@ -1,12 +1,47 @@
 import React from "react";
 import GlobalStyle from "../styles/global";
-import { LoginBtn, LoginContainer } from "../styles/login/login";
 import CookieImg from "../assets/images/login/cookie_img.svg";
 import CookieLogo from "../assets/images/login/cookie_lg.svg";
 import kakaoLogin from "../assets/images/login/kakao_OAuth.svg";
 import googleLogin from "../assets/images/login/google_OAuth.svg";
 import naverLogin from "../assets/images/login/naver_OAuth.svg";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+
+export const LoginContainer = styled.div`
+  background-color: var(--main);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h2 {
+    color: white;
+    line-height: 3px;
+  }
+
+  .login__img {
+    margin: 1rem 0;
+  }
+`;
+
+export const LoginBtn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+
+  img {
+    margin: 0.5rem 0;
+    cursor: pointer;
+  }
+`;
+
 function Login() {
+  const navigate = useNavigate();
+
   return (
     <>
       <GlobalStyle />
@@ -23,7 +58,11 @@ function Login() {
             <img src={googleLogin} alt="googleLogin" />
           </a>
           <a href="#">
-            <img src={naverLogin} alt="naverLogin" />
+            <img
+              src={naverLogin}
+              alt="naverLogin"
+              onClick={() => navigate("/sign-up")}
+            />
           </a>
         </LoginBtn>
       </LoginContainer>

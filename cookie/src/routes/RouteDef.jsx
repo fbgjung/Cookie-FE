@@ -3,6 +3,7 @@ import Main from "../pages/main";
 import Search from "../pages/search";
 import MovieDetail from "../pages/MovieDetail";
 import Login from "../pages/Login";
+import SignUp from "../pages/SignUp";
 
 export const AppRouteDef = {
   Main: {
@@ -27,13 +28,21 @@ export const AppRouteDef = {
       <PrivateRoute>
         <MovieDetail />
       </PrivateRoute>
-      ),
+    ),
   },
   Login: {
     path: "/login",
     element: (
       <PrivateRoute>
         <Login />
+      </PrivateRoute>
+    ),
+  },
+  SignUp: {
+    path: "/sign-up",
+    element: (
+      <PrivateRoute>
+        <SignUp />
       </PrivateRoute>
     ),
   },
