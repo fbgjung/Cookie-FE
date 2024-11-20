@@ -12,7 +12,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 5px;
-  background-color: #ffffff;
+  background-color: #f9f9f9;
   min-height: 100vh;
   box-sizing: border-box;
 
