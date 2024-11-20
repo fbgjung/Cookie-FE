@@ -55,17 +55,13 @@ const NavbarWrapper = styled(CommonContainer)`
 const Main = () => {
   return (
     <>
-      <HeaderWrapper>
-        <Header />
-      </HeaderWrapper>
+      <HeaderWrapper></HeaderWrapper>
       <MainContainer>
         <Content>
           <h1>메인입니다</h1>
         </Content>
       </MainContainer>
-      <NavbarWrapper>
-        <Navbar />
-      </NavbarWrapper>
+      <NavbarWrapper></NavbarWrapper>
     </>
   );
 };
