@@ -4,6 +4,7 @@ import Search from "../pages/search";
 import MovieDetail from "../pages/MovieDetail";
 import Login from "../pages/Login";
 import MyPage from "../pages/mypage";
+import ManageProfile from "../pages/ManageProfile";
 
 export const AppRouteDef = {
   Main: {
@@ -28,7 +29,7 @@ export const AppRouteDef = {
       <PrivateRoute>
         <MovieDetail />
       </PrivateRoute>
-      ),
+    ),
   },
   Login: {
     path: "/login",
@@ -44,6 +45,15 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MyPage />
+      </PrivateRoute>
+    ),
+  },
+
+  ManageProfile: {
+    path: "/manageprofile",
+    element: (
+      <PrivateRoute>
+        <ManageProfile />
       </PrivateRoute>
     ),
   },
