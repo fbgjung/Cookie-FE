@@ -12,6 +12,7 @@ const BadgeContainer = styled.div`
 const BadgeTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: bold;
+  margin-right: 10px;
   margin-bottom: 10px;
   text-align: left;
   width: 100%;
