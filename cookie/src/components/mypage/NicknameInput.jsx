@@ -12,7 +12,7 @@ const Label = styled.label`
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 8px;
-  margin-left: 50px;
+  margin-left: 40px;
   color: #333;
 `;
 
@@ -27,7 +27,7 @@ const Input = styled.input`
   flex: 1;
   padding: 10px;
   font-size: 1rem;
-  margin-left: 50px;
+  margin-left: 40px;
   border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
