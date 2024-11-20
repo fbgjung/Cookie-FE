@@ -5,6 +5,7 @@ import MovieDetail from "../pages/MovieDetail";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import SignUpTag from "../pages/SignUpTag";
+import MyPage from "../pages/mypage";
 
 export const AppRouteDef = {
   Main: {
@@ -52,6 +53,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <SignUpTag />
+      </PrivateRoute>
+    ),
+  },
+  MyPage: {
+    path: "/mypage",
+    element: (
+      <PrivateRoute>
+        <MyPage />
       </PrivateRoute>
     ),
   },
