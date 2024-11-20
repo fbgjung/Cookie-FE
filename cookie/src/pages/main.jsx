@@ -1,5 +1,3 @@
-import Header from "../components/Header";
-import Navbar from "../components/Navvar";
 import styled from "styled-components";
 
 const CommonContainer = styled.div`
