@@ -134,7 +134,7 @@ const MainContent = styled.main`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: calc(100vh - 120px); // 헤더(70px)와 네비바(50px) 높이를 제외한 높이
+  height: calc(100vh - 120px);
 `;
 
 const AppContainer = styled.div`
