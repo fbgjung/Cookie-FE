@@ -41,14 +41,21 @@ const ThemeContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
+  width: 70%;
 `;
 
 const ThemeBtn = styled.button`
   background-color: ${(props) =>
     props.$isSelected ? "var(--main)" : "var(--sub-btn)"};
   color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
-  border-radius: 80px;
+  border-radius: 5rem;
   padding: 0.8rem 1rem;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--main);
+    color: white;
+  }
 `;
 
 const SubmitBtn = styled.div`
@@ -63,7 +70,7 @@ const SubmitBtn = styled.div`
     height: 4rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0 10px 100px rgba(3, 6, 59, 0.5);
+    box-shadow: 0 0.625rem 6.25rem rgba(3, 6, 59, 0.5);
     font-size: 1.2rem;
     outline: none;
   }

@@ -36,8 +36,8 @@ const UserInfo = styled.div`
   }
 
   .user__profile--image {
-    width: 100px;
-    height: 100px;
+    width: 6.25rem;
+    height: 6.25rem;
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
@@ -48,14 +48,15 @@ const UserInfo = styled.div`
 
   .user__profile--deleteBtn {
     background-color: transparent;
-    width: 24px;
-    height: 24px;
+    width: 1.5rem;
+    height: 1.5rem;
     border: none;
     padding: 0;
     outline: none;
     position: absolute;
-    top: 200px;
-    right: 250px;
+    right: 33.8rem;
+    top: 12.5rem;
+    cursor: pointer;
   }
 
   p {
@@ -64,7 +65,7 @@ const UserInfo = styled.div`
   }
 
   .user__nickName {
-    margin-top: 50px;
+    margin-top: 3.125rem;
   }
 
   label {
@@ -80,7 +81,7 @@ const UserInfo = styled.div`
     height: 3rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0 70px 200px rgba(3, 6, 59, 0.5);
+    box-shadow: 0 4.38rem 12.5rem rgba(3, 6, 59, 0.5);
     font-size: 1.2rem;
     padding: 0.5rem;
     margin-top: 0.5rem;
@@ -104,9 +105,10 @@ const SubmitBtn = styled.div`
     height: 4rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0 10px 100px rgba(3, 6, 59, 0.5);
+    box-shadow: 0 0.625rem 6.25rem rgba(3, 6, 59, 0.5);
     font-size: 1.2rem;
     outline: none;
+    cursor: pointer;
   }
 `;
 
