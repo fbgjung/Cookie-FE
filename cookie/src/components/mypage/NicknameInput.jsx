@@ -9,7 +9,7 @@ const NicknameContainer = styled.div`
 `;
 
 const Label = styled.label`
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 8px;
   margin-left: 50px;
