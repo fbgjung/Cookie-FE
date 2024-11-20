@@ -1,12 +1,14 @@
+import React from "react";
 import styled from "styled-components";
 
 const ReviewSection = styled.div`
-  margin-top: 30px;
+  margin-top: 20px;
+  padding: 0 15px;
 `;
 
 const ReviewTitle = styled.h3`
   font-size: 1.2rem;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: #04012d;
   font-weight: bold;
 `;
@@ -14,49 +16,74 @@ const ReviewTitle = styled.h3`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 `;
 
 const ReviewTicket = styled.div`
   position: relative;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
   background-image: url("/src/assets/images/mypage/reviewticket.svg");
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
-  height: 180px;
-  padding: 20px;
+  min-height: 180px;
+  padding: 15px;
   box-sizing: border-box;
   cursor: pointer;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
 `;
 
 const ReviewLeft = styled.div`
-  flex: 0 0 80px;
+  flex: 0 0 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  margin-bottom: 10px;
+
+  @media (min-width: 768px) {
+    flex-direction: column;
+    flex: 0 0 80px;
+    margin-bottom: 0;
+    margin-right: 15px;
+  }
 
   img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
     border-radius: 8px;
-    margin-bottom: 5px;
+    margin-right: 10px;
+
+    @media (min-width: 768px) {
+      width: 80px;
+      height: 80px;
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
   }
 
   .title {
     font-size: 0.9rem;
     font-weight: bold;
     color: #04012d;
-    text-align: center;
+    text-align: left;
+
+    @media (min-width: 768px) {
+      text-align: center;
+      margin-top: 5px;
+    }
   }
 `;
 
 const ReviewCenter = styled.div`
   flex: 1;
-  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
 
   .profile {
     display: flex;
@@ -95,36 +122,53 @@ const ReviewCenter = styled.div`
 `;
 
 const ReviewRight = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  text-align: right;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 10px;
+
+  @media (min-width: 768px) {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 0;
+  }
 
   .score {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
+    align-items: center;
+
+    .score-text {
+      font-size: 0.9rem;
+      margin-right: 5px;
+      color: #666;
+    }
 
     img {
       width: 20px;
       height: 20px;
-      margin: 1px;
+      margin: 0 2px;
     }
   }
 
   .actions {
     display: flex;
-    justify-content: flex-end;
     gap: 10px;
+    margin-top: 10px;
+
+    @media (min-width: 768px) {
+      margin-top: 90px;
+    }
 
     img {
       width: 24px;
       height: 24px;
-      margin-top: 90px;
       cursor: pointer;
 
       &:hover {
-        color: #cc5283;
+        opacity: 0.7;
       }
     }
   }
