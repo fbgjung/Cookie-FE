@@ -4,10 +4,10 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const SearchBarContainer = styled.div`
   position: relative;
-  margin: 20px 0px 50px 0px;
-  height: 48px;
+  margin: 10px 0px 30px 0px;
+  height: 40px;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
 
   @media (max-width: 768px) {
     margin: 15px 0px 40px 0px;
@@ -21,10 +21,10 @@ const SearchBarContainer = styled.div`
 `;
 
 const SearchInput = styled.input`
-  width: 70%;
+  width: 87%;
   height: 100%;
   padding: 10px 50px 10px 20px; // 오른쪽 패딩을 늘려서 아이콘 공간 확보
-  font-size: 16px;
+  font-size: 18px;
   border: 1px solid #ddd;
   border-radius: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -52,8 +52,8 @@ const SearchInput = styled.input`
 
 const SearchIconButton = styled.button`
   position: absolute;
-  top: 70%;
-  right: 15%;
+  top: 75%;
+  right: 3%;
   transform: translateY(-50%);
   background: none;
   border: none;
