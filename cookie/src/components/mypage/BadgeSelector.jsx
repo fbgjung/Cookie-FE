@@ -12,10 +12,10 @@ const BadgeContainer = styled.div`
 const BadgeTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 10px; /* 타이틀과 리스트 간 간격 */
-  text-align: left; /* 타이틀 왼쪽 정렬 */
+  margin-bottom: 10px;
+  text-align: left;
   width: 100%;
-  max-width: 450px; /* 리스트와 동일한 너비로 맞춤 */
+  max-width: 450px;
 `;
 
 const BadgeList = styled.div`
@@ -30,17 +30,11 @@ const BadgeList = styled.div`
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
 
+  /* 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer */
   &::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #cccccc;
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: #f4f4f4;
+    display: none; /* Chrome, Safari, Edge */
   }
 `;
 
@@ -49,7 +43,7 @@ const BadgeItem = styled.div`
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  margin-right: 15px;
+  margin-right: 30px;
 
   img {
     width: 60px;
