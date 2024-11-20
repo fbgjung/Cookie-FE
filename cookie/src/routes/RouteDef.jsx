@@ -7,6 +7,7 @@ import SignUpProfile from "../pages/SignUpProfile";
 import SignUpTheme from "../pages/SignUpTheme";
 import MyPage from "../pages/mypage";
 import ManageProfile from "../pages/ManageProfile";
+import LikedMovies from "../pages/LikedMovies";
 
 export const AppRouteDef = {
   Main: {
@@ -71,6 +72,15 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <ManageProfile />
+      </PrivateRoute>
+    ),
+  },
+
+  LikedMovies: {
+    path: "/likemovies",
+    element: (
+      <PrivateRoute>
+        <LikedMovies />
       </PrivateRoute>
     ),
   },

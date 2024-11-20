@@ -10,7 +10,7 @@ const ManageProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #04012d;
+  background-color: #ffffff;
   position: relative;
 `;
 
@@ -19,11 +19,11 @@ const ManageProfileContent = styled.div`
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 20px;
   z-index: 1;
   box-sizing: border-box;
   padding: 20px;
-  padding-bottom: 80px;
+  padding-bottom: 20px;
 `;
 
 const handleSaveClick = () => {
@@ -33,7 +33,6 @@ const handleSaveClick = () => {
 const ManageProfile = () => {
   return (
     <ManageProfileContainer>
-      <Header />
       <ManageProfileContent>
         <SetProfileImage />
         <BadgeSelector />

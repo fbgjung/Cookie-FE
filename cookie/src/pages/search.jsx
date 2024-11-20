@@ -1,17 +1,54 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Header from "../components/Header";
-import Navbar from "../components/Navvar";
+
 import SearchBar from "../components/searchpage/SearchBar";
 import SearchResults from "../components/searchpage/SearchResults";
-import TopButton from "../components/searchpage/TopButton"; // ✨ TopButton import
+import TopButton from "../components/searchpage/TopButton";
 
 const Container = styled.div`
-  padding: 70px 20px 70px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 70px 15px;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  width: 100%;
   max-width: 600px;
-  margin: 0 auto;
-  background-color: #f9f9f9;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto; /* 스크롤 가능 */
+  background: #fffff;
+  border-radius: 10px;
+
+  padding: 20px;
+  box-sizing: border-box;
+
+  /* 스크롤바 스타일 */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 const Search = () => {
@@ -34,16 +71,17 @@ const Search = () => {
 
   const navigate = useNavigate();
 
-  // 스크롤 이벤트로 TopButton 표시/숨김 제어
   useEffect(() => {
     const handleScroll = () => {
-      setShowTopButton(window.scrollY > 200);
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      setShowTopButton(scrollTop > 200);
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 검색어 입력에 따라 실시간 필터링
   useEffect(() => {
     if (!searchTerm) {
       setFilteredMovies([]);
@@ -53,13 +91,15 @@ const Search = () => {
     }
 
     const movieResults = movies.filter((movie) =>
-      movie.title.includes(searchTerm)
+      movie.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     const directorResults = movies.filter((movie) =>
-      movie.director.includes(searchTerm)
+      movie.director.toLowerCase().includes(searchTerm.toLowerCase())
     );
     const actorResults = movies.filter((movie) =>
-      movie.actors.some((actor) => actor.includes(searchTerm))
+      movie.actors.some((actor) =>
+        actor.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     );
 
     setFilteredMovies(movieResults);
@@ -67,20 +107,17 @@ const Search = () => {
     setFilteredActors(actorResults);
   }, [searchTerm]);
 
-  // 영화 상세 페이지 이동
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
   };
 
-  // 페이지 상단으로 이동
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <>
-      <Header />
-      <Container>
+    <Container>
+      <ContentWrapper>
         <SearchBar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -92,11 +129,9 @@ const Search = () => {
           filteredActors={filteredActors}
           onMovieClick={handleMovieClick}
         />
-        {/* ✨ TopButton 배치 */}
-        <TopButton visible={showTopButton} onClick={scrollToTop} />
-      </Container>
-      <Navbar />
-    </>
+      </ContentWrapper>
+      <TopButton visible={showTopButton} onClick={scrollToTop} />
+    </Container>
   );
 };
 
