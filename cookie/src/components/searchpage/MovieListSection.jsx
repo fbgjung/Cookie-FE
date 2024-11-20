@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const SectionTitle = styled.h3`
-  margin: 20px 0 10px 0;
+  margin: 10px 0 0 0;
   font-size: 18px;
   color: #333;
   font-weight: bold;
