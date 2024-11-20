@@ -25,6 +25,7 @@ const ReviewTicket = styled.div`
   flex-direction: column;
   background-image: url("/src/assets/images/mypage/reviewticket.svg");
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   width: 100%;
   min-height: 180px;
@@ -35,6 +36,7 @@ const ReviewTicket = styled.div`
   @media (min-width: 768px) {
     flex-direction: row;
     align-items: flex-start;
+    background-size: 100% 100%;
   }
 `;
 
@@ -44,6 +46,7 @@ const ReviewLeft = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
+  margin-top: 3%;
 
   @media (min-width: 768px) {
     flex-direction: column;
@@ -63,6 +66,8 @@ const ReviewLeft = styled.div`
       width: 80px;
       height: 80px;
       margin-right: 0;
+
+      margin-left: 5%;
       margin-bottom: 5px;
     }
   }
@@ -75,7 +80,8 @@ const ReviewLeft = styled.div`
 
     @media (min-width: 768px) {
       text-align: center;
-      margin-top: 5px;
+      margin-top: 5%;
+      margin-left: 5%;
     }
   }
 `;
@@ -85,14 +91,20 @@ const ReviewCenter = styled.div`
   display: flex;
   flex-direction: column;
 
+  @media (min-width: 768px) {
+    padding-right: 100px;
+  }
+
   .profile {
     display: flex;
     align-items: center;
+    margin-top: 5%;
     margin-bottom: 10px;
 
     img {
       width: 30px;
       height: 30px;
+
       border-radius: 50%;
       margin-right: 10px;
     }
@@ -104,11 +116,13 @@ const ReviewCenter = styled.div`
       .name {
         font-size: 0.9rem;
         font-weight: bold;
+
         color: #333;
       }
 
       .date {
         font-size: 0.8rem;
+
         color: #666;
       }
     }
@@ -124,7 +138,7 @@ const ReviewCenter = styled.div`
 const ReviewRight = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-top: 10px;
 
   @media (min-width: 768px) {
@@ -134,21 +148,18 @@ const ReviewRight = styled.div`
     flex-direction: column;
     align-items: flex-end;
     margin-top: 0;
+    width: 80px;
   }
 
   .score {
     display: flex;
     align-items: center;
-
-    .score-text {
-      font-size: 0.9rem;
-      margin-right: 5px;
-      color: #666;
-    }
+    margin-top: 15%;
 
     img {
       width: 20px;
       height: 20px;
+      margin-top: 5%;
       margin: 0 2px;
     }
   }
@@ -159,12 +170,16 @@ const ReviewRight = styled.div`
     margin-top: 10px;
 
     @media (min-width: 768px) {
-      margin-top: 90px;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 50px;
+      align-items: center;
     }
 
     img {
       width: 24px;
       height: 24px;
+      margin-top: 5%;
       cursor: pointer;
 
       &:hover {
