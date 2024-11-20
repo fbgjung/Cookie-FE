@@ -1,4 +1,3 @@
-import Header from "../components/Header";
 import SetProfileImage from "../components/mypage/SetProfileImage";
 import BadgeSelector from "../components/mypage/BadgeSelector";
 import styled from "styled-components";
