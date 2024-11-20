@@ -4,6 +4,7 @@ import Search from "../pages/search";
 import MovieDetail from "../pages/MovieDetail";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
+import SignUpTag from "../pages/SignUpTag";
 
 export const AppRouteDef = {
   Main: {
@@ -43,6 +44,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <SignUp />
+      </PrivateRoute>
+    ),
+  },
+  SignUpTag: {
+    path: "/sign-up-tag",
+    element: (
+      <PrivateRoute>
+        <SignUpTag />
       </PrivateRoute>
     ),
   },

@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
-import GlobalStyle, { Content } from "../styles/global";
+import GlobalStyle from "../styles/global";
 import styled from "styled-components";
 import userDefaultImg from "../assets/images/signUp/user_img.svg";
 import deleteBtn from "../assets/images/signUp/close_icon.svg";
+import { useNavigate } from "react-router-dom";
 const MainContainer = styled.div`
   /* background-color: var(--ticket-bg); */
   background-color: white;
@@ -112,8 +113,8 @@ const SubmitBtn = styled.div`
 function SignUp() {
   const [userImageUrl, setUserImageUrl] = useState(null);
   const [userNickname, setUserNickname] = useState("");
-
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -135,6 +136,7 @@ function SignUp() {
     e.preventDefault();
     console.log("이미지 URL:", userImageUrl);
     console.log("닉네임:", userNickname);
+    navigate("/sign-up-tag");
   };
 
   return (
