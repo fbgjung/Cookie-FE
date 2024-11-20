@@ -11,7 +11,7 @@ const ProfileContainer = styled.div`
 
 const BackButton = styled.img`
   position: absolute;
-  top: 100px;
+  top: 30px;
   left: 20px;
   width: 24px;
   height: 24px;
@@ -23,7 +23,7 @@ const ImageWrapper = styled.label`
   height: 100px;
   border-radius: 20px;
   position: relative;
-  margin-top: 50px;
+  margin-top: 10px;
 
   background-color: #ffffff;
   cursor: pointer;
