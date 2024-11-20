@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import AppPages from "./AppPages";
 import { BrowserRouter } from "react-router-dom";
+import ScrollToTop from "../components/ScrollToTop";
 
 const ViewArea = styled.div`
   width: 600px;
@@ -13,6 +14,7 @@ const AppScreen = () => {
     <ViewArea>
       <div className="flex flex-col h-screen border-x border-divider text-text">
         <BrowserRouter>
+          <ScrollToTop />
           <AppPages />
         </BrowserRouter>
       </div>
