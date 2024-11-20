@@ -6,6 +6,7 @@ import Login from "../pages/Login";
 import SignUpProfile from "../pages/SignUpProfile";
 import SignUpTheme from "../pages/SignUpTheme";
 import MyPage from "../pages/mypage";
+import ManageProfile from "../pages/ManageProfile";
 
 export const AppRouteDef = {
   Main: {
@@ -61,6 +62,15 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MyPage />
+      </PrivateRoute>
+    ),
+  },
+
+  ManageProfile: {
+    path: "/manageprofile",
+    element: (
+      <PrivateRoute>
+        <ManageProfile />
       </PrivateRoute>
     ),
   },
