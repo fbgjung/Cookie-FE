@@ -84,7 +84,6 @@ const MyPage = () => {
 
   return (
     <MypageContainer>
-      <Header />
       <div
         style={{
           position: "absolute",
@@ -113,8 +112,6 @@ const MyPage = () => {
           onWithdraw={handleWithdraw}
         />
       </MypageContent>
-
-      <Navbar />
     </MypageContainer>
   );
 };
