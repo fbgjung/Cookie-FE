@@ -3,6 +3,8 @@ import Main from "../pages/main";
 import Search from "../pages/search";
 import MovieDetail from "../pages/MovieDetail";
 import Login from "../pages/Login";
+import SignUpProfile from "../pages/SignUpProfile";
+import SignUpTheme from "../pages/SignUpTheme";
 import MyPage from "../pages/mypage";
 import ManageProfile from "../pages/ManageProfile";
 
@@ -39,7 +41,22 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
-
+  SignUp: {
+    path: "/sign-up-profile",
+    element: (
+      <PrivateRoute>
+        <SignUpProfile />
+      </PrivateRoute>
+    ),
+  },
+  SignUpTag: {
+    path: "/sign-up-theme",
+    element: (
+      <PrivateRoute>
+        <SignUpTheme />
+      </PrivateRoute>
+    ),
+  },
   MyPage: {
     path: "/mypage",
     element: (
