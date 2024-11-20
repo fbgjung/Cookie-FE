@@ -33,6 +33,7 @@ const UserInfo = styled.div`
     justify-content: center;
     align-items: center;
     margin-top: 1rem;
+    position: relative;
   }
 
   .user__profile--image {
@@ -41,8 +42,9 @@ const UserInfo = styled.div`
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
+    box-shadow: 0.13rem 0.19rem 0.5rem rgba(3, 6, 59, 0.2);
     &:hover {
-      border: 1px solid var(--main);
+      border: 1px solid var(--ticket-bg);
     }
   }
 
@@ -53,14 +55,14 @@ const UserInfo = styled.div`
     border: none;
     padding: 0;
     outline: none;
-    position: absolute;
-    right: 33.8rem;
-    top: 12.5rem;
     cursor: pointer;
+    position: absolute;
+    left: 5rem;
+    top: 0.8rem;
   }
 
   p {
-    margin: 2rem 0 0.5rem 0;
+    margin: 1.5rem 0 0.5rem 0;
     color: var(--main);
   }
 
@@ -96,7 +98,7 @@ const UserInfo = styled.div`
 const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 15rem;
+  margin-top: 14.5rem;
 
   button {
     background-color: var(--main);
@@ -112,7 +114,7 @@ const SubmitBtn = styled.div`
   }
 `;
 
-function SignUp() {
+function SignUpProfile() {
   const [userImageUrl, setUserImageUrl] = useState(null);
   const [userNickname, setUserNickname] = useState("");
   const fileInputRef = useRef(null);
@@ -138,7 +140,7 @@ function SignUp() {
     e.preventDefault();
     console.log("이미지 URL:", userImageUrl);
     console.log("닉네임:", userNickname);
-    navigate("/sign-up-tag");
+    navigate("/sign-up-theme");
   };
 
   return (
@@ -175,7 +177,7 @@ function SignUp() {
                 </button>
               )}
             </div>
-            <p>프로필사진을 등록해주세요</p>
+            <p>프로필사진을 등록해주세요 😎</p>
             <div className="user__nickName">
               <label>
                 닉네임
@@ -198,4 +200,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignUpProfile;

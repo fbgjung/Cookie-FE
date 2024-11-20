@@ -73,10 +73,11 @@ const SubmitBtn = styled.div`
     box-shadow: 0 0.625rem 6.25rem rgba(3, 6, 59, 0.5);
     font-size: 1.2rem;
     outline: none;
+    cursor: pointer;
   }
 `;
 
-function SignUPTag() {
+function SignUpTheme() {
   const MovieTheme = [
     {
       id: 1,
@@ -145,7 +146,7 @@ function SignUPTag() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("선택된 테마:", selectedTheme);
-    navigate("/main");
+    navigate("/");
   };
   return (
     <>
@@ -183,4 +184,4 @@ function SignUPTag() {
   );
 }
 
-export default SignUPTag;
+export default SignUpTheme;

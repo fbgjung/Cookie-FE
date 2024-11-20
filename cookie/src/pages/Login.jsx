@@ -60,7 +60,7 @@ function Login() {
             <img
               src={naverLogin}
               alt="naverLogin"
-              onClick={() => navigate("/sign-up")}
+              onClick={() => navigate("/sign-up-profile")}
             />
           </a>
         </LoginBtn>

@@ -3,8 +3,8 @@ import Main from "../pages/main";
 import Search from "../pages/search";
 import MovieDetail from "../pages/MovieDetail";
 import Login from "../pages/Login";
-import SignUp from "../pages/SignUp";
-import SignUpTag from "../pages/SignUpTag";
+import SignUpProfile from "../pages/SignUpProfile";
+import SignUpTheme from "../pages/SignUpTheme";
 import MyPage from "../pages/mypage";
 
 export const AppRouteDef = {
@@ -41,18 +41,18 @@ export const AppRouteDef = {
     ),
   },
   SignUp: {
-    path: "/sign-up",
+    path: "/sign-up-profile",
     element: (
       <PrivateRoute>
-        <SignUp />
+        <SignUpProfile />
       </PrivateRoute>
     ),
   },
   SignUpTag: {
-    path: "/sign-up-tag",
+    path: "/sign-up-theme",
     element: (
       <PrivateRoute>
-        <SignUpTag />
+        <SignUpTheme />
       </PrivateRoute>
     ),
   },
