@@ -18,7 +18,6 @@ export const LoginContainer = styled.div`
 
   h2 {
     color: white;
-    line-height: 3px;
   }
 
   .login__img {
