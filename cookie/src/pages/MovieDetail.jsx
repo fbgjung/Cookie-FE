@@ -1,7 +1,5 @@
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import Header from "../components/Header";
-import Navbar from "../components/Navvar";
 
 const Container = styled.div`
   max-width: 600px;

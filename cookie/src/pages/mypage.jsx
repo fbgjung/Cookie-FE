@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import Header from "../components/Header";
-import Navbar from "../components/Navvar";
+
 import ProfileImage from "../components/mypage/ProfileImage";
 import BadgeList from "../components/mypage/BadgeList";
 import GenreChart from "../components/mypage/GenreChart";
