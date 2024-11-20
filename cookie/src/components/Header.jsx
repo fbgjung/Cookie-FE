@@ -13,21 +13,12 @@ const HeaderContainer = styled.header`
   align-items: center;
   justify-content: space-between;
   background-color: #04012d;
-  padding: 10px 20px;
-  height: 60px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  height: 70px;
   z-index: 100;
-  box-sizing: border-box; /* padding 포함 */
-
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    height: 50px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 6px 12px;
-    height: 60px;
-  }
+  box-sizing: border-box;
+  box-shadow: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const Logo = styled.div`
