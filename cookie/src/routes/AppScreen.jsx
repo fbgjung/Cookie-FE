@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BrowserRouter } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
 import AppPages from "./AppPages";
 import CookieLogo from "/src/assets/images/Cookie.svg";
@@ -18,7 +18,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   background: #f5faff;
-  width: 40%;
+  width: 600px;
 `;
 
 const ViewArea = styled.div`
@@ -64,7 +64,7 @@ const NavContainer = styled.nav`
   justify-content: space-around;
   background-color: white;
   padding: 5px 20px;
-  height: 50px;
+  height: 70px;
   box-sizing: border-box;
   border-top: 1px solid #e5e7eb;
   position: sticky;
@@ -72,8 +72,8 @@ const NavContainer = styled.nav`
   z-index: 100;
 
   img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
 `;
 
@@ -146,11 +146,18 @@ const AppContainer = styled.div`
 `;
 
 const AppScreen = () => {
+  const location = useLocation();
+  const hideHeaderFooterPages = [
+    "/login",
+    "/sign-up-profile",
+    "/sign-up-theme",
+  ];
+
   return (
     <Container>
       <ViewArea>
-        <BrowserRouter>
-          <AppContainer>
+        <AppContainer>
+          {!hideHeaderFooterPages.includes(location.pathname) && (
             <HeaderContainer>
               <Logo>
                 <img src={CookieLogo} alt="Cookie Logo" />
@@ -159,12 +166,13 @@ const AppScreen = () => {
                 <img src={NotificationIcon} alt="Notification Icon" />
               </Notification>
             </HeaderContainer>
+          )}
+          <MainContent>
+            <ScrollToTop />
+            <AppPages />
+          </MainContent>
 
-            <MainContent>
-              <ScrollToTop />
-              <AppPages />
-            </MainContent>
-
+          {!hideHeaderFooterPages.includes(location.pathname) && (
             <NavContainer>
               <Link to="/">
                 <img src={HomeIcon} alt="홈" />
@@ -182,8 +190,8 @@ const AppScreen = () => {
                 <img src={ProfileIcon} alt="내정보" />
               </Link>
             </NavContainer>
-          </AppContainer>
-        </BrowserRouter>
+          )}
+        </AppContainer>
       </ViewArea>
     </Container>
   );
