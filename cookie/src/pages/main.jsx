@@ -1,4 +1,8 @@
 import styled from "styled-components";
+import specialMovie from "../assets/images/main/special_icon.svg";
+import cookieMovie from "../assets/images/main/video_icon.svg";
+import MatchUpContainer from "../components/main/MatchUpContainer";
+import GlobalStyle from "../styles/global";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -11,15 +15,15 @@ const MainContainer = styled(CommonContainer)`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f9f9f9;
+  background-color: white;
   padding-bottom: 60px;
 `;
 
 const Content = styled.div`
-  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
-  padding-top: 60px;
-  overflow-y: auto;
+  gap: 1rem;
 
   @media (max-width: 600px) {
     padding: 15px;
@@ -51,12 +55,34 @@ const NavbarWrapper = styled(CommonContainer)`
 `;
 
 const Main = () => {
+  const dummyMovies = [
+    {
+      matchTitle: "박찬욱 감독의 복수 3부작 빅매치",
+      data: [
+        {
+          id: 1,
+          poster: "https://via.placeholder.com/83x118",
+          movie: "올드보이",
+          matchDate: "2024-12-31",
+        },
+        {
+          id: 2,
+          poster: "https://via.placeholder.com/83x118",
+          movie: "복수는나의것",
+          matchDate: "2024-12-31",
+        },
+      ],
+    },
+  ];
+
   return (
     <>
+      <GlobalStyle />
       <HeaderWrapper></HeaderWrapper>
       <MainContainer>
+        <img src={"https://via.placeholder.com/600x250"} alt="배너" />
         <Content>
-          <h1>메인입니다</h1>
+          <MatchUpContainer dummydata={dummyMovies} />
         </Content>
       </MainContainer>
       <NavbarWrapper></NavbarWrapper>
