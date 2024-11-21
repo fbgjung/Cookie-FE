@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-
 const Container = styled.div`
   padding-top: 20px;
   display: flex;
@@ -22,7 +21,7 @@ const Container = styled.div`
 const BackButton = styled.img`
   position: absolute;
   top: 20px;
-  left: 20px;
+  left: -3%;
   width: 24px;
   height: 24px;
   cursor: pointer;
