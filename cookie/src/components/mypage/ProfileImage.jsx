@@ -11,7 +11,7 @@ const Image = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 20px;
-  background-color: ${(props) => props.bgColor || "#fff"};
+  background-color: #fff; /* 기본값으로 설정 */
   background-image: url(${(props) => props.image || "defaultImage.png"});
   background-size: cover;
   background-position: center;
@@ -23,7 +23,7 @@ const Title = styled.h3`
   font-size: 1.2rem;
   margin: 0 0 10px 0;
   text-align: center;
-  color: ${(props) => props.titleColor || "#ffffff"};
+  color: #ffffff; /* 기본값으로 설정 */
   font-weight: bold;
 `;
 
@@ -37,7 +37,7 @@ const Name = styled.h2`
   font-size: 1.2rem;
   margin: 0;
   text-align: center;
-  color: ${(props) => props.textColor || "#000"};
+  color: #000; /* 기본값으로 설정 */
 `;
 
 const ManageProfileIcon = styled.img`
@@ -51,26 +51,19 @@ const ManageProfileIcon = styled.img`
   }
 `;
 
-const ProfileImage = ({
-  title,
-  name,
-  image,
-  bgColor,
-  titleColor,
-  textColor,
-}) => {
-  const navigate = useNavigate(); // React Router의 useNavigate 훅 사용
+const ProfileImage = ({ title, name, image }) => {
+  const navigate = useNavigate();
 
   const handleManageClick = () => {
-    navigate("/manageprofile"); // /manageprofile 경로로 이동
+    navigate("/manageprofile");
   };
 
   return (
     <ProfileContainer>
-      {title && <Title titleColor={titleColor}>{title}</Title>}
-      <Image bgColor={bgColor} image={image} />
+      {title && <Title>{title}</Title>} {/* 기본값 사용 */}
+      <Image image={image} />
       <NameContainer>
-        {name && <Name textColor={textColor}>{name}</Name>}
+        {name && <Name>{name}</Name>} {/* 기본값 사용 */}
         <ManageProfileIcon
           src="/src/assets/images/mypage/manageprofile.svg"
           alt="Manage Profile"
