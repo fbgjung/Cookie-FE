@@ -1,90 +1,80 @@
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import HeaderSection from "../components/movieDetailPage/HeaderSection";
+import DetailsSection from "../components/movieDetailPage/DetailsSection";
+import CastSection from "../components/movieDetailPage/CastSection";
 
 const Container = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 70px 20px;
-  background-color: #f9f9f9;
-`;
-
-const MovieHeader = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 5px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  box-sizing: border-box;
 
-  img {
-    width: 100%;
-    border-radius: 10px;
-  }
-
-  h1 {
-    font-size: 24px;
-    margin-top: 10px;
-    font-weight: bold;
-  }
-
-  p {
-    font-size: 14px;
-    color: #555;
+  @media (max-width: 768px) {
+    padding: 70px 15px;
   }
 `;
 
-const Section = styled.div`
-  margin-bottom: 30px;
+const ContentWrapper = styled.div`
+  width: 100%;
+  max-width: 600px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 10px;
 
-  h2 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-
-  p {
-    font-size: 14px;
-    line-height: 1.5;
-    color: #333;
-  }
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 const MovieDetail = () => {
   const { id } = useParams();
 
-  // 영화 데이터를 임시로 하드코딩 (추후 API로 교체 가능)
   const movie = {
     id,
-    title: `랜덤 영화 ${id}`,
-    year: 2023,
-    genre: "드라마",
+    title: "소년시절의 너",
+    year: "2019",
+    genre: "범죄/가족/드라마/로맨스",
+    country: "중국, 홍콩",
     duration: "2시간 15분",
-    description: "영화 줄거리가 여기에 들어갑니다.",
-    imageUrl: `https://via.placeholder.com/600x300?text=영화+${id}`,
+    rating: "15세",
+    description:
+      "시험만 잘 치면 멋진 인생을 살 수 있다고 가르치는 세상에서 기댈 곳 없이 세상에 내몰린 우등생 소녀 ‘첸니엔’과 양아치 소년 ‘베이’...",
+    posterUrl: "https://via.placeholder.com/120x160?text=포스터",
+    stillCuts: [
+      "https://via.placeholder.com/600x300?text=스틸컷+1",
+      "https://via.placeholder.com/600x300?text=스틸컷+2",
+      "https://via.placeholder.com/600x300?text=스틸컷+3",
+    ],
+    keywords: ["로맨스", "범죄", "실화를 소재로 한", "포근한 가을"],
+    cast: [
+      { name: "중국상", role: "감독", img: "https://via.placeholder.com/70" },
+      { name: "홍콩현", role: "배우", img: "https://via.placeholder.com/70" },
+      { name: "첸니엔", role: "배우", img: "https://via.placeholder.com/70" },
+      { name: "베이", role: "배우", img: "https://via.placeholder.com/70" },
+      { name: "천위안", role: "배우", img: "https://via.placeholder.com/70" },
+    ],
   };
 
   return (
-    <>
-      <Header />
-      <Container>
-        <MovieHeader>
-          <img src={movie.imageUrl} alt={movie.title} />
-          <h1>{movie.title}</h1>
-          <p>{`${movie.year} · ${movie.genre} · ${movie.duration}`}</p>
-        </MovieHeader>
-        <Section>
-          <h2>줄거리</h2>
-          <p>{movie.description}</p>
-        </Section>
-        <Section>
-          <h2>출연/제작</h2>
-          <p>출연자 및 제작자 정보가 여기에 들어갑니다.</p>
-        </Section>
-        <Section>
-          <h2>리뷰</h2>
-          <p>리뷰 내용이 여기에 들어갑니다.</p>
-        </Section>
-      </Container>
-      <Navbar />
-    </>
+    <Container>
+      <ContentWrapper>
+        <HeaderSection {...movie} />
+        <DetailsSection
+          posterUrl={movie.posterUrl}
+          keywords={movie.keywords}
+          description={movie.description}
+        />
+        <CastSection cast={movie.cast} />
+      </ContentWrapper>
+    </Container>
   );
 };
 
