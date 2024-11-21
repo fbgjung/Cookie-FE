@@ -21,7 +21,7 @@ const Container = styled.div`
 const BackButton = styled.img`
   position: absolute;
   top: 20px;
-  left: 20px;
+  left: -3%;
   width: 24px;
   height: 24px;
   cursor: pointer;

@@ -12,12 +12,14 @@ const ChartContainer = styled.div`
   margin-top: 40px;
   background-color: #ffffff;
   padding: 20px;
+  margin-right: 5%;
   border-radius: 16px;
 `;
 
 const ChartTitle = styled.h3`
   font-size: 1.2rem;
   color: #333;
+
   margin-bottom: 20px;
 `;
 
