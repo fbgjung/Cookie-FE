@@ -9,6 +9,7 @@ import MyPage from "../pages/mypage";
 import ManageProfile from "../pages/ManageProfile";
 import LikedMovies from "../pages/LikedMovies";
 import LikedReviews from "../pages/LikedRevies";
+import DetailReview from "../pages/DetailReview";
 
 export const AppRouteDef = {
   Main: {
@@ -91,6 +92,15 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <LikedReviews />
+      </PrivateRoute>
+    ),
+  },
+
+  DetailReviews: {
+    path: "/detailreview",
+    element: (
+      <PrivateRoute>
+        <DetailReview />
       </PrivateRoute>
     ),
   },
