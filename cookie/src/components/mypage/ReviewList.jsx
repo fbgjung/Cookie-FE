@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; // React Router에서 useNavigate 가져오기
 
 const ReviewSection = styled.div`
   margin-top: 20px;
@@ -9,19 +10,20 @@ const ReviewTitle = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 15px;
   color: #04012d;
+
   font-weight: bold;
 `;
 
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-
   gap: 15px;
 `;
 
 const ReviewTicket = styled.div`
   position: relative;
   display: flex;
+  margin-right: 5%;
   flex-direction: column;
   background-image: url("/src/assets/images/mypage/reviewticket.svg");
   background-size: cover;
@@ -32,6 +34,10 @@ const ReviewTicket = styled.div`
   padding: 15px;
   box-sizing: border-box;
   cursor: pointer;
+
+  &:hover {
+    opacity: 0.9; /* 호버 효과 추가 */
+  }
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -47,6 +53,7 @@ const ReviewLeft = styled.div`
   align-items: center;
   margin-bottom: 10px;
   margin-top: 6%;
+  margin-left: 1%;
 
   @media (min-width: 768px) {
     flex-direction: column;
@@ -66,7 +73,6 @@ const ReviewLeft = styled.div`
       width: 80px;
       height: 80px;
       margin-right: 0;
-
       margin-left: 5%;
       margin-bottom: 5px;
     }
@@ -104,7 +110,6 @@ const ReviewCenter = styled.div`
     img {
       width: 30px;
       height: 30px;
-
       border-radius: 50%;
       margin-right: 10px;
     }
@@ -116,13 +121,11 @@ const ReviewCenter = styled.div`
       .name {
         font-size: 0.9rem;
         font-weight: bold;
-
         color: #333;
       }
 
       .date {
         font-size: 0.8rem;
-
         color: #666;
       }
     }
@@ -191,12 +194,18 @@ const ReviewRight = styled.div`
 `;
 
 const ReviewList = ({ title, reviews }) => {
+  const navigate = useNavigate(); // useNavigate 훅 사용
+
+  const handleTicketClick = () => {
+    navigate("/detailreview"); // 클릭 시 /detailreview로 이동
+  };
+
   return (
     <ReviewSection>
       <ReviewTitle>{title}</ReviewTitle>
       <ReviewContainer>
         {reviews.map((review, index) => (
-          <ReviewTicket key={index}>
+          <ReviewTicket key={index} onClick={handleTicketClick}>
             <ReviewLeft>
               <img src={review.poster} alt="Movie Poster" />
               <div className="title">{review.movieTitle}</div>
