@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 const ReviewSection = styled.div`
@@ -16,6 +15,7 @@ const ReviewTitle = styled.h3`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
+
   gap: 15px;
 `;
 
@@ -46,7 +46,7 @@ const ReviewLeft = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
-  margin-top: 3%;
+  margin-top: 6%;
 
   @media (min-width: 768px) {
     flex-direction: column;
@@ -80,8 +80,8 @@ const ReviewLeft = styled.div`
 
     @media (min-width: 768px) {
       text-align: center;
-      margin-top: 5%;
-      margin-left: 5%;
+      margin-top: 1%;
+      margin-left: 1%;
     }
   }
 `;
@@ -98,7 +98,7 @@ const ReviewCenter = styled.div`
   .profile {
     display: flex;
     align-items: center;
-    margin-top: 5%;
+    margin-top: 10%;
     margin-bottom: 10px;
 
     img {
@@ -148,38 +148,39 @@ const ReviewRight = styled.div`
     flex-direction: column;
     align-items: flex-end;
     margin-top: 0;
-    width: 80px;
+    width: 100px;
   }
 
   .score {
     display: flex;
     align-items: center;
-    margin-top: 15%;
+    margin-top: 30%;
 
     img {
       width: 20px;
       height: 20px;
-      margin-top: 5%;
+      margin-top: -3%;
       margin: 0 2px;
     }
   }
 
   .actions {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 5px;
+    margin-top: 3px;
 
     @media (min-width: 768px) {
       flex-direction: column;
-      gap: 10px;
-      margin-top: 50px;
+      gap: 6px;
+      margin-top: 40px;
+      margin-right: 10px;
       align-items: center;
     }
 
     img {
-      width: 24px;
-      height: 24px;
-      margin-top: 5%;
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
       cursor: pointer;
 
       &:hover {
