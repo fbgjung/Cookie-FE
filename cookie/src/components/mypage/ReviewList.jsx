@@ -1,5 +1,5 @@
-import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; // React Router에서 useNavigate 가져오기
 
 const ReviewSection = styled.div`
   margin-top: 20px;
@@ -10,6 +10,7 @@ const ReviewTitle = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 15px;
   color: #04012d;
+
   font-weight: bold;
 `;
 
@@ -22,6 +23,7 @@ const ReviewContainer = styled.div`
 const ReviewTicket = styled.div`
   position: relative;
   display: flex;
+  margin-right: 5%;
   flex-direction: column;
   background-image: url("/src/assets/images/mypage/reviewticket.svg");
   background-size: cover;
@@ -32,6 +34,10 @@ const ReviewTicket = styled.div`
   padding: 15px;
   box-sizing: border-box;
   cursor: pointer;
+
+  &:hover {
+    opacity: 0.9; /* 호버 효과 추가 */
+  }
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -46,7 +52,8 @@ const ReviewLeft = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
-  margin-top: 3%;
+  margin-top: 6%;
+  margin-left: 1%;
 
   @media (min-width: 768px) {
     flex-direction: column;
@@ -66,7 +73,6 @@ const ReviewLeft = styled.div`
       width: 80px;
       height: 80px;
       margin-right: 0;
-
       margin-left: 5%;
       margin-bottom: 5px;
     }
@@ -80,8 +86,8 @@ const ReviewLeft = styled.div`
 
     @media (min-width: 768px) {
       text-align: center;
-      margin-top: 5%;
-      margin-left: 5%;
+      margin-top: 1%;
+      margin-left: 1%;
     }
   }
 `;
@@ -98,13 +104,12 @@ const ReviewCenter = styled.div`
   .profile {
     display: flex;
     align-items: center;
-    margin-top: 5%;
+    margin-top: 10%;
     margin-bottom: 10px;
 
     img {
       width: 30px;
       height: 30px;
-
       border-radius: 50%;
       margin-right: 10px;
     }
@@ -116,13 +121,11 @@ const ReviewCenter = styled.div`
       .name {
         font-size: 0.9rem;
         font-weight: bold;
-
         color: #333;
       }
 
       .date {
         font-size: 0.8rem;
-
         color: #666;
       }
     }
@@ -148,38 +151,39 @@ const ReviewRight = styled.div`
     flex-direction: column;
     align-items: flex-end;
     margin-top: 0;
-    width: 80px;
+    width: 100px;
   }
 
   .score {
     display: flex;
     align-items: center;
-    margin-top: 15%;
+    margin-top: 30%;
 
     img {
       width: 20px;
       height: 20px;
-      margin-top: 5%;
+      margin-top: -3%;
       margin: 0 2px;
     }
   }
 
   .actions {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 5px;
+    margin-top: 3px;
 
     @media (min-width: 768px) {
       flex-direction: column;
-      gap: 10px;
-      margin-top: 50px;
+      gap: 6px;
+      margin-top: 40px;
+      margin-right: 10px;
       align-items: center;
     }
 
     img {
-      width: 24px;
-      height: 24px;
-      margin-top: 5%;
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
       cursor: pointer;
 
       &:hover {
@@ -190,12 +194,18 @@ const ReviewRight = styled.div`
 `;
 
 const ReviewList = ({ title, reviews }) => {
+  const navigate = useNavigate(); // useNavigate 훅 사용
+
+  const handleTicketClick = () => {
+    navigate("/detailreview"); // 클릭 시 /detailreview로 이동
+  };
+
   return (
     <ReviewSection>
       <ReviewTitle>{title}</ReviewTitle>
       <ReviewContainer>
         {reviews.map((review, index) => (
-          <ReviewTicket key={index}>
+          <ReviewTicket key={index} onClick={handleTicketClick}>
             <ReviewLeft>
               <img src={review.poster} alt="Movie Poster" />
               <div className="title">{review.movieTitle}</div>
