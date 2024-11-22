@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   padding-top: 20px;
@@ -8,7 +10,7 @@ const Container = styled.div`
   align-items: center;
   background-color: #ffffff;
   min-height: 100vh;
-  max-width: 800px; /* 더 넓은 화면 대응 */
+  max-width: 800px;
   margin: 0 auto;
   position: relative;
 
@@ -21,7 +23,7 @@ const Container = styled.div`
 const BackButton = styled.img`
   position: absolute;
   top: 20px;
-  left: -3%;
+  left: -90%;
   width: 24px;
   height: 24px;
   cursor: pointer;
@@ -70,23 +72,23 @@ const HeartIcon = styled.img`
 
 const MoviesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 기본 4열 */
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   width: 100%;
   padding: 0 20px 30px;
   box-sizing: border-box;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr); /* 태블릿 화면에서 3열 */
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr); /* 모바일 화면에서 2열 */
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr; /* 작은 화면에서는 1열 */
+    grid-template-columns: 1fr;
     gap: 10px;
   }
 `;
@@ -149,8 +151,8 @@ const MovieInfo = styled.div`
     }
   }
 
-  .reviews,
-  .likes {
+  .runtime,
+  .score {
     font-size: 0.8rem;
     margin-top: 5px;
 
@@ -164,111 +166,47 @@ const MovieInfo = styled.div`
   }
 `;
 
-const movies = [
-  {
-    id: 1,
-    title: "글래디에이터",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/gladiator.jpg",
-    reviews: 100,
-    likes: 1978,
-  },
-  {
-    id: 2,
-    title: "위키드",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/wicked.jpg",
-    reviews: 120,
-    likes: 1503,
-  },
-  {
-    id: 3,
-    title: "청설",
-    year: "2024",
-    country: "한국",
-    poster: "/src/assets/images/movies/chungseol.jpg",
-    reviews: 80,
-    likes: 1120,
-  },
-  {
-    id: 4,
-    title: "히든 페이스",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/hiddenface.jpg",
-    reviews: 50,
-    likes: 800,
-  },
-
-  {
-    id: 4,
-    title: "히든 페이스",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/hiddenface.jpg",
-    reviews: 50,
-    likes: 800,
-  },
-
-  {
-    id: 4,
-    title: "히든 페이스",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/hiddenface.jpg",
-    reviews: 50,
-    likes: 800,
-  },
-
-  {
-    id: 4,
-    title: "히든 페이스",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/hiddenface.jpg",
-    reviews: 50,
-    likes: 800,
-  },
-
-  {
-    id: 4,
-    title: "히든 페이스",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/hiddenface.jpg",
-    reviews: 50,
-    likes: 800,
-  },
-
-  {
-    id: 4,
-    title: "히든 페이스",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/hiddenface.jpg",
-    reviews: 50,
-    likes: 800,
-  },
-
-  {
-    id: 4,
-    title: "히든 페이스",
-    year: "2024",
-    country: "미국",
-    poster: "/src/assets/images/movies/hiddenface.jpg",
-    reviews: 50,
-    likes: 800,
-  },
-];
+const EmptyMessage = styled.div`
+  font-size: 1rem;
+  color: #999;
+  text-align: center;
+  margin: 30px 0;
+`;
 
 const LikedMovies = () => {
   const navigate = useNavigate();
+  const userId = 1;
+  const [movies, setMovies] = useState([]);
 
   const handleBackClick = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    const fetchLikedMovies = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/users/${userId}/movieLiked/`
+        );
+        const moviesData = response.data.response;
+
+        const transformedMovies = moviesData.map((movie) => ({
+          id: movie.id,
+          title: movie.title,
+          poster: movie.poster,
+          runtime: movie.runtime,
+          score: movie.score,
+          releasedAt: movie.releasedAt,
+        }));
+
+        setMovies(transformedMovies);
+      } catch (error) {
+        console.error("Failed to fetch liked movies:", error);
+      }
+    };
+
+    fetchLikedMovies();
+  }, [userId]);
 
   return (
     <Container>
@@ -279,21 +217,23 @@ const LikedMovies = () => {
       />
       <Title>좋아하는 영화</Title>
       <HeartIcon src="/src/assets/images/mypage/red-heart.svg" alt="하트" />
-      <MoviesGrid>
-        {movies.map((movie) => (
-          <MovieCard key={movie.id}>
-            <Poster src={movie.poster} alt={movie.title} />
-            <MovieInfo>
-              <h2>{movie.title}</h2>
-              <p>
-                {movie.year} {movie.country}
-              </p>
-              <p className="reviews">리뷰 {movie.reviews}개</p>
-              <p className="likes">좋아요 {movie.likes}개</p>
-            </MovieInfo>
-          </MovieCard>
-        ))}
-      </MoviesGrid>
+      {movies.length > 0 ? (
+        <MoviesGrid>
+          {movies.map((movie) => (
+            <MovieCard key={movie.id}>
+              <Poster src={movie.poster} alt={movie.title} />
+              <MovieInfo>
+                <h2>{movie.title}</h2>
+                <p>개봉일: {movie.releasedAt}</p>
+                <p className="runtime">상영시간: {movie.runtime}</p>
+                <p className="score">평점: {movie.score.toFixed(1)}</p>
+              </MovieInfo>
+            </MovieCard>
+          ))}
+        </MoviesGrid>
+      ) : (
+        <EmptyMessage>좋아하는 영화를 선택해보세요!</EmptyMessage>
+      )}
     </Container>
   );
 };
