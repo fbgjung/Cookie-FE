@@ -13,6 +13,7 @@ import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
 import ReTokenPage from "../api/auth/ReTokenPage";
 import AdminLogin from "../pages/AdminLogin";
+import Review from "../pages/Review";
 
 export const AppRouteDef = {
   Main: {
@@ -36,6 +37,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MovieDetail />
+      </PrivateRoute>
+    ),
+  },
+  Review: {
+    path: "/review",
+    element: (
+      <PrivateRoute>
+        <Review />
       </PrivateRoute>
     ),
   },
