@@ -2,7 +2,9 @@ import styled from "styled-components";
 
 const ReviewSection = styled.div`
   margin-top: 20px;
-  padding: 0 15px;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
 `;
 
 const ReviewTitle = styled.h3`
@@ -47,6 +49,7 @@ const ReviewLeft = styled.div`
   align-items: center;
   margin-bottom: 10px;
   margin-top: 6%;
+  padding: 0 0 30px 30px;
 
   @media (min-width: 768px) {
     flex-direction: column;
@@ -90,6 +93,7 @@ const ReviewCenter = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding: 0 0 30px 30px;
 
   @media (min-width: 768px) {
     padding-right: 100px;
@@ -140,6 +144,7 @@ const ReviewRight = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
+  padding-right: 30px;
 
   @media (min-width: 768px) {
     position: absolute;
@@ -154,13 +159,32 @@ const ReviewRight = styled.div`
   .score {
     display: flex;
     align-items: center;
-    margin-top: 30%;
+    padding: 30px 0 0 30px;
 
     img {
       width: 20px;
       height: 20px;
-      margin-top: -3%;
       margin: 0 2px;
+    }
+
+    span {
+      font-size: 0.9rem;
+      margin-left: 5px;
+      color: #666;
+    }
+  }
+
+  .likes {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+    padding: 10px 0 0 30px;
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
     }
   }
 
@@ -189,7 +213,6 @@ const ReviewRight = styled.div`
     }
   }
 `;
-
 const ReviewList = ({ title, reviews }) => {
   return (
     <ReviewSection>
@@ -237,9 +260,24 @@ const ReviewList = ({ title, reviews }) => {
             </ReviewCenter>
             <ReviewRight>
               <div className="score">
-                평점: {review.movieScore?.toFixed(1) || review.cookies || "0"}
+                {Array.from({ length: Math.round(review.movieScore || 0) }).map(
+                  (_, i) => (
+                    <img
+                      key={i}
+                      src="/src/assets/images/mypage/cookiescore.svg"
+                      alt="Cookie"
+                    />
+                  )
+                )}
+                <span>{review.movieScore?.toFixed(1) || "0"}</span>
               </div>
-              <div className="likes">좋아요: {review.reviewLike || 0}</div>
+              <div className="likes">
+                <img
+                  src="/src/assets/images/mypage/hearticon.svg"
+                  alt="Heart Icon"
+                />
+                {review.reviewLike || 0}
+              </div>
             </ReviewRight>
           </ReviewTicket>
         ))}
