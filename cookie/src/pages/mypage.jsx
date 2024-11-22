@@ -42,7 +42,9 @@ const MyPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/users/${userId}`);
+        const response = await axios.get(
+          `http://localhost:8080/api/users/${userId}`
+        );
         const { nickname, profileImage, badge, genreScores, reviews } =
           response.data.response;
 
