@@ -8,6 +8,7 @@ import SignUpTheme from "../pages/SignUpTheme";
 import MyPage from "../pages/mypage";
 import ManageProfile from "../pages/ManageProfile";
 import LikedMovies from "../pages/LikedMovies";
+import Review from "../pages/Review";
 
 export const AppRouteDef = {
   Main: {
@@ -31,6 +32,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MovieDetail />
+      </PrivateRoute>
+    ),
+  },
+  Review: {
+    path: "/review",
+    element: (
+      <PrivateRoute>
+        <Review />
       </PrivateRoute>
     ),
   },
