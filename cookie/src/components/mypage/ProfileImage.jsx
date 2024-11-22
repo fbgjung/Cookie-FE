@@ -65,12 +65,7 @@ const ManageProfileIcon = styled.img`
   }
 `;
 
-const ProfileImage = ({
-  title,
-  name,
-  image,
-  badgeIcon = "/src/assets/images/mypage/romancebadge.svg",
-}) => {
+const ProfileImage = ({ title, name, image, badgeIcon }) => {
   const navigate = useNavigate();
 
   const handleManageClick = () => {
@@ -82,7 +77,7 @@ const ProfileImage = ({
       {title && <Title>{title}</Title>}
       <ImageContainer>
         <Image image={image} />
-        <BadgeIcon src={badgeIcon} alt="Romance Badge" />
+        <BadgeIcon src={badgeIcon} alt="Main Badge" />
       </ImageContainer>
       <NameContainer>
         {name && <Name>{name}</Name>}
