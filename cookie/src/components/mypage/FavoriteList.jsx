@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 const FavoriteSection = styled.div`
   margin-top: 30px;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const FavoriteTitle = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 10px;
+  margin-left: 5px;
   color: #04012d;
   font-weight: bold;
 `;

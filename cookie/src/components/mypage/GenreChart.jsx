@@ -12,6 +12,7 @@ const ChartContainer = styled.div`
   margin-top: 40px;
   background-color: #ffffff;
   padding: 20px;
+  margin-right: 5%;
   border-radius: 16px;
 `;
 
@@ -21,24 +22,7 @@ const ChartTitle = styled.h3`
   margin-bottom: 20px;
 `;
 
-const GenreChart = () => {
-  const data = [
-    { name: "로맨스", points: 300 },
-    { name: "액션", points: 500 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "SF", points: 200 },
-    { name: "코미디", points: 150 },
-    { name: "드라마", points: 400 },
-  ];
-
+const GenreChart = ({ data }) => {
   return (
     <ChartContainer>
       <ChartTitle>장르별 포인트</ChartTitle>

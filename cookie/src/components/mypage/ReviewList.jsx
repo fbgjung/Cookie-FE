@@ -1,9 +1,10 @@
-import React from "react";
 import styled from "styled-components";
 
 const ReviewSection = styled.div`
   margin-top: 20px;
-  padding: 0 15px;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
 `;
 
 const ReviewTitle = styled.h3`
@@ -16,6 +17,7 @@ const ReviewTitle = styled.h3`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
+
   gap: 15px;
 `;
 
@@ -46,7 +48,8 @@ const ReviewLeft = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
-  margin-top: 3%;
+  margin-top: 6%;
+  padding: 0 0 30px 30px;
 
   @media (min-width: 768px) {
     flex-direction: column;
@@ -80,8 +83,8 @@ const ReviewLeft = styled.div`
 
     @media (min-width: 768px) {
       text-align: center;
-      margin-top: 5%;
-      margin-left: 5%;
+      margin-top: 1%;
+      margin-left: 1%;
     }
   }
 `;
@@ -90,6 +93,7 @@ const ReviewCenter = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding: 0 0 30px 30px;
 
   @media (min-width: 768px) {
     padding-right: 100px;
@@ -98,7 +102,7 @@ const ReviewCenter = styled.div`
   .profile {
     display: flex;
     align-items: center;
-    margin-top: 5%;
+    margin-top: 10%;
     margin-bottom: 10px;
 
     img {
@@ -140,6 +144,7 @@ const ReviewRight = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
+  padding-right: 30px;
 
   @media (min-width: 768px) {
     position: absolute;
@@ -148,38 +153,58 @@ const ReviewRight = styled.div`
     flex-direction: column;
     align-items: flex-end;
     margin-top: 0;
-    width: 80px;
+    width: 100px;
   }
 
   .score {
     display: flex;
     align-items: center;
-    margin-top: 15%;
+    padding: 30px 0 0 30px;
 
     img {
       width: 20px;
       height: 20px;
-      margin-top: 5%;
       margin: 0 2px;
+    }
+
+    span {
+      font-size: 0.9rem;
+      margin-left: 5px;
+      color: #666;
+    }
+  }
+
+  .likes {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+    padding: 10px 0 0 30px;
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
     }
   }
 
   .actions {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 5px;
+    margin-top: 3px;
 
     @media (min-width: 768px) {
       flex-direction: column;
-      gap: 10px;
-      margin-top: 50px;
+      gap: 6px;
+      margin-top: 40px;
+      margin-right: 10px;
       align-items: center;
     }
 
     img {
-      width: 24px;
-      height: 24px;
-      margin-top: 5%;
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
       cursor: pointer;
 
       &:hover {
@@ -188,7 +213,6 @@ const ReviewRight = styled.div`
     }
   }
 `;
-
 const ReviewList = ({ title, reviews }) => {
   return (
     <ReviewSection>
@@ -197,38 +221,62 @@ const ReviewList = ({ title, reviews }) => {
         {reviews.map((review, index) => (
           <ReviewTicket key={index}>
             <ReviewLeft>
-              <img src={review.poster} alt="Movie Poster" />
-              <div className="title">{review.movieTitle}</div>
+              <img
+                src={
+                  review.movie?.poster ||
+                  review.poster ||
+                  "/src/assets/images/default-poster.png"
+                }
+                alt={review.movie?.title || review.movieTitle || "제목 없음"}
+              />
+              <div className="title">
+                {review.movie?.title || review.movieTitle || "제목 없음"}
+              </div>
             </ReviewLeft>
             <ReviewCenter>
               <div className="profile">
-                <img src={review.profileImage} alt="Profile" />
+                <img
+                  src={
+                    review.user?.profileImage ||
+                    review.profileImage ||
+                    "/src/assets/images/default-user.png"
+                  }
+                  alt={`${review.user?.nickname || review.userName || "익명"} Profile`}
+                />
                 <div className="user-info">
-                  <span className="name">{review.userName}</span>
-                  <span className="date">{review.date}</span>
+                  <span className="name">
+                    {review.user?.nickname || review.userName || "익명"}
+                  </span>
+                  <span className="date">
+                    {review.createdAt
+                      ? new Date(review.createdAt).toLocaleDateString()
+                      : review.date || "날짜 없음"}
+                  </span>
                 </div>
               </div>
-              <div className="comment">{review.comment}</div>
+              <div className="comment">
+                {review.content || review.comment || "내용 없음"}
+              </div>
             </ReviewCenter>
             <ReviewRight>
               <div className="score">
-                {Array.from({ length: review.cookies }).map((_, i) => (
-                  <img
-                    key={i}
-                    src="/src/assets/images/mypage/cookiescore.svg"
-                    alt="Cookie Score"
-                  />
-                ))}
+                {Array.from({ length: Math.round(review.movieScore || 0) }).map(
+                  (_, i) => (
+                    <img
+                      key={i}
+                      src="/src/assets/images/mypage/cookiescore.svg"
+                      alt="Cookie"
+                    />
+                  )
+                )}
+                <span>{review.movieScore?.toFixed(1) || "0"}</span>
               </div>
-              <div className="actions">
+              <div className="likes">
                 <img
                   src="/src/assets/images/mypage/hearticon.svg"
                   alt="Heart Icon"
                 />
-                <img
-                  src="/src/assets/images/mypage/shareicon.svg"
-                  alt="Share Icon"
-                />
+                {review.reviewLike || 0}
               </div>
             </ReviewRight>
           </ReviewTicket>
