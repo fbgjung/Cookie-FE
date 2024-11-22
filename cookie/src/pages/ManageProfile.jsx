@@ -40,6 +40,7 @@ const ManageProfile = () => {
           `http://localhost:8080/api/users/${userId}/profileData`
         );
         const { profileImage, badges, nickname } = response.data.response;
+        console.log(response.data.response);
 
         setProfileImage(profileImage);
         setBadges(badges);
