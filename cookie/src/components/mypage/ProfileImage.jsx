@@ -45,6 +45,7 @@ const NameContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 5px;
+  margin: 30px;
 `;
 
 const Name = styled.h2`

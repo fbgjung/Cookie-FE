@@ -10,7 +10,6 @@ const BadgeSection = styled.div`
 
 const BadgeTitle = styled.h3`
   font-size: 1.2rem;
-  margin-bottom: 20px;
   color: #333;
   font-weight: 500;
 `;
@@ -21,7 +20,10 @@ const BadgeContainer = styled.div`
   align-items: center;
   gap: 15px;
   overflow-x: auto;
-  padding: 0 10px;
+  padding: 20px 10px;
+  flex-wrap: wrap;
+  height: 350px;
+  overflow-y: scroll;
 `;
 
 const BadgeItem = styled.div`
@@ -34,7 +36,7 @@ const BadgeItem = styled.div`
   height: 80px;
   background-color: #ffffff;
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 `;

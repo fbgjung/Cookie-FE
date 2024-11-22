@@ -26,7 +26,6 @@ const ManageProfileContent = styled.div`
   padding: 20px;
   padding-bottom: 20px;
 
-  /* 반응형 스타일 */
   @media (max-width: 768px) {
     padding: 16px;
     margin-top: 15px;
@@ -43,6 +42,7 @@ const ManageProfile = () => {
   const [profileImage, setProfileImage] = useState("");
   const [badges, setBadges] = useState([]);
   const [nickname, setNickname] = useState("");
+  const [selectedBadge, setSelectedBadge] = useState(""); // main 뱃지 ID
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const isErrorShown = useRef(false);
 
@@ -57,9 +57,15 @@ const ManageProfile = () => {
         setProfileImage(profileImage);
         setBadges(badges);
         setNickname(nickname);
+
+        // main: true인 뱃지를 찾아서 선택
+        const mainBadge = badges.find((badge) => badge.main);
+        if (mainBadge) {
+          setSelectedBadge(mainBadge.name);
+        }
       } catch (error) {
         if (!isErrorShown.current) {
-          toast.error("프로필 정보를 불러오지 못했습니다!!");
+          toast.error("프로필 정보를 불러오지 못했습니다!");
           isErrorShown.current = true;
         }
         console.error("Failed to fetch profile data:", error);
@@ -70,16 +76,16 @@ const ManageProfile = () => {
   }, [userId]);
 
   const handleSaveClick = async () => {
-    if (!isNicknameChecked) {
-      toast.error("닉네임 중복 확인을 완료해주세요.");
-      return;
-    }
+    // if (!isNicknameChecked) {
+    //   toast.error("닉네임 중복 확인을 완료해주세요.");
+    //   return;
+    // }
 
     try {
       const requestData = {
         profileImage,
         nickname,
-        mainBadge: badges.find((badge) => badge.main)?.name || "",
+        mainBadge: selectedBadge,
       };
 
       const response = await axios.post(
@@ -117,7 +123,11 @@ const ManageProfile = () => {
         />
         <BadgeSelector
           badges={badges}
-          onBadgeChange={(updatedBadges) => setBadges(updatedBadges)}
+          selectedBadge={selectedBadge}
+          onBadgeChange={(updatedBadges, newSelectedBadge) => {
+            setBadges(updatedBadges);
+            setSelectedBadge(newSelectedBadge);
+          }}
         />
         <NicknameInput
           nickname={nickname}
