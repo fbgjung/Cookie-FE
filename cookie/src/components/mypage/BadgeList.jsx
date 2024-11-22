@@ -20,7 +20,6 @@ const BadgeContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 15px;
-
   overflow-x: auto;
   padding: 0 10px;
 `;
@@ -33,20 +32,11 @@ const BadgeItem = styled.div`
   flex-shrink: 0;
   width: 80px;
   height: 80px;
-  background-color: ${(props) => props.bgColor || "#fff"};
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 10px;
-  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-
-  &:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    top: 10%;
-    right: -8px;
-    height: 80%;
-    border-right: 1px solid #ddd;
-  }
 `;
 
 const BadgeImage = styled.img`
@@ -57,20 +47,27 @@ const BadgeImage = styled.img`
 
 const BadgeLabel = styled.span`
   font-size: 0.9rem;
-  color: ${(props) => props.color || "#333"};
+  color: #333;
 `;
 
-const BadgeList = ({ title, badges }) => {
+const BadgeList = ({ title = "배지 리스트", badges = [] }) => {
   return (
     <BadgeSection>
       <BadgeTitle>{title}</BadgeTitle>
       <BadgeContainer>
-        {badges.map((badge, index) => (
-          <BadgeItem key={index} bgColor={badge.bgColor}>
-            <BadgeImage src={badge.image} alt={`${badge.label} Badge`} />
-            <BadgeLabel color={badge.textColor}>{badge.label}</BadgeLabel>
-          </BadgeItem>
-        ))}
+        {badges.length > 0 ? (
+          badges.map((badge, index) => (
+            <BadgeItem key={index}>
+              <BadgeImage
+                src={badge.badgeImage || "https://ibb.co/QrbJCj0"}
+                alt={`${badge.name || "Badge"} Badge`}
+              />
+              <BadgeLabel>{badge.name || "이름 없음"}</BadgeLabel>
+            </BadgeItem>
+          ))
+        ) : (
+          <p>표시할 배지가 없습니다.</p>
+        )}
       </BadgeContainer>
     </BadgeSection>
   );
