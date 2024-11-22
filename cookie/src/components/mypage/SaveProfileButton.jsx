@@ -18,10 +18,6 @@ const SaveButton = styled.button`
   cursor: pointer;
   width: 460px;
 
-  &:hover {
-    background-color: #0056b3;
-  }
-
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
