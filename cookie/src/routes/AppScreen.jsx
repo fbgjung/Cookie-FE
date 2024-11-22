@@ -10,6 +10,7 @@ import ReviewIcon from "/src/assets/images/navbar_review.svg";
 import MatchupIcon from "/src/assets/images/navbar_matchup.svg";
 import ProfileIcon from "/src/assets/images/navbar_profile.svg";
 import { Link } from "react-router-dom";
+import Notification from "../components/Notification";
 
 const Container = styled.div`
   position: relative;
@@ -109,22 +110,6 @@ const Logo = styled.div`
   }
 `;
 
-const Notification = styled.div`
-  img {
-    height: 30px;
-    cursor: pointer;
-    transition: height 0.2s ease;
-
-    @media (max-width: 768px) {
-      height: 25px;
-    }
-
-    @media (max-width: 480px) {
-      height: 20px;
-    }
-  }
-`;
-
 const MainContent = styled.main`
   flex: 1;
   width: 100%;
@@ -159,9 +144,7 @@ const AppScreen = () => {
               <Logo>
                 <img src={CookieLogo} alt="Cookie Logo" />
               </Logo>
-              <Notification>
-                <img src={NotificationIcon} alt="Notification Icon" />
-              </Notification>
+              <Notification />
             </HeaderContainer>
           )}
           <MainContent>

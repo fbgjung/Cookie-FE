@@ -7,6 +7,12 @@ const ProfileContainer = styled.div`
   align-items: center;
 `;
 
+const ImageContainer = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
+`;
+
 const Image = styled.div`
   width: 100px;
   height: 100px;
@@ -15,8 +21,15 @@ const Image = styled.div`
   background-image: url(${(props) => props.image || "defaultImage.png"});
   background-size: cover;
   background-position: center;
-  margin-bottom: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+`;
+
+const BadgeIcon = styled.img`
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  width: 50px;
+  height: 50px;
 `;
 
 const Title = styled.h3`
@@ -31,6 +44,8 @@ const NameContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
+  margin: 30px;
 `;
 
 const Name = styled.h2`
@@ -43,7 +58,7 @@ const Name = styled.h2`
 const ManageProfileIcon = styled.img`
   width: 20px;
   height: 20px;
-  margin-left: 8px;
+  margin-left: 2px;
   cursor: pointer;
 
   &:hover {
@@ -51,7 +66,7 @@ const ManageProfileIcon = styled.img`
   }
 `;
 
-const ProfileImage = ({ title, name, image }) => {
+const ProfileImage = ({ title, name, image, badgeIcon }) => {
   const navigate = useNavigate();
 
   const handleManageClick = () => {
@@ -61,7 +76,10 @@ const ProfileImage = ({ title, name, image }) => {
   return (
     <ProfileContainer>
       {title && <Title>{title}</Title>}
-      <Image image={image} />
+      <ImageContainer>
+        <Image image={image} />
+        <BadgeIcon src={badgeIcon} alt="Main Badge" />
+      </ImageContainer>
       <NameContainer>
         {name && <Name>{name}</Name>}
         <ManageProfileIcon

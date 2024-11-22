@@ -61,7 +61,7 @@ const CheckButton = styled.button`
 const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
   const handleCheckNickname = async () => {
     try {
-      const response = await axios.post("/api/auth/check-nickname", {
+      const response = await axios.post("http://localhost:8080/api/auth/check-nickname", {
         nickname,
       });
 
