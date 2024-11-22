@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const CastGrid = styled.div`
-  margin-top: 10px;
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 10px;
