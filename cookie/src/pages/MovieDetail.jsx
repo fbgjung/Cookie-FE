@@ -6,6 +6,8 @@ import CastSection from "../components/movieDetailPage/CastSection";
 import VideoSection from "../components/movieDetailPage/VideoSection";
 import GallerySection from "../components/movieDetailPage/GallerySection";
 import ReviewSection from "../components/movieDetailPage/ReviewSection";
+import image from "../assets/images/ghpark.jpg";
+import test from "../assets/images/test.png";
 
 const ContentWrapper = styled.div`
   max-width: 900px;
@@ -25,38 +27,38 @@ const MovieDetail = () => {
     rating: "15세",
     description:
       "시험만 잘 치면 멋진 인생을 살 수 있다고 가르치는 세상에서 기댈 곳 없이 세상에 내몰린 우등생 소녀 ‘첸니엔’과 양아치 소년 ‘베이’. 비슷한 상처와 외로움에 끌려 서로에게 의지하게 된 두 사람은 수능을 하루 앞둔 어느 날, ‘첸니엔’의 삶을 뒤바꿔버릴 거대한 사건에 휘말리게 된다. ‘첸니엔’만은 평범하고 행복하게 살길 바라는 ‘베이’는 그녀의 그림자가 되어 모든 것을 해결하기로 마음 먹는데…",
-    posterUrl: "https://via.placeholder.com/120x160?text=포스터",
+    posterUrl: image,
     stillCuts: [
-      "https://via.placeholder.com/600x300?text=스틸컷+1",
+      test,
       "https://via.placeholder.com/600x300?text=스틸컷+2",
       "https://via.placeholder.com/600x300?text=스틸컷+3"
     ],
     cast: [
-      { name: "중국상", role: "감독", img: "https://via.placeholder.com/70" },
-      { name: "장동건", role: "주연", img: "https://via.placeholder.com/70" },
-      { name: "장동건", role: "주연", img: "https://via.placeholder.com/70" },
-      { name: "장동건", role: "주연", img: "https://via.placeholder.com/70" },
-      { name: "장동건", role: "주연", img: "https://via.placeholder.com/70" },
-      { name: "장동건", role: "주연", img: "https://via.placeholder.com/70" },
+      { name: "박건휘", role: "감독", img: image },
+      { name: "박건휘", role: "주연", img: image },
+      { name: "박건휘", role: "주연", img: image },
+      { name: "박건휘", role: "주연", img: image },
+      { name: "박건휘", role: "주연", img: image },
+      { name: "박건휘", role: "주연", img: image }
     ],
     videos: [
       {
-        thumbnail: "https://via.placeholder.com/200x120?text=메인+예고편",
+        thumbnail: test,
         title: "메인 예고편",
       },
       {
-        thumbnail: "https://via.placeholder.com/200x120?text=30초+예고편",
+        thumbnail: test,
         title: "30초 예고편",
       },
       {
-        thumbnail: "https://via.placeholder.com/200x120?text=메이킹+영상",
+        thumbnail: test,
         title: "메이킹 영상",
       }
     ],
     gallery: [
-      "https://via.placeholder.com/200x120?text=갤러리+1",
-      "https://via.placeholder.com/200x120?text=갤러리+2",
-      "https://via.placeholder.com/200x120?text=갤러리+3"
+      test,
+      test,
+      test
     ],
   };
 
