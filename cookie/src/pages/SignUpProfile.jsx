@@ -5,7 +5,6 @@ import userDefaultImg from "../assets/images/signUp/user_img.svg";
 import deleteBtn from "../assets/images/signUp/close_icon.svg";
 import { useNavigate } from "react-router-dom";
 const MainContainer = styled.div`
-  /* background-color: var(--ticket-bg); */
   background-color: white;
   height: 100vh;
   padding: 4.375rem 0 0 0;

@@ -4,7 +4,6 @@ import GlobalStyle from "../styles/global";
 import { useNavigate } from "react-router-dom";
 
 const MainContainer = styled.div`
-  /* background-color: var(--ticket-bg); */
   background-color: white;
   height: 100vh;
   padding: 4.375rem 0 0 0;
@@ -121,15 +120,11 @@ function SignUpTheme() {
     },
     {
       id: 11,
-      theme: "퀴어",
-    },
-    {
-      id: 12,
       theme: "전쟁",
     },
     {
-      id: 13,
-      theme: "다큐맨터리",
+      id: 12,
+      theme: "다큐멘터리",
     },
   ];
   const [selectedTheme, setSelectedTheme] = useState([]);

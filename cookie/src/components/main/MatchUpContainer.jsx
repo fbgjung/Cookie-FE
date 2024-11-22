@@ -6,14 +6,16 @@ import { useNavigate } from "react-router-dom";
 
 const MathUp = styled.div`
   position: relative;
+
   .matchUp__title {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+    margin-bottom: 1rem;
   }
+
   .matchUp__movie {
-    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,6 +25,49 @@ const MathUp = styled.div`
     border: none;
     border-radius: 0.75rem;
     padding: 1rem;
+    position: relative;
+  }
+
+  .matchUp__overlay {
+    position: absolute;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.75rem;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .matchUp__overlay button {
+    width: 16rem;
+    height: 3.19rem;
+    background-color: var(--sub);
+    color: white;
+    border: none;
+    font-size: 1.125rem;
+    font-weight: 700;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+  }
+
+  .matchUp__overlay:hover button {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .matchUp__movie--title {
+    background-color: white;
+    border-radius: 12px;
+    padding: 5px 10px;
+    border: 1px solid var(--sub-btn);
   }
 
   .matchUp__movie--container {
@@ -36,7 +81,11 @@ const MathUp = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 87px;
+    width: 90px;
+  }
+
+  .matchUp__movie--list p {
+    text-align: center;
   }
 
   .matchUp__movie--poster {
@@ -46,43 +95,8 @@ const MathUp = styled.div`
 
   .matchUp__movie--icon {
     position: absolute;
-    top: 7.5rem;
+    top: 5.5rem;
     left: 15rem;
-  }
-
-  .matchUp__overlay button {
-    width: 16rem;
-    height: 3.19rem;
-    background-color: var(--sub);
-    color: white;
-    border: none;
-    font-size: 1.125rem;
-    border-radius: 0.75rem;
-    cursor: pointer;
-    position: relative;
-    top: 35%;
-    left: 27%;
-    opacity: 0;
-    visibility: visible;
-    transition: opacity 0.3s ease;
-  }
-
-  .matchUp__overlay {
-    position: absolute;
-    bottom: 0.08rem;
-    background-color: none;
-    transition: background-color 0.3s ease;
-    width: 35rem;
-    height: 11.2rem;
-    border-radius: 0.75rem;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-  }
-
-  .matchUp__overlay:hover button {
-    opacity: 1;
-    visibility: visible;
   }
 `;
 
@@ -101,7 +115,13 @@ function MatchUpContainer({ matchDate, dummydata }) {
       </div>
       {dummydata.length > 0 && (
         <div className="matchUp__movie">
-          <p>{dummydata[0].matchTitle}</p>
+          <img className="matchUp__movie--icon" src={fight} alt="fight_icon" />
+          <div className="matchUp__overlay">
+            <button onClick={() => navigate("/matchup")}>
+              투표하러 가기👀
+            </button>
+          </div>
+          <p className="matchUp__movie--title">{dummydata[0].matchTitle}</p>
           {dummydata.map((group) => (
             <div key={group.matchTitle} className="matchUp__movie--container">
               {group.data.map((movie) => (
@@ -118,11 +138,6 @@ function MatchUpContainer({ matchDate, dummydata }) {
           ))}
         </div>
       )}
-      <img className="matchUp__movie--icon" src={fight} alt="fight_icon" />
-
-      <div className="matchUp__overlay">
-        <button onClick={() => navigate("/matchup")}>투표하러 가기</button>
-      </div>
     </MathUp>
   );
 }

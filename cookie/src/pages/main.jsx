@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import specialMovie from "../assets/images/main/special_icon.svg";
-import cookieMovie from "../assets/images/main/video_icon.svg";
-import MatchUpContainer from "../components/main/MatchUpContainer";
 import GlobalStyle from "../styles/global";
+import MatchUpContainer from "../components/main/MatchUpContainer";
+import MovieRank from "../components/main/MovieRank";
+import CookieMovies from "../components/main/CookieMovies";
+import SpecialMovie from "../components/main/SpecialMovie";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -16,14 +17,14 @@ const MainContainer = styled(CommonContainer)`
   flex-direction: column;
   min-height: 100vh;
   background-color: white;
-  padding-bottom: 60px;
+  margin-bottom: 50px;
 `;
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  gap: 1rem;
+  gap: 2rem;
 
   @media (max-width: 600px) {
     padding: 15px;
@@ -46,7 +47,7 @@ const NavbarWrapper = styled(CommonContainer)`
   position: fixed;
   bottom: 0;
   z-index: 100;
-  background-color: #ffffff;
+  background-color: white;
   box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 600px) {
@@ -68,7 +69,7 @@ const Main = () => {
         {
           id: 2,
           poster: "https://via.placeholder.com/83x118",
-          movie: "복수는나의것",
+          movie: "복수는나의 것",
           matchDate: "2024-12-31",
         },
       ],
@@ -83,6 +84,9 @@ const Main = () => {
         <img src={"https://via.placeholder.com/600x250"} alt="배너" />
         <Content>
           <MatchUpContainer dummydata={dummyMovies} />
+          <MovieRank />
+          <CookieMovies />
+          <SpecialMovie />
         </Content>
       </MainContainer>
       <NavbarWrapper></NavbarWrapper>
