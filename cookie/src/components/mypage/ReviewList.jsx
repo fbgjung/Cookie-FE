@@ -195,30 +195,51 @@ const ReviewList = ({ title, reviews }) => {
     <ReviewSection>
       <ReviewTitle>{title}</ReviewTitle>
       <ReviewContainer>
-        {reviews.map((review) => (
-          <ReviewTicket key={review.reviewId}>
+        {reviews.map((review, index) => (
+          <ReviewTicket key={index}>
             <ReviewLeft>
-              <img src={review.movie.poster} alt={review.movie.title} />
-              <div className="title">{review.movie.title}</div>
+              <img
+                src={
+                  review.movie?.poster ||
+                  review.poster ||
+                  "/src/assets/images/default-poster.png"
+                }
+                alt={review.movie?.title || review.movieTitle || "제목 없음"}
+              />
+              <div className="title">
+                {review.movie?.title || review.movieTitle || "제목 없음"}
+              </div>
             </ReviewLeft>
             <ReviewCenter>
               <div className="profile">
                 <img
-                  src={review.user.profileImage}
-                  alt={`${review.user.nickname} Profile`}
+                  src={
+                    review.user?.profileImage ||
+                    review.profileImage ||
+                    "/src/assets/images/default-user.png"
+                  }
+                  alt={`${review.user?.nickname || review.userName || "익명"} Profile`}
                 />
                 <div className="user-info">
-                  <span className="name">{review.user.nickname}</span>
+                  <span className="name">
+                    {review.user?.nickname || review.userName || "익명"}
+                  </span>
                   <span className="date">
-                    {new Date(review.createdAt).toLocaleDateString()}
+                    {review.createdAt
+                      ? new Date(review.createdAt).toLocaleDateString()
+                      : review.date || "날짜 없음"}
                   </span>
                 </div>
               </div>
-              <div className="comment">{review.content}</div>
+              <div className="comment">
+                {review.content || review.comment || "내용 없음"}
+              </div>
             </ReviewCenter>
             <ReviewRight>
-              <div className="score">평점: {review.movieScore.toFixed(1)}</div>
-              <div className="likes">좋아요: {review.reviewLike}</div>
+              <div className="score">
+                평점: {review.movieScore?.toFixed(1) || review.cookies || "0"}
+              </div>
+              <div className="likes">좋아요: {review.reviewLike || 0}</div>
             </ReviewRight>
           </ReviewTicket>
         ))}
