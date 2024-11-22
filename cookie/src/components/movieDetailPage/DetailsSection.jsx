@@ -4,6 +4,7 @@ import styled from "styled-components";
 const DetailsWrapper = styled.div`
   display: flex;
   margin-top: 20px;
+  margin-bottom: 20px;
 
   img {
     width: 120px;
