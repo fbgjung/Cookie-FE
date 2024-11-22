@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import GlobalStyle from "../styles/global";
 import styled from "styled-components";
 import userDefaultImg from "../assets/images/signUp/user_img.svg";
