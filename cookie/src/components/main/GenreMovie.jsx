@@ -29,6 +29,7 @@ const GenreMovieList = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    cursor: pointer;
   }
 
   .genre__movie--list img {
@@ -105,6 +106,8 @@ function GenreMovie() {
       theme: "다큐멘터리",
     },
   ];
+
+  // 더미데이터
   const GenreMovies = Array.from({ length: 60 }, (_, i) => ({
     movieId: i + 1,
     title: `영화 ${i + 1}`,
