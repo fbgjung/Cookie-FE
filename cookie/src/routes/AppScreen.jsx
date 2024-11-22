@@ -18,30 +18,27 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   background: #ffffff;
-  width: 600px;
+  width: 100%; // 600px에서 100%로 변경
+  max-width: 600px; // 최대 너비 추가
+  margin: 0 auto; // 중앙 정렬을 위해 추가
 `;
 
 const ViewArea = styled.div`
   width: 100%;
-  max-width: 600px;
-  min-width: 360px;
   position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   border-left: 1px solid var(--border-divider);
   border-right: 1px solid var(--border-divider);
-  margin: 0 auto;
-
-  @media (max-width: 1440px) {
-    max-width: 100%;
-  }
 
   @media (max-width: 768px) {
-    max-width: 90%;
+    width: 100%;
+    max-width: none;
+    border-left: none; // 모바일에서는 테두리 제거
+    border-right: none;
   }
 `;
-
 const HeaderContainer = styled.header`
   width: 100%;
   display: flex;

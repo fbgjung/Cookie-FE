@@ -11,7 +11,7 @@ const Image = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 20px;
-  background-color: #fff; /* 기본값으로 설정 */
+  background-color: #fff;
   background-image: url(${(props) => props.image || "defaultImage.png"});
   background-size: cover;
   background-position: center;
@@ -37,7 +37,7 @@ const Name = styled.h2`
   font-size: 1.2rem;
   margin: 0;
   text-align: center;
-  color: #000; /* 기본값으로 설정 */
+  color: #000;
 `;
 
 const ManageProfileIcon = styled.img`
@@ -60,10 +60,10 @@ const ProfileImage = ({ title, name, image }) => {
 
   return (
     <ProfileContainer>
-      {title && <Title>{title}</Title>} {/* 기본값 사용 */}
+      {title && <Title>{title}</Title>}
       <Image image={image} />
       <NameContainer>
-        {name && <Name>{name}</Name>} {/* 기본값 사용 */}
+        {name && <Name>{name}</Name>}
         <ManageProfileIcon
           src="/src/assets/images/mypage/manageprofile.svg"
           alt="Manage Profile"
