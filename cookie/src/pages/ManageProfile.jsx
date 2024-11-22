@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import SetProfileImage from "../components/mypage/SetProfileImage";
 import BadgeSelector from "../components/mypage/BadgeSelector";
 import styled from "styled-components";
 import NicknameInput from "../components/mypage/NicknameInput";
 import SaveProfileButton from "../components/mypage/SaveProfileButton";
+import { Toaster, toast } from "react-hot-toast";
 
 const ManageProfileContainer = styled.div`
   display: flex;
@@ -24,15 +25,27 @@ const ManageProfileContent = styled.div`
   box-sizing: border-box;
   padding: 20px;
   padding-bottom: 20px;
+
+  /* 반응형 스타일 */
+  @media (max-width: 768px) {
+    padding: 16px;
+    margin-top: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    margin-top: 10px;
+  }
 `;
 
 const ManageProfile = () => {
-  const userId = 1; // 예시 User ID
+  const userId = 1;
   const [profileImage, setProfileImage] = useState("");
   const [badges, setBadges] = useState([]);
   const [nickname, setNickname] = useState("");
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const isErrorShown = useRef(false);
 
-  // 데이터 가져오기
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -40,12 +53,15 @@ const ManageProfile = () => {
           `http://localhost:8080/api/users/${userId}/profileData`
         );
         const { profileImage, badges, nickname } = response.data.response;
-        console.log(response.data.response);
 
         setProfileImage(profileImage);
         setBadges(badges);
         setNickname(nickname);
       } catch (error) {
+        if (!isErrorShown.current) {
+          toast.error("프로필 정보를 불러오지 못했습니다!!");
+          isErrorShown.current = true;
+        }
         console.error("Failed to fetch profile data:", error);
       }
     };
@@ -54,34 +70,46 @@ const ManageProfile = () => {
   }, [userId]);
 
   const handleSaveClick = async () => {
+    if (!isNicknameChecked) {
+      toast.error("닉네임 중복 확인을 완료해주세요.");
+      return;
+    }
+
     try {
-      // 요청 데이터 생성
       const requestData = {
-        profileImage, // 프로필 이미지 URL
-        nickname, // 닉네임
-        mainBadge: badges.find((badge) => badge.main)?.name || "", // 메인 뱃지의 이름
+        profileImage,
+        nickname,
+        mainBadge: badges.find((badge) => badge.main)?.name || "",
       };
 
-      // API 요청
       const response = await axios.post(
         `http://localhost:8080/api/users/${userId}`,
         requestData
       );
 
-      // 응답 확인 및 처리
       if (response.data.response === "SUCCESS") {
-        alert("프로필 저장이 완료되었습니다!");
+        toast.success("프로필 저장이 완료되었습니다!");
       } else {
-        throw new Error("Unexpected response format");
+        throw new Error("오류");
       }
     } catch (error) {
-      console.error("Failed to save profile data:", error);
-      alert("프로필 저장에 실패했습니다.");
+      toast.error("프로필 저장에 실패했습니다.");
+      console.error("오류", error);
     }
   };
 
   return (
     <ManageProfileContainer>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            marginTop: "10px",
+            fontSize: "1rem",
+          },
+        }}
+      />
       <ManageProfileContent>
         <SetProfileImage
           profileImage={profileImage}
@@ -94,6 +122,8 @@ const ManageProfile = () => {
         <NicknameInput
           nickname={nickname}
           onChange={(newNickname) => setNickname(newNickname)}
+          onResetCheck={setIsNicknameChecked}
+          isChecked={isNicknameChecked}
         />
         <SaveProfileButton onClick={handleSaveClick} />
       </ManageProfileContent>
