@@ -54,8 +54,9 @@ const ThemeBtn = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  margin-right: 0.5rem;
+  margin-right: 0.3rem;
   font-size: 1rem;
+  color: ${(props) => (props.$isSelected ? "var(--main)" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
 `;
 
@@ -106,7 +107,7 @@ function SpecialMovie() {
     const shuffled = arr.sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count); // 섞은 배열에서 첫 번째 count 개 항목을 선택
   }
-  const specialMovies = Array.from({ length: 14 }, (_, i) => ({
+  const specialMovies = Array.from({ length: 20 }, (_, i) => ({
     movieId: i + 1,
     title: `영화 ${i + 1}`,
     poster: `https://via.placeholder.com/124x177`,
@@ -171,7 +172,7 @@ function SpecialMovie() {
       <SpecialMovieList>
         <div className="specialMovie__title">
           <img src={specialIcon} alt="special_icon" />
-          <h2>뭘 좋아할지 몰라서 다준비했어</h2>
+          <h2>뭘 좋아할지 몰라서 다준비했어(이름추천받아요)</h2>
         </div>
         <div>
           <div>

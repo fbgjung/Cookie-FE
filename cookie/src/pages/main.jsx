@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import GlobalStyle from "../styles/global";
 import MatchUpContainer from "../components/main/MatchUpContainer";
-import MovieRank from "../components/main/MovieRank";
+import RankMovie from "../components/main/RankMovie";
 import CookieMovies from "../components/main/CookieMovies";
 import SpecialMovie from "../components/main/SpecialMovie";
+import GenreMovie from "../components/main/GenreMovie";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -84,9 +85,10 @@ const Main = () => {
         <img src={"https://via.placeholder.com/600x250"} alt="배너" />
         <Content>
           <MatchUpContainer dummydata={dummyMovies} />
-          <MovieRank />
+          <RankMovie />
           <CookieMovies />
           <SpecialMovie />
+          <GenreMovie />
         </Content>
       </MainContainer>
       <NavbarWrapper></NavbarWrapper>
