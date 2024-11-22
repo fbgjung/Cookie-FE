@@ -50,7 +50,7 @@ function CookieMovies() {
     title: `영화 ${i + 1}`,
     poster: `https://via.placeholder.com/124x177`,
     plot: `이 영화는 영화 ${i + 1}에 대한 설명입니다.`,
-    company: `영화회사 ${i + 1}`,
+    nation: ["미국", "한국", "대만", "중국", "캐나다", "프랑스"][i % 6],
     released: `20${10 + (i % 20)}`,
     runtime: `${120 + i}분`,
     score: Math.floor(Math.random() * 5) + 1,
@@ -76,8 +76,11 @@ function CookieMovies() {
                 <p>
                   <strong>{movie.title}</strong>
                 </p>
-                <p>{movie.released}</p>
-                <p>{movie.company}</p>
+                <p>
+                  {" "}
+                  {movie.released}﹒{movie.nation}
+                </p>
+
                 <p className="movie__info--sub">리뷰 : {movie.reviews}개</p>
                 <p className="movie__info--sub">좋아요 : {movie.likes}개</p>
               </div>
