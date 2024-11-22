@@ -1,10 +1,13 @@
 import styled from "styled-components";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const NicknameContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 40px;
   width: 100%;
+  margin-left: 10px;
   max-width: 600px;
 `;
 
@@ -55,7 +58,32 @@ const CheckButton = styled.button`
   }
 `;
 
-const NicknameInput = ({ nickname, onChange }) => {
+const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
+  const handleCheckNickname = async () => {
+    try {
+      const response = await axios.post("/api/auth/check-nickname", {
+        nickname,
+      });
+
+      if (response.data.response === "SUCCESS") {
+        toast.success("사용 가능한 닉네임입니다.");
+        onResetCheck(true);
+      } else if (response.data.response === "DUPLICATED_NICKNAME") {
+        toast.error("이미 사용 중인 닉네임입니다.");
+        onResetCheck(false);
+      }
+    } catch (error) {
+      toast.error("서버 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error("중복 확인 실패:", error);
+      onResetCheck(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    onChange(e.target.value);
+    onResetCheck(false);
+  };
+
   return (
     <NicknameContainer>
       <Label htmlFor="nickname">닉네임</Label>
@@ -65,9 +93,11 @@ const NicknameInput = ({ nickname, onChange }) => {
           type="text"
           placeholder="닉네임을 입력하세요"
           value={nickname}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleInputChange}
         />
-        <CheckButton>중복확인</CheckButton>
+        <CheckButton onClick={handleCheckNickname} disabled={!nickname}>
+          중복확인
+        </CheckButton>
       </InputWrapper>
     </NicknameContainer>
   );
