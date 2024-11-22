@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axios from "axios";
 import DetailHeader from "../components/mypage/DetailHeader";
 import ReviewContentSection from "../components/mypage/ReviewContentSection";
 import ReviewTextSection from "../components/mypage/ReviewTextSection";
@@ -16,45 +17,71 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 
-const ReviewText = styled.div`
-  font-size: 0.9rem;
-  color: #333;
-  margin-bottom: 20px;
-  line-height: 1.5;
+const CommentsSection = styled.div`
+  margin-top: 20px;
 
-  p {
+  h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
     margin-bottom: 10px;
   }
-`;
 
-const Footer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #666;
-
-  margin-top: auto;
-
-  .likes-comments {
+  .comment {
     display: flex;
     align-items: center;
+    margin-bottom: 15px;
 
-    .icon {
-      font-size: 1rem;
-      margin-right: 5px;
-      color: #666;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
     }
 
-    .count {
-      margin-right: 15px;
+    .comment-content {
+      background-color: #f8f8f8;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.9rem;
+
+      .nickname {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .text {
+        color: #333;
+      }
+
+      .date {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 5px;
+      }
     }
   }
 `;
 
 const DetailReview = () => {
   const navigate = useNavigate();
+  const { reviewId } = useParams();
+  const [reviewData, setReviewData] = useState(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchReviewData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/reviews/${reviewId}`
+        );
+        setReviewData(response.data.response[0]);
+      } catch (error) {
+        console.error("Failed to fetch review data:", error);
+      }
+    };
+
+    fetchReviewData();
+  }, [reviewId]);
 
   const handleBack = () => {
     navigate(-1);
@@ -74,46 +101,58 @@ const DetailReview = () => {
     setMenuOpen(false);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        !event.target.closest(".options") &&
-        !event.target.closest(".dropdown-menu")
-      ) {
-        setMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+  if (!reviewData) {
+    return <Container>로딩 중...</Container>;
+  }
 
   return (
     <Container>
       {/* Header */}
       <DetailHeader onBack={handleBack} />
 
+      {/* Review Content Section */}
       <ReviewContentSection
-        posterSrc="/src/assets/images/movies/gladiator.jpg"
-        profileSrc="/src/assets/images/mypage/user1.jpg"
-        name="영화만보는사람"
-        date="오늘"
-        movieTitle="글래디에이터"
-        movieYearCountry="2021 | 미국"
-        cookieScoreCount={4}
+        posterSrc={reviewData.movie.poster}
+        profileSrc={reviewData.user.profileImage}
+        name={reviewData.user.nickname}
+        date={new Date(reviewData.createdAt).toLocaleDateString()}
+        movieTitle={reviewData.movie.title}
+        movieYearCountry="미국"
+        cookieScoreCount={reviewData.movieScore}
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
       />
 
-      <ReviewTextSection
-        reviewText={`억지 글래디에이터 감성 주입에 잔인한 액션 추가 영화 "글래디에이터 2"는 전쟁영화의 거장으로 불리는 리들리 스콧 감독의 역작으로, 그의 작품세계...`}
-      />
+      {/* Review Text Section */}
+      <ReviewTextSection reviewText={reviewData.content} />
 
-      <FooterSection likes={78} comments={2} />
+      {/* Comments Section */}
+      <CommentsSection>
+        <h3>댓글</h3>
+        {reviewData.comments.map((comment, index) => (
+          <div className="comment" key={index}>
+            <img
+              src={comment.user.profileImage}
+              alt={`${comment.user.nickname} 프로필`}
+            />
+            <div className="comment-content">
+              <div className="nickname">{comment.user.nickname}</div>
+              <div className="text">{comment.comment}</div>
+              <div className="date">
+                {new Date(comment.createdAt).toLocaleString()}
+              </div>
+            </div>
+          </div>
+        ))}
+      </CommentsSection>
+
+      {/* Footer Section */}
+      <FooterSection
+        likes={reviewData.reviewLike}
+        comments={reviewData.comments.length}
+      />
     </Container>
   );
 };
