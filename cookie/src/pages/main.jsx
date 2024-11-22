@@ -1,4 +1,12 @@
 import styled from "styled-components";
+import GlobalStyle from "../styles/global";
+import MatchUpContainer from "../components/main/MatchUpContainer";
+import RankMovie from "../components/main/RankMovie";
+import CookieMovies from "../components/main/CookieMovies";
+import SpecialMovie from "../components/main/SpecialMovie";
+import GenreMovie from "../components/main/GenreMovie";
+import TopButton from "../components/searchpage/TopButton";
+import { useEffect, useState } from "react";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -11,15 +19,15 @@ const MainContainer = styled(CommonContainer)`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f9f9f9;
-  padding-bottom: 60px;
+  background-color: white;
+  margin-bottom: 50px;
 `;
 
 const Content = styled.div`
-  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
-  padding-top: 60px;
-  overflow-y: auto;
+  gap: 2rem;
 
   @media (max-width: 600px) {
     padding: 15px;
@@ -42,7 +50,7 @@ const NavbarWrapper = styled(CommonContainer)`
   position: fixed;
   bottom: 0;
   z-index: 100;
-  background-color: #ffffff;
+  background-color: white;
   box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 600px) {
@@ -51,13 +59,53 @@ const NavbarWrapper = styled(CommonContainer)`
 `;
 
 const Main = () => {
+  const dummyMovies = [
+    {
+      matchTitle: "박찬욱 감독의 복수 3부작 빅매치",
+      data: [
+        {
+          id: 1,
+          poster: "https://via.placeholder.com/83x118",
+          movie: "올드보이",
+          matchDate: "2024-12-31",
+        },
+        {
+          id: 2,
+          poster: "https://via.placeholder.com/83x118",
+          movie: "복수는나의 것",
+          matchDate: "2024-12-31",
+        },
+      ],
+    },
+  ];
+  const [showTopButton, setShowTopButton] = useState(false);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      setShowTopButton(scrollTop > 200);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <>
+      <GlobalStyle />
       <HeaderWrapper></HeaderWrapper>
       <MainContainer>
+        <img src={"https://via.placeholder.com/600x250"} alt="배너" />
         <Content>
-          <h1>메인입니다</h1>
+          <MatchUpContainer dummydata={dummyMovies} />
+          <RankMovie />
+          <CookieMovies />
+          <SpecialMovie />
+          <GenreMovie />
         </Content>
+        <TopButton visible={showTopButton} onClick={scrollToTop} />
       </MainContainer>
       <NavbarWrapper></NavbarWrapper>
     </>
