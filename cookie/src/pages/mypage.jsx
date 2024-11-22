@@ -53,6 +53,7 @@ const MyPage = () => {
           badge.map((b) => ({
             name: b.name,
             badgeImage: b.badgeImage,
+            main: b.main,
           }))
         );
 
@@ -85,6 +86,7 @@ const MyPage = () => {
     fetchUserData();
   }, [userId]);
 
+  const mainBadge = badgeData.find((badge) => badge.main) || {};
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
   const handleLogout = () => {
@@ -107,9 +109,12 @@ const MyPage = () => {
         }}
       >
         <ProfileImage
-          title="로맨스 매니아"
+          title={mainBadge.name || "배지 없음"}
           name={userData.nickname}
           image={userData.profileImage}
+          badgeIcon={
+            mainBadge.badgeImage || "/src/assets/images/defaultBadge.png"
+          }
         />
       </div>
       <MypageContent>
