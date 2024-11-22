@@ -59,7 +59,7 @@ const BadgeList = ({ title = "배지 리스트", badges = [] }) => {
           badges.map((badge, index) => (
             <BadgeItem key={index}>
               <BadgeImage
-                src={badge.badgeImage || "/default-badge.png"}
+                src={badge.badgeImage || "https://ibb.co/QrbJCj0"}
                 alt={`${badge.name || "Badge"} Badge`}
               />
               <BadgeLabel>{badge.name || "이름 없음"}</BadgeLabel>
