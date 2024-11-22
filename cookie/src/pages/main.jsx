@@ -5,6 +5,8 @@ import RankMovie from "../components/main/RankMovie";
 import CookieMovies from "../components/main/CookieMovies";
 import SpecialMovie from "../components/main/SpecialMovie";
 import GenreMovie from "../components/main/GenreMovie";
+import TopButton from "../components/searchpage/TopButton";
+import { useEffect, useState } from "react";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -76,7 +78,20 @@ const Main = () => {
       ],
     },
   ];
+  const [showTopButton, setShowTopButton] = useState(false);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      setShowTopButton(scrollTop > 200);
+    };
 
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <>
       <GlobalStyle />
@@ -90,6 +105,7 @@ const Main = () => {
           <SpecialMovie />
           <GenreMovie />
         </Content>
+        <TopButton visible={showTopButton} onClick={scrollToTop} />
       </MainContainer>
       <NavbarWrapper></NavbarWrapper>
     </>
