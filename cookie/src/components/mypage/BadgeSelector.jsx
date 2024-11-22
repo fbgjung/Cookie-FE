@@ -69,7 +69,7 @@ const BadgeItem = styled.div`
 `;
 
 const BadgeSelector = () => {
-  const [selectedBadge, setSelectedBadge] = useState("roomance");
+  const [selectedBadge, setSelectedBadge] = useState("romance");
 
   const badges = [
     {

@@ -10,10 +10,9 @@ const Container = styled.div`
   align-items: center;
   background-color: #ffffff;
   min-height: 100vh;
-  /* max-width: 800px; */
+  max-width: 800px;
   margin: 0 auto;
   position: relative;
-  width:100%;
 
   @media (max-width: 768px) {
     padding-top: 15px;
@@ -187,7 +186,7 @@ const LikedMovies = () => {
     const fetchLikedMovies = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/users/${userId}/movieLiked`
+          `http://localhost:8080/api/users/${userId}/movieLiked/`
         );
         const moviesData = response.data.response;
 
@@ -202,7 +201,7 @@ const LikedMovies = () => {
 
         setMovies(transformedMovies);
       } catch (error) {
-        console.error("Failed to fetch liked movies:", error);
+        console.error("실패", error);
       }
     };
 
