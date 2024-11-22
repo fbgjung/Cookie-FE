@@ -39,7 +39,6 @@ const HeaderWrapper = styled.div`
 const HeaderSection = ({
   title,
   year,
-  genre,
   country,
   duration,
   rating,
@@ -66,8 +65,7 @@ const HeaderSection = ({
       </ArrowButton>
       <div className="info-overlay">
         <h1>{title}</h1>
-        <p>{`${year} · ${genre} · ${country}`}</p>
-        <p>{`${duration} · ${rating}`}</p>
+        <p>{`${year} · ${country} · ${duration} · ${rating}`}</p>
       </div>
     </HeaderWrapper>
   );
@@ -77,7 +75,6 @@ const HeaderSection = ({
 HeaderSection.propTypes = {
   title: PropTypes.string.isRequired, // title은 필수 string 타입
   year: PropTypes.string.isRequired, // year은 필수 string 타입
-  genre: PropTypes.string.isRequired, // genre은 필수 string 타입
   country: PropTypes.string.isRequired, // country은 필수 string 타입
   duration: PropTypes.string.isRequired, // duration은 필수 string 타입
   rating: PropTypes.string.isRequired, // rating은 필수 string 타입
