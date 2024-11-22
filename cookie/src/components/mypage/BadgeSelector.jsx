@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const BadgeContainer = styled.div`
@@ -31,11 +31,10 @@ const BadgeList = styled.div`
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
 
-  /* 스크롤바 숨기기 */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
+    display: none;
   }
 `;
 
@@ -68,72 +67,20 @@ const BadgeItem = styled.div`
   }
 `;
 
-const BadgeSelector = () => {
-  const [selectedBadge, setSelectedBadge] = useState("romance");
+const BadgeSelector = ({ badges, selectedBadge, onBadgeChange }) => {
+  const [currentSelectedBadge, setCurrentSelectedBadge] = useState(selectedBadge);
 
-  const badges = [
-    {
-      id: "roomance",
-      name: "로맨스 매니아",
-      activeSrc: "/src/assets/images/mypage/romancebadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
-    {
-      id: "action",
-      name: "액션 매니아",
-      activeSrc: "/src/assets/images/mypage/actionbadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
-    {
-      id: "sf",
-      name: "SF 매니아",
-      activeSrc: "/src/assets/images/mypage/sfbadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
-    {
-      id: "crime",
-      name: "범죄 매니아",
-      activeSrc: "/src/assets/images/mypage/crimebadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
-    {
-      id: "comedy",
-      name: "코미디 매니아",
-      activeSrc: "/src/assets/images/mypage/comedybadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
+  useEffect(() => {
+    setCurrentSelectedBadge(selectedBadge); // 초기값 설정
+  }, [selectedBadge]);
 
-    {
-      id: "comedy",
-      name: "코미디 매니아",
-      activeSrc: "/src/assets/images/mypage/comedybadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
-
-    {
-      id: "comedy",
-      name: "코미디 매니아",
-      activeSrc: "/src/assets/images/mypage/comedybadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
-
-    {
-      id: "comedy",
-      name: "코미디 매니아",
-      activeSrc: "/src/assets/images/mypage/comedybadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
-
-    {
-      id: "comedy",
-      name: "코미디 매니아",
-      activeSrc: "/src/assets/images/mypage/comedybadge.svg",
-      inactiveSrc: "/src/assets/images/mypage/defaultbadge.svg",
-    },
-  ];
-
-  const handleBadgeSelect = (id) => {
-    setSelectedBadge(id);
+  const handleBadgeSelect = (badge) => {
+    const updatedBadges = badges.map((b) => ({
+      ...b,
+      main: b.name === badge.name,
+    }));
+    setCurrentSelectedBadge(badge.name);
+    onBadgeChange(updatedBadges, badge.name);
   };
 
   return (
@@ -142,13 +89,15 @@ const BadgeSelector = () => {
       <BadgeList>
         {badges.map((badge) => (
           <BadgeItem
-            key={badge.id}
-            isSelected={selectedBadge === badge.id}
-            onClick={() => handleBadgeSelect(badge.id)}
+            key={badge.name}
+            isSelected={currentSelectedBadge === badge.name}
+            onClick={() => handleBadgeSelect(badge)}
           >
             <img
               src={
-                selectedBadge === badge.id ? badge.activeSrc : badge.inactiveSrc
+                currentSelectedBadge === badge.name
+                  ? badge.badgeImage
+                  : "/path/to/defaultBadge.png"
               }
               alt={badge.name}
             />
@@ -156,8 +105,8 @@ const BadgeSelector = () => {
             <input
               type="radio"
               name="badge"
-              checked={selectedBadge === badge.id}
-              onChange={() => handleBadgeSelect(badge.id)}
+              checked={currentSelectedBadge === badge.name}
+              onChange={() => handleBadgeSelect(badge)}
             />
           </BadgeItem>
         ))}
