@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import ReviewList from "../components/mypage/ReviewList";
 
 const Container = styled.div`
@@ -8,11 +10,11 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #ffffff;
-  width: 100%; /* 화면 전체 너비 */
-  max-width: 1000px; /* 부모 컨테이너 최대 너비 */
+  width: 100%;
+  max-width: 1000px;
   margin: 0 auto;
   position: relative;
-
+  min-height: 100vh;
   @media (max-width: 768px) {
     padding-top: 15px;
     max-width: 95%;
@@ -69,42 +71,54 @@ const HeartIcon = styled.img`
   }
 `;
 
-const dummyReviews = [
-  {
-    poster: "/src/assets/images/movies/gladiator.jpg",
-    movieTitle: "글래디에이터",
-    profileImage: "/src/assets/images/mypage/user1.jpg",
-    userName: "사용자1",
-    date: "2024-11-18",
-    comment: "정말 감동적인 영화였습니다.",
-    cookies: 4,
-  },
-  {
-    poster: "/src/assets/images/movies/wicked.jpg",
-    movieTitle: "위키드",
-    profileImage: "/src/assets/images/mypage/user2.jpg",
-    userName: "사용자2",
-    date: "2024-11-17",
-    comment: "화려한 음악과 공연, 최고였습니다.",
-    cookies: 5,
-  },
-  {
-    poster: "/src/assets/images/movies/chungseol.jpg",
-    movieTitle: "청설",
-    profileImage: "/src/assets/images/mypage/user3.jpg",
-    userName: "사용자3",
-    date: "2024-11-16",
-    comment: "잔잔한 스토리가 마음을 울렸어요.",
-    cookies: 3,
-  },
-];
+const EmptyMessage = styled.div`
+  font-size: 1rem;
+  color: #999;
+  text-align: center;
+  margin: 30px 0;
+`;
 
 const LikedReviews = () => {
   const navigate = useNavigate();
+  const userId = 1;
+  const [reviews, setReviews] = useState([]);
 
   const handleBackClick = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    const fetchLikedReviews = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/users/${userId}/reviewLiked`
+        );
+        const reviewsData = response.data.response;
+
+        const transformedReviews = reviewsData.map((review) => ({
+          reviewId: review.reviewId,
+          content: review.content,
+          movieScore: review.movieScore,
+          reviewLike: review.reviewLike,
+          createdAt: review.createdAt,
+          movie: {
+            title: review.movie.title,
+            poster: review.movie.poster,
+          },
+          user: {
+            nickname: review.user.nickname,
+            profileImage: review.user.profileImage,
+          },
+        }));
+
+        setReviews(transformedReviews);
+      } catch (error) {
+        console.error("실패", error);
+      }
+    };
+
+    fetchLikedReviews();
+  }, [userId]);
 
   return (
     <Container>
@@ -115,8 +129,11 @@ const LikedReviews = () => {
       />
       <Title>좋아하는 리뷰</Title>
       <HeartIcon src="/src/assets/images/mypage/red-heart.svg" alt="하트" />
-
-      <ReviewList title="" reviews={dummyReviews} />
+      {reviews.length > 0 ? (
+        <ReviewList title="" reviews={reviews} />
+      ) : (
+        <EmptyMessage>좋아하는 리뷰를 선택해보세요!</EmptyMessage>
+      )}
     </Container>
   );
 };
