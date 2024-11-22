@@ -43,17 +43,14 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
-const SetProfileImage = () => {
-  const [profileImage, setProfileImage] = useState(
-    "/src/assets/images/mypage/setimage.svg"
-  );
+const SetProfileImage = ({ profileImage, onChange }) => {
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
+      onChange(imageUrl);
     }
   };
 
