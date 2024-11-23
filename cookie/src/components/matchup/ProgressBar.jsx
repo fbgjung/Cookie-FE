@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const BarContainer = styled.div`
-  width: 90%;
+  width: 80%;
   max-width: 1000px;
   height: 30px;
   background-color: #d9d9d9;
@@ -21,7 +21,6 @@ const FilledBar = styled.div`
 `;
 
 const PercentageBubble = styled.div`
-  // 말풍선
   position: absolute;
   top: -40px;
   left: ${(props) => props.percentage}%;
@@ -52,19 +51,24 @@ const PercentageBubble = styled.div`
 `;
 
 const Icon = styled.img`
-  //아이콘
   width: 20px;
   height: 20px;
 `;
 
-const ProgressBar = ({ percentage }) => (
-  <BarContainer>
-    <FilledBar percentage={percentage} />
-    <PercentageBubble percentage={percentage}>
-      <Icon src="/src/assets/images/matchup/ic_fight.svg" alt="Fight Icon" />
-      {percentage}%
-    </PercentageBubble>
-  </BarContainer>
-);
+const ProgressBar = ({ movie1Likes, movie2Likes }) => {
+  const totalVotes = movie1Likes + movie2Likes;
+  const percentage =
+    totalVotes > 0 ? Math.round((movie1Likes / totalVotes) * 100) : 50;
+
+  return (
+    <BarContainer>
+      <FilledBar percentage={percentage} />
+      <PercentageBubble percentage={percentage}>
+        <Icon src="/src/assets/images/matchup/ic_fight.svg" alt="Fight Icon" />
+        {percentage}%
+      </PercentageBubble>
+    </BarContainer>
+  );
+};
 
 export default ProgressBar;

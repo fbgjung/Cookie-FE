@@ -1,6 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components";
-import RadarChart from "./RadarChart";
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+} from "recharts";
 
 const SectionContainer = styled.div`
   display: flex;
@@ -13,7 +19,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: 600px;
+  max-width: 540px;
   margin-bottom: 20px;
 `;
 
@@ -46,7 +52,11 @@ const SelectButton = styled.button`
 
 const ChartContainer = styled.div`
   display: flex;
-  gap: 40px;
+`;
+
+const ChartWrapper = styled.div`
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 `;
 
 const ChartLabel = styled.div`
@@ -56,65 +66,99 @@ const ChartLabel = styled.div`
   margin-top: 10px;
 `;
 
-const ChartSection = () => {
-  const [selectedMovie, setSelectedMovie] = useState("올드보이");
+const ChartSection = ({ movie1, movie2 }) => {
+  const [selectedMovie, setSelectedMovie] = useState(movie1.movieTitle);
 
-  const radarData = {
-    올드보이: {
-      labels: [
-        "감독 연출",
-        "배우 연기",
-        "음악",
-        "스토리",
-        "영상미",
-        "영상미",
-        "영상미",
-      ],
-      매력포인트: [8, 9, 7, 8.5, 9],
-      감정포인트: [7.5, 8, 7, 8, 8.5],
-    },
-    복수는나의것: {
-      labels: ["감독 연출", "배우 연기", "음악", "스토리", "영상미"],
-      매력포인트: [7, 8, 7.5, 7, 8],
-      감정포인트: [8, 7.5, 7, 7.5, 7],
-    },
+  const formatData = (data) => {
+    return Object.keys(data).map((key) => ({
+      subject: key,
+      value: data[key],
+    }));
   };
 
-  const currentData = radarData[selectedMovie];
+  const charmData =
+    selectedMovie === movie1.movieTitle
+      ? formatData(movie1.charmPoint)
+      : formatData(movie2.charmPoint);
+
+  const emotionData =
+    selectedMovie === movie1.movieTitle
+      ? formatData(movie1.emotionPoint)
+      : formatData(movie2.emotionPoint);
 
   return (
     <SectionContainer>
       <ButtonContainer>
         <SelectButton
-          active={selectedMovie === "올드보이"}
-          onClick={() => setSelectedMovie("올드보이")}
+          active={selectedMovie === movie1.movieTitle}
+          onClick={() => setSelectedMovie(movie1.movieTitle)}
         >
-          올드보이
+          {movie1.movieTitle}
         </SelectButton>
         <SelectButton
-          active={selectedMovie === "복수는나의것"}
-          onClick={() => setSelectedMovie("복수는나의것")}
+          active={selectedMovie === movie2.movieTitle}
+          onClick={() => setSelectedMovie(movie2.movieTitle)}
         >
-          복수는 나의 것
+          {movie2.movieTitle}
         </SelectButton>
       </ButtonContainer>
       <ChartContainer>
         <div>
-          <RadarChart
-            labels={currentData.labels}
-            data={currentData.매력포인트}
-            backgroundColor="rgba(138, 43, 226, 0.5)"
-            borderColor="rgba(138, 43, 226, 1)"
-          />
+          <ChartWrapper>
+            <RadarChart
+              width={300}
+              height={300}
+              data={charmData}
+              margin={{ top: 30, right: 30, bottom: 20, left: 30 }}
+            >
+              <PolarGrid stroke="#ffffff" />
+              <PolarAngleAxis
+                dataKey="subject"
+                tick={{ fill: "#ffffff", fontSize: 10 }}
+              />
+              <PolarRadiusAxis
+                angle={38}
+                domain={[0, 100]}
+                tick={{ fill: "#ffffff" }}
+              />
+              <Radar
+                name="매력포인트"
+                dataKey="value"
+                stroke="rgba(138, 43, 226, 1)"
+                fill="rgba(138, 43, 226, 0.5)"
+                strokeWidth={2}
+              />
+            </RadarChart>
+          </ChartWrapper>
           <ChartLabel>매력 포인트</ChartLabel>
         </div>
         <div>
-          <RadarChart
-            labels={currentData.labels}
-            data={currentData.감정포인트}
-            backgroundColor="rgba(34, 193, 195, 0.5)"
-            borderColor="rgba(34, 193, 195, 1)"
-          />
+          <ChartWrapper>
+            <RadarChart
+              width={300}
+              height={300}
+              data={emotionData}
+              margin={{ top: 20, right: 30, bottom: 20, left: 30 }}
+            >
+              <PolarGrid stroke="#ffffff" />
+              <PolarAngleAxis
+                dataKey="subject"
+                tick={{ fill: "#ffffff", fontSize: 10 }}
+              />
+              <PolarRadiusAxis
+                angle={38}
+                domain={[0, 100]}
+                tick={{ fill: "#ffffff" }}
+              />
+              <Radar
+                name="감정포인트"
+                dataKey="value"
+                stroke="rgba(34, 193, 195, 1)"
+                fill="rgba(34, 193, 195, 0.5)"
+                strokeWidth={2}
+              />
+            </RadarChart>
+          </ChartWrapper>
           <ChartLabel>감정 포인트</ChartLabel>
         </div>
       </ChartContainer>

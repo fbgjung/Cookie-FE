@@ -17,8 +17,13 @@ const PosterContainer = styled.div`
 
 const PosterList = ({ posters }) => (
   <PosterContainer>
-    {posters.map((poster, index) => (
-      <Poster key={index} src={poster.src} alt={`Poster ${index + 1}`} />
+    {posters.map((poster) => (
+      <Poster
+        key={poster.movieId}
+        src={poster.src}
+        movieTitle={poster.title}
+        movieId={poster.movieId}
+      />
     ))}
   </PosterContainer>
 );

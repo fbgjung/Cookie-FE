@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const ModalBackground = styled.div`
   position: fixed;
@@ -86,7 +87,7 @@ const CloseButton = styled.button`
   border: none;
   font-size: 1.5rem;
   font-weight: bold;
-  position: absolute; /* 부모 요소 기준 우측 상단에 위치 */
+  position: absolute;
   top: 15px;
   right: 20px;
   cursor: pointer;
@@ -101,25 +102,28 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
   const [selectedAttractiveTags, setSelectedAttractiveTags] = useState([]);
   const [selectedEmotionTags, setSelectedEmotionTags] = useState([]);
 
-  const attractiveTags = [
-    "감독 연출",
-    "OST",
-    "스토리",
-    "대사",
-    "영상미",
-    "배우 연기",
-    "특수효과 및 CG",
-  ];
+  const matchUpId = 1;
+  const matchUpMovieId = 2;
 
-  const emotionTags = [
-    "감동",
-    "분노",
-    "즐거움",
-    "몰입감",
-    "긴장감",
-    "공감",
-    "설렘",
-  ];
+  const attractiveTagsMap = {
+    OST: "ost",
+    "감독 연출": "direction",
+    스토리: "story",
+    대사: "dialogue",
+    영상미: "visual",
+    "배우 연기": "acting",
+    "특수효과 및 CG": "specialEffect",
+  };
+
+  const emotionTagsMap = {
+    감동: "touching",
+    분노: "angry",
+    즐거움: "joy",
+    몰입감: "immersion",
+    긴장감: "tension",
+    공감: "empathy",
+    설렘: "excited",
+  };
 
   const handleTagClick = (tag, type) => {
     if (type === "attractive") {
@@ -133,19 +137,50 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
     }
   };
 
+  const handleSubmit = async () => {
+    const charmPoint = Object.keys(attractiveTagsMap).reduce((acc, tag) => {
+      acc[attractiveTagsMap[tag]] = selectedAttractiveTags.includes(tag)
+        ? 1
+        : 0;
+      return acc;
+    }, {});
+
+    const emotionPoint = Object.keys(emotionTagsMap).reduce((acc, tag) => {
+      acc[emotionTagsMap[tag]] = selectedEmotionTags.includes(tag) ? 1 : 0;
+      return acc;
+    }, {});
+
+    const payload = {
+      charmPoint,
+      emotionPoint,
+    };
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/matchups/${matchUpId}/movies/${matchUpMovieId}/estimation`,
+        payload
+      );
+      if (response.data.response === "SUCCESS") {
+        alert("투표가 성공적으로 완료되었습니다!");
+        onClose();
+      }
+    } catch (error) {
+      console.error("투표 요청 실패:", error);
+      alert("투표 중 문제가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
     <ModalBackground>
       <ModalContainer>
-        {/* Close Button */}
         <CloseButton onClick={onClose}>×</CloseButton>
 
-        {/* Modal Title and Content */}
         <Title>{movieTitle}의 매력 포인트를 알려주세요</Title>
         <Description>복수 선택이 가능합니다</Description>
         <TagsContainer>
-          {attractiveTags.map((tag) => (
+          {Object.keys(attractiveTagsMap).map((tag) => (
             <Tag
               key={tag}
               selected={selectedAttractiveTags.includes(tag)}
@@ -158,7 +193,7 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
         <Title>{movieTitle}의 감정 포인트를 알려주세요</Title>
         <Description>복수 선택이 가능합니다</Description>
         <TagsContainer>
-          {emotionTags.map((tag) => (
+          {Object.keys(emotionTagsMap).map((tag) => (
             <Tag
               key={tag}
               selected={selectedEmotionTags.includes(tag)}
@@ -168,7 +203,7 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
             </Tag>
           ))}
         </TagsContainer>
-        <VoteButton>투표하기</VoteButton>
+        <VoteButton onClick={handleSubmit}>투표하기</VoteButton>
       </ModalContainer>
     </ModalBackground>
   );

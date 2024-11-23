@@ -67,11 +67,10 @@ const NotificationDropdown = styled.div`
 `;
 
 const Notification = () => {
-  const [notifications, setNotifications] = useState([]); 
-  const [showDropdown, setShowDropdown] = useState(false); 
+  const [notifications, setNotifications] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
-  
     const eventSource = new EventSource(
       `http://localhost:8080/api/reviews/subscribe/push-notification`
     );
