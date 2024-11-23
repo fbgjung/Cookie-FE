@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import TitleSection from "../components/matchup/TitleSection";
 import Timer from "../components/matchup/Timer";
 import PosterList from "../components/matchup/PosterList";
@@ -19,47 +20,109 @@ const Container = styled.div`
   padding-bottom: 50px;
 `;
 
-const MatchupPage = () => {
-  const [timeLeft, setTimeLeft] = useState({
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+const sampleData = {
+  matchUpId: 1,
+  matchUpTitle: "테스트 빅매치",
+  startAt: "2024-11-23T17:21:03",
+  entAt: "2024-11-28T17:21:01",
+  movie1: {
+    movieId: 1,
+    movieTitle: "테스트 영화 1",
+    moviePoster: null,
+    movieLike: 10,
+    charmPoint: {
+      ost: 20,
+      direction: 18,
+      story: 15,
+      dialogue: 25,
+      visual: 30,
+      acting: 35,
+      specialEffect: 15,
+    },
+    emotionPoint: {
+      touching: 25,
+      angry: 5,
+      joy: 35,
+      immersion: 30,
+      excited: 20,
+      empathy: 15,
+      tension: 10,
+    },
+  },
+  movie2: {
+    movieId: 2,
+    movieTitle: "테스트 영화 2",
+    moviePoster: null,
+    movieLike: 5,
+    charmPoint: {
+      ost: 15,
+      direction: 25,
+      story: 20,
+      dialogue: 18,
+      visual: 28,
+      acting: 20,
+      specialEffect: 25,
+    },
+    emotionPoint: {
+      touching: 20,
+      angry: 10,
+      joy: 30,
+      immersion: 25,
+      excited: 15,
+      empathy: 10,
+      tension: 15,
+    },
+  },
+};
 
-  const [percentage, setPercentage] = useState(50);
+const MatchupPage = () => {
+  const [matchUpData, setMatchUpData] = useState(sampleData);
 
   useEffect(() => {
-    const targetDate = new Date("2024-11-28T00:00:00");
-    const interval = setInterval(() => {
-      const now = new Date();
-      const difference = targetDate - now;
+    const fetchMatchUpData = async () => {
+      try {
+        const response = await axios.get(`/api/matchups/1`);
+        setMatchUpData(response.data.response || sampleData);
+      } catch (error) {
+        console.error("API 요청 실패:", error);
 
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((difference / 1000 / 60) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
+        setMatchUpData(sampleData);
+      }
+    };
 
-      setTimeLeft({
-        hours: hours >= 0 ? hours : 0,
-        minutes: minutes >= 0 ? minutes : 0,
-        seconds: seconds >= 0 ? seconds : 0,
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
+    fetchMatchUpData();
   }, []);
-
-  const posters = [
-    { src: "/src/assets/images/matchup/sampleimage1.svg" },
-    { src: "/src/assets/images/matchup/sampleimage2.svg" },
-  ];
 
   return (
     <Container>
-      <TitleSection />
-      <Timer timeLeft={timeLeft} />
-      <PosterList posters={posters} />
-      <ProgressBar percentage={percentage} />
-      <ChartSection />
+      <TitleSection
+        matchUpTitle={matchUpData.matchUpTitle}
+        endAt={matchUpData.entAt}
+      />
+      <Timer startAt={matchUpData.startAt} endAt={matchUpData.entAt} />
+      <PosterList
+        posters={[
+          {
+            src:
+              matchUpData.movie1.moviePoster ||
+              "/src/assets/images/matchup/sampleimage1.svg",
+            title: matchUpData.movie1.movieTitle,
+            movieId: matchUpData.movie1.movieId,
+          },
+          {
+            src:
+              matchUpData.movie2.moviePoster ||
+              "/src/assets/images/matchup/sampleimage2.svg",
+            title: matchUpData.movie2.movieTitle,
+            movieId: matchUpData.movie2.movieId,
+          },
+        ]}
+      />
+      <ProgressBar
+        movie1Likes={matchUpData.movie1.movieLike}
+        movie2Likes={matchUpData.movie2.movieLike}
+      />
+      <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
     </Container>
   );
 };
