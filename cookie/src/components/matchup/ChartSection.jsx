@@ -12,16 +12,18 @@ const SectionContainer = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-
+  width: 100%;
+  max-width: 600px;
   margin-bottom: 20px;
 `;
 
 const SelectButton = styled.button`
+  flex: 1;
   background-color: ${(props) => (props.active ? "#1ee5b0" : "#d9d9d9")};
   color: ${(props) => (props.active ? "#ffffff" : "#333333")};
   border: none;
   border-radius: 5px;
-  padding: 10px 98px;
+  padding: 10px 0;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
@@ -29,6 +31,16 @@ const SelectButton = styled.button`
 
   &:hover {
     background-color: ${(props) => (props.active ? "#17c397" : "#c4c4c4")};
+  }
+
+  &:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 `;
 
