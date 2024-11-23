@@ -81,8 +81,9 @@ const MatchupPage = () => {
   useEffect(() => {
     const fetchMatchUpData = async () => {
       try {
-        const response = await axios.get(`/api/matchups/1`);
+        const response = await axios.get(`http://localhost:8080/api/matchups/1`);
         setMatchUpData(response.data.response || sampleData);
+        console.log(response.data.response);
       } catch (error) {
         console.error("API 요청 실패:", error);
 

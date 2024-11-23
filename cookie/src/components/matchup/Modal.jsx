@@ -157,7 +157,7 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/matchups/${matchUpId}/movies/${matchUpMovieId}/estimation`,
+        `http://localhost:8080/api/matchups/${matchUpId}/movies/${matchUpMovieId}/vote`,
         payload
       );
       if (response.data.response === "SUCCESS") {
