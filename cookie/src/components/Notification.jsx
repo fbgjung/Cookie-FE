@@ -67,18 +67,18 @@ const NotificationDropdown = styled.div`
 `;
 
 const Notification = () => {
-  const [notifications, setNotifications] = useState([]); // 알림 데이터 저장
-  const [showDropdown, setShowDropdown] = useState(false); // 드롭다운 표시 상태
+  const [notifications, setNotifications] = useState([]); 
+  const [showDropdown, setShowDropdown] = useState(false); 
 
   useEffect(() => {
-    // SSE 연결
+  
     const eventSource = new EventSource(
       `http://localhost:8080/api/reviews/subscribe/push-notification`
     );
 
     eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data); // 서버에서 PushNotification 데이터 수신
-      setNotifications((prev) => [...prev, data]); // 새 알림 추가
+      const data = JSON.parse(event.data);
+      setNotifications((prev) => [...prev, data]);
     };
 
     eventSource.onerror = (error) => {
