@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import styled from "styled-components";
+import Modal from "./Modal";
 
 const PosterWrapper = styled.div`
   position: relative;
@@ -49,13 +51,32 @@ const VoteButton = styled.button`
   }
 `;
 
-const Poster = ({ src, alt }) => (
-  <PosterWrapper>
-    <PosterImage src={src} alt={alt} />
-    <Overlay className="overlay">
-      <VoteButton>투표하기</VoteButton>
-    </Overlay>
-  </PosterWrapper>
-);
+const Poster = ({ src, alt, movieTitle }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleVoteClick = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  return (
+    <>
+      <PosterWrapper>
+        <PosterImage src={src} alt={alt} />
+        <Overlay className="overlay">
+          <VoteButton onClick={handleVoteClick}>투표하기</VoteButton>
+        </Overlay>
+      </PosterWrapper>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        movieTitle={movieTitle}
+      />
+    </>
+  );
+};
 
 export default Poster;
