@@ -2508,6 +2508,11 @@ react-lifecycles-compat@^3.0.0:
   resolved "https://registry.npmjs.org/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-mo@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.npmjs.org/react-mo/-/react-mo-0.0.0.tgz"
+  integrity sha512-7JS5wedzd8a4Hg4FJRl0l21JIiBbX7DNZplwODEA1gsf99X37XUMvPvJGmvwx3Lgklf2BcyjRusf9O5MK6VEJA==
+
 react-modal@^3.16.1:
   version "3.16.1"
   resolved "https://registry.npmjs.org/react-modal/-/react-modal-3.16.1.tgz"
