@@ -14,6 +14,7 @@ import MatchupPage from "../pages/MatchupPage";
 import ReTokenPage from "../api/auth/reTokenPage";
 import AdminLogin from "../pages/AdminLogin";
 import Review from "../pages/Review";
+import ReviewFeed from "../pages/ReviewFeed";
 
 export const AppRouteDef = {
   Main: {
@@ -41,10 +42,10 @@ export const AppRouteDef = {
     ),
   },
   Review: {
-    path: "/review",
+    path: "/reviewfeed",
     element: (
       <PrivateRoute>
-        <Review />
+        <ReviewFeed />
       </PrivateRoute>
     ),
   },
