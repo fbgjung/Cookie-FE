@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const FormWrapper = styled.div`
   width: 90%;
@@ -135,15 +136,32 @@ const ReviewForm = ({ movieTitle }) => {
     navigate(-1); // 이전 페이지로 돌아가기
   };
 
-  const handleSubmit = () => {
-    console.log({
-      movieTitle,
-      rating,
-      review,
-      containsSpoiler,
-    });
-    alert("리뷰가 제출되었습니다.");
-    navigate("/reviews"); // 리뷰 리스트 페이지로 이동
+  const handleSubmit = async () => {
+    const userId = 1; // 사용자 ID를 여기에 설정 (로그인된 사용자 ID 필요)
+  
+    const payload = {
+      movieId: movie.id, // 영화 ID
+      userId, // 사용자 ID
+      rating, // 평점
+      review, // 리뷰 내용
+      containsSpoiler, // 스포일러 포함 여부
+    };
+  
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/reviews/${userId}`,
+        payload
+      );
+      if (response.status === 201) {
+        alert("리뷰가 성공적으로 등록되었습니다.");
+        navigate("/reviews"); // 리뷰 페이지로 이동
+      } else {
+        alert("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("리뷰 등록 실패:", error);
+      alert("리뷰 등록 중 오류가 발생했습니다.");
+    }
   };
 
   return (
