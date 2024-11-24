@@ -36,6 +36,7 @@ const GlobalStyle = createGlobalStyle`
   --sub-btn: rgba(132, 130, 164, 0.12);
   --match-up: #C4FFEF;
   --cookie: #CC9D52;
+  --notice: #FF7383;
   /* color: var(--cookie) */
 }
 `;
