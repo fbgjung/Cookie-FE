@@ -166,7 +166,6 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
-  },
   SearchForReview: {
     path: "/searchmov",
     element: (
