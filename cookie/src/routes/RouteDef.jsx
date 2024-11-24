@@ -16,6 +16,8 @@ import AdminLogin from "../pages/AdminLogin";
 import Review from "../pages/Review";
 import ReviewFeed from "../pages/ReviewFeed";
 import ReviewForm from "../pages/ReviewForm";
+import SearchForReview from "../pages/SearchForReview";
+import MovieReviewForm from "../pages/MovieReviewForm";
 
 export const AppRouteDef = {
   Main: {
@@ -159,6 +161,23 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <AdminLogin />
+      </PrivateRoute>
+    ),
+  },
+  },
+  SearchForReview: {
+    path: "/searchmov",
+    element: (
+      <PrivateRoute>
+        <SearchForReview />
+      </PrivateRoute>
+    ),
+  },
+  MovieReviewForm: {
+    path: "/movie/:movieId/review",
+    element: (
+      <PrivateRoute>
+        <MovieReviewForm />
       </PrivateRoute>
     ),
   },
