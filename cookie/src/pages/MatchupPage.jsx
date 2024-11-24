@@ -6,7 +6,7 @@ import Timer from "../components/matchup/Timer";
 import PosterList from "../components/matchup/PosterList";
 import ProgressBar from "../components/matchup/ProgressBar";
 import ChartSection from "../components/matchup/ChartSection";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -75,23 +75,26 @@ const sampleData = {
 
 const MatchupPage = () => {
   const { matchUpId } = useParams();
+  const location = useLocation();
   const [matchUpData, setMatchUpData] = useState(null);
 
-  useEffect(() => {
-    const fetchMatchUpData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/matchups/${matchUpId}/history`
-        );
-        setMatchUpData(response.data.response || sampleData);
-      } catch (error) {
-        console.error("API 요청 실패:", error);
-        setMatchUpData(sampleData);
-      }
-    };
+  const fetchMatchUpData = async () => {
+    try {
+      const endpoint = matchUpId
+        ? `http://localhost:8080/api/matchups/${matchUpId}/history`
+        : `http://localhost:8080/api/matchups/current`;
 
+      const response = await axios.get(endpoint);
+      setMatchUpData(response.data.response || sampleData);
+    } catch (error) {
+      console.error("API 요청 실패:", error);
+      setMatchUpData(sampleData);
+    }
+  };
+
+  useEffect(() => {
     fetchMatchUpData();
-  }, [matchUpId]);
+  }, [matchUpId, location.pathname]);
 
   if (!matchUpData) {
     return <Container>로딩 중...</Container>;
