@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import TopicImage from "/src/assets/images/matchup/topic_image.svg";
 import { FiChevronDown } from "react-icons/fi";
 import Modal from "react-modal";
+import { useNavigate } from "react-router-dom"; // 페이지 이동을 위한 네비게이터
 
 Modal.setAppElement("#root");
 
@@ -88,6 +90,12 @@ const ModalListItem = styled.li`
   font-size: 1rem;
   color: #555555;
   margin-bottom: 10px;
+  cursor: pointer;
+
+  &:hover {
+    color: #1ee5b0;
+    text-decoration: underline;
+  }
 `;
 
 const CloseButton = styled.button`
@@ -108,16 +116,58 @@ const CloseButton = styled.button`
 
 const TitleSection = ({ matchUpTitle, endAt }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [historyData, setHistoryData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleModalToggle = () => {
     setIsModalOpen((prev) => !prev);
   };
+
+  const fetchHistoryData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/matchups/history"
+      );
+      setHistoryData(response.data.response);
+    } catch (error) {
+      console.error("히스토리 데이터 요청 실패:", error);
+
+      setHistoryData([
+        {
+          matchUpId: 1,
+          matchUpTitle: "로맨스 영화 빅매치입니다.",
+          startAt: "2024-11-23T17:21:03",
+          endAt: "2024-11-23T17:21:01",
+        },
+        {
+          matchUpId: 2,
+          matchUpTitle: "무슨 감독 영화 빅매치!!",
+          startAt: "2024-11-23T17:21:28",
+          endAt: "2024-11-23T17:21:45",
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (isModalOpen) {
+      fetchHistoryData();
+    }
+  }, [isModalOpen]);
 
   const calculateDDay = () => {
     const now = new Date();
     const endDate = new Date(endAt);
     const difference = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
     return difference > 0 ? `D-${difference}` : "종료";
+  };
+
+  const handleNavigate = (matchUpId) => {
+    setIsModalOpen(false);
+    navigate(`/matchup/${matchUpId}/history`);
   };
 
   return (
@@ -140,9 +190,21 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
       >
         <ModalHeader>히스토리 목록</ModalHeader>
         <ModalList>
-          <ModalListItem>1. 올드보이 - 2003년</ModalListItem>
-          <ModalListItem>2. 친절한 금자씨 - 2005년</ModalListItem>
-          <ModalListItem>3. 복수는 나의 것 - 2002년</ModalListItem>
+          {isLoading ? (
+            <ModalListItem>로딩 중...</ModalListItem>
+          ) : historyData && historyData.length > 0 ? (
+            historyData.map((item) => (
+              <ModalListItem
+                key={item.matchUpId}
+                onClick={() => handleNavigate(item.matchUpId)}
+              >
+                {item.matchUpId}. {item.matchUpTitle} <br />({item.startAt} ~{" "}
+                {item.endAt})
+              </ModalListItem>
+            ))
+          ) : (
+            <ModalListItem>히스토리 데이터가 없습니다.</ModalListItem>
+          )}
         </ModalList>
         <CloseButton onClick={handleModalToggle}>닫기</CloseButton>
       </Modal>
