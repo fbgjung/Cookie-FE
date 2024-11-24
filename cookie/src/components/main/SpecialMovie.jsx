@@ -23,7 +23,6 @@ const SpecialMovieList = styled.div`
   .specialMovie__list {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 1rem;
     overflow-x: scroll;
   }
@@ -102,6 +101,7 @@ function SpecialMovie() {
     },
   ];
 
+  //테마 랜덤으로 지정하기 (임의 데이터)
   function getRandomItems(arr, maxCount) {
     const count = Math.floor(Math.random() * maxCount) + 1; // 1개 또는 2개 선택
     const shuffled = arr.sort(() => Math.random() - 0.5);
@@ -215,7 +215,6 @@ function SpecialMovie() {
                     </p>
                     <p className="movie__info--sub">리뷰 수: {movie.reviews}</p>
                     <p className="movie__info--sub">좋아요 수: {movie.likes}</p>
-                    {/* <p> {movie.theme}</p> */}
                   </div>
                 </div>
               ))
