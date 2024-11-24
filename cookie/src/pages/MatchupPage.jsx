@@ -6,6 +6,7 @@ import Timer from "../components/matchup/Timer";
 import PosterList from "../components/matchup/PosterList";
 import ProgressBar from "../components/matchup/ProgressBar";
 import ChartSection from "../components/matchup/ChartSection";
+import { useParams } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -21,12 +22,10 @@ const Container = styled.div`
 `;
 
 const sampleData = {
-  matchUpId: 1,
   matchUpTitle: "테스트 빅매치",
   startAt: "2024-11-23T17:21:03",
   entAt: "2024-11-28T17:21:01",
   movie1: {
-    movieId: 1,
     movieTitle: "테스트 영화 1",
     moviePoster: null,
     movieLike: 10,
@@ -50,7 +49,6 @@ const sampleData = {
     },
   },
   movie2: {
-    movieId: 2,
     movieTitle: "테스트 영화 2",
     moviePoster: null,
     movieLike: 5,
@@ -76,22 +74,28 @@ const sampleData = {
 };
 
 const MatchupPage = () => {
-  const [matchUpData, setMatchUpData] = useState(sampleData);
+  const { matchUpId } = useParams();
+  const [matchUpData, setMatchUpData] = useState(null);
 
   useEffect(() => {
     const fetchMatchUpData = async () => {
       try {
-        const response = await axios.get(`/api/matchups/1`);
+        const response = await axios.get(
+          `http://localhost:8080/api/matchups/${matchUpId}/history`
+        );
         setMatchUpData(response.data.response || sampleData);
       } catch (error) {
         console.error("API 요청 실패:", error);
-
         setMatchUpData(sampleData);
       }
     };
 
     fetchMatchUpData();
-  }, []);
+  }, [matchUpId]);
+
+  if (!matchUpData) {
+    return <Container>로딩 중...</Container>;
+  }
 
   return (
     <Container>
@@ -107,14 +111,12 @@ const MatchupPage = () => {
               matchUpData.movie1.moviePoster ||
               "/src/assets/images/matchup/sampleimage1.svg",
             title: matchUpData.movie1.movieTitle,
-            movieId: matchUpData.movie1.movieId,
           },
           {
             src:
               matchUpData.movie2.moviePoster ||
               "/src/assets/images/matchup/sampleimage2.svg",
             title: matchUpData.movie2.movieTitle,
-            movieId: matchUpData.movie2.movieId,
           },
         ]}
       />
