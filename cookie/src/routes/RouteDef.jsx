@@ -106,6 +106,15 @@ export const AppRouteDef = {
     ),
   },
 
+  MatchUpHistoryDetail: {
+    path: "/matchup/:matchUpId/history",
+    element: (
+      <PrivateRoute>
+        <MatchupPage />
+      </PrivateRoute>
+    ),
+  },
+
   MatchUp: {
     path: "/matchup",
     element: (
