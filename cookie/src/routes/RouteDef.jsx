@@ -15,6 +15,7 @@ import ReTokenPage from "../api/auth/reTokenPage";
 import AdminLogin from "../pages/AdminLogin";
 import Review from "../pages/Review";
 import ReviewFeed from "../pages/ReviewFeed";
+import ReviewForm from "../pages/ReviewForm";
 
 export const AppRouteDef = {
   Main: {
@@ -144,6 +145,14 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
+  ReviewForm: {
+    path: "/reviews/write",
+    element: (
+      <PrivateRoute>
+        <ReviewForm />
+      </PrivateRoute>
+    ),
+  }
 
   AdminLogin: {
     path: "/admin",
