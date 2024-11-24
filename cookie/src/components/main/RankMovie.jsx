@@ -20,7 +20,7 @@ const MovieRankList = styled.div`
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.375rem;
   }
   .rank__movie {
     display: flex;
@@ -29,6 +29,7 @@ const MovieRankList = styled.div`
     justify-content: center;
     overflow-x: scroll;
     gap: 1rem;
+    padding: 0.625rem;
   }
   .rank__movie--list {
     display: flex;
@@ -44,7 +45,7 @@ const MovieRankList = styled.div`
   .rank__number--image {
     position: absolute;
     left: -9px;
-    top: -2px;
+    top: -9px;
   }
   .rank__movie--list p {
     text-align: start;
