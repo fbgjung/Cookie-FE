@@ -113,6 +113,10 @@ const ReviewSection = ({ reviews, reviewCount, onViewAllReviews, movie }) => {
     
   };
 
+  const handleWriteReviewClick = () => {
+    navigate("/reviews/write"); // 리뷰 작성하기 클릭 시 리뷰 작성 페이지로 이동
+  };
+
   return (
     <ReviewWrapper>
       <h2>
