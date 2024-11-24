@@ -11,7 +11,7 @@ import LikedMovies from "../pages/LikedMovies";
 import LikedReviews from "../pages/LikedRevies";
 import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
-import Review from "../pages/Review";
+import ReviewFeed from "../pages/ReviewFeed";
 
 export const AppRouteDef = {
   Main: {
@@ -39,10 +39,10 @@ export const AppRouteDef = {
     ),
   },
   Review: {
-    path: "/review",
+    path: "/reviewfeed",
     element: (
       <PrivateRoute>
-        <Review />
+        <ReviewFeed />
       </PrivateRoute>
     ),
   },
