@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import axios from "axios";
 import TopicImage from "/src/assets/images/matchup/topic_image.svg";
 import { FiChevronDown } from "react-icons/fi";
 import Modal from "react-modal";
-import { useNavigate } from "react-router-dom"; // 페이지 이동을 위한 네비게이터
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
@@ -118,6 +119,7 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [historyData, setHistoryData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isVoteEnded, setIsVoteEnded] = useState(false); // 투표 종료 상태 관리
   const navigate = useNavigate();
 
   const handleModalToggle = () => {
@@ -138,20 +140,21 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
         {
           matchUpId: 1,
           matchUpTitle: "로맨스 영화 빅매치입니다.",
-          startAt: "2024-11-23T17:21:03",
-          endAt: "2024-11-23T17:21:01",
+          startAt: "2024-11-20T00:00:00",
+          endAt: "2024-11-30T23:59:59",
         },
         {
           matchUpId: 2,
-          matchUpTitle: "무슨 감독 영화 빅매치!!",
-          startAt: "2024-11-23T17:21:28",
-          endAt: "2024-11-23T17:21:45",
+          matchUpTitle: "스릴러 영화 빅매치입니다.",
+          startAt: "2024-11-15T00:00:00",
+          endAt: "2024-11-18T23:59:59",
         },
       ]);
     } finally {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     if (isModalOpen) {
       fetchHistoryData();
@@ -162,7 +165,11 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
     const now = new Date();
     const endDate = new Date(endAt);
     const difference = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
-    return difference > 0 ? `D-${difference}` : "종료";
+    return difference > 0 ? `D-${difference}` : "투표 종료";
+  };
+
+  const handleTimerEnd = () => {
+    setIsVoteEnded(true); // 타이머 종료 시 투표 종료 상태 업데이트
   };
 
   const handleNavigate = (matchUpId) => {
@@ -176,7 +183,11 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
         <TitleImage src={TopicImage} alt="Topic Icon" />
         <Title>{matchUpTitle}</Title>
         <DDayContainer>
-          <DDay>{calculateDDay()}</DDay>
+          {isVoteEnded ? (
+            <DDay>투표 종료</DDay>
+          ) : (
+            <DDay>{calculateDDay()}</DDay>
+          )}
           <HistoryButton onClick={handleModalToggle}>
             히스토리 보기 <FiChevronDown size={16} />
           </HistoryButton>
@@ -210,6 +221,11 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
       </Modal>
     </>
   );
+};
+
+TitleSection.propTypes = {
+  matchUpTitle: PropTypes.string.isRequired,
+  endAt: PropTypes.string.isRequired,
 };
 
 export default TitleSection;

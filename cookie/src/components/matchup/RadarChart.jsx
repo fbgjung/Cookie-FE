@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -53,10 +54,16 @@ const RadarChart = ({ labels, data, backgroundColor, borderColor }) => {
 
   return (
     <div style={{ width: "250px", height: "250px" }}>
-      {" "}
       <Radar data={chartData} options={options} />
     </div>
   );
+};
+
+RadarChart.propTypes = {
+  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  data: PropTypes.arrayOf(PropTypes.number).isRequired,
+  backgroundColor: PropTypes.string.isRequired,
+  borderColor: PropTypes.string.isRequired,
 };
 
 export default RadarChart;
