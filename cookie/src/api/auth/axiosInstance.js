@@ -1,8 +1,7 @@
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
-import { useNavigate } from "react-router-dom";
-const navigate = useNavigate();
-//TODO 서버 주소 추가하기
+
+// TODO 서버 주소 추가하기
 const axiosInstance = axios.create({
   baseURL: serverBaseUrl,
   withCredentials: true,
@@ -44,9 +43,10 @@ axiosInstance.interceptors.response.use(
         }
       }
 
+      // 페이지 리다이렉트를 위해 useNavigate 대신 window.location.href 사용
       localStorage.clear();
       sessionStorage.clear();
-      navigate("/login");
+      window.location.href = "/login";
     }
 
     return Promise.reject(error);
@@ -75,4 +75,5 @@ const refreshAccessToken = async () => {
     throw error;
   }
 };
+
 export default axiosInstance;
