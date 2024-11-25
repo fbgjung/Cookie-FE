@@ -103,12 +103,8 @@ const ReviewWrapper = styled.div`
   }
 `;
 
-const ReviewSection = ({ reviews, reviewCount, movie }) => {
+const ReviewSection = ({ reviews, reviewCount, onViewAllReviews, movie }) => {
   const navigate = useNavigate();
-
-  const handleMoreClick = () => {
-    navigate("/reviews"); // 더보기 클릭 시 리뷰 페이지로 이동
-  };
 
   const handleWriteReviewClick = () => {
     navigate("/reviews/write", {
@@ -138,7 +134,7 @@ const ReviewSection = ({ reviews, reviewCount, movie }) => {
         ))}
       </div>
       <div className="more-button">
-        <button onClick={handleMoreClick}>더보기</button>
+        <button onClick={onViewAllReviews}>더보기</button>
       </div>
     </ReviewWrapper>
   );
