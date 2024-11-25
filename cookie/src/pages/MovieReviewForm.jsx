@@ -157,6 +157,7 @@ const MovieReviewForm = () => {
   const navigate = useNavigate();
   const { movie } = location.state || {
     movie: {
+      id: 1,
       title: "제목 없음",
       poster: "/assets/images/default-poster.png",
       year: "연도 없음",
@@ -165,12 +166,12 @@ const MovieReviewForm = () => {
     },
   };
 
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState("");
-  const [containsSpoiler, setContainsSpoiler] = useState(false);
+  const [movieScore, setMovieScore] = useState(0);
+  const [content, setContent] = useState("");
+  const [isSpoiler, setIsSpoiler] = useState(false);
 
   const handleRatingClick = (index) => {
-    setRating(index + 1);
+    setMovieScore(index + 1);
   };
 
   const handleCancel = () => {
@@ -181,11 +182,10 @@ const MovieReviewForm = () => {
     const userId = 1; // 사용자 ID를 여기에 설정 (로그인된 사용자 ID 필요)
   
     const payload = {
-      movieId: movie.id, // 영화 ID
-      userId, // 사용자 ID
-      rating, // 평점
-      review, // 리뷰 내용
-      containsSpoiler, // 스포일러 포함 여부
+      movieId: 1,
+      movieScore,
+      content,
+      isSpoiler,
     };
   
     try {
@@ -193,7 +193,7 @@ const MovieReviewForm = () => {
         `http://localhost:8080/api/reviews/${userId}`,
         payload
       );
-      if (response.status === 201) {
+      if (response.status === 200) {
         alert("리뷰가 성공적으로 등록되었습니다.");
         navigate("/reviews"); // 리뷰 페이지로 이동
       } else {
@@ -229,12 +229,12 @@ const MovieReviewForm = () => {
               <img
                 key={index}
                 src={
-                  index < rating
+                  index < movieScore
                     ? "/assets/images/mypage/cookiescore.svg"
                     : "/assets/images/mypage/cookieinactive.svg"
                 }
                 alt="Cookie"
-                className={index >= rating ? "inactive" : ""}
+                className={index >= movieScore ? "inactive" : ""}
                 onClick={() => handleRatingClick(index)}
               />
             ))}
@@ -243,16 +243,16 @@ const MovieReviewForm = () => {
 
       <TextArea
         placeholder="리뷰를 작성해주세요..."
-        value={review}
-        onChange={(e) => setReview(e.target.value)}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
       />
 
       <SpoilerWrapper>
         <input
           type="checkbox"
           id="spoiler"
-          checked={containsSpoiler}
-          onChange={(e) => setContainsSpoiler(e.target.checked)}
+          checked={isSpoiler}
+          onChange={(e) => setIsSpoiler(e.target.checked)}
         />
         <label htmlFor="spoiler">스포일러가 포함된 리뷰</label>
         <span className="description">

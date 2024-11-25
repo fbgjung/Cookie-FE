@@ -103,7 +103,7 @@ const MovieDetail = () => {
       <CastSection cast={movie.cast} />
       <VideoSection videos={movie.videos} />
       <GallerySection images={movie.gallery} />
-      <ReviewSection reviews={reviews} reviewCount={36} />
+      <ReviewSection reviews={reviews} reviewCount={36} movie={movie}/>
     </ContentWrapper>
   );
 };
