@@ -45,7 +45,7 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
-  Review: {
+  ReviewFeed: {
     path: "/review",
     element: (
       <PrivateRoute>

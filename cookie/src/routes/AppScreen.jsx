@@ -182,7 +182,7 @@ const AppScreen = () => {
               <Link to="/search">
                 <img src={SearchIcon} alt="검색" />
               </Link>
-              <Link to="/reviewfeed">
+              <Link to="/review">
                 <img src={ReviewIcon} alt="리뷰" />
               </Link>
               <Link to="/matchup">
