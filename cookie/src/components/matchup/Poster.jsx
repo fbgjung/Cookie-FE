@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import Modal from "./Modal";
 
 const PosterWrapper = styled.div`
@@ -51,11 +52,13 @@ const VoteButton = styled.button`
   }
 `;
 
-const Poster = ({ src, movieTitle, movieId }) => {
+const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleVoteClick = () => {
-    setModalOpen(true);
+    if (!isVoteEnded) {
+      setModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {
@@ -67,7 +70,9 @@ const Poster = ({ src, movieTitle, movieId }) => {
       <PosterWrapper>
         <PosterImage src={src} alt={`${movieTitle} 포스터`} />
         <Overlay className="overlay">
-          <VoteButton onClick={handleVoteClick}>투표하기</VoteButton>
+          <VoteButton onClick={handleVoteClick} disabled={isVoteEnded}>
+            {isVoteEnded ? "투표 종료" : "투표하기"}
+          </VoteButton>
         </Overlay>
       </PosterWrapper>
       <Modal
@@ -78,6 +83,13 @@ const Poster = ({ src, movieTitle, movieId }) => {
       />
     </>
   );
+};
+
+Poster.propTypes = {
+  src: PropTypes.string.isRequired,
+  movieTitle: PropTypes.string.isRequired,
+  movieId: PropTypes.number.isRequired,
+  isVoteEnded: PropTypes.bool.isRequired, // 투표 종료 상태 전달
 };
 
 export default Poster;
