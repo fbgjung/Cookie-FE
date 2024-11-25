@@ -134,6 +134,7 @@ const AppScreen = () => {
     "/login",
     "/sign-up-profile",
     "/sign-up-genre",
+    "/admin",
   ];
 
   return (
