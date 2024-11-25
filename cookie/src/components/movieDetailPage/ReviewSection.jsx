@@ -103,7 +103,7 @@ const ReviewWrapper = styled.div`
   }
 `;
 
-const ReviewSection = ({ reviews, reviewCount }) => {
+const ReviewSection = ({ reviews, reviewCount, movie }) => {
   const navigate = useNavigate();
 
   const handleMoreClick = () => {
@@ -111,7 +111,10 @@ const ReviewSection = ({ reviews, reviewCount }) => {
   };
 
   const handleWriteReviewClick = () => {
-    navigate("/reviews/write"); // 리뷰 작성하기 클릭 시 리뷰 작성 페이지로 이동
+    navigate("/reviews/write", {
+      state: { movie },
+    });
+    
   };
 
   return (
@@ -150,6 +153,8 @@ ReviewSection.propTypes = {
     })
   ).isRequired,
   reviewCount: PropTypes.number.isRequired,
+  onViewAllReviews: PropTypes.func.isRequired,
+  movie: PropTypes.object.isRequired, // 영화 정보 전달
 };
 
 export default ReviewSection;
