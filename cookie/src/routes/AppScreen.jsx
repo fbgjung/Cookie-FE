@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
 import AppPages from "./AppPages";
 import CookieLogo from "/src/assets/images/Cookie.svg";
-import NotificationIcon from "/src/assets/images/Notification.svg";
+
 import HomeIcon from "/src/assets/images/navbar_home.svg";
 import SearchIcon from "/src/assets/images/navbar_search.svg";
 import ReviewIcon from "/src/assets/images/navbar_review.svg";
@@ -11,6 +11,8 @@ import MatchupIcon from "/src/assets/images/navbar_matchup.svg";
 import ProfileIcon from "/src/assets/images/navbar_profile.svg";
 import { Link } from "react-router-dom";
 import Notification from "../components/Notification";
+import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   position: relative;
@@ -19,9 +21,9 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   background: #ffffff;
-  width: 100%; // 600px에서 100%로 변경
-  max-width: 600px; // 최대 너비 추가
-  margin: 0 auto; // 중앙 정렬을 위해 추가
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 `;
 
 const ViewArea = styled.div`
@@ -36,7 +38,7 @@ const ViewArea = styled.div`
   @media (max-width: 768px) {
     width: 100%;
     max-width: none;
-    border-left: none; // 모바일에서는 테두리 제거
+    border-left: none;
     border-right: none;
   }
 `;
@@ -62,7 +64,7 @@ const NavContainer = styled.nav`
   justify-content: space-around;
   background-color: white;
   padding: 5px 20px;
-  height: 70px;
+  height: 60px;
   box-sizing: border-box;
   border-top: 1px solid #e5e7eb;
   position: sticky;
@@ -70,14 +72,15 @@ const NavContainer = styled.nav`
   z-index: 100;
 
   img {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
   }
 `;
 
 const Logo = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   img {
     height: 40px;
@@ -129,6 +132,11 @@ const AppContainer = styled.div`
 
 const AppScreen = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/"); // '/'로 이동
+  };
   const hideHeaderFooterPages = [
     "/login",
     "/sign-up-profile",
@@ -140,19 +148,32 @@ const AppScreen = () => {
     <Container>
       <ViewArea>
         <AppContainer>
+          <Toaster
+            toastOptions={{
+              style: {
+                background: "#ffffff",
+                color: "#333333",
+                border: "1px solid #ddd",
+                borderRadius: "10px",
+                padding: "10px",
+              },
+            }}
+          />
+          {/* 헤더 */}
           {!hideHeaderFooterPages.includes(location.pathname) && (
             <HeaderContainer>
-              <Logo>
+              <Logo onClick={handleLogoClick}>
                 <img src={CookieLogo} alt="Cookie Logo" />
               </Logo>
               <Notification />
             </HeaderContainer>
           )}
+          {/* 메인 콘텐츠 */}
           <MainContent>
             <ScrollToTop />
             <AppPages />
           </MainContent>
-
+          {/* 네비게이션 */}
           {!hideHeaderFooterPages.includes(location.pathname) && (
             <NavContainer>
               <Link to="/">
