@@ -188,7 +188,12 @@ function SignUpGenre() {
     try {
       const response = await axiosInstance.post(
         `${serverBaseUrl}/api/auth/register`,
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       if (response.status === 200) {
