@@ -3,7 +3,11 @@ import GlobalStyle from "../styles/global";
 import styled from "styled-components";
 import userDefaultImg from "../assets/images/signUp/user_img.svg";
 import deleteBtn from "../assets/images/signUp/close_icon.svg";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import serverBaseUrl from "../config/apiConfig";
+import axios from "axios";
+import axiosInstance from "../api/auth/axiosInstance";
+
 const MainContainer = styled.div`
   background-color: white;
   height: 100vh;
@@ -67,8 +71,33 @@ const UserInfo = styled.div`
 
   .user__nickName {
     margin-top: 3.125rem;
+    gap: 1rem;
   }
-
+  .user__nickName div {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .nickName__valid--text {
+    color: var(--notice);
+    padding: 0 5px;
+    font-size: 1rem;
+    margin: -5px 0 0 0;
+  }
+  .nickName__valid--btn {
+    margin: 8px 0 0 0;
+    background-color: ${(props) =>
+      props.$isSelected ? "var(--sub-bg)" : "white"};
+    color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
+    border-radius: 0.75rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--main);
+      color: white;
+    }
+  }
   label {
     display: block;
     font-size: 1rem;
@@ -78,11 +107,11 @@ const UserInfo = styled.div`
 
   input {
     display: block;
-    width: 28rem;
+    width: 22.6rem;
     height: 3rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0 4.38rem 12.5rem rgba(3, 6, 59, 0.5);
+    box-shadow: 3rem 4.38rem 12.5rem rgba(3, 6, 59, 0.5);
     font-size: 1.2rem;
     padding: 0.5rem;
     margin-top: 0.5rem;
@@ -114,32 +143,83 @@ const SubmitBtn = styled.div`
 `;
 
 function SignUpProfile() {
-  const [userImageUrl, setUserImageUrl] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
   const [userNickname, setUserNickname] = useState("");
+  const [nicknameValid, setNicknameValid] = useState(false);
+  const [isDuplicateNickname, setIsDuplicateNickname] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const socialProvider = searchParams.get("socialProvider");
+  const email = searchParams.get("email");
+  const socialId = searchParams.get("socialId");
+  const regex = /^[A-Za-z0-9ㄱ-ㅎㅏ-ㅣ가-힣]{2,10}$/;
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       const fileUrl = URL.createObjectURL(file);
-      setUserImageUrl(fileUrl);
+      setProfileImage(fileUrl);
+      console.log("파일 정보:", file);
     }
   };
+
   const handleImageDelete = () => {
-    setUserImageUrl(null);
+    setProfileImage(null);
     fileInputRef.current.value = "";
   };
 
   const handleNicknameChange = (e) => {
-    setUserNickname(e.target.value);
+    const value = e.target.value;
+    setUserNickname(value);
+
+    const isValid = value && regex.test(value);
+    setNicknameValid(isValid);
+
+    if (isValid) {
+      setIsDuplicateNickname(null);
+    }
+  };
+
+  const handleCheckNickname = async (e) => {
+    e.preventDefault();
+
+    if (!nicknameValid || !userNickname) {
+      setIsDuplicateNickname(false);
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post("/api/auth/check-nickname", {
+        nickname: userNickname,
+      });
+
+      if (response.data.response === "SUCCESS") {
+        setIsDuplicateNickname(true);
+      } else if (response.data.response === "DUPLICATED_NICKNAME") {
+        setIsDuplicateNickname(false);
+      }
+    } catch (error) {
+      console.error("중복 확인 실패:", error);
+      setIsDuplicateNickname(false);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("이미지 URL:", userImageUrl);
-    console.log("닉네임:", userNickname);
-    navigate("/sign-up-theme");
+    const userProfileData = {
+      socialProvider,
+      email,
+      socialId,
+      nickname: userNickname,
+      profileImage,
+    };
+    navigate("/sign-up-genre", {
+      state: userProfileData,
+    });
   };
 
   return (
@@ -155,7 +235,7 @@ function SignUpProfile() {
             <div className="user__profile">
               <img
                 className="user__profile--image"
-                src={userImageUrl || userDefaultImg}
+                src={profileImage || userDefaultImg}
                 alt="user_img"
                 onClick={() => fileInputRef.current.click()}
               />
@@ -166,7 +246,7 @@ function SignUpProfile() {
                 onChange={handleImageUpload}
                 style={{ display: "none" }}
               />
-              {userImageUrl && (
+              {profileImage && (
                 <button
                   type="button"
                   className="user__profile--deleteBtn"
@@ -180,18 +260,51 @@ function SignUpProfile() {
             <div className="user__nickName">
               <label>
                 닉네임
-                <input
-                  type="text"
-                  placeholder="ex) 쿠키"
-                  value={userNickname || ""}
-                  onChange={handleNicknameChange}
-                  required
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="ex) 쿠키"
+                    value={userNickname || ""}
+                    onChange={handleNicknameChange}
+                    maxLength={11}
+                    required
+                  />
+                  <button
+                    className="nickName__valid--btn"
+                    onClick={handleCheckNickname}
+                    type="button"
+                    disabled={!nicknameValid}
+                  >
+                    중복확인
+                  </button>
+                </div>
               </label>
+              {!nicknameValid && userNickname && (
+                <p className="nickName__valid--text">
+                  닉네임은 2~10자 사이의 숫자, 영어, 한글만 가능해요!
+                </p>
+              )}
+
+              {nicknameValid && isDuplicateNickname === false && (
+                <p className="nickName__valid--text">
+                  이미 사용 중인 닉네임입니다.
+                </p>
+              )}
+
+              {nicknameValid && isDuplicateNickname === true && (
+                <p className="nickName__valid--text">
+                  사용 가능한 닉네임입니다.
+                </p>
+              )}
             </div>
           </UserInfo>
           <SubmitBtn>
-            <button type="submit">다음</button>
+            <button
+              type="submit"
+              disabled={!nicknameValid || isDuplicateNickname === false}
+            >
+              다음
+            </button>
           </SubmitBtn>
         </form>
       </MainContainer>
