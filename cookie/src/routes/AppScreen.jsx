@@ -12,6 +12,7 @@ import ProfileIcon from "/src/assets/images/navbar_profile.svg";
 import { Link } from "react-router-dom";
 import Notification from "../components/Notification";
 import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   position: relative;
@@ -63,7 +64,7 @@ const NavContainer = styled.nav`
   justify-content: space-around;
   background-color: white;
   padding: 5px 20px;
-  height: 70px;
+  height: 60px;
   box-sizing: border-box;
   border-top: 1px solid #e5e7eb;
   position: sticky;
@@ -71,14 +72,15 @@ const NavContainer = styled.nav`
   z-index: 100;
 
   img {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
   }
 `;
 
 const Logo = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   img {
     height: 40px;
@@ -130,6 +132,11 @@ const AppContainer = styled.div`
 
 const AppScreen = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/"); // '/'로 이동
+  };
   const hideHeaderFooterPages = [
     "/login",
     "/sign-up-profile",
@@ -155,7 +162,7 @@ const AppScreen = () => {
           {/* 헤더 */}
           {!hideHeaderFooterPages.includes(location.pathname) && (
             <HeaderContainer>
-              <Logo>
+              <Logo onClick={handleLogoClick}>
                 <img src={CookieLogo} alt="Cookie Logo" />
               </Logo>
               <Notification />
