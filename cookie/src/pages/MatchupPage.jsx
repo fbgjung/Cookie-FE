@@ -23,12 +23,12 @@ const Container = styled.div`
 
 const sampleData = {
   matchUpTitle: "테스트 빅매치",
-  startAt: "2024-11-23T17:21:03",
-  entAt: "2024-11-28T17:21:01",
+  startAt: "2024-11-21T17:21:03",
+  entAt: "2024-11-25T18:29:50",
   movie1: {
     movieTitle: "테스트 영화 1",
     moviePoster: null,
-    movieLike: 10,
+    movieLike: 14,
     charmPoint: {
       ost: 20,
       direction: 18,
@@ -51,7 +51,7 @@ const sampleData = {
   movie2: {
     movieTitle: "테스트 영화 2",
     moviePoster: null,
-    movieLike: 5,
+    movieLike: 22,
     charmPoint: {
       ost: 15,
       direction: 25,
@@ -77,6 +77,7 @@ const MatchupPage = () => {
   const { matchUpId } = useParams();
   const location = useLocation();
   const [matchUpData, setMatchUpData] = useState(null);
+  const [isVoteEnded, setIsVoteEnded] = useState(false);
 
   const fetchMatchUpData = async () => {
     try {
@@ -96,6 +97,10 @@ const MatchupPage = () => {
     fetchMatchUpData();
   }, [matchUpId, location.pathname]);
 
+  const handleVoteEnd = () => {
+    setIsVoteEnded(true);
+  };
+
   if (!matchUpData) {
     return <Container>로딩 중...</Container>;
   }
@@ -106,7 +111,7 @@ const MatchupPage = () => {
         matchUpTitle={matchUpData.matchUpTitle}
         endAt={matchUpData.entAt}
       />
-      <Timer startAt={matchUpData.startAt} endAt={matchUpData.entAt} />
+      <Timer endAt={matchUpData.entAt} onVoteEnd={handleVoteEnd} />
       <PosterList
         posters={[
           {
@@ -122,6 +127,7 @@ const MatchupPage = () => {
             title: matchUpData.movie2.movieTitle,
           },
         ]}
+        isVoteEnded={isVoteEnded}
       />
       <ProgressBar
         movie1Likes={matchUpData.movie1.movieLike}

@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const BarContainer = styled.div`
-  width: 80%;
+  width: 90%;
   max-width: 1000px;
   height: 30px;
   background-color: #d9d9d9;
@@ -12,20 +13,29 @@ const BarContainer = styled.div`
   align-items: center;
 `;
 
-const FilledBar = styled.div`
+const FilledBarLeft = styled.div`
   height: 100%;
   width: ${(props) => props.percentage}%;
   background-color: #1ee5b0;
-  border-radius: 15px;
+  border-radius: 15px 0 0 15px;
+  transition: width 0.5s ease;
+`;
+
+const FilledBarRight = styled.div`
+  height: 100%;
+  width: ${(props) => 100 - props.percentage}%;
+  background-color: #ff6b6b;
+  border-radius: 0 15px 15px 0;
   transition: width 0.5s ease;
 `;
 
 const PercentageBubble = styled.div`
   position: absolute;
   top: -40px;
-  left: ${(props) => props.percentage}%;
+  left: ${(props) =>
+    props.isLeftWinning ? props.percentage : 100 - props.percentage}%;
   transform: translateX(-50%);
-  background-color: #1ee5b0;
+  background-color: ${(props) => (props.isLeftWinning ? "#1ee5b0" : "#ff6b6b")};
   color: #ffffff;
   font-size: 0.9rem;
   font-weight: bold;
@@ -46,7 +56,8 @@ const PercentageBubble = styled.div`
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-top: 10px solid #1ee5b0;
+    border-top: 10px solid
+      ${(props) => (props.isLeftWinning ? "#1ee5b0" : "#ff6b6b")};
   }
 `;
 
@@ -59,16 +70,23 @@ const ProgressBar = ({ movie1Likes, movie2Likes }) => {
   const totalVotes = movie1Likes + movie2Likes;
   const percentage =
     totalVotes > 0 ? Math.round((movie1Likes / totalVotes) * 100) : 50;
+  const isLeftWinning = percentage >= 50;
 
   return (
     <BarContainer>
-      <FilledBar percentage={percentage} />
-      <PercentageBubble percentage={percentage}>
+      <FilledBarLeft percentage={percentage} />
+      <FilledBarRight percentage={percentage} />
+      <PercentageBubble isLeftWinning={isLeftWinning} percentage={percentage}>
         <Icon src="/src/assets/images/matchup/ic_fight.svg" alt="Fight Icon" />
-        {percentage}%
+        {isLeftWinning ? percentage : 100 - percentage}%
       </PercentageBubble>
     </BarContainer>
   );
+};
+
+ProgressBar.propTypes = {
+  movie1Likes: PropTypes.number.isRequired,
+  movie2Likes: PropTypes.number.isRequired,
 };
 
 export default ProgressBar;

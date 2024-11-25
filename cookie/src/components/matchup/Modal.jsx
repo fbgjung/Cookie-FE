@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import toast from "react-hot-toast";
+import PropTypes from "prop-types";
 
 const ModalBackground = styled.div`
   position: fixed;
@@ -16,14 +18,29 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  width: 90%;
-  max-width: 400px;
+  width: 80%;
+  max-width: 480px;
   background: #ffffff;
   border-radius: 15px;
-  padding: 20px;
+  padding: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   position: relative;
   text-align: center;
+`;
+
+const ImageContainer = styled.div`
+  width: 150px;
+  height: 230px;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Title = styled.h2`
@@ -52,7 +69,7 @@ const Tag = styled.div`
   color: ${(props) => (props.selected ? "#ffffff" : "#333333")};
   border: 1px solid ${(props) => (props.selected ? "#04012D" : "#ddd")};
   border-radius: 20px;
-  padding: 5px 10px;
+  padding: 10px 20px;
   font-size: 0.9rem;
   cursor: pointer;
   transition:
@@ -85,7 +102,7 @@ const CloseButton = styled.button`
   background-color: transparent;
   color: #333333;
   border: none;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
   position: absolute;
   top: 15px;
@@ -98,7 +115,7 @@ const CloseButton = styled.button`
   }
 `;
 
-const Modal = ({ isOpen, onClose, movieTitle }) => {
+const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
   const [selectedAttractiveTags, setSelectedAttractiveTags] = useState([]);
   const [selectedEmotionTags, setSelectedEmotionTags] = useState([]);
 
@@ -106,23 +123,23 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
   const matchUpMovieId = 2;
 
   const attractiveTagsMap = {
-    OST: "ost",
-    "감독 연출": "direction",
-    스토리: "story",
-    대사: "dialogue",
-    영상미: "visual",
-    "배우 연기": "acting",
-    "특수효과 및 CG": "specialEffect",
+    "🎶 OST": "ost",
+    "🎬 감독 연출": "direction",
+    "✏️ 스토리": "story",
+    "💭 대사": "dialogue",
+    "🎨 영상미": "visual",
+    "🧞‍♂ 배우 연기": "acting",
+    "🚀 특수효과 및 CG": "specialEffect",
   };
 
   const emotionTagsMap = {
-    감동: "touching",
-    분노: "angry",
-    즐거움: "joy",
-    몰입감: "immersion",
-    긴장감: "tension",
-    공감: "empathy",
-    설렘: "excited",
+    "🥹 감동": "touching",
+    "😡 분노": "angry",
+    "😊 즐거움": "joy",
+    "😧 몰입감": "immersion",
+    "🫢 긴장감": "tension",
+    "😉 공감": "empathy",
+    "🥰 설렘": "excited",
   };
 
   const handleTagClick = (tag, type) => {
@@ -161,12 +178,12 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
         payload
       );
       if (response.data.response === "SUCCESS") {
-        alert("투표가 성공적으로 완료되었습니다!");
+        toast.success("투표가 성공적으로 완료되었습니다!");
         onClose();
       }
     } catch (error) {
       console.error("투표 요청 실패:", error);
-      alert("투표 중 문제가 발생했습니다. 다시 시도해주세요.");
+      toast.error("투표 중 문제가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -177,6 +194,9 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
       <ModalContainer>
         <CloseButton onClick={onClose}>×</CloseButton>
 
+        <ImageContainer>
+          <img src={imageUrl} alt={`${movieTitle} 이미지`} />
+        </ImageContainer>
         <Title>{movieTitle}의 매력 포인트를 알려주세요</Title>
         <Description>복수 선택이 가능합니다</Description>
         <TagsContainer>
@@ -207,6 +227,13 @@ const Modal = ({ isOpen, onClose, movieTitle }) => {
       </ModalContainer>
     </ModalBackground>
   );
+};
+
+Modal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  movieTitle: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired,
 };
 
 export default Modal;

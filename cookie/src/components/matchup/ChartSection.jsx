@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import {
   RadarChart,
   PolarGrid,
@@ -164,6 +165,19 @@ const ChartSection = ({ movie1, movie2 }) => {
       </ChartContainer>
     </SectionContainer>
   );
+};
+
+ChartSection.propTypes = {
+  movie1: PropTypes.shape({
+    movieTitle: PropTypes.string.isRequired,
+    charmPoint: PropTypes.objectOf(PropTypes.number).isRequired,
+    emotionPoint: PropTypes.objectOf(PropTypes.number).isRequired,
+  }).isRequired,
+  movie2: PropTypes.shape({
+    movieTitle: PropTypes.string.isRequired,
+    charmPoint: PropTypes.objectOf(PropTypes.number).isRequired,
+    emotionPoint: PropTypes.objectOf(PropTypes.number).isRequired,
+  }).isRequired,
 };
 
 export default ChartSection;
