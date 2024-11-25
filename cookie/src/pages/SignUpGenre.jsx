@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
-import serverBaseUrl from "../config/apiConfig";
 import axiosInstance from "../api/auth/axiosInstance";
-import axios from "axios";
+import toast from "react-hot-toast";
 
 const MainContainer = styled.div`
   background-color: white;
@@ -184,11 +183,11 @@ function SignUpGenre() {
     formData.append("pushEnabled", "false");
     formData.append("emailEnabled", "false");
     formData.append("genreId", selectedGenreId.toString());
-    formData.append("profileImage", userProfileData.profileImage);      
+    formData.append("profileImage", userProfileData.profileImage);
 
     try {
       const response = await axiosInstance.post(
-        `${serverBaseUrl}/api/auth/register`,
+        `/api/auth/register`,
         formData,
         {
           headers: {
@@ -198,12 +197,29 @@ function SignUpGenre() {
       );
 
       if (response.status === 200) {
-        alert("회원등록이 완료되었어요!");
-        navigate("/");
+        toast.success("회원등록이 완료되었어요!");
+
+        const tokenResponse = await axiosInstance.get(
+          `/api/auth/retrieve-token`,
+          { withCredentials: true }
+        );
+
+        const { accessToken, refreshToken } = tokenResponse.data.response;
+
+        if (accessToken && refreshToken) {
+          sessionStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+          console.log("AccessToken: ", accessToken);
+          console.log("RefreshToken: ", refreshToken);
+
+          navigate("/");
+        } else {
+          throw new Error("토큰 발급에 실패했습니다.");
+        }
       }
     } catch (error) {
-      console.error("회원가입 중 오류:", error);
-      alert("가입실패실패실패.");
+      console.error("오류 발생:", error);
+      toast.error(`가입 실패: ${error.message}`);
     }
   };
 

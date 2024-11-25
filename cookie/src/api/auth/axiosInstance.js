@@ -1,6 +1,7 @@
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
-
+import { useNavigate } from "react-router-dom";
+const navigate = useNavigate();
 //TODO 서버 주소 추가하기
 const axiosInstance = axios.create({
   baseURL: serverBaseUrl,
@@ -45,6 +46,7 @@ axiosInstance.interceptors.response.use(
 
       localStorage.clear();
       sessionStorage.clear();
+      navigate("/login");
     }
 
     return Promise.reject(error);
