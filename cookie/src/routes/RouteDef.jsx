@@ -14,6 +14,7 @@ import MatchupPage from "../pages/MatchupPage";
 import ReviewForm from "../pages/ReviewForm";
 import SearchForReview from "../pages/SearchForReview";
 import MovieReviewForm from "../pages/MovieReviewForm";
+import MovieReviewFeed from "../pages/MovieReviewFeed";
 
 export const AppRouteDef = {
   Main: {
@@ -146,6 +147,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MovieReviewForm />
+      </PrivateRoute>
+    ),
+  },
+  MovieReviewFeed: {
+    path: "/reviews/movie/:movieId",
+    element: (
+      <PrivateRoute>
+        <MovieReviewFeed />
       </PrivateRoute>
     ),
   },
