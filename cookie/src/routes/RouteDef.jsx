@@ -115,11 +115,19 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
+<<<<<<< HEAD
   LoginToken: {
     path: "/retrieve-token",
     element: (
       <PrivateRoute>
         <ReTokenPage />
+=======
+  MatchUpHistory: {
+    path: "/matchup/:matchUpId/history",
+    element: (
+      <PrivateRoute>
+        <MatchupPage />
+>>>>>>> e3bed028c9118cce25ce18be030c4db53e3581cf
       </PrivateRoute>
     ),
   },
