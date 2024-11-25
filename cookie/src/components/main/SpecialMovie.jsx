@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import specialIcon from "../../assets/images/main/special_icon.svg";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SpecialMovieList = styled.div`
   position: relative;
@@ -33,6 +34,7 @@ const SpecialMovieList = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
 
   .specialMovie__list--info img {
@@ -144,6 +146,8 @@ function SpecialMovie() {
   const [filteredMovies, setFilteredMovies] = useState(specialMovies); //영화정보
   const [selectedTheme, setSelectedTheme] = useState("");
   const categoryKeys = Object.keys(category[0]);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -167,6 +171,9 @@ function SpecialMovie() {
     }
   }, [selectedCategory]);
 
+  const handleMovieClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
   return (
     <>
       <SpecialMovieList>
@@ -204,7 +211,11 @@ function SpecialMovie() {
           <div className="specialMovie__list">
             {filteredMovies.length > 0 ? (
               filteredMovies.map((movie) => (
-                <div key={movie.movieId} className="specialMovie__list--info">
+                <div
+                  key={movie.movieId}
+                  className="specialMovie__list--info"
+                  onClick={handleMovieClick}
+                >
                   <img src={movie.poster} alt={movie.title} />
                   <div>
                     <p>

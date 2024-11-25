@@ -59,54 +59,81 @@ function GenreMovie() {
   const MovieGenre = [
     {
       id: 1,
-      theme: "로맨스",
+      genre: "로맨스",
     },
     {
       id: 2,
-      theme: "공포",
+      genre: "공포",
     },
     {
       id: 3,
-      theme: "코미디",
+      genre: "코미디",
     },
     {
       id: 4,
-      theme: "액션",
+      genre: "액션",
     },
     {
       id: 5,
-      theme: "애니메이션",
+      genre: "판타지",
     },
     {
       id: 6,
-      theme: "전쟁",
+      genre: "애니메이션",
     },
     {
       id: 7,
-      theme: "범죄",
+      genre: "범죄",
     },
     {
       id: 8,
-      theme: "SF",
+      genre: "SF",
     },
     {
       id: 9,
-      theme: "음악",
+      genre: "음악",
     },
     {
       id: 10,
-      theme: "스릴러",
+      genre: "스릴러",
     },
     {
       id: 11,
-      theme: "판타지",
+      genre: "전쟁",
     },
     {
       id: 12,
-      theme: "다큐멘터리",
+      genre: "다큐멘터리",
+    },
+    {
+      id: 13,
+      genre: "드라마",
+    },
+    {
+      id: 14,
+      genre: "가족",
+    },
+    {
+      id: 15,
+      genre: "역사",
+    },
+    {
+      id: 16,
+      genre: "미스터리",
+    },
+    {
+      id: 17,
+      genre: "TV영화",
+    },
+    {
+      id: 18,
+      genre: "서부극",
+    },
+    {
+      id: 19,
+      genre: "모험",
     },
   ];
-
   // 더미데이터
   const GenreMovies = Array.from({ length: 60 }, (_, i) => ({
     movieId: i + 1,
@@ -118,7 +145,15 @@ function GenreMovie() {
     runtime: `${120 + i}분`,
     score: Math.floor(Math.random() * 5) + 1,
     rating: i + 1 <= 10 ? "teenager" : "adult",
-    genre: ["스릴러", "액션", "코미디", "드라마", "판타지", "로맨스"][i % 6],
+    genre: [
+      "스릴러",
+      "액션",
+      "코미디",
+      "드라마",
+      "판타지",
+      "로맨스",
+      "미스터리",
+    ][i % 7],
 
     //서비스내 자체 추가 부분
     reviews: Math.floor(Math.random() * 1901) + 100,
@@ -137,7 +172,6 @@ function GenreMovie() {
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
   };
-
   const filteredMovies = selectedGenre
     ? GenreMovies.filter((movie) => movie.genre === selectedGenre)
     : GenreMovies;
@@ -153,10 +187,10 @@ function GenreMovie() {
           {MovieGenre.map((genre) => (
             <GenreBtn
               key={genre.id}
-              $isSelected={selectedGenre === genre.theme}
-              onClick={() => handleGenreClick(genre.theme)}
+              $isSelected={selectedGenre === genre.genre}
+              onClick={() => handleGenreClick(genre.genre)}
             >
-              {genre.theme}
+              {genre.genre}
             </GenreBtn>
           ))}
         </div>

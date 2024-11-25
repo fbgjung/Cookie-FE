@@ -1,3 +1,2 @@
-export const API_CONFIG = {
-  serverBaseUrl: "http://cookiekie:8080",
-};
+const serverBaseUrl = "http://localhost:8080";
+export default serverBaseUrl;

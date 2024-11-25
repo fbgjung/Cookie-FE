@@ -132,7 +132,7 @@ const AppScreen = () => {
   const hideHeaderFooterPages = [
     "/login",
     "/sign-up-profile",
-    "/sign-up-theme",
+    "/sign-up-genre",
   ];
 
   return (

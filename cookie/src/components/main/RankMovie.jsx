@@ -11,6 +11,7 @@ import rank7 from "../../assets/images/main/rank_7.svg";
 import rank8 from "../../assets/images/main/rank_8.svg";
 import rank9 from "../../assets/images/main/rank_9.svg";
 import rank10 from "../../assets/images/main/rank_10.svg";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MovieRankList = styled.div`
   position: relative;
@@ -86,6 +87,12 @@ function MovieRank() {
     rank9,
     rank10,
   ];
+  const navigate = useNavigate();
+
+  const { id } = useParams();
+  const handleMovieClick = (id) => {
+    navigate(`/movie/${id}`);
+  };
 
   return (
     <>
@@ -97,20 +104,21 @@ function MovieRank() {
         <div className="rank__movie">
           {sortedRankMovies.map((movie, index) => (
             <div key={movie.movieId} className="rank__movie--list">
-              <img src={movie.poster} alt={movie.title} />
               <img
                 className="rank__number--image"
                 src={rankImage[index]}
                 alt={`Rank ${index + 1}`}
               />
-              <div>
-                <p>
-                  <strong>{movie.title}</strong>
-                </p>
-                <p>
-                  {movie.released}﹒{movie.nation}
-                </p>
-
+              <div onClick={handleMovieClick} style={{ cursor: "pointer" }}>
+                <img src={movie.poster} alt={movie.title} />
+                <div>
+                  <p>
+                    <strong>{movie.title}</strong>
+                  </p>
+                  <p>
+                    {movie.released}﹒{movie.nation}
+                  </p>
+                </div>
                 <p className="movie__info--sub">리뷰 : {movie.reviews}개</p>
                 <p className="movie__info--sub">좋아요 : {movie.likes}개</p>
               </div>

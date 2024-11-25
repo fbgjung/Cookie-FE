@@ -5,8 +5,8 @@ import userDefaultImg from "../assets/images/signUp/user_img.svg";
 import deleteBtn from "../assets/images/signUp/close_icon.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import serverBaseUrl from "../config/apiConfig";
-import toast from "react-hot-toast";
 import axios from "axios";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const MainContainer = styled.div`
   background-color: white;
@@ -142,8 +142,6 @@ const SubmitBtn = styled.div`
   }
 `;
 
-//TODO 중복확인 검사 필요
-
 function SignUpProfile() {
   const [profileImage, setProfileImage] = useState(null);
   const [userNickname, setUserNickname] = useState("");
@@ -195,12 +193,9 @@ function SignUpProfile() {
     }
 
     try {
-      const response = await axios.post(
-        `${serverBaseUrl}/api/auth/check-nickname`,
-        {
-          nickname: userNickname,
-        }
-      );
+      const response = await axiosInstance.post("/api/auth/check-nickname", {
+        nickname: userNickname,
+      });
 
       if (response.data.response === "SUCCESS") {
         setIsDuplicateNickname(true);

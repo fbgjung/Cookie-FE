@@ -4,13 +4,14 @@ import Search from "../pages/search";
 import MovieDetail from "../pages/MovieDetail";
 import Login from "../pages/Login";
 import SignUpProfile from "../pages/SignUpProfile";
-import SignUpTheme from "../pages/SignUpTheme";
+import SignUpGenre from "../pages/SignUpGenre";
 import MyPage from "../pages/mypage";
 import ManageProfile from "../pages/ManageProfile";
 import LikedMovies from "../pages/LikedMovies";
 import LikedReviews from "../pages/LikedRevies";
 import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
+import ReTokenPage from "../api/auth/reTokenPage";
 
 export const AppRouteDef = {
   Main: {
@@ -54,10 +55,10 @@ export const AppRouteDef = {
     ),
   },
   SignUpTag: {
-    path: "/sign-up-theme",
+    path: "/sign-up-genre",
     element: (
       <PrivateRoute>
-        <SignUpTheme />
+        <SignUpGenre />
       </PrivateRoute>
     ),
   },
@@ -111,6 +112,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MatchupPage />
+      </PrivateRoute>
+    ),
+  },
+  LoginToken: {
+    path: "/retrieve-token",
+    element: (
+      <PrivateRoute>
+        <ReTokenPage />
       </PrivateRoute>
     ),
   },
