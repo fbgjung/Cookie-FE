@@ -12,6 +12,7 @@ import LikedReviews from "../pages/LikedRevies";
 import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
 import ReTokenPage from "../api/auth/reTokenPage";
+import AdminLogin from "../pages/AdminLogin";
 
 export const AppRouteDef = {
   Main: {
@@ -130,6 +131,15 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MatchupPage />
+      </PrivateRoute>
+    ),
+  },
+
+  AdminLogin: {
+    path: "/admin",
+    element: (
+      <PrivateRoute>
+        <AdminLogin />
       </PrivateRoute>
     ),
   },
