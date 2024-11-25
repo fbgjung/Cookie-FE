@@ -2,7 +2,6 @@ import React from "react";
 import GlobalStyle from "../styles/global";
 import CookieImg from "../assets/images/login/cookie_img.svg";
 import CookieLogo from "../assets/images/login/cookie_lg.svg";
-import kakaoLogin from "../assets/images/login/kakao_OAuth.svg";
 import styled from "styled-components";
 import { OAuth_LOGIN_PROVIDER } from "../config/OAuthConfig";
 
@@ -39,8 +38,12 @@ export const LoginBtn = styled.div`
     cursor: pointer;
   }
 `;
+//TODO 로그인연동하기
 
 function Login() {
+  const handleLoginClick = (url) => {
+    window.location.href = url;
+  };
   return (
     <>
       <GlobalStyle />
@@ -51,7 +54,7 @@ function Login() {
         <img className="login__img" src={CookieImg} alt="logoImg" />
         <LoginBtn>
           {Object.entries(OAuth_LOGIN_PROVIDER).map(([key, { img, url }]) => (
-            <button key={key} onClick={() => (window.location.href = url)}>
+            <button key={key} onClick={() => handleLoginClick(url)}>
               <img src={img} alt={`${key}Login`} />
             </button>
           ))}

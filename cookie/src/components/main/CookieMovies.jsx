@@ -20,10 +20,13 @@ const CookieMovieList = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    overflow-x: scroll;
+    overflow-x: auto;
     gap: 1rem;
+    &:hover {
+      overflow-x: scroll;
+    }
   }
+
   .cookie__movie--list {
     display: flex;
     flex-direction: column;
@@ -77,7 +80,6 @@ function CookieMovies() {
                   <strong>{movie.title}</strong>
                 </p>
                 <p>
-                  {" "}
                   {movie.released}﹒{movie.nation}
                 </p>
 

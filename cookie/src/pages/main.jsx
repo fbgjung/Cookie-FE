@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import GlobalStyle from "../styles/global";
-import MatchUpContainer from "../components/main/MatchUpContainer";
+import MatchUp from "../components/main/MatchUp";
 import RankMovie from "../components/main/RankMovie";
 import CookieMovies from "../components/main/CookieMovies";
 import SpecialMovie from "../components/main/SpecialMovie";
@@ -57,6 +57,7 @@ const NavbarWrapper = styled(CommonContainer)`
     padding: 0 10px;
   }
 `;
+// FIX 일정 숫자부터  보이는 스크롤 오류 해결
 
 const Main = () => {
   const dummyMovies = [
@@ -99,7 +100,7 @@ const Main = () => {
       <MainContainer>
         <img src={"https://via.placeholder.com/600x250"} alt="배너" />
         <Content>
-          <MatchUpContainer dummydata={dummyMovies} />
+          <MatchUp dummydata={dummyMovies} />
           <RankMovie />
           <CookieMovies />
           <SpecialMovie />
