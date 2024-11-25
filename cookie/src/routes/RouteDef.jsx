@@ -11,6 +11,7 @@ import LikedMovies from "../pages/LikedMovies";
 import LikedReviews from "../pages/LikedRevies";
 import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
+import ReviewFeed from "../pages/Review";
 import ReviewForm from "../pages/ReviewForm";
 import SearchForReview from "../pages/SearchForReview";
 import MovieReviewForm from "../pages/MovieReviewForm";
@@ -38,6 +39,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MovieDetail />
+      </PrivateRoute>
+    ),
+  },
+  Review: {
+    path: "/review",
+    element: (
+      <PrivateRoute>
+        <ReviewFeed />
       </PrivateRoute>
     ),
   },

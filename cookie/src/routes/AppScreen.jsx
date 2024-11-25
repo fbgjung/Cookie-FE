@@ -160,7 +160,7 @@ const AppScreen = () => {
               <Link to="/search">
                 <img src={SearchIcon} alt="검색" />
               </Link>
-              <Link to="/review">
+              <Link to="/reviewfeed">
                 <img src={ReviewIcon} alt="리뷰" />
               </Link>
               <Link to="/matchup">
