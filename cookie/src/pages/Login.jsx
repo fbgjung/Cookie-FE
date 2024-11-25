@@ -2,11 +2,8 @@ import React from "react";
 import GlobalStyle from "../styles/global";
 import CookieImg from "../assets/images/login/cookie_img.svg";
 import CookieLogo from "../assets/images/login/cookie_lg.svg";
-import kakaoLogin from "../assets/images/login/kakao_OAuth.svg";
-import googleLogin from "../assets/images/login/google_OAuth.svg";
-import naverLogin from "../assets/images/login/naver_OAuth.svg";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { OAuth_LOGIN_PROVIDER } from "../config/OAuthConfig";
 
 export const LoginContainer = styled.div`
   background-color: var(--main);
@@ -32,15 +29,21 @@ export const LoginBtn = styled.div`
   align-items: center;
   margin-top: 3rem;
 
+  button {
+    background: none;
+    border: none;
+  }
   img {
     margin: 0.5rem 0;
     cursor: pointer;
   }
 `;
+//TODO 로그인연동하기
 
 function Login() {
-  const navigate = useNavigate();
-
+  const handleLoginClick = (url) => {
+    window.location.href = url;
+  };
   return (
     <>
       <GlobalStyle />
@@ -50,19 +53,11 @@ function Login() {
         <img className="login__img" src={CookieLogo} alt="logo" />
         <img className="login__img" src={CookieImg} alt="logoImg" />
         <LoginBtn>
-          <a href="#">
-            <img src={kakaoLogin} alt="kakaoLogin" />
-          </a>
-          <a href="#">
-            <img src={googleLogin} alt="googleLogin" />
-          </a>
-          <a href="#">
-            <img
-              src={naverLogin}
-              alt="naverLogin"
-              onClick={() => navigate("/sign-up-profile")}
-            />
-          </a>
+          {Object.entries(OAuth_LOGIN_PROVIDER).map(([key, { img, url }]) => (
+            <button key={key} onClick={() => handleLoginClick(url)}>
+              <img src={img} alt={`${key}Login`} />
+            </button>
+          ))}
         </LoginBtn>
       </LoginContainer>
     </>

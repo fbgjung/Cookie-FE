@@ -4,7 +4,7 @@ import matchUp from "../../assets/images/main/matchup_icon.svg";
 import fight from "../../assets/images/main/fight_icon.svg";
 import { useNavigate } from "react-router-dom";
 
-const MathUp = styled.div`
+const MatchUpContainer = styled.div`
   position: relative;
 
   .matchUp__title {
@@ -100,7 +100,7 @@ const MathUp = styled.div`
   }
 `;
 
-function MatchUpContainer({ matchDate, dummydata }) {
+function MatchUp({ matchDate, dummydata }) {
   const today = new Date();
   matchDate = new Date("2024-12-31");
   const leftTime = matchDate - today;
@@ -108,7 +108,7 @@ function MatchUpContainer({ matchDate, dummydata }) {
   const navigate = useNavigate();
 
   return (
-    <MathUp>
+    <MatchUpContainer>
       <div className="matchUp__title">
         <img src={matchUp} alt="matchUp_icon" />
         <h2> 이번주 영화 매치업! D-{leftDay}</h2>
@@ -138,8 +138,8 @@ function MatchUpContainer({ matchDate, dummydata }) {
           ))}
         </div>
       )}
-    </MathUp>
+    </MatchUpContainer>
   );
 }
 
-export default MatchUpContainer;
+export default MatchUp;

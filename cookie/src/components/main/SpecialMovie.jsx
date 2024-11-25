@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import specialIcon from "../../assets/images/main/special_icon.svg";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SpecialMovieList = styled.div`
   position: relative;
@@ -23,7 +24,6 @@ const SpecialMovieList = styled.div`
   .specialMovie__list {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 1rem;
     overflow-x: scroll;
   }
@@ -34,6 +34,7 @@ const SpecialMovieList = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
 
   .specialMovie__list--info img {
@@ -102,6 +103,7 @@ function SpecialMovie() {
     },
   ];
 
+  //테마 랜덤으로 지정하기 (임의 데이터)
   function getRandomItems(arr, maxCount) {
     const count = Math.floor(Math.random() * maxCount) + 1; // 1개 또는 2개 선택
     const shuffled = arr.sort(() => Math.random() - 0.5);
@@ -144,6 +146,8 @@ function SpecialMovie() {
   const [filteredMovies, setFilteredMovies] = useState(specialMovies); //영화정보
   const [selectedTheme, setSelectedTheme] = useState("");
   const categoryKeys = Object.keys(category[0]);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -167,6 +171,9 @@ function SpecialMovie() {
     }
   }, [selectedCategory]);
 
+  const handleMovieClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
   return (
     <>
       <SpecialMovieList>
@@ -204,7 +211,11 @@ function SpecialMovie() {
           <div className="specialMovie__list">
             {filteredMovies.length > 0 ? (
               filteredMovies.map((movie) => (
-                <div key={movie.movieId} className="specialMovie__list--info">
+                <div
+                  key={movie.movieId}
+                  className="specialMovie__list--info"
+                  onClick={handleMovieClick}
+                >
                   <img src={movie.poster} alt={movie.title} />
                   <div>
                     <p>
@@ -215,7 +226,6 @@ function SpecialMovie() {
                     </p>
                     <p className="movie__info--sub">리뷰 수: {movie.reviews}</p>
                     <p className="movie__info--sub">좋아요 수: {movie.likes}</p>
-                    {/* <p> {movie.theme}</p> */}
                   </div>
                 </div>
               ))
