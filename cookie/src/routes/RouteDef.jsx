@@ -39,7 +39,7 @@ export const AppRouteDef = {
     ),
   },
   Review: {
-    path: "/reviewfeed",
+    path: "/review",
     element: (
       <PrivateRoute>
         <ReviewFeed />
