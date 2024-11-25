@@ -4,13 +4,12 @@ import axios from "axios";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
-  margin: 0px auto;
+  margin: 0 auto;
   max-width: 900px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  height: 100vh;
 `;
 
 const ReviewTitle = styled.h3`
@@ -59,7 +58,7 @@ const ReviewContainer = styled.div`
 const ReviewTicket = styled.div`
   display: flex;
   background-image: url("/src/assets/images/mypage/reviewticket.svg");
-  background-size: contain; /* 이미지를 비율을 유지하며 축소 */
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   padding: 20px;
@@ -67,9 +66,8 @@ const ReviewTicket = styled.div`
   box-sizing: border-box;
   min-height: 180px;
   cursor: pointer;
-  width: 95%; /* 전체 컨테이너의 80% 크기로 조정 */
-  margin: 20 auto; /* 
-  transform: scale(0.9); /* 전체 비율 유지하면서 약간 축소 */
+  width: 95%;
+  margin: 0 auto;
 `;
 
 const ReviewLeft = styled.div`
@@ -151,83 +149,70 @@ const ReviewFeed = () => {
   const [reviews, setReviews] = useState([]);
   const [filteredReviews, setFilteredReviews] = useState([]);
   const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchReviews = useCallback(async () => {
-    try {
-      const dummyReviews = [
-        {
-          movie: {
-            poster: "https://via.placeholder.com/80x120",
-            title: "영화 제목 1",
-          },
-          user: {
-            profileImage: "https://via.placeholder.com/40",
-            nickname: "사용자 1",
-          },
-          content: "이 영화 정말 재미있었어요!",
-          createdAt: new Date().toISOString(),
-          movieScore: 4,
-          isSpoiler: false,
-        },
-        {
-          movie: {
-            poster: "https://via.placeholder.com/80x120",
-            title: "영화 제목 2",
-          },
-          user: {
-            profileImage: "https://via.placeholder.com/40",
-            nickname: "사용자 2",
-          },
-          content: "이 리뷰는 스포일러 리뷰입니당",
-          createdAt: new Date().toISOString(),
-          movieScore: 2,
-          isSpoiler: true,
-        },
-        {
-          movie: {
-            poster: "https://via.placeholder.com/80x120",
-            title: "영화 제목 3",
-          },
-          user: {
-            profileImage: "https://via.placeholder.com/40",
-            nickname: "사용자 3",
-          },
-          content: "볼만한 영화입니다!",
-          createdAt: new Date().toISOString(),
-          movieScore: 3,
-          isSpoiler: false,
-        },
-        {
-          movie: {
-            poster: "https://via.placeholder.com/80x120",
-            title: "영화 제목 4",
-          },
-          user: {
-            profileImage: "https://via.placeholder.com/40",
-            nickname: "사용자 4",
-          },
-          content: "주인공이 사망하는 충격적 결말",
-          createdAt: new Date().toISOString(),
-          movieScore: 5,
-          isSpoiler: true,
-        },
-      ];
-      setReviews(dummyReviews);
-      setFilteredReviews(dummyReviews);
-    } catch (error) {
-      console.error("Failed to fetch reviews:", error);
+  const fetchReviews = useCallback(
+    async (spoiler = false) => {
+      if (!hasMore || isLoading) return;
+
+      try {
+        setIsLoading(true);
+        const endpoint = spoiler ? "/api/reviews/spoiler" : "/api/reviews";
+        const response = await axios.get(endpoint, {
+          params: { page, size: 10 },
+        });
+
+        const newReviews = response.data.response.reviews;
+
+        if (spoiler) {
+          setReviews(newReviews); // 스포일러 리뷰는 따로 대체
+        } else {
+          setReviews((prevReviews) => [...prevReviews, ...newReviews]);
+        }
+
+        setFilteredReviews((prevReviews) =>
+          spoiler ? newReviews : [...prevReviews, ...newReviews]
+        );
+
+        if (newReviews.length < 10) {
+          setHasMore(false); // 더 이상 데이터가 없으면 로딩 중지
+        }
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [page, hasMore, isLoading]
+  );
+
+  useEffect(() => {
+    fetchReviews(showSpoilerOnly);
+  }, [fetchReviews, showSpoilerOnly]);
+
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.scrollHeight
+    ) {
+      setPage((prevPage) => prevPage + 1);
     }
   }, []);
 
   useEffect(() => {
-    fetchReviews();
-  }, [fetchReviews]);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
 
   const filterReviews = (showSpoilers) => {
     setShowSpoilerOnly(showSpoilers);
-    setFilteredReviews(
-      showSpoilers ? reviews.filter((review) => review.isSpoiler) : reviews
-    );
+    setPage(1);
+    setHasMore(true);
+    fetchReviews(showSpoilers); // 필터링에 맞게 새로 데이터 요청
   };
 
   return (
@@ -249,7 +234,7 @@ const ReviewFeed = () => {
       </FilterButtons>
       <ReviewContainer>
         {filteredReviews.map((review, index) => (
-          <ReviewTicket key={index}>
+          <ReviewTicket key={review.reviewId}>
             <ReviewLeft>
               <img src={review.movie.poster} alt={review.movie.title} />
               <div className="title">{review.movie.title}</div>
@@ -292,6 +277,7 @@ const ReviewFeed = () => {
           </ReviewTicket>
         ))}
       </ReviewContainer>
+      {isLoading && <p>Loading more reviews...</p>}
     </ReviewFeedWrapper>
   );
 };
