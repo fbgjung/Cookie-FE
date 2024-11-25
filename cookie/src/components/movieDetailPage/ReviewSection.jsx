@@ -113,13 +113,6 @@ const ReviewSection = ({ reviews, reviewCount, onViewAllReviews, movie }) => {
     
   };
 
-  const handleWriteReviewClick = () => {
-    navigate("/reviews/write", {
-      state: { movie },
-    });
-    
-  };
-
   return (
     <ReviewWrapper>
       <h2>
