@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeaderSection from "../components/movieDetailPage/HeaderSection";
 import DetailsSection from "../components/movieDetailPage/DetailsSection";
@@ -17,6 +17,7 @@ const ContentWrapper = styled.div`
 
 const MovieDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   // 샘플 데이터 (API 연동 시 대체)
   const movie = {
@@ -39,7 +40,6 @@ const MovieDetail = () => {
       { name: "박건휘", role: "주연", img: image },
       { name: "박건휘", role: "주연", img: image },
       { name: "박건휘", role: "주연", img: image },
-      { name: "박건휘", role: "주연", img: image }
     ],
     videos: [
       {
@@ -85,6 +85,11 @@ const MovieDetail = () => {
     },
   ];
 
+  const handleViewAllReviews = () => {
+    // /reviews/movie/:movieId로 이동
+    navigate(`/reviews/movie/${id}`);
+  };
+
   return (
     <ContentWrapper>
       <HeaderSection
@@ -103,7 +108,7 @@ const MovieDetail = () => {
       <CastSection cast={movie.cast} />
       <VideoSection videos={movie.videos} />
       <GallerySection images={movie.gallery} />
-      <ReviewSection reviews={reviews} reviewCount={36} />
+      <ReviewSection reviews={reviews} reviewCount={36} onViewAllReviews={handleViewAllReviews} movie={movie}/>
     </ContentWrapper>
   );
 };

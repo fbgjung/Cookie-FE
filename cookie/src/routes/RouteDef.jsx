@@ -11,7 +11,11 @@ import LikedMovies from "../pages/LikedMovies";
 import LikedReviews from "../pages/LikedRevies";
 import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
-import ReviewFeed from "../pages/ReviewFeed";
+import ReviewFeed from "../pages/Review";
+import ReviewForm from "../pages/ReviewForm";
+import SearchForReview from "../pages/SearchForReview";
+import MovieReviewForm from "../pages/MovieReviewForm";
+import MovieReviewFeed from "../pages/MovieReviewFeed";
 
 export const AppRouteDef = {
   Main: {
@@ -128,6 +132,38 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MatchupPage />
+      </PrivateRoute>
+    ),
+  },
+  ReviewForm: {
+    path: "/reviews/write",
+    element: (
+      <PrivateRoute>
+        <ReviewForm />
+      </PrivateRoute>
+    ),
+  },
+  SearchForReview: {
+    path: "/searchmov",
+    element: (
+      <PrivateRoute>
+        <SearchForReview />
+      </PrivateRoute>
+    ),
+  },
+  MovieReviewForm: {
+    path: "/movie/:movieId/review",
+    element: (
+      <PrivateRoute>
+        <MovieReviewForm />
+      </PrivateRoute>
+    ),
+  },
+  MovieReviewFeed: {
+    path: "/reviews/movie/:movieId",
+    element: (
+      <PrivateRoute>
+        <MovieReviewFeed />
       </PrivateRoute>
     ),
   },
