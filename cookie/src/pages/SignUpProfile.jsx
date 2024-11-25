@@ -4,8 +4,6 @@ import styled from "styled-components";
 import userDefaultImg from "../assets/images/signUp/user_img.svg";
 import deleteBtn from "../assets/images/signUp/close_icon.svg";
 import { useLocation, useNavigate } from "react-router-dom";
-import serverBaseUrl from "../config/apiConfig";
-import axios from "axios";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const MainContainer = styled.div`
@@ -162,8 +160,8 @@ function SignUpProfile() {
 
     if (file) {
       const fileUrl = URL.createObjectURL(file);
-      setProfileImage(fileUrl);
-      console.log("파일 정보:", file);
+      setProfileImage(file);
+      console.log("파일 정보:", fileUrl);
     }
   };
 
@@ -235,12 +233,12 @@ function SignUpProfile() {
         <form onSubmit={handleSubmit}>
           <UserInfo>
             <div className="user__profile">
-              <img
-                className="user__profile--image"
-                src={profileImage || userDefaultImg}
-                alt="user_img"
-                onClick={() => fileInputRef.current.click()}
-              />
+            <img
+              className="user__profile--image"
+              src={profileImage ? URL.createObjectURL(profileImage) : userDefaultImg}
+              alt="user_img"
+              onClick={() => fileInputRef.current.click()}
+            />
               <input
                 type="file"
                 accept="image/*"

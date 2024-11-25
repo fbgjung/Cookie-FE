@@ -4,6 +4,7 @@ import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import serverBaseUrl from "../config/apiConfig";
 import axiosInstance from "../api/auth/axiosInstance";
+import axios from "axios";
 
 const MainContainer = styled.div`
   background-color: white;
@@ -180,10 +181,10 @@ function SignUpGenre() {
     formData.append("socialId", userProfileData.socialId);
     formData.append("email", userProfileData.email);
     formData.append("nickname", userProfileData.nickname);
-    formData.append("isPushEnabled", false);
-    formData.append("isEmailEnabled", false);
-    formData.append("genreId", selectedGenreId);
-    formData.append("profileImage", userProfileData.profileImage);
+    formData.append("pushEnabled", "false");
+    formData.append("emailEnabled", "false");
+    formData.append("genreId", selectedGenreId.toString());
+    formData.append("profileImage", userProfileData.profileImage);      
 
     try {
       const response = await axiosInstance.post(
@@ -199,8 +200,6 @@ function SignUpGenre() {
       if (response.status === 200) {
         alert("회원등록이 완료되었어요!");
         navigate("/");
-      } else {
-        alert(`회원가입 실패: ${response.data.message}`);
       }
     } catch (error) {
       console.error("회원가입 중 오류:", error);
