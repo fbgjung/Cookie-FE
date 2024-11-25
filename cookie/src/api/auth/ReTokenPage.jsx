@@ -15,14 +15,16 @@ const ReTokenPage = () => {
         withCredentials: true,
       })
       .then((response) => {
-        const accessToken = response.headers["authorization"];
-        const refreshToken = response.data.refreshToken;
+        const accessToken = response.data.response.accessToken;
+        const refreshToken = response.data.response.refreshToken;
 
+        console.log(response);
         if (accessToken && refreshToken) {
           sessionStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
-
-          navigate("/sign-up-profile");
+          console.log(accessToken);
+          console.log(refreshToken);
+          navigate("/");
         } else {
           console.error("Authorization header missing in response");
         }

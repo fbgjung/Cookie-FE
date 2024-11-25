@@ -193,8 +193,10 @@ function SignUpProfile() {
     }
 
     try {
-      const response = await axiosInstance.post("/api/auth/check-nickname", {
-        nickname: userNickname,
+      const response = await axiosInstance.get("/api/auth/check-nickname", {
+        params: {
+          nickname: userNickname,
+        },
       });
 
       if (response.data.response === "SUCCESS") {
