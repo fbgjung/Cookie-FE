@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
+import useNotificationStore from "../../stores/notificationStore";
 
 //로그인 완료 후 토근 발급
 const ReTokenPage = () => {
@@ -24,6 +25,28 @@ const ReTokenPage = () => {
           localStorage.setItem("refreshToken", refreshToken);
           console.log(accessToken);
           console.log(refreshToken);
+
+          const eventSource = new EventSource(
+            `http://localhost:8080/api/reviews/subscribe/push-notification`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+
+          const addNotification =
+            useNotificationStore.getState().addNotification;
+
+          eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            addNotification(data);
+          };
+
+          eventSource.onerror = (error) => {
+            console.error("SSE 연결 에러:", error);
+            eventSource.close();
+          };
           navigate("/");
         } else {
           console.error("Authorization header missing in response");
