@@ -1,2 +1,2 @@
-const serverBaseUrl = "https://www.cookiekie.com:8080";
+const serverBaseUrl = "https://www.cookiekie.com";
 export default serverBaseUrl;
