@@ -1,4 +1,3 @@
-import React from "react";
 import GlobalStyle from "../styles/global";
 import CookieImg from "../assets/images/login/cookie_img.svg";
 import CookieLogo from "../assets/images/login/cookie_lg.svg";
