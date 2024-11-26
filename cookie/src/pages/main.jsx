@@ -79,6 +79,25 @@ const WriteReviewButton = styled.button`
   }
 `;
 
+const WriteReviewButton = styled.button`
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background-color: #cc5283;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 200;
+
+  &:hover {
+    background-color: #b44d78;
+  }
+`;
+
 const Main = () => {
   const dummyMovies = [
     {
