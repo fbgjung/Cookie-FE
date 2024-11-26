@@ -4,6 +4,7 @@ import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 import toast from "react-hot-toast";
+import useNotificationStore from "../stores/notificationStore";
 
 const MainContainer = styled.div`
   background-color: white;
@@ -211,6 +212,28 @@ function SignUpGenre() {
           localStorage.setItem("refreshToken", refreshToken);
           console.log("AccessToken: ", accessToken);
           console.log("RefreshToken: ", refreshToken);
+
+          const eventSource = new EventSource(
+            `http://localhost:8080/api/reviews/subscribe/push-notification`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+
+          const addNotification =
+            useNotificationStore.getState().addNotification;
+
+          eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            addNotification(data);
+          };
+
+          eventSource.onerror = (error) => {
+            console.error("SSE 연결 에러:", error);
+            eventSource.close();
+          };
 
           navigate("/");
         } else {
