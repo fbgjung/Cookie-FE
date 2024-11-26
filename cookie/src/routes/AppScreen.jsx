@@ -24,6 +24,11 @@ const Container = styled.div`
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 0;
+  }
 `;
 
 const ViewArea = styled.div`
@@ -40,6 +45,7 @@ const ViewArea = styled.div`
     max-width: none;
     border-left: none;
     border-right: none;
+    overflow-x: hidden;
   }
 `;
 const HeaderContainer = styled.header`
@@ -120,6 +126,13 @@ const MainContent = styled.main`
   flex-direction: column;
   overflow-y: auto;
   height: calc(100vh - 120px);
+
+  @media (max-width: 768px) {
+    height: calc(100vh - 130px);
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
 `;
 
 const AppContainer = styled.div`
@@ -135,7 +148,7 @@ const AppScreen = () => {
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
-    navigate("/"); // '/'로 이동
+    navigate("/");
   };
   const hideHeaderFooterPages = [
     "/login",
