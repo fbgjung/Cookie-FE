@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import NotificationIcon from "/src/assets/images/Notification.svg";
 import useNotificationStore from "../stores/notificationStore";
@@ -68,12 +68,16 @@ const NotificationDropdown = styled.div`
 `;
 
 const Notification = () => {
-  const notifications = useNotificationStore((state) => state.notifications);
+  const notifications = useNotificationStore((state) => state.notifications); // 상태 구독
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleNotificationClick = () => {
     setShowDropdown((prev) => !prev);
   };
+
+  useEffect(() => {
+    console.log("렌더링 시 알림 상태:", notifications);
+  }, [notifications]);
 
   return (
     <NotificationContainer>
