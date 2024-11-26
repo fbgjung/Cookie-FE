@@ -27,26 +27,29 @@ const ReTokenPage = () => {
           console.log(refreshToken);
 
           const eventSource = new EventSource(
-            `http://localhost:8080/api/reviews/subscribe/push-notification`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
+            `http://localhost:8080/api/reviews/subscribe/push-notification`
           );
 
           const addNotification =
             useNotificationStore.getState().addNotification;
 
-          eventSource.onmessage = (event) => {
+          // eventSource.onmessage = (event) => {
+          //   const data = JSON.parse(event.data);
+          //   console.log(data); // 이게 안찍혀!!!!!!  push-notification 여기 네트워크에서는 찍혀
+          //   addNotification(data);
+          // };
+
+          eventSource.addEventListener("push-notification", (event) => {
             const data = JSON.parse(event.data);
+            console.log("푸시 알림 수신 데이터:", data);
             addNotification(data);
-          };
+          });
 
           eventSource.onerror = (error) => {
             console.error("SSE 연결 에러:", error);
             eventSource.close();
           };
+
           navigate("/");
         } else {
           console.error("Authorization header missing in response");
@@ -58,7 +61,7 @@ const ReTokenPage = () => {
       });
   }, [navigate]);
 
-  return <div>토큰을 가져오는 중입니다...</div>;
+  return <div>토큰을 가져오는 중입니다…</div>;
 };
 
 export default ReTokenPage;
