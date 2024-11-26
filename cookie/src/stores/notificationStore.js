@@ -1,15 +1,18 @@
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
 
-const useNotificationStore = create((set) => ({
-  notifications: [],
-  addNotification: (notification) =>
-    set((state) => ({
-      notifications: [...state.notifications, notification],
-    })),
-  clearNotifications: () =>
-    set(() => ({
-      notifications: [],
-    })),
-}));
+const useNotificationStore = create(
+  immer((set) => ({
+    notifications: [],
+    addNotification: (notification) =>
+      set((state) => {
+        state.notifications.push(notification);
+      }),
+    clearNotifications: () =>
+      set((state) => {
+        state.notifications = [];
+      }),
+  }))
+);
 
 export default useNotificationStore;
