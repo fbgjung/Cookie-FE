@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
@@ -160,7 +161,7 @@ const ReviewFeed = () => {
   
         try {
           setIsLoading(true);
-          const endpoint = spoiler ? "/api/reviews/spoiler" : "/api/reviews";
+          const endpoint = spoiler ? "http://localhost:8080/api/reviews/spoiler" : "http://localhost:8080/api/reviews";
           const response = await axios.get(endpoint, {
             params: { page, size: 10 },
           });
@@ -191,7 +192,7 @@ const ReviewFeed = () => {
   
     useEffect(() => {
       fetchReviews(showSpoilerOnly);
-    }, [fetchReviews, showSpoilerOnly]);
+    }, []);
   
     const handleScroll = useCallback(() => {
       if (
