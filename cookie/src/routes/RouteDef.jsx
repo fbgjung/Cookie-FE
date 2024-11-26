@@ -11,7 +11,7 @@ import LikedMovies from "../pages/LikedMovies";
 import LikedReviews from "../pages/LikedRevies";
 import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
-import ReTokenPage from "../api/auth/reTokenPage";
+import ReTokenPage from "../api/auth/ReTokenPage";
 import AdminLogin from "../pages/AdminLogin";
 
 export const AppRouteDef = {
