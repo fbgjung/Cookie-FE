@@ -2,10 +2,11 @@ import styled from "styled-components";
 import cookieLogo from "../../assets/images/admin/cookieLogo.svg";
 import logout from "../../assets/images/admin/logout.svg";
 import setting from "../../assets/images/admin/setting.svg";
-import cookieSm from "../../assets/images/admin/cookie_sm.svg";
 import movie from "../../assets/images/admin/movie.svg";
 import award from "../../assets/images/admin/award.svg";
 import cookie from "../../assets/images/admin/cookie.svg";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const PageNav = styled.div`
   width: 409px;
@@ -19,7 +20,7 @@ const PageNav = styled.div`
 
 const SideBarTitle = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
 
   .title__logo {
@@ -29,6 +30,13 @@ const SideBarTitle = styled.div`
   span {
     margin-right: 0.8rem;
     font-weight: bold;
+  }
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-top: 5px;
   }
 `;
 
@@ -40,18 +48,22 @@ const SideBarContainer = styled.div`
 
   .sidebar__menu {
     background-color: white;
-    width: 327px;
-    height: 50px;
+    width: 320px;
+    height: 40px;
     border-radius: 12px;
     padding: 0.5rem;
-    color: var(--main);
+    color: #a7a7a7;
     font-weight: bold;
     font-size: 28px;
     display: flex;
     align-items: center;
     justify-content: start;
+    transition: color 0.3s ease;
+    cursor: pointer;
   }
-
+  .sidebar__menu:hover {
+    color: var(--main);
+  }
   img {
     margin-right: 0.5rem;
     width: 40px;
@@ -59,35 +71,55 @@ const SideBarContainer = styled.div`
 `;
 
 function sideBar() {
+  const navigate = useNavigate();
   const sideMenu = [
     {
       image: movie,
       title: "Movie",
+      link: "/admin/movie",
     },
     {
       image: setting,
       title: "Review / Like",
+      link: "/admin/reviews-likes",
     },
     {
       image: award,
       title: "Match Up",
+      link: "/admin/matchUp",
     },
     {
       image: cookie,
       title: "Badge",
+      link: "/admin/badge",
     },
   ];
+  const handleClick = (link) => {
+    navigate(link);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("accessToken");
+    navigate("/admin");
+    alert("로그아웃되었습니다.");
+  };
 
   return (
     <PageNav>
       <SideBarTitle>
         <img src={cookieLogo} className="title__logo" alt="logo_icon" />
         <span> Admin</span>
-        <img src={logout} />
+        <button onClick={handleLogout}>
+          <img src={logout} />
+        </button>
       </SideBarTitle>
       <SideBarContainer>
         {sideMenu.map((menuItem, index) => (
-          <div key={index} className="sidebar__menu">
+          <div
+            key={index}
+            className="sidebar__menu"
+            onClick={() => handleClick(menuItem.link)}
+          >
             <img src={menuItem.image} alt={`${menuItem.title}_icon`} />
             <p>{menuItem.title}</p>
           </div>

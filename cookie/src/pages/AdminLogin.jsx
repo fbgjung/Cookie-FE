@@ -21,7 +21,7 @@ const Viewport = styled.div`
     gap: 1rem;
     align-items: center;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 1.6rem;
   }
 `;
 
@@ -41,28 +41,29 @@ const FormContanier = styled.div`
   input {
     display: block;
     border: 1px solid #a7a7a7;
-    border-radius: 8px;
-    height: 47px;
-    width: 347px;
+    border-radius: 0.5rem;
+    height: 3rem;
+    width: 21.7rem;
     margin-top: 0.5rem;
-    padding: 0.2rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 1.25rem;
   }
 
   button {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 1.25rem;
     background-color: white;
     border: 1px solid var(--main);
     color: var(--main);
-    border-radius: 8px;
-    width: 187px;
-    height: 47px;
+    border-radius: 0.5rem;
+    width: 11.7rem;
+    height: 3rem;
     margin-top: 1rem;
     cursor: pointer;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
   }
   button:hover {
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.375rem 1.25rem rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -110,18 +111,18 @@ function AdminLogin() {
           <img src={CookieLogo} />
           <img src={CookieImg} />
         </div>
-        <form action="/submit" method="POST">
+        <form action="/submit" method="POST" onSubmit={handleLoginClick}>
           <FormContanier>
-            <label for="email">
+            <label for="adminId">
               아이디
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="text"
+                id="adminId"
+                name="adminId"
                 value={adminId}
                 onChange={(e) => setAdminId(e.target.value)}
                 required
-                placeholder="이메일을 입력하세요"
+                placeholder="아이디를 입력하세요"
               />
             </label>
 
@@ -138,7 +139,7 @@ function AdminLogin() {
               />
             </label>
 
-            <button type="submit" onClick={handleLoginClick}>
+            <button type="submit" onSubmit={handleLoginClick}>
               Login
             </button>
           </FormContanier>
