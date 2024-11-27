@@ -7,6 +7,7 @@ import PosterList from "../components/matchup/PosterList";
 import ProgressBar from "../components/matchup/ProgressBar";
 import ChartSection from "../components/matchup/ChartSection";
 import { useParams, useLocation } from "react-router-dom";
+import ChatUI from "../components/matchup/ChatUI";
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +19,6 @@ const Container = styled.div`
   color: #ffffff;
   font-family: "Arial", sans-serif;
   padding-top: 50px;
-  padding-bottom: 50px;
 `;
 
 const sampleData = {
@@ -134,6 +134,7 @@ const MatchupPage = () => {
         movie2Likes={matchUpData.movie2.movieLike}
       />
       <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
+      <ChatUI />
     </Container>
   );
 };
