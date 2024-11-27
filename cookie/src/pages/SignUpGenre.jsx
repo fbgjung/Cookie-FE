@@ -183,7 +183,7 @@ function SignUpGenre() {
   };
 
   useEffect(() => {
-    if (pushEnabled || emailEnabled) {
+    if (pushEnabled === "true" || emailEnabled === "true") {
       handleFormDataSubmission();
     }
   }, [pushEnabled, emailEnabled]);
@@ -201,7 +201,9 @@ function SignUpGenre() {
   const handleCloseModal = () => {
     setEmailEnabled("false");
     setPushEnabled("false");
-    setShowModal(false);
+    setTimeout(() => {
+      handleFormDataSubmission();
+    }, 0);
   };
 
   const handleFormDataSubmission = async () => {
@@ -260,7 +262,7 @@ function SignUpGenre() {
           setShowModal(false);
           setTimeout(() => {
             navigate("/");
-          }, 5000);
+          }, 2000);
         } else {
           throw new Error("토큰 발급에 실패했습니다.");
         }
