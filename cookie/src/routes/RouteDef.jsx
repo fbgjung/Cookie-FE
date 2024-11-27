@@ -156,8 +156,7 @@ export const AppRouteDef = {
         <ReviewForm />
       </PrivateRoute>
     ),
-  }
-
+  },
   AdminLogin: {
     path: "/admin",
     element: (
