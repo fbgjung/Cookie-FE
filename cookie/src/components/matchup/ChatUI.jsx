@@ -18,16 +18,8 @@ const ChatWrapper = styled.div`
   overflow: hidden;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* 테두리 강조 효과 */
 `;
-
 const ChatUI = () => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      username: "상대방", // 상대방 메시지
-      content: "안녕하세요! 여기에 의견을 남겨주세요.",
-      timestamp: new Date().toLocaleTimeString(),
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const currentUser = "나";
 
   const handleSend = (content) => {
