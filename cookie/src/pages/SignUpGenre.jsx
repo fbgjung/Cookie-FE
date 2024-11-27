@@ -6,6 +6,8 @@ import axiosInstance from "../api/auth/axiosInstance";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
 import useNotificationStore from "../stores/notificationStore";
+import serverBaseUrl from "../config/apiConfig";
+import axios from "axios";
 
 const MainContainer = styled.div`
   background-color: white;
@@ -215,8 +217,8 @@ function SignUpGenre() {
     formData.append("profileImage", userProfileData.profileImage);
 
     try {
-      const response = await axiosInstance.post(
-        `/api/auth/register`,
+      const response = await axios.post(
+        `${serverBaseUrl}/api/auth/register`,
         formData,
         {
           headers: {
@@ -227,12 +229,7 @@ function SignUpGenre() {
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요!");
 
-        const tokenResponse = await axiosInstance.get(
-          `/api/auth/retrieve-token`,
-          { withCredentials: true }
-        );
-
-        const { accessToken, refreshToken } = tokenResponse.data.response;
+        const { accessToken, refreshToken } = response.data.response;
         if (accessToken && refreshToken) {
           sessionStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
@@ -240,7 +237,7 @@ function SignUpGenre() {
           console.log("RefreshToken: ", refreshToken);
 
           const eventSource = new EventSource(
-            `http://localhost:8080/api/reviews/subscribe/push-notification`,
+            `${serverBaseUrl}/api/reviews/subscribe/push-notification`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -260,6 +257,7 @@ function SignUpGenre() {
             console.error("SSE 연결 에러:", error);
             eventSource.close();
           };
+
           setShowModal(false);
           navigate("/");
         } else {
