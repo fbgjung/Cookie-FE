@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 import toast from "react-hot-toast";
+import Modal from "../components/signUp/Modal";
 
 const MainContainer = styled.div`
   background-color: white;
@@ -77,7 +78,6 @@ const SubmitBtn = styled.div`
     cursor: pointer;
   }
 `;
-// TODO 알림 or 이메일 수신 여부 및 알림동의 모달
 
 function SignUpGenre() {
   const MovieGenre = [
@@ -162,26 +162,54 @@ function SignUpGenre() {
   const navigate = useNavigate();
   const location = useLocation();
   const userProfileData = location.state;
+  const [showModal, setShowModal] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState("false");
+  const [emailEnabled, setEmailEnabled] = useState("false");
 
   const handleButtonClick = (id) => {
     setSelectedGenreId(id);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
+    // 장르 선택 여부 확인
     if (!selectedGenreId) {
       alert("장르를 선택해주세요.");
       return;
     }
+    setShowModal(true);
+  };
 
+  useEffect(() => {
+    if (pushEnabled || emailEnabled) {
+      handleFormDataSubmission();
+    }
+  }, [pushEnabled, emailEnabled]);
+
+  const handlePushNotification = () => {
+    setPushEnabled("true");
+    setEmailEnabled("false");
+  };
+
+  const handleEmailNotification = () => {
+    setEmailEnabled("true");
+    setPushEnabled("false");
+  };
+
+  const handleCloseModal = () => {
+    setEmailEnabled("false");
+    setPushEnabled("false");
+    setShowModal(false);
+  };
+
+  const handleFormDataSubmission = async () => {
     const formData = new FormData();
     formData.append("socialProvider", userProfileData.socialProvider);
     formData.append("socialId", userProfileData.socialId);
     formData.append("email", userProfileData.email);
     formData.append("nickname", userProfileData.nickname);
-    formData.append("pushEnabled", "false");
-    formData.append("emailEnabled", "false");
+    formData.append("pushEnabled", pushEnabled);
+    formData.append("emailEnabled", emailEnabled);
     formData.append("genreId", selectedGenreId.toString());
     formData.append("profileImage", userProfileData.profileImage);
 
@@ -195,7 +223,6 @@ function SignUpGenre() {
           },
         }
       );
-
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요!");
 
@@ -205,13 +232,12 @@ function SignUpGenre() {
         );
 
         const { accessToken, refreshToken } = tokenResponse.data.response;
-
         if (accessToken && refreshToken) {
           sessionStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
           console.log("AccessToken: ", accessToken);
           console.log("RefreshToken: ", refreshToken);
-
+          setShowModal(false);
           navigate("/");
         } else {
           throw new Error("토큰 발급에 실패했습니다.");
@@ -251,6 +277,13 @@ function SignUpGenre() {
             완료
           </button>
         </SubmitBtn>
+        {showModal && (
+          <Modal
+            onClose={handleCloseModal}
+            onPushNotification={handlePushNotification}
+            onEmailNotification={handleEmailNotification}
+          />
+        )}
       </MainContainer>
     </>
   );
