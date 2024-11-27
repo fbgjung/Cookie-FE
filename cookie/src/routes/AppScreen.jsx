@@ -26,8 +26,8 @@ const Container = styled.div`
   margin: 0 auto;
 
   @media (max-width: 768px) {
-    max-width: 100%; // 모바일에서 전체 너비 사용
-    padding: 0; // 좌우 패딩 제거
+    max-width: 60%;
+    padding: 0;
   }
 `;
 
@@ -38,17 +38,19 @@ const ViewArea = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
   @media (min-width: 769px) {
-    max-width: 600px; // 데스크톱에서만 최대 너비 제한
+    max-width: 600px;
     border-left: 1px solid var(--border-divider);
     border-right: 1px solid var(--border-divider);
   }
 
   @media (max-width: 768px) {
-    width: 100%; // 모바일에서 100% 너비
-    border: none; // 보더 제거
-    margin: 0; // 마진 제거
+    width: 100%;
+    border: none;
+    margin: 0;
   }
 `;
 const HeaderContainer = styled.header`
@@ -129,7 +131,7 @@ const MainContent = styled.main`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: calc(100vh - 130px); // 헤더와 네비게이션 높이 고려
+  height: calc(100vh - 130px);
 
   @media (max-width: 768px) {
     width: 100vw; // 모바일에서 뷰포트 전체 너비
@@ -144,7 +146,7 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 100%; // 전체 너비 사용
+  width: 100%;
   position: relative;
   background-color: white;
   margin: 0;
