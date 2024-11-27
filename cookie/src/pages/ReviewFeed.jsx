@@ -152,7 +152,7 @@ const ReviewFeed = () => {
     const [reviews, setReviews] = useState([]);
     const [filteredReviews, setFilteredReviews] = useState([]);
     const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
   
@@ -213,7 +213,7 @@ const ReviewFeed = () => {
   
     const filterReviews = (showSpoilers) => {
       setShowSpoilerOnly(showSpoilers);
-      setPage(1);
+      setPage(0);
       setHasMore(true);
       fetchReviews(showSpoilers);
     };
