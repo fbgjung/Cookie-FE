@@ -233,12 +233,16 @@ function SignUpProfile() {
         <form onSubmit={handleSubmit}>
           <UserInfo>
             <div className="user__profile">
-            <img
-              className="user__profile--image"
-              src={profileImage ? URL.createObjectURL(profileImage) : userDefaultImg}
-              alt="user_img"
-              onClick={() => fileInputRef.current.click()}
-            />
+              <img
+                className="user__profile--image"
+                src={
+                  profileImage
+                    ? URL.createObjectURL(profileImage)
+                    : userDefaultImg
+                }
+                alt="user_img"
+                onClick={() => fileInputRef.current.click()}
+              />
               <input
                 type="file"
                 accept="image/*"
@@ -273,7 +277,7 @@ function SignUpProfile() {
                     className="nickName__valid--btn"
                     onClick={handleCheckNickname}
                     type="button"
-                    disabled={!nicknameValid}
+                    disabled={!nicknameValid || !userNickname}
                   >
                     중복확인
                   </button>
