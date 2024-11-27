@@ -65,7 +65,6 @@ const ChatMessagesContainer = styled.div`
   overflow-y: auto;
   padding: 15px;
 `;
-
 const ChatMessages = ({ messages, currentUser }) => {
   const messagesEndRef = useRef(null);
   const [isFirstRender, setIsFirstRender] = useState(true);
@@ -83,28 +82,24 @@ const ChatMessages = ({ messages, currentUser }) => {
 
   return (
     <ChatMessagesContainer>
-      {messages.map((message) => (
-        <MessageWrapper
-          key={message.id}
-          isUser={message.username === currentUser}
-        >
-          {message.username !== currentUser && (
-            <ProfileImage
-              src={message.profile || "/default-profile.png"}
-              alt={`${message.username} 프로필`}
-            />
-          )}
-          <MessageContent isUser={message.username === currentUser}>
-            {message.username !== currentUser && (
-              <Nickname>{message.username}</Nickname>
+      {messages.map((message) => {
+        const isUser = message.username === currentUser;
+        return (
+          <MessageWrapper key={message.id} isUser={isUser}>
+            {!isUser && (
+              <ProfileImage
+                src={message.profile || "/default-profile.png"}
+                alt={`${message.username} 프로필`}
+              />
             )}
-            <MessageBubble isUser={message.username === currentUser}>
-              {message.content}
-            </MessageBubble>
-            <Timestamp>{message.timestamp}</Timestamp>
-          </MessageContent>
-        </MessageWrapper>
-      ))}
+            <MessageContent isUser={isUser}>
+              {!isUser && <Nickname>{message.username}</Nickname>}
+              <MessageBubble isUser={isUser}>{message.content}</MessageBubble>
+              <Timestamp>{message.timestamp}</Timestamp>
+            </MessageContent>
+          </MessageWrapper>
+        );
+      })}
       <div ref={messagesEndRef} />
     </ChatMessagesContainer>
   );
