@@ -14,17 +14,40 @@ const ReviewFeedWrapper = styled.div`
   height: 100vh;
 `;
 
-const ReviewTitle = styled.h3`
-  font-size: 1.5rem;
+const ReviewTitle = styled.div`
+  text-align: center; /* 텍스트를 중앙 정렬 */
   margin-bottom: 20px;
-  font-weight: bold;
+  transform: translateX(-20px);
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* 텍스트와 쿠키 이미지 간격 */
+  }
+
+  h2 {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #b29463; /* 쿠키 색상과 유사한 색상 */
+    margin-top: 10px;
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const FilterButtons = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
+  transform: translateX(-20px);
 
   button {
     padding: 10px 20px;
@@ -63,13 +86,14 @@ const ReviewTicket = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   box-sizing: border-box;
   min-height: 180px;
   cursor: pointer;
-  width: 95%;
+  width: 90%;
   margin: 0 auto;
+  transform: translateX(-20px);
 `;
 
 const ReviewLeft = styled.div`
@@ -148,141 +172,148 @@ const ReviewRight = styled.div`
 `;
 
 const ReviewFeed = () => {
-    const navigate = useNavigate();
-    const [reviews, setReviews] = useState([]);
-    const [filteredReviews, setFilteredReviews] = useState([]);
-    const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
-    const [page, setPage] = useState(0);
-    const [hasMore, setHasMore] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
-  
-    const fetchReviews = useCallback(
-      async (spoiler = false) => {
-        if (!hasMore || isLoading) return;
-  
-        try {
-          setIsLoading(true);
-          const endpoint = spoiler ? "http://localhost:8080/api/reviews/spoiler" : "http://localhost:8080/api/reviews";
-          const response = await axios.get(endpoint, {
-            params: { page, size: 10 },
-          });
-  
-          const newReviews = response.data.response.reviews;
-  
-          if (spoiler) {
-            setReviews(newReviews);
-          } else {
-            setReviews((prevReviews) => [...prevReviews, ...newReviews]);
-          }
-  
-          setFilteredReviews((prevReviews) =>
-            spoiler ? newReviews : [...prevReviews, ...newReviews]
-          );
-  
-          if (newReviews.length < 10) {
-            setHasMore(false);
-          }
-        } catch (error) {
-          console.error("Failed to fetch reviews:", error);
-        } finally {
-          setIsLoading(false);
+  const navigate = useNavigate();
+  const [reviews, setReviews] = useState([]);
+  const [filteredReviews, setFilteredReviews] = useState([]);
+  const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchReviews = useCallback(
+    async (spoiler = false) => {
+      if (!hasMore || isLoading) return;
+
+      try {
+        setIsLoading(true);
+        const endpoint = spoiler
+          ? "http://localhost:8080/api/reviews/spoiler"
+          : "http://localhost:8080/api/reviews";
+        const response = await axios.get(endpoint, {
+          params: { page, size: 10 },
+        });
+
+        const newReviews = response.data.response.reviews;
+
+        if (spoiler) {
+          setReviews(newReviews);
+        } else {
+          setReviews((prevReviews) => [...prevReviews, ...newReviews]);
         }
-      },
-      [page, hasMore, isLoading]
-    );
-  
-    useEffect(() => {
-      fetchReviews(showSpoilerOnly);
-    }, []);
-  
-    const handleScroll = useCallback(() => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight
-      ) {
-        setPage((prevPage) => prevPage + 1);
+
+        setFilteredReviews((prevReviews) =>
+          spoiler ? newReviews : [...prevReviews, ...newReviews]
+        );
+
+        if (newReviews.length < 10) {
+          setHasMore(false);
+        }
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error);
+      } finally {
+        setIsLoading(false);
       }
-    }, []);
-  
-    useEffect(() => {
-      window.addEventListener("scroll", handleScroll);
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
-    }, [handleScroll]);
-  
-    const filterReviews = (showSpoilers) => {
-      setShowSpoilerOnly(showSpoilers);
-      setPage(0);
-      setHasMore(true);
-      fetchReviews(showSpoilers);
+    },
+    [page, hasMore, isLoading]
+  );
+
+  useEffect(() => {
+    fetchReviews(showSpoilerOnly);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.scrollHeight
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
     };
-  
-    const handleReviewClick = (reviewId) => {
-      navigate(`/reviews/${reviewId}`);
-    };
-  
-    return (
-      <ReviewFeedWrapper>
-        <ReviewTitle>Cookie Review</ReviewTitle>
-        <FilterButtons>
-          <button
-            className={!showSpoilerOnly ? "active" : "inactive"}
-            onClick={() => filterReviews(false)}
+  }, [handleScroll]);
+
+  const filterReviews = (showSpoilers) => {
+    setShowSpoilerOnly(showSpoilers);
+    setPage(0);
+    setHasMore(true);
+    fetchReviews(showSpoilers);
+  };
+
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`);
+  };
+
+  return (
+    <ReviewFeedWrapper>
+      <ReviewTitle>
+        <h1>
+          Cookie Review
+        </h1>
+        <h2>쿠키의 전체리뷰</h2>
+      </ReviewTitle>
+      <FilterButtons>
+        <button
+          className={!showSpoilerOnly ? "active" : "inactive"}
+          onClick={() => filterReviews(false)}
+        >
+          전체 리뷰
+        </button>
+        <button
+          className={showSpoilerOnly ? "active" : "inactive"}
+          onClick={() => filterReviews(true)}
+        >
+          스포일러 리뷰
+        </button>
+      </FilterButtons>
+      <ReviewContainer>
+        {filteredReviews.map((review, index) => (
+          <ReviewTicket
+            key={`${review.reviewId}-${index}`} // 고유 키 생성
+            onClick={() => handleReviewClick(review.reviewId)}
           >
-            전체 리뷰
-          </button>
-          <button
-            className={showSpoilerOnly ? "active" : "inactive"}
-            onClick={() => filterReviews(true)}
-          >
-            스포일러 리뷰
-          </button>
-        </FilterButtons>
-        <ReviewContainer>
-          {filteredReviews.map((review) => (
-            <ReviewTicket
-              key={review.reviewId}
-              onClick={() => handleReviewClick(review.reviewId)}
-            >
-              <ReviewLeft>
-                <img src={review.movie.poster} alt={review.movie.title} />
-                <div className="title">{review.movie.title}</div>
-              </ReviewLeft>
-              <ReviewCenter>
-                <div className="profile">
-                  <img
-                    src={review.user.profileImage}
-                    alt={review.user.nickname}
-                  />
-                  <div className="user-info">
-                    <div className="name">{review.user.nickname}</div>
-                    <div className="date">
-                      {new Date(review.createdAt).toLocaleDateString()}
-                    </div>
+            <ReviewLeft>
+              <img src={review.movie.poster} alt={review.movie.title} />
+              <div className="title">{review.movie.title}</div>
+            </ReviewLeft>
+            <ReviewCenter>
+              <div className="profile">
+                <img
+                  src={review.user.profileImage}
+                  alt={review.user.nickname}
+                />
+                <div className="user-info">
+                  <div className="name">{review.user.nickname}</div>
+                  <div className="date">
+                    {new Date(review.createdAt).toLocaleDateString()}
                   </div>
                 </div>
-                <div className="comment">{review.content}</div>
-              </ReviewCenter>
-              <ReviewRight>
-                <div className="score">
-                  {Array.from({ length: Math.round(review.movieScore) }).map(
-                    (_, i) => (
-                      <img
-                        key={i}
-                        src="/src/assets/images/mypage/cookiescore.svg"
-                        alt="score"
-                      />
-                    )
-                  )}
-                </div>
-              </ReviewRight>
-            </ReviewTicket>
-          ))}
-        </ReviewContainer>
-        {isLoading && <p>Loading more reviews...</p>}
-      </ReviewFeedWrapper>
-    );
-};  
+              </div>
+              <div className="comment">{review.content}</div>
+            </ReviewCenter>
+            <ReviewRight>
+              <div className="score">
+                {Array.from({ length: Math.round(review.movieScore) }).map(
+                  (_, i) => (
+                    <img
+                      key={`${review.reviewId}-score-${i}`} // 고유 키 생성
+                      src="/src/assets/images/mypage/cookiescore.svg"
+                      alt="score"
+                    />
+                  )
+                )}
+              </div>
+            </ReviewRight>
+          </ReviewTicket>
+        ))}
+      </ReviewContainer>
+      {isLoading && <p>Loading more reviews...</p>}
+    </ReviewFeedWrapper>
+  );
+};
 
 export default ReviewFeed;
