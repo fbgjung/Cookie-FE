@@ -1,7 +1,6 @@
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
 
-//TODO 서버 주소 추가하기
 const axiosInstance = axios.create({
   baseURL: serverBaseUrl,
   withCredentials: true,
