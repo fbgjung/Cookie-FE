@@ -6,8 +6,9 @@ import Timer from "../components/matchup/Timer";
 import PosterList from "../components/matchup/PosterList";
 import ProgressBar from "../components/matchup/ProgressBar";
 import ChartSection from "../components/matchup/ChartSection";
-import { useParams, useLocation } from "react-router-dom";
 import ChatUI from "../components/matchup/ChatUI";
+import { useParams, useLocation } from "react-router-dom";
+import { StompSessionProvider } from "react-stomp-hooks";
 
 const Container = styled.div`
   display: flex;
@@ -106,37 +107,42 @@ const MatchupPage = () => {
   }
 
   return (
-    <Container>
-      <TitleSection
-        matchUpTitle={matchUpData.matchUpTitle}
-        endAt={matchUpData.entAt}
-      />
-      <Timer endAt={matchUpData.entAt} onVoteEnd={handleVoteEnd} />
-      <PosterList
-        posters={[
-          {
-            src:
-              matchUpData.movie1.moviePoster ||
-              "/src/assets/images/matchup/sampleimage1.svg",
-            title: matchUpData.movie1.movieTitle,
-          },
-          {
-            src:
-              matchUpData.movie2.moviePoster ||
-              "/src/assets/images/matchup/sampleimage2.svg",
-            title: matchUpData.movie2.movieTitle,
-          },
-        ]}
-        isVoteEnded={isVoteEnded}
-      />
-      <ProgressBar
-        movie1Likes={matchUpData.movie1.movieLike}
-        movie2Likes={matchUpData.movie2.movieLike}
-      />
-      <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
-      <ChatUI />
-    </Container>
+    <StompSessionProvider
+      url="http://localhost:8080/ws"
+      onConnect={() => console.log("WebSocket 연결 성공")}
+      onDisconnect={() => console.log("WebSocket 연결 종료")}
+    >
+      <Container>
+        <TitleSection
+          matchUpTitle={matchUpData.matchUpTitle}
+          endAt={matchUpData.entAt}
+        />
+        <Timer endAt={matchUpData.entAt} onVoteEnd={handleVoteEnd} />
+        <PosterList
+          posters={[
+            {
+              src:
+                matchUpData.movie1.moviePoster ||
+                "/src/assets/images/matchup/sampleimage1.svg",
+              title: matchUpData.movie1.movieTitle,
+            },
+            {
+              src:
+                matchUpData.movie2.moviePoster ||
+                "/src/assets/images/matchup/sampleimage2.svg",
+              title: matchUpData.movie2.movieTitle,
+            },
+          ]}
+          isVoteEnded={isVoteEnded}
+        />
+        <ProgressBar
+          movie1Likes={matchUpData.movie1.movieLike}
+          movie2Likes={matchUpData.movie2.movieLike}
+        />
+        <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
+        <ChatUI matchUpId={matchUpId} />
+      </Container>
+    </StompSessionProvider>
   );
 };
-
 export default MatchupPage;
