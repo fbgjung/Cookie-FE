@@ -45,7 +45,7 @@ const MovieRankList = styled.div`
 
   .rank__number--image {
     position: absolute;
-    left: -9px;
+    left: -6px;
     top: -9px;
   }
   .rank__movie--list p {

@@ -1,10 +1,12 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
-import axiosInstance from "../api/auth/axiosInstance";
 import toast from "react-hot-toast";
+import Modal from "../components/signUp/Modal";
 import useNotificationStore from "../stores/notificationStore";
+import serverBaseUrl from "../config/apiConfig";
+import axios from "axios";
 
 const MainContainer = styled.div`
   background-color: white;
@@ -78,7 +80,6 @@ const SubmitBtn = styled.div`
     cursor: pointer;
   }
 `;
-// TODO 알림 or 이메일 수신 여부 및 알림동의 모달
 
 function SignUpGenre() {
   const MovieGenre = [
@@ -163,32 +164,60 @@ function SignUpGenre() {
   const navigate = useNavigate();
   const location = useLocation();
   const userProfileData = location.state;
+  const [showModal, setShowModal] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState("false");
+  const [emailEnabled, setEmailEnabled] = useState("false");
 
   const handleButtonClick = (id) => {
     setSelectedGenreId(id);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!selectedGenreId) {
       alert("장르를 선택해주세요.");
       return;
     }
+    setShowModal(true);
+  };
 
+  useEffect(() => {
+    if (pushEnabled || emailEnabled) {
+      handleFormDataSubmission();
+    }
+  }, [pushEnabled, emailEnabled]);
+
+  const handlePushNotification = () => {
+    setPushEnabled("true");
+    setEmailEnabled("false");
+  };
+
+  const handleEmailNotification = () => {
+    setEmailEnabled("true");
+    setPushEnabled("false");
+  };
+
+  const handleCloseModal = () => {
+    setEmailEnabled("false");
+    setPushEnabled("false");
+    setShowModal(false);
+  };
+
+  const handleFormDataSubmission = async () => {
     const formData = new FormData();
     formData.append("socialProvider", userProfileData.socialProvider);
     formData.append("socialId", userProfileData.socialId);
     formData.append("email", userProfileData.email);
     formData.append("nickname", userProfileData.nickname);
-    formData.append("pushEnabled", "false");
-    formData.append("emailEnabled", "false");
+    formData.append("pushEnabled", pushEnabled);
+    formData.append("emailEnabled", emailEnabled);
     formData.append("genreId", selectedGenreId.toString());
     formData.append("profileImage", userProfileData.profileImage);
 
     try {
-      const response = await axiosInstance.post(
-        `/api/auth/register`,
+      const response = await axios.post(
+        `${serverBaseUrl}/api/auth/register`,
         formData,
         {
           headers: {
@@ -196,17 +225,10 @@ function SignUpGenre() {
           },
         }
       );
-
       if (response.status === 200) {
-        toast.success("회원등록이 완료되었어요!");
+        toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
 
-        const tokenResponse = await axiosInstance.get(
-          `/api/auth/retrieve-token`,
-          { withCredentials: true }
-        );
-
-        const { accessToken, refreshToken } = tokenResponse.data.response;
-
+        const { accessToken, refreshToken } = response.data.response;
         if (accessToken && refreshToken) {
           sessionStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
@@ -214,7 +236,7 @@ function SignUpGenre() {
           console.log("RefreshToken: ", refreshToken);
 
           const eventSource = new EventSource(
-            `http://localhost:8080/api/reviews/subscribe/push-notification`,
+            `${serverBaseUrl}/api/reviews/subscribe/push-notification`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -235,7 +257,10 @@ function SignUpGenre() {
             eventSource.close();
           };
 
-          navigate("/");
+          setShowModal(false);
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
         } else {
           throw new Error("토큰 발급에 실패했습니다.");
         }
@@ -274,6 +299,13 @@ function SignUpGenre() {
             완료
           </button>
         </SubmitBtn>
+        {showModal && (
+          <Modal
+            onClose={handleCloseModal}
+            onPushNotification={handlePushNotification}
+            onEmailNotification={handleEmailNotification}
+          />
+        )}
       </MainContainer>
     </>
   );
