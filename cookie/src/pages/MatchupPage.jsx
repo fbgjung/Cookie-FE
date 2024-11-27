@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 import axios from "axios";
 import TitleSection from "../components/matchup/TitleSection";
 import Timer from "../components/matchup/Timer";
@@ -8,7 +10,6 @@ import ProgressBar from "../components/matchup/ProgressBar";
 import ChartSection from "../components/matchup/ChartSection";
 import ChatUI from "../components/matchup/ChatUI";
 import { useParams, useLocation } from "react-router-dom";
-import { StompSessionProvider } from "react-stomp-hooks";
 
 const Container = styled.div`
   display: flex;
@@ -79,6 +80,8 @@ const MatchupPage = () => {
   const location = useLocation();
   const [matchUpData, setMatchUpData] = useState(null);
   const [isVoteEnded, setIsVoteEnded] = useState(false);
+  const [stompClient, setStompClient] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   const fetchMatchUpData = async () => {
     try {
@@ -95,6 +98,29 @@ const MatchupPage = () => {
   };
 
   useEffect(() => {
+    const socket = new SockJS("http://localhost:8080/ws");
+    const client = new Client({
+      webSocketFactory: () => socket,
+      debug: (str) => console.log(str),
+      onConnect: () => {
+        console.log("WebSocket 연결 성공");
+        setIsConnected(true);
+      },
+      onDisconnect: () => {
+        console.log("WebSocket 연결 종료");
+        setIsConnected(false);
+      },
+    });
+
+    client.activate();
+    setStompClient(client);
+
+    return () => {
+      client.deactivate();
+    };
+  }, []);
+
+  useEffect(() => {
     fetchMatchUpData();
   }, [matchUpId, location.pathname]);
 
@@ -107,42 +133,39 @@ const MatchupPage = () => {
   }
 
   return (
-    <StompSessionProvider
-      url="http://localhost:8080/ws"
-      onConnect={() => console.log("WebSocket 연결 성공")}
-      onDisconnect={() => console.log("WebSocket 연결 종료")}
-    >
-      <Container>
-        <TitleSection
-          matchUpTitle={matchUpData.matchUpTitle}
-          endAt={matchUpData.entAt}
-        />
-        <Timer endAt={matchUpData.entAt} onVoteEnd={handleVoteEnd} />
-        <PosterList
-          posters={[
-            {
-              src:
-                matchUpData.movie1.moviePoster ||
-                "/src/assets/images/matchup/sampleimage1.svg",
-              title: matchUpData.movie1.movieTitle,
-            },
-            {
-              src:
-                matchUpData.movie2.moviePoster ||
-                "/src/assets/images/matchup/sampleimage2.svg",
-              title: matchUpData.movie2.movieTitle,
-            },
-          ]}
-          isVoteEnded={isVoteEnded}
-        />
-        <ProgressBar
-          movie1Likes={matchUpData.movie1.movieLike}
-          movie2Likes={matchUpData.movie2.movieLike}
-        />
-        <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
-        <ChatUI matchUpId={matchUpId} />
-      </Container>
-    </StompSessionProvider>
+    <Container>
+      <TitleSection
+        matchUpTitle={matchUpData.matchUpTitle}
+        endAt={matchUpData.entAt}
+      />
+      <Timer endAt={matchUpData.entAt} onVoteEnd={handleVoteEnd} />
+      <PosterList
+        posters={[
+          {
+            src:
+              matchUpData.movie1.moviePoster ||
+              "/src/assets/images/matchup/sampleimage1.svg",
+            title: matchUpData.movie1.movieTitle,
+          },
+          {
+            src:
+              matchUpData.movie2.moviePoster ||
+              "/src/assets/images/matchup/sampleimage2.svg",
+            title: matchUpData.movie2.movieTitle,
+          },
+        ]}
+        isVoteEnded={isVoteEnded}
+      />
+      <ProgressBar
+        movie1Likes={matchUpData.movie1.movieLike}
+        movie2Likes={matchUpData.movie2.movieLike}
+      />
+      <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
+      {isConnected && (
+        <ChatUI matchUpId={matchUpId} stompClient={stompClient} />
+      )}
+    </Container>
   );
 };
+
 export default MatchupPage;

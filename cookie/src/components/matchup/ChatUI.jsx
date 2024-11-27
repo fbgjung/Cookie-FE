@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useStompClient, useSubscription } from "react-stomp-hooks";
 import styled from "styled-components";
 import ChatContainer from "./ChatContainer";
 import ChatMessages from "./ChatMessages";
@@ -21,9 +20,8 @@ const ChatWrapper = styled.div`
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 `;
 
-const ChatUI = ({ matchUpId }) => {
+const ChatUI = ({ matchUpId, stompClient }) => {
   const [messages, setMessages] = useState([]);
-  const stompClient = useStompClient();
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -38,7 +36,6 @@ const ChatUI = ({ matchUpId }) => {
             content: message.content,
             timestamp: new Date(message.sentAt).toLocaleTimeString(),
             profile: message.senderProfileImage,
-            senderId: message.senderUserId,
           }))
         );
       } catch (error) {
@@ -49,29 +46,41 @@ const ChatUI = ({ matchUpId }) => {
     fetchMessages();
   }, [matchUpId]);
 
+  useEffect(() => {
+    if (!stompClient || !stompClient.connected) return;
+
+    const subscription = stompClient.subscribe(
+      `/topic/chat/${matchUpId}`,
+      (message) => {
+        const newMessage = JSON.parse(message.body);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: newMessage.sentAt,
+            username: newMessage.senderNickname,
+            content: newMessage.content,
+            timestamp: new Date(newMessage.sentAt).toLocaleTimeString(),
+            profile: newMessage.senderProfileImage,
+          },
+        ]);
+      }
+    );
+
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
+  }, [stompClient, matchUpId]);
+
   const handleSend = (content) => {
-    if (stompClient) {
+    if (stompClient && stompClient.connected) {
       stompClient.publish({
         destination: `/app/chat/${matchUpId}/messages`,
         body: JSON.stringify({ content }),
       });
+    } else {
+      console.error("STOMP 연결이 활성화되지 않았습니다.");
     }
   };
-
-  useSubscription(`/topic/chat/${matchUpId}`, (message) => {
-    const newMessage = JSON.parse(message.body);
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        id: newMessage.sentAt,
-        username: newMessage.senderNickname,
-        content: newMessage.content,
-        timestamp: new Date(newMessage.sentAt).toLocaleTimeString(),
-        profile: newMessage.senderProfileImage,
-        senderId: newMessage.senderUserId,
-      },
-    ]);
-  });
 
   return (
     <ChatWrapper>
