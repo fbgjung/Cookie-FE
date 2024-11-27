@@ -9,6 +9,7 @@ const DetailWrapper = styled.div`
   margin: 0 auto;
   background: #fff;
   border-radius: 8px;
+  height: 100vh;
 `;
 
 const DetailHeader = styled.div`
