@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
-import axiosInstance from "../api/auth/axiosInstance";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
 import useNotificationStore from "../stores/notificationStore";
@@ -175,7 +174,7 @@ function SignUpGenre() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 장르 선택 여부 확인
+
     if (!selectedGenreId) {
       alert("장르를 선택해주세요.");
       return;
@@ -227,7 +226,7 @@ function SignUpGenre() {
         }
       );
       if (response.status === 200) {
-        toast.success("회원등록이 완료되었어요!");
+        toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
 
         const { accessToken, refreshToken } = response.data.response;
         if (accessToken && refreshToken) {
@@ -259,7 +258,9 @@ function SignUpGenre() {
           };
 
           setShowModal(false);
-          navigate("/");
+          setTimeout(() => {
+            navigate("/");
+          }, 5000);
         } else {
           throw new Error("토큰 발급에 실패했습니다.");
         }
