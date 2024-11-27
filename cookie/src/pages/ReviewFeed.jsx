@@ -178,8 +178,8 @@ const ReviewFeed = () => {
   const [page, setPage] = useState(0); // 현재 페이지
   const [hasMore, setHasMore] = useState(true); // 추가 로딩 가능 여부
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const [initialLoad, setInitialLoad] = useState(true); // 초기 로딩 여부
 
-  // 리뷰 데이터 로딩 함수
   const fetchReviews = useCallback(async () => {
     if (isLoading || !hasMore) return;
 
@@ -197,7 +197,9 @@ const ReviewFeed = () => {
 
       const newReviews = response.data.response.reviews;
 
-      setReviews((prevReviews) => [...prevReviews, ...newReviews]); // 기존 데이터에 추가
+      setReviews((prevReviews) =>
+        page === 0 ? newReviews : [...prevReviews, ...newReviews]
+      ); // 초기 페이지일 경우 덮어쓰기, 아닐 경우 추가
 
       // 더 이상 데이터가 없는지 확인
       if (newReviews.length < 10 || page + 1 === response.data.response.totalReviewPages) {
@@ -210,9 +212,19 @@ const ReviewFeed = () => {
     }
   }, [page, showSpoilerOnly, isLoading, hasMore]);
 
-  // 페이지 변경 시 데이터 로드
+  // 초기 로드
   useEffect(() => {
-    fetchReviews();
+    if (initialLoad) {
+      fetchReviews();
+      setInitialLoad(false); // 초기 로딩 완료
+    }
+  }, [initialLoad, fetchReviews]);
+
+  // 페이지 변경 시 추가 로드
+  useEffect(() => {
+    if (!initialLoad) {
+      fetchReviews();
+    }
   }, [page]);
 
   // 스크롤 이벤트 핸들러
@@ -242,6 +254,7 @@ const ReviewFeed = () => {
     setPage(0); // 페이지 초기화
     setReviews([]); // 기존 데이터 초기화
     setHasMore(true); // 추가 로딩 가능
+    setInitialLoad(true); // 초기 로드 트리거
   };
 
   const handleReviewClick = (reviewId) => {
