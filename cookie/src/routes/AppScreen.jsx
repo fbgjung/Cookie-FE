@@ -22,30 +22,33 @@ const Container = styled.div`
   align-items: center;
   background: #ffffff;
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; // 데스크톱에서는 최대 너비 유지
   margin: 0 auto;
 
   @media (max-width: 768px) {
-    max-width: 100%;
-    padding: 0;
+    max-width: 100%; // 모바일에서 전체 너비 사용
+    padding: 0; // 좌우 패딩 제거
   }
 `;
 
 const ViewArea = styled.div`
-  width: 100%;
+  width: 100vw; // 뷰포트 전체 너비 사용
+  max-width: 100%; // 최대 너비 100%로 설정
   position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  border-left: 1px solid var(--border-divider);
-  border-right: 1px solid var(--border-divider);
+
+  @media (min-width: 769px) {
+    max-width: 600px; // 데스크톱에서만 최대 너비 제한
+    border-left: 1px solid var(--border-divider);
+    border-right: 1px solid var(--border-divider);
+  }
 
   @media (max-width: 768px) {
-    width: 100%;
-    max-width: none;
-    border-left: none;
-    border-right: none;
-    overflow-x: hidden;
+    width: 100%; // 모바일에서 100% 너비
+    border: none; // 보더 제거
+    margin: 0; // 마진 제거
   }
 `;
 const HeaderContainer = styled.header`
@@ -121,14 +124,16 @@ const Logo = styled.div`
 
 const MainContent = styled.main`
   flex: 1;
-  width: 100%;
+  width: 100%; // 전체 너비 사용
+  max-width: 100%; // 최대 너비 100%
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 130px); // 헤더와 네비게이션 높이 고려
 
   @media (max-width: 768px) {
-    height: calc(100vh - 130px);
+    width: 100vw; // 모바일에서 뷰포트 전체 너비
+    padding: 0; // 패딩 제거
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
@@ -139,8 +144,11 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%; // 전체 너비 사용
   position: relative;
   background-color: white;
+  margin: 0;
+  padding: 0;
 `;
 
 const AppScreen = () => {

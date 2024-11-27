@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import NotificationIcon from "/src/assets/images/Notification.svg";
+import useNotificationStore from "../stores/notificationStore";
+import { useEffect } from "react";
 
 const NotificationContainer = styled.div`
   position: relative;
@@ -67,32 +69,16 @@ const NotificationDropdown = styled.div`
 `;
 
 const Notification = () => {
-  const [notifications, setNotifications] = useState([]);
+  const notifications = useNotificationStore((state) => state.notifications);
   const [showDropdown, setShowDropdown] = useState(false);
-
-  useEffect(() => {
-    const eventSource = new EventSource(
-      `http://localhost:8080/api/reviews/subscribe/push-notification`
-    );
-
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setNotifications((prev) => [...prev, data]);
-    };
-
-    eventSource.onerror = (error) => {
-      console.error("SSE 연결 에러:", error);
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, []);
 
   const handleNotificationClick = () => {
     setShowDropdown((prev) => !prev);
   };
+
+  useEffect(() => {
+    console.log("컴포넌트 상태 알림 변경:", notifications);
+  }, [notifications]);
 
   return (
     <NotificationContainer>
@@ -102,7 +88,6 @@ const Notification = () => {
         onClick={handleNotificationClick}
       />
       {notifications.length > 0 && <Badge>{notifications.length}</Badge>}
-
       {showDropdown && (
         <NotificationDropdown>
           <ul>
