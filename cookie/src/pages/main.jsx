@@ -7,6 +7,7 @@ import SpecialMovie from "../components/main/SpecialMovie";
 import GenreMovie from "../components/main/GenreMovie";
 import TopButton from "../components/searchpage/TopButton";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -59,6 +60,25 @@ const NavbarWrapper = styled(CommonContainer)`
 `;
 // FIX 일정 숫자부터  보이는 스크롤 오류 해결
 
+const WriteReviewButton = styled.button`
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background-color: #cc5283;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 200;
+
+  &:hover {
+    background-color: #b44d78;
+  }
+`;
+
 const Main = () => {
   const dummyMovies = [
     {
@@ -80,6 +100,8 @@ const Main = () => {
     },
   ];
   const [showTopButton, setShowTopButton] = useState(false);
+  const navigate = useNavigate(); 
+  
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -106,6 +128,9 @@ const Main = () => {
           <SpecialMovie />
           <GenreMovie />
         </Content>
+        <WriteReviewButton onClick={() => navigate("/searchmov")}>
+          리뷰 작성하기
+        </WriteReviewButton>
         <TopButton visible={showTopButton} onClick={scrollToTop} />
       </MainContainer>
       <NavbarWrapper></NavbarWrapper>
