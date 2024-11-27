@@ -180,6 +180,38 @@ const ReviewFeed = () => {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const [initialLoad, setInitialLoad] = useState(true); // 초기 로딩 여부
 
+  // SSE 연결
+useEffect(() => {
+  const eventSource = new EventSource(
+    "http://localhost:8080/api/reviews/subscribe/feed"
+  );
+
+  eventSource.addEventListener("message", (event) => {
+    const newReview = JSON.parse(event.data);
+
+    // 리뷰 리스트에 추가 (중복 제거)
+    setReviews((prevReviews) => {
+      if (prevReviews.find((review) => review.reviewId === newReview.reviewId)) {
+        return prevReviews; // 중복된 리뷰는 추가하지 않음
+      }
+      return [newReview, ...prevReviews]; // 새 리뷰를 리스트의 맨 위에 추가
+    });
+
+    console.log("새 리뷰 수신:", newReview);
+  });
+
+  eventSource.addEventListener("error", (error) => {
+    console.error("SSE 연결 에러:", error);
+    eventSource.close();
+  });
+
+  // 컴포넌트 언마운트 시 SSE 연결 닫기
+  return () => {
+    eventSource.close();
+  };
+}, []);
+
+  // 초기 데이터 로드 및 페이지네이션
   const fetchReviews = useCallback(async () => {
     if (isLoading || !hasMore) return;
 
@@ -258,7 +290,7 @@ const ReviewFeed = () => {
   };
 
   const handleReviewClick = (reviewId) => {
-    navigate(`/reviews/${reviewId}`);
+    navigate(`/detailreview/${reviewId}`);
   };
 
   return (
