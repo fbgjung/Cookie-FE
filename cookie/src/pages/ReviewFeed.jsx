@@ -174,62 +174,61 @@ const ReviewRight = styled.div`
 const ReviewFeed = () => {
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
-  const [filteredReviews, setFilteredReviews] = useState([]);
   const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(0); // 현재 페이지
+  const [hasMore, setHasMore] = useState(true); // 추가 로딩 가능 여부
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
 
-  const fetchReviews = useCallback(
-    async (spoiler = false) => {
-      if (!hasMore || isLoading) return;
+  // 리뷰 데이터 로딩 함수
+  const fetchReviews = useCallback(async () => {
+    if (isLoading || !hasMore) return;
 
-      try {
-        setIsLoading(true);
-        const endpoint = spoiler
-          ? "http://localhost:8080/api/reviews/spoiler"
-          : "http://localhost:8080/api/reviews";
-        const response = await axios.get(endpoint, {
-          params: { page, size: 10 },
-        });
+    try {
+      setIsLoading(true); // 로딩 시작
+      const endpoint = showSpoilerOnly
+        ? "http://localhost:8080/api/reviews/spoiler"
+        : "http://localhost:8080/api/reviews";
 
-        const newReviews = response.data.response.reviews;
+      console.log(`Fetching page ${page}...`);
 
-        if (spoiler) {
-          setReviews(newReviews);
-        } else {
-          setReviews((prevReviews) => [...prevReviews, ...newReviews]);
-        }
+      const response = await axios.get(endpoint, {
+        params: { page, size: 10 },
+      });
 
-        setFilteredReviews((prevReviews) =>
-          spoiler ? newReviews : [...prevReviews, ...newReviews]
-        );
+      const newReviews = response.data.response.reviews;
 
-        if (newReviews.length < 10) {
-          setHasMore(false);
-        }
-      } catch (error) {
-        console.error("Failed to fetch reviews:", error);
-      } finally {
-        setIsLoading(false);
+      setReviews((prevReviews) => [...prevReviews, ...newReviews]); // 기존 데이터에 추가
+
+      // 더 이상 데이터가 없는지 확인
+      if (newReviews.length < 10 || page + 1 === response.data.response.totalReviewPages) {
+        setHasMore(false); // 더 이상 로딩하지 않음
       }
-    },
-    [page, hasMore, isLoading]
-  );
+    } catch (error) {
+      console.error("Failed to fetch reviews:", error);
+    } finally {
+      setIsLoading(false); // 로딩 종료
+    }
+  }, [page, showSpoilerOnly, isLoading, hasMore]);
 
+  // 페이지 변경 시 데이터 로드
   useEffect(() => {
-    fetchReviews(showSpoilerOnly);
-  }, []);
+    fetchReviews();
+  }, [page]);
 
+  // 스크롤 이벤트 핸들러
   const handleScroll = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
       document.documentElement.scrollHeight
     ) {
-      setPage((prevPage) => prevPage + 1);
+      if (hasMore && !isLoading) {
+        console.log("Triggering next page load...");
+        setPage((prevPage) => prevPage + 1);
+      }
     }
-  }, []);
+  }, [hasMore, isLoading]);
 
+  // 스크롤 이벤트 등록
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -237,11 +236,12 @@ const ReviewFeed = () => {
     };
   }, [handleScroll]);
 
+  // 필터링 핸들러
   const filterReviews = (showSpoilers) => {
-    setShowSpoilerOnly(showSpoilers);
-    setPage(0);
-    setHasMore(true);
-    fetchReviews(showSpoilers);
+    setShowSpoilerOnly(showSpoilers); // 스포일러 필터 설정
+    setPage(0); // 페이지 초기화
+    setReviews([]); // 기존 데이터 초기화
+    setHasMore(true); // 추가 로딩 가능
   };
 
   const handleReviewClick = (reviewId) => {
@@ -251,9 +251,7 @@ const ReviewFeed = () => {
   return (
     <ReviewFeedWrapper>
       <ReviewTitle>
-        <h1>
-          Cookie Review
-        </h1>
+        <h1>Cookie Review</h1>
         <h2>쿠키의 전체리뷰</h2>
       </ReviewTitle>
       <FilterButtons>
@@ -271,7 +269,7 @@ const ReviewFeed = () => {
         </button>
       </FilterButtons>
       <ReviewContainer>
-        {filteredReviews.map((review, index) => (
+        {reviews.map((review, index) => (
           <ReviewTicket
             key={`${review.reviewId}-${index}`} // 고유 키 생성
             onClick={() => handleReviewClick(review.reviewId)}
@@ -312,6 +310,7 @@ const ReviewFeed = () => {
         ))}
       </ReviewContainer>
       {isLoading && <p>Loading more reviews...</p>}
+      {!hasMore && <p>No more reviews available.</p>}
     </ReviewFeedWrapper>
   );
 };
