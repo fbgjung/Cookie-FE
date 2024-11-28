@@ -1,180 +1,280 @@
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import DetailHeader from "../components/mypage/DetailHeader";
+import ReviewContentSection from "../components/mypage/ReviewContentSection";
+import ReviewTextSection from "../components/mypage/ReviewTextSection";
+import FooterSection from "../components/mypage/FooterSection";
+import { toast } from "react-hot-toast";
 
-const DetailWrapper = styled.div`
+const Container = styled.div`
   padding: 20px;
-  max-width: 800px;
+  width: 95%;
   margin: 0 auto;
-  background: #fff;
-  border-radius: 8px;
+  font-family: "Arial", sans-serif;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
 `;
 
-const DetailHeader = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
+const CommentsSectionContainer = styled.div`
+  margin-top: 20px;
 
-  img {
-    width: 100px;
-    border-radius: 8px;
-  }
-`;
-
-const UserInfo = styled.div`
-  .nickname {
-    font-weight: bold;
+  h3 {
     font-size: 1.2rem;
-  }
-  .createdAt {
-    color: #666;
-    font-size: 0.9rem;
-  }
-`;
-
-const Content = styled.p`
-  margin-top: 20px;
-  font-size: 1rem;
-`;
-
-const CommentsSection = styled.div`
-  margin-top: 40px;
-`;
-
-const Comment = styled.div`
-  margin-bottom: 20px;
-
-  .commentUser {
     font-weight: bold;
-  }
-  .commentText {
-    margin-top: 5px;
-  }
-`;
-
-const CommentForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-
-  textarea {
-    width: 100%;
-    height: 80px;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    resize: none;
+    margin-bottom: 10px;
   }
 
-  button {
-    align-self: flex-end;
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #04012d;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  .comment-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 
-    &:hover {
-      background-color: #333;
+    input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 1rem;
+      outline: none;
+      margin-right: 10px;
+      height: 20px;
+    }
+
+    button {
+      background-color: #c99d66;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+  }
+
+  .comment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    .comment-left {
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .comment-content {
+        background-color: #f8f8f8;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 0.9rem;
+
+        .nickname {
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+
+        .text {
+          color: #333;
+        }
+
+        .date {
+          font-size: 0.8rem;
+          color: #666;
+          margin-top: 5px;
+        }
+      }
+    }
+
+    .comment-right {
+      position: relative;
+
+      button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        gap: 2px; /* 점 세 개 간격 */
+      }
+
+      .menu {
+        position: absolute;
+        top: 100%; /* 아래로 펼치기 */
+        left: 0; /* 왼쪽 정렬 */
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 5px 10px; /* 메뉴 패딩 조정 */
+        display: none;
+        flex-direction: row; /* 가로로 펼치기 */
+        align-items: center;
+
+        &.active {
+          display: flex; /* flex로 가로 표시 */
+        }
+
+        button {
+          all: unset;
+          color: #333;
+          font-size: 0.9rem;
+          cursor: pointer;
+          margin-right: 10px; /* 메뉴 항목 간 간격 */
+          &:hover {
+            color: #c99d66;
+          }
+        }
+      }
     }
   }
 `;
 
-const ReviewDetail = () => {
-  const { reviewId } = useParams();
-  const [review, setReview] = useState(null);
-  const [newComment, setNewComment] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
+const ReviewDetail = () => {
+  const { reviewId } = useParams(); // URL에서 reviewId 가져오기
+  const [reviewData, setReviewData] = useState(null); // 리뷰 데이터 상태
+  const [newComment, setNewComment] = useState(""); // 댓글 입력 상태
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태
+  const userId = "currentUserId"; // 실제 사용자 ID를 여기에 연결
+
+  // 리뷰 데이터 가져오기
   useEffect(() => {
-    const fetchReview = async () => {
+    const fetchReviewData = async () => {
       try {
-        const response = await axios.get(`/api/reviews/${reviewId}`);
-        setReview(response.data.response);
+        const response = await axios.get(
+          `http://localhost:8080/api/reviews/${reviewId}`
+        );
+        const review = response.data.response; // API 응답 데이터
+        setReviewData(review);
       } catch (error) {
-        console.error("Failed to fetch review:", error);
+        console.error("Failed to fetch review data:", error);
+      } finally {
+        setIsLoading(false); // 로딩 완료
       }
     };
 
-    fetchReview();
+    fetchReviewData();
   }, [reviewId]);
 
-  const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-    if (!newComment.trim()) return; // 빈 입력 방지
+  const handleBack = () => {
+    alert("뒤로가기");
+  };
 
-    setIsSubmitting(true);
+  const handleAddComment = async () => {
+    if (!newComment.trim()) return;
 
     try {
       const response = await axios.post(
-        `/api/reviews/${reviewId}/comments/1`, // userId는 로그인된 사용자 ID로 대체 필요
-        { comment: newComment }
+        `http://localhost:5173/api/reviews/${reviewId}/comments/${userId}`,
+        { comment: newComment } // POST 요청 본문
       );
 
-      if (response.data.response === "SUCCESS") {
-        setReview((prevReview) => ({
-          ...prevReview,
-          comments: [
-            ...prevReview.comments,
-            {
-              user: { nickname: "현재 사용자", profileImage: "" }, // 임시 데이터
-              comment: newComment,
-              createdAt: new Date().toISOString(),
-            },
-          ],
-        }));
-        setNewComment(""); // 입력 필드 초기화
-      }
+      // 응답 데이터로 댓글 업데이트
+      const updatedComment = response.data.response;
+
+      // 리뷰 데이터의 댓글 목록 업데이트
+      setReviewData((prevData) => ({
+        ...prevData,
+        comments: [...prevData.comments, updatedComment],
+      }));
+
+      // 성공 메시지 출력
+      toast.success("댓글이 작성되었습니다!");
+
+      // 입력 필드 초기화
+      setNewComment("");
     } catch (error) {
-      console.error("Failed to submit comment:", error);
-    } finally {
-      setIsSubmitting(false);
+      console.error("Failed to add comment:", error);
+      toast.error("댓글 작성에 실패했습니다.");
     }
   };
 
-  if (!review) return <p>Loading...</p>;
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleAddComment();
+    }
+  };
+
+  if (isLoading) {
+    return <Container>Loading...</Container>; // 로딩 중 메시지
+  }
+
+  if (!reviewData) {
+    return <Container>No review found.</Container>; // 리뷰 데이터 없음 메시지
+  }
 
   return (
-    <DetailWrapper>
-      <DetailHeader>
-        <img src={review.movie.poster} alt={review.movie.title} />
-        <div>
-          <UserInfo>
-            <div className="nickname">{review.user.nickname}</div>
-            <div className="createdAt">
-              {new Date(review.createdAt).toLocaleString()}
-            </div>
-          </UserInfo>
-        </div>
-      </DetailHeader>
-      <Content>{review.content}</Content>
-      <CommentsSection>
-        <h3>댓글</h3>
-        {review.comments.map((comment, index) => (
-          <Comment key={index}>
-            <div className="commentUser">{comment.user.nickname}</div>
-            <div className="commentText">{comment.comment}</div>
-          </Comment>
-        ))}
-        <CommentForm onSubmit={handleCommentSubmit}>
-          <textarea
+    <Container>
+      {/* Header */}
+      <DetailHeader onBack={handleBack} />
+
+      {/* Review Content Section */}
+      <ReviewContentSection
+        posterSrc={reviewData.movie.poster} // 영화 포스터
+        profileSrc={reviewData.user.profileImage} // 작성자 프로필 이미지
+        name={reviewData.user.nickname} // 작성자 닉네임
+        date={new Date(reviewData.createdAt).toLocaleDateString()} // 작성일
+        movieTitle={reviewData.movie.title} // 영화 제목
+        cookieScoreCount={reviewData.movieScore} // 영화 점수
+      />
+
+      {/* Review Text Section */}
+      <ReviewTextSection reviewText={reviewData.content} />
+
+      {/* Footer Section */}
+      <FooterSection
+        likes={reviewData.reviewLike} // 좋아요 수
+        comments={reviewData.comments.length} // 댓글 수
+      />
+
+      {/* Comments Section */}
+      <CommentsSectionContainer>
+        <h3>Comment</h3>
+
+        {/* 댓글 작성란 */}
+        <div className="comment-input">
+          <input
+            type="text"
             placeholder="댓글을 입력하세요..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
+            onKeyDown={handleKeyDown} // 엔터 키 입력
           />
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "등록 중..." : "댓글 등록"}
-          </button>
-        </CommentForm>
-      </CommentsSection>
-    </DetailWrapper>
+          <button onClick={handleAddComment}>↑</button>
+        </div>
+
+        {/* 댓글 목록 */}
+        {reviewData.comments.map((comment, index) => (
+          <div className="comment" key={index}>
+            <div className="comment-left">
+              <img
+                src={comment.user.profileImage}
+                alt={`${comment.user.nickname} 프로필`}
+              />
+              <div className="comment-content">
+                <div className="nickname">{comment.user.nickname}</div>
+                <div className="text">{comment.comment}</div>
+                <div className="date">
+                  {new Date(comment.createdAt).toLocaleString()}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </CommentsSectionContainer>
+    </Container>
   );
 };
 
