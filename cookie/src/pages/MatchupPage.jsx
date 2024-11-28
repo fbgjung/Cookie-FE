@@ -81,15 +81,15 @@ const MatchupPage = () => {
   const [matchUpData, setMatchUpData] = useState(null);
   const [isVoteEnded, setIsVoteEnded] = useState(false);
   const [stompClient, setStompClient] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
 
   const fetchMatchUpData = async () => {
     try {
-      const endpoint = matchUpId
-        ? `http://localhost:8080/api/matchups/${matchUpId}/history`
-        : `http://localhost:8080/api/matchups/current`;
+      // const endpoint = matchUpId
+      //   ? `http://localhost:8080/api/matchups/${matchUpId}/history`
+      //   : `http://localhost:8080/api/matchups/current`;
 
-      const response = await axios.get(endpoint);
+      const response = await axios.get(`http://localhost:8080/api/matchups/1`);
       setMatchUpData(response.data.response || sampleData);
     } catch (error) {
       console.error("API 요청 실패:", error);
