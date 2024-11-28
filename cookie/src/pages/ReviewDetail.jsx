@@ -6,6 +6,7 @@ import DetailHeader from "../components/mypage/DetailHeader";
 import ReviewContentSection from "../components/mypage/ReviewContentSection";
 import ReviewTextSection from "../components/mypage/ReviewTextSection";
 import FooterSection from "../components/mypage/FooterSection";
+import { toast } from "react-hot-toast";
 
 const Container = styled.div`
   padding: 20px;
@@ -140,11 +141,13 @@ const CommentsSectionContainer = styled.div`
   }
 `;
 
+
 const ReviewDetail = () => {
   const { reviewId } = useParams(); // URL에서 reviewId 가져오기
   const [reviewData, setReviewData] = useState(null); // 리뷰 데이터 상태
   const [newComment, setNewComment] = useState(""); // 댓글 입력 상태
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태
+  const userId = "currentUserId"; // 실제 사용자 ID를 여기에 연결
 
   // 리뷰 데이터 가져오기
   useEffect(() => {
@@ -169,10 +172,38 @@ const ReviewDetail = () => {
     alert("뒤로가기");
   };
 
-  const handleAddComment = () => {
-    if (newComment.trim()) {
-      alert(`댓글 작성: ${newComment}`);
+  const handleAddComment = async () => {
+    if (!newComment.trim()) return;
+
+    try {
+      const response = await axios.post(
+        `http://localhost:5173/api/reviews/${reviewId}/comments/${userId}`,
+        { comment: newComment } // POST 요청 본문
+      );
+
+      // 응답 데이터로 댓글 업데이트
+      const updatedComment = response.data.response;
+
+      // 리뷰 데이터의 댓글 목록 업데이트
+      setReviewData((prevData) => ({
+        ...prevData,
+        comments: [...prevData.comments, updatedComment],
+      }));
+
+      // 성공 메시지 출력
+      toast.success("댓글이 작성되었습니다!");
+
+      // 입력 필드 초기화
       setNewComment("");
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+      toast.error("댓글 작성에 실패했습니다.");
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleAddComment();
     }
   };
 
@@ -219,6 +250,7 @@ const ReviewDetail = () => {
             placeholder="댓글을 입력하세요..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
+            onKeyDown={handleKeyDown} // 엔터 키 입력
           />
           <button onClick={handleAddComment}>↑</button>
         </div>
