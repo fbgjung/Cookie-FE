@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 import axios from "axios";
 import TitleSection from "../components/matchup/TitleSection";
 import Timer from "../components/matchup/Timer";
 import PosterList from "../components/matchup/PosterList";
 import ProgressBar from "../components/matchup/ProgressBar";
 import ChartSection from "../components/matchup/ChartSection";
-import { useParams, useLocation } from "react-router-dom";
 import ChatUI from "../components/matchup/ChatUI";
+import { useParams, useLocation } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -78,20 +80,45 @@ const MatchupPage = () => {
   const location = useLocation();
   const [matchUpData, setMatchUpData] = useState(null);
   const [isVoteEnded, setIsVoteEnded] = useState(false);
+  const [stompClient, setStompClient] = useState(null);
+  const [isConnected, setIsConnected] = useState(true);
 
   const fetchMatchUpData = async () => {
     try {
-      const endpoint = matchUpId
-        ? `http://localhost:8080/api/matchups/${matchUpId}/history`
-        : `http://localhost:8080/api/matchups/current`;
+      // const endpoint = matchUpId
+      //   ? `http://localhost:8080/api/matchups/${matchUpId}/history`
+      //   : `http://localhost:8080/api/matchups/current`;
 
-      const response = await axios.get(endpoint);
+      const response = await axios.get(`http://localhost:8080/api/matchups/1`);
       setMatchUpData(response.data.response || sampleData);
     } catch (error) {
       console.error("API 요청 실패:", error);
       setMatchUpData(sampleData);
     }
   };
+
+  useEffect(() => {
+    const socket = new SockJS("http://localhost:8080/ws");
+    const client = new Client({
+      webSocketFactory: () => socket,
+      debug: (str) => console.log(str),
+      onConnect: () => {
+        console.log("WebSocket 연결 성공");
+        setIsConnected(true);
+      },
+      onDisconnect: () => {
+        console.log("WebSocket 연결 종료");
+        setIsConnected(false);
+      },
+    });
+
+    client.activate();
+    setStompClient(client);
+
+    return () => {
+      client.deactivate();
+    };
+  }, []);
 
   useEffect(() => {
     fetchMatchUpData();
@@ -134,7 +161,9 @@ const MatchupPage = () => {
         movie2Likes={matchUpData.movie2.movieLike}
       />
       <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
-      <ChatUI />
+      {isConnected && (
+        <ChatUI matchUpId={matchUpId} stompClient={stompClient} />
+      )}
     </Container>
   );
 };
