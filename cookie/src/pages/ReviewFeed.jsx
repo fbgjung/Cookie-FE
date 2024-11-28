@@ -290,7 +290,7 @@ useEffect(() => {
   };
 
   const handleReviewClick = (reviewId) => {
-    navigate(`/detailreview/${reviewId}`);
+    navigate(`/reviews/${reviewId}`);
   };
 
   return (

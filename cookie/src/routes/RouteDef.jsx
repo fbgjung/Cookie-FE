@@ -115,7 +115,7 @@ export const AppRouteDef = {
   },
 
   DetailReviews: {
-    path: "/detailreview/:reviewId",
+    path: "/detailreview",
     element: (
       <PrivateRoute>
         <DetailReview />
