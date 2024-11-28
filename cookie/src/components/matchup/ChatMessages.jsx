@@ -65,10 +65,11 @@ const ChatMessagesContainer = styled.div`
   overflow-y: auto;
   padding: 15px;
 `;
-const ChatMessages = ({ messages, currentUser }) => {
+const ChatMessages = ({ messages, currentUserId }) => {
   const messagesEndRef = useRef(null);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
+  console.log("내 아이디:", currentUserId);
   useEffect(() => {
     if (isFirstRender) {
       setIsFirstRender(false);
@@ -83,17 +84,21 @@ const ChatMessages = ({ messages, currentUser }) => {
   return (
     <ChatMessagesContainer>
       {messages.map((message) => {
-        const isUser = message.username === currentUser;
+        console.log(messages);
+        const isUser = message.id === currentUserId;
+        console.log(isUser);
+        console.log(currentUserId);
+        console.log(message.id);
         return (
           <MessageWrapper key={message.id} isUser={isUser}>
             {!isUser && (
               <ProfileImage
                 src={message.profile || "/default-profile.png"}
-                alt={`${message.username} 프로필`}
+                alt={`${message.nickname} 프로필`}
               />
             )}
             <MessageContent isUser={isUser}>
-              {!isUser && <Nickname>{message.username}</Nickname>}
+              {!isUser && <Nickname>{message.nickname}</Nickname>}
               <MessageBubble isUser={isUser}>{message.content}</MessageBubble>
               <Timestamp>{message.timestamp}</Timestamp>
             </MessageContent>
