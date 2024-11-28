@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import DetailHeader from "../components/mypage/DetailHeader";
 import ReviewContentSection from "../components/mypage/ReviewContentSection";
 import ReviewTextSection from "../components/mypage/ReviewTextSection";
@@ -7,12 +9,12 @@ import FooterSection from "../components/mypage/FooterSection";
 
 const Container = styled.div`
   padding: 20px;
-  max-width: 768px;
+  width: 95%;
   margin: 0 auto;
   font-family: "Arial", sans-serif;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
 `;
 
 const CommentsSectionContainer = styled.div`
@@ -138,42 +140,30 @@ const CommentsSectionContainer = styled.div`
   }
 `;
 
-const dummyReviewData = {
-  movie: {
-    poster: "https://via.placeholder.com/150",
-    title: "더미 영화 제목",
-  },
-  user: {
-    profileImage: "https://via.placeholder.com/40",
-    nickname: "더미사용자",
-  },
-  createdAt: "2021-01-01T00:00:00Z",
-  movieScore: 4.5,
-  content: "억지 글래디에이터 감성 주입에 잔인한 액션 추가영화 <글래디에이터 2>는 전쟁영화의 거장으로 불리는 리들리스콧 감독의 역작으로, 그의 작품깨나 봤다 싶은 관객들은 이번에도 황홀스러운 전쟁씬과 전작과 상응하는 재미의 기대를 걸고 극장에 들어설 것이다. 하지만 난 객관적으로 봤을 때 이 작품이 전작만큼 재밌다고, 웅장하다고 생각하진 않는다. 전편과 비교해봤을 때 흐름은 잔잔하고, 액션은 오래 지속되지 않으며, 검투사의 칼끼리 부딪히는 굉음보다는 전쟁으로 고통받는 이의 울음소리가 더 가깝게 다가왔다. 단지, ‘영화계의 전쟁광’으로 묘사되곤 하는 스콧이 왜 이 작품에서는 전쟁씬을 심도있게 다루지 않았을까에 초점을 맞추다 보니 점점 이 작품이 입체적으로 보이기 시작했다.“노예의 꿈은 자유가 아니라, 자신의 노예를 사는 거야.”이 작품의 핵심적 메세지이자 하이라이트씬은 바로 루시우스(폴 메스칼)가 마크리누스(덴젤 워싱턴)와의 전투를 끝내고 대립을 이루고 있는 군대들에게 소리치는 말에 있다고 생각한다. 리들리 스콧 감독은 자신이 만든, 몇 번이고 검을 휘두르고, 피를 흘리는 모습을 스크린으로 접하면서 전쟁의 참혹함을 그 누구보다 가장 가까이서 체감했을 것이다. 전쟁이 멈추고 있지 않은 이 시점에서, 전쟁광 리들리 스콧은 이 작품으로써 과감하게 그것으로부터 타파된다. 마치, 현대사회의 관객들에게 ‘더 이상의 전쟁은 불필요하다고’ 말하고 있는 것만 같았다.“쌍둥이는 숲에 버러졌었는데, 늑대가 그걸 발견하고는 자기 젖을 먹여서 키웠대. 동물의 본성이 로마에 흐르는 거지.”“어떻게 로마에 대해 잘 알아?”“그들이 초래할 일에 대해서는 알지.”",
-  comments: [
-    {
-      user: {
-        profileImage: "https://via.placeholder.com/40",
-        nickname: "망고리뷰",
-      },
-      text: "이 리뷰보고 보러갔습니다. 덕분에 영화에 대한 아쉬움에 대해 조금 내려놓고 봤어요 :)",
-      createdAt: "2024-11-27T12:00:00Z",
-    },
-    {
-      user: {
-        profileImage: "https://via.placeholder.com/40",
-        nickname: "금정씨는못말려",
-      },
-      text: "공감합니다람쥐",
-      createdAt: "2024-11-28T10:00:00Z",
-    },
-  ],
-  reviewLike: 10,
-};
-
 const ReviewDetail = () => {
-  const [newComment, setNewComment] = useState("");
-  const [menuOpenIndex, setMenuOpenIndex] = useState(null);
+  const { reviewId } = useParams(); // URL에서 reviewId 가져오기
+  const [reviewData, setReviewData] = useState(null); // 리뷰 데이터 상태
+  const [newComment, setNewComment] = useState(""); // 댓글 입력 상태
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태
+
+  // 리뷰 데이터 가져오기
+  useEffect(() => {
+    const fetchReviewData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/reviews/${reviewId}`
+        );
+        const review = response.data.response; // API 응답 데이터
+        setReviewData(review);
+      } catch (error) {
+        console.error("Failed to fetch review data:", error);
+      } finally {
+        setIsLoading(false); // 로딩 완료
+      }
+    };
+
+    fetchReviewData();
+  }, [reviewId]);
 
   const handleBack = () => {
     alert("뒤로가기");
@@ -186,9 +176,13 @@ const ReviewDetail = () => {
     }
   };
 
-  const toggleMenu = (index) => {
-    setMenuOpenIndex(menuOpenIndex === index ? null : index);
-  };
+  if (isLoading) {
+    return <Container>Loading...</Container>; // 로딩 중 메시지
+  }
+
+  if (!reviewData) {
+    return <Container>No review found.</Container>; // 리뷰 데이터 없음 메시지
+  }
 
   return (
     <Container>
@@ -197,21 +191,21 @@ const ReviewDetail = () => {
 
       {/* Review Content Section */}
       <ReviewContentSection
-        posterSrc={dummyReviewData.movie.poster}
-        profileSrc={dummyReviewData.user.profileImage}
-        name={dummyReviewData.user.nickname}
-        date={new Date(dummyReviewData.createdAt).toLocaleDateString()}
-        movieTitle={dummyReviewData.movie.title}
-        movieYearCountry="미국"
-        cookieScoreCount={dummyReviewData.movieScore}
+        posterSrc={reviewData.movie.poster} // 영화 포스터
+        profileSrc={reviewData.user.profileImage} // 작성자 프로필 이미지
+        name={reviewData.user.nickname} // 작성자 닉네임
+        date={new Date(reviewData.createdAt).toLocaleDateString()} // 작성일
+        movieTitle={reviewData.movie.title} // 영화 제목
+        cookieScoreCount={reviewData.movieScore} // 영화 점수
       />
 
       {/* Review Text Section */}
-      <ReviewTextSection reviewText={dummyReviewData.content} />
+      <ReviewTextSection reviewText={reviewData.content} />
+
       {/* Footer Section */}
       <FooterSection
-        likes={dummyReviewData.reviewLike}
-        comments={dummyReviewData.comments.length}
+        likes={reviewData.reviewLike} // 좋아요 수
+        comments={reviewData.comments.length} // 댓글 수
       />
 
       {/* Comments Section */}
@@ -230,24 +224,19 @@ const ReviewDetail = () => {
         </div>
 
         {/* 댓글 목록 */}
-        {dummyReviewData.comments.map((comment, index) => (
+        {reviewData.comments.map((comment, index) => (
           <div className="comment" key={index}>
             <div className="comment-left">
-              <img src={comment.user.profileImage} alt="프로필" />
+              <img
+                src={comment.user.profileImage}
+                alt={`${comment.user.nickname} 프로필`}
+              />
               <div className="comment-content">
                 <div className="nickname">{comment.user.nickname}</div>
-                <div className="text">{comment.text}</div>
+                <div className="text">{comment.comment}</div>
                 <div className="date">
                   {new Date(comment.createdAt).toLocaleString()}
                 </div>
-              </div>
-            </div>
-            <div className="comment-right">
-              <button onClick={() => toggleMenu(index)}>⋮</button>
-              <div className={`menu ${menuOpenIndex === index ? "active" : ""}`}>
-                <button onClick={() => alert("내 댓글 관리")}>
-                  내 댓글 관리
-                </button>
               </div>
             </div>
           </div>
