@@ -43,7 +43,7 @@ const MyPage = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/users/${userId}`
+          `https://www.cookiekie.com/api/users/${userId}`
         );
         const { nickname, profileImage, badge, genreScores, reviews } =
           response.data.response;
