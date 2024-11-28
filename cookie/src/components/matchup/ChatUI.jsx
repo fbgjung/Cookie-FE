@@ -20,8 +20,9 @@ const ChatWrapper = styled.div`
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 `;
 
-const ChatUI = ({ matchUpId, stompClient }) => {
+const ChatUI = ({ stompClient }) => {
   const [messages, setMessages] = useState([]);
+  const matchUpId = 1;
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -31,8 +32,8 @@ const ChatUI = ({ matchUpId, stompClient }) => {
         );
         setMessages(
           response.data.response.map((message) => ({
-            id: message.sentAt,
-            username: message.senderNickname,
+            id: message.senderUserId,
+            nickname: message.senderNickname,
             content: message.content,
             timestamp: new Date(message.sentAt).toLocaleTimeString(),
             profile: message.senderProfileImage,
@@ -56,7 +57,7 @@ const ChatUI = ({ matchUpId, stompClient }) => {
         setMessages((prev) => [
           ...prev,
           {
-            id: newMessage.sentAt,
+            id: newMessage.senderUserId,
             username: newMessage.senderNickname,
             content: newMessage.content,
             timestamp: new Date(newMessage.sentAt).toLocaleTimeString(),
