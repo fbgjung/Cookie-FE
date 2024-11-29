@@ -7,7 +7,6 @@ const PosterContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
   margin-top: 30px;
   background-color: #ffffff;
   padding: 30px;
@@ -15,6 +14,16 @@ const PosterContainer = styled.div`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   width: 80%;
   max-width: 1000px;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    width: 85%;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+    width: 95%;
+  }
 `;
 
 const FightImageWrapper = styled.div`
@@ -27,6 +36,16 @@ const FightImageWrapper = styled.div`
 const FightImage = styled.img`
   width: 100px;
   height: 100px;
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 80px;
+  }
+
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+  }
 `;
 
 const PosterList = ({ posters, isVoteEnded }) => (
