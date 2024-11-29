@@ -6,7 +6,7 @@ const SearchedMovie = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   justify-content: center;
-  margin: 0 90px;
+  margin: 0 3rem;
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 700px;
