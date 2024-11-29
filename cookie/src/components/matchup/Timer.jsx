@@ -6,6 +6,10 @@ import Modal from "react-modal";
 const TimerContainer = styled.div`
   display: flex;
   gap: 10px;
+
+  @media (max-width: 480px) {
+    gap: 5px;
+  }
 `;
 
 const TimerBox = styled.div`
@@ -20,6 +24,18 @@ const TimerBox = styled.div`
   justify-content: center;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    width: 60px;
+    height: 65px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    width: 50px;
+    height: 55px;
+  }
 `;
 
 const Colon = styled.span`
@@ -27,6 +43,14 @@ const Colon = styled.span`
   margin-top: 15px;
   font-weight: bold;
   color: #ffffff;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const EndedMessage = styled.div`
@@ -73,6 +97,7 @@ const Timer = ({ endAt, onVoteEnd }) => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0); // 배경 위치 저장
 
   useEffect(() => {
     const targetDate = new Date(endAt);
@@ -83,9 +108,9 @@ const Timer = ({ endAt, onVoteEnd }) => {
       if (difference <= 0) {
         clearInterval(interval);
         setIsEnded(true);
-        setIsModalOpen(true);
+        openModal();
         setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
-        onVoteEnd(); // 타이머 종료 시 콜백 호출
+        onVoteEnd();
       } else {
         const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((difference / (1000 * 60)) % 60);
@@ -108,7 +133,19 @@ const Timer = ({ endAt, onVoteEnd }) => {
   const [m1, m2] = splitDigits(timeLeft.minutes);
   const [s1, s2] = splitDigits(timeLeft.seconds);
 
+  const openModal = () => {
+    setScrollPosition(window.scrollY); // 현재 스크롤 위치 저장
+    document.body.style.position = "fixed"; // 배경 고정
+    document.body.style.top = `-${window.scrollY}px`; // 현재 위치 유지
+    document.body.style.width = "100%"; // 화면 크기 유지
+    setIsModalOpen(true);
+  };
+
   const closeModal = () => {
+    document.body.style.position = ""; // 고정 해제
+    document.body.style.top = ""; // 초기화
+    document.body.style.width = ""; // 초기화
+    window.scrollTo(0, scrollPosition); // 스크롤 위치 복원
     setIsModalOpen(false);
   };
 
@@ -141,17 +178,19 @@ const Timer = ({ endAt, onVoteEnd }) => {
             borderRadius: "15px",
             width: "90%",
             maxWidth: "300px",
-            height: "200px",
+            maxHeight: "60vh",
             margin: "auto",
             textAlign: "center",
             padding: "20px",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             alignItems: "center",
+            overflowY: "auto",
           },
         }}
+        ariaHideApp={false}
       >
         <ModalContent>
           투표가 종료되었습니다.
