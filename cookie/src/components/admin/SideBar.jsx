@@ -7,12 +7,13 @@ import award from "../../assets/images/admin/award.svg";
 import cookie from "../../assets/images/admin/cookie.svg";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import GlobalStyle from "../../styles/global";
 
 const PageNav = styled.div`
   width: 409px;
   background-color: var(--main);
   height: 100vh;
-  margin: 0 0;
+  margin-right: 2rem;
   padding: 1.5rem;
   color: white;
   font-size: 22px;
@@ -70,7 +71,7 @@ const SideBarContainer = styled.div`
   }
 `;
 
-function sideBar() {
+function SideBar() {
   const navigate = useNavigate();
   const sideMenu = [
     {
@@ -101,15 +102,16 @@ function sideBar() {
     localStorage.removeItem("refreshToken");
     sessionStorage.removeItem("accessToken");
     navigate("/admin");
-    alert("로그아웃되었습니다.");
+    toast.success("로그아웃되었습니다.");
   };
 
   return (
     <PageNav>
+      <GlobalStyle />
       <SideBarTitle>
         <img src={cookieLogo} className="title__logo" alt="logo_icon" />
         <span> Admin</span>
-        <button onClick={handleLogout}>
+        <button onClick={handleLogout} type="button">
           <img src={logout} />
         </button>
       </SideBarTitle>
@@ -129,4 +131,4 @@ function sideBar() {
   );
 }
 
-export default sideBar;
+export default SideBar;
