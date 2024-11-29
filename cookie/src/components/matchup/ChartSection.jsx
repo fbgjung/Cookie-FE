@@ -18,10 +18,14 @@ const SectionContainer = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
   max-width: 540px;
   margin-bottom: 20px;
+
+  @media (max-width: 480px) {
+    max-width: 90%; /* 모바일에서 전체 컨테이너 너비 축소 */
+  }
 `;
 
 const SelectButton = styled.button`
@@ -49,15 +53,41 @@ const SelectButton = styled.button`
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 6px 0;
+    max-width: 200px;
+  }
 `;
 
 const ChartContainer = styled.div`
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 10px;
+
+  @media (max-width: 480px) {
+    justify-content: flex-start;
+  }
 `;
 
 const ChartWrapper = styled.div`
   background: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
+  padding: 10px;
+
+  @media (max-width: 768px) {
+    padding: 5px;
+  }
 `;
 
 const ChartLabel = styled.div`
@@ -65,6 +95,10 @@ const ChartLabel = styled.div`
   font-size: 1.2rem;
   text-align: center;
   margin-top: 10px;
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const ChartSection = ({ movie1, movie2 }) => {
@@ -107,20 +141,26 @@ const ChartSection = ({ movie1, movie2 }) => {
         <div>
           <ChartWrapper>
             <RadarChart
-              width={300}
-              height={300}
+              width={window.innerWidth < 768 ? 200 : 300}
+              height={window.innerWidth < 768 ? 200 : 300}
               data={charmData}
-              margin={{ top: 30, right: 30, bottom: 20, left: 30 }}
+              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
             >
               <PolarGrid stroke="#ffffff" />
               <PolarAngleAxis
                 dataKey="subject"
-                tick={{ fill: "#ffffff", fontSize: 10 }}
+                tick={{
+                  fill: "#ffffff",
+                  fontSize: window.innerWidth < 768 ? 8 : 10,
+                }}
               />
               <PolarRadiusAxis
                 angle={38}
                 domain={[0, 100]}
-                tick={{ fill: "#ffffff" }}
+                tick={{
+                  fill: "#ffffff",
+                  fontSize: window.innerWidth < 768 ? 8 : 10,
+                }}
               />
               <Radar
                 name="매력포인트"
@@ -136,20 +176,26 @@ const ChartSection = ({ movie1, movie2 }) => {
         <div>
           <ChartWrapper>
             <RadarChart
-              width={300}
-              height={300}
+              width={window.innerWidth < 768 ? 200 : 300}
+              height={window.innerWidth < 768 ? 200 : 300}
               data={emotionData}
-              margin={{ top: 20, right: 30, bottom: 20, left: 30 }}
+              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
             >
               <PolarGrid stroke="#ffffff" />
               <PolarAngleAxis
                 dataKey="subject"
-                tick={{ fill: "#ffffff", fontSize: 10 }}
+                tick={{
+                  fill: "#ffffff",
+                  fontSize: window.innerWidth < 768 ? 8 : 10,
+                }}
               />
               <PolarRadiusAxis
                 angle={38}
                 domain={[0, 100]}
-                tick={{ fill: "#ffffff" }}
+                tick={{
+                  fill: "#ffffff",
+                  fontSize: window.innerWidth < 768 ? 8 : 10,
+                }}
               />
               <Radar
                 name="감정포인트"

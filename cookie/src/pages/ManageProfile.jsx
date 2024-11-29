@@ -6,6 +6,7 @@ import styled from "styled-components";
 import NicknameInput from "../components/mypage/NicknameInput";
 import SaveProfileButton from "../components/mypage/SaveProfileButton";
 import { Toaster, toast } from "react-hot-toast";
+import SetGenre from "../components/mypage/SetGenre";
 
 const ManageProfileContainer = styled.div`
   display: flex;
@@ -13,6 +14,7 @@ const ManageProfileContainer = styled.div`
   min-height: 100vh;
   background-color: #ffffff;
   position: relative;
+  overflow-y: auto;
 `;
 
 const ManageProfileContent = styled.div`
@@ -35,6 +37,10 @@ const ManageProfileContent = styled.div`
     padding: 12px;
     margin-top: 10px;
   }
+
+  & > *:not(:last-child) {
+    margin-top: 10px;
+  }
 `;
 
 const ManageProfile = () => {
@@ -42,7 +48,7 @@ const ManageProfile = () => {
   const [profileImage, setProfileImage] = useState("");
   const [badges, setBadges] = useState([]);
   const [nickname, setNickname] = useState("");
-  const [selectedBadge, setSelectedBadge] = useState(""); // main 뱃지 ID
+  const [selectedBadge, setSelectedBadge] = useState("");
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const isErrorShown = useRef(false);
 
@@ -58,7 +64,6 @@ const ManageProfile = () => {
         setBadges(badges);
         setNickname(nickname);
 
-        // main: true인 뱃지를 찾아서 선택
         const mainBadge = badges.find((badge) => badge.main);
         if (mainBadge) {
           setSelectedBadge(mainBadge.name);
@@ -106,16 +111,6 @@ const ManageProfile = () => {
 
   return (
     <ManageProfileContainer>
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            marginTop: "10px",
-            fontSize: "1rem",
-          },
-        }}
-      />
       <ManageProfileContent>
         <SetProfileImage
           profileImage={profileImage}
@@ -135,6 +130,8 @@ const ManageProfile = () => {
           onResetCheck={setIsNicknameChecked}
           isChecked={isNicknameChecked}
         />
+
+        <SetGenre />
         <SaveProfileButton onClick={handleSaveClick} />
       </ManageProfileContent>
     </ManageProfileContainer>

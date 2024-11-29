@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const SaveButtonWrapper = styled.div`
-  margin-top: 40px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -21,6 +20,20 @@ const SaveButton = styled.button`
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 80%;
+    padding: 12px 25px;
+    margin-top: 30px;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    padding: 10px 20px;
+    margin-top: 40px;
+    font-size: 0.8rem;
   }
 `;
 

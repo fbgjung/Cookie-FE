@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import Notification from "../components/Notification";
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import ToggleSwitch from "../components/ToggleSwitch";
 
 const Container = styled.div`
   position: relative;
@@ -65,6 +66,12 @@ const HeaderContainer = styled.header`
   position: sticky;
   top: 0;
   z-index: 100;
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 `;
 
 const NavContainer = styled.nav`
@@ -194,7 +201,10 @@ const AppScreen = () => {
               <Logo onClick={handleLogoClick}>
                 <img src={CookieLogo} alt="Cookie Logo" />
               </Logo>
-              <Notification />
+              <div className="header-right">
+                <ToggleSwitch />
+                <Notification />
+              </div>
             </HeaderContainer>
           )}
           {/* 메인 콘텐츠 */}
