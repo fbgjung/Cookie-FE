@@ -50,7 +50,6 @@ const SideBarContainer = styled.div`
   .sidebar__menu {
     background-color: white;
     width: 320px;
-    height: 40px;
     border-radius: 12px;
     padding: 0.5rem;
     color: #a7a7a7;

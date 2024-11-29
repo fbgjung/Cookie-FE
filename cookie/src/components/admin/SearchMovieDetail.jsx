@@ -11,10 +11,9 @@ const flexRowCenter = `
   align-items: center;
 `;
 
-// 스타일 컴포넌트
 const AddMovieDetail = styled.div`
   margin: 1rem;
-  min-height: 900px;
+  height: 780px;
   border: 1px solid var(--main);
   border-radius: 12px;
   position: relative;
@@ -28,7 +27,7 @@ const TitleContainer = styled.div`
   background-color: var(--main);
   height: 32px;
   border-radius: 11px;
-  width: 1174px;
+  width: 1175px;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -53,7 +52,7 @@ const TitleContainer = styled.div`
 
 const MovieDetail = styled.div`
   display: flex;
-  margin: 70px 50px;
+  margin: 40px 50px;
   height: 600px;
   background-color: white;
   color: var(--main);
@@ -102,7 +101,9 @@ const ActorProfile = styled.img`
 
 const ButtonWrapper = styled.div`
   ${flexRowCenter}
-  margin: 6rem 0 0 0;
+  margin: 2rem;
+  display: flex;
+  justify-content: end;
 `;
 
 const SubmitBtn = styled.button`
@@ -121,7 +122,7 @@ const SubmitBtn = styled.button`
 `;
 const MovieInfoSection = ({ label, children }) => {
   return (
-    <div style={{ display: "flex", marginBottom: "1rem" }}>
+    <div style={{ display: "flex", marginBottom: "0.6rem" }}>
       <Label>{label}</Label>
       <div style={{ display: "flex", flexDirection: "row", width: "850px" }}>
         {children}

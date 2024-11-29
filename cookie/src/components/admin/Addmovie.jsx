@@ -7,12 +7,12 @@ import useAdminMovieStore from "../../stores/useAdminMovieStore";
 
 const AddMovieContainer = styled.div`
   width: 1239px;
-  height: 935px;
+  height: 840px;
   border: none;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 12px;
   background-color: white;
-  overflow: hidden;
+
   box-shadow:
     -1px 6px 10px rgba(0, 0, 0, 0.1),
     1px -6px 10px rgba(0, 0, 0, 0.1),
