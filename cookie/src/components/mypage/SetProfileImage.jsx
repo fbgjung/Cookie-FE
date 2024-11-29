@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -66,7 +65,10 @@ const SetProfileImage = ({ profileImage, onChange }) => {
         onClick={handleBackClick}
       />
       <ImageWrapper htmlFor="file-input">
-        <ProfileImage src={profileImage} alt="Profile" />
+        <ProfileImage
+          src={profileImage || "/src/assets/images/mypage/setdefaultImage.svg"}
+          alt="Profile"
+        />
         <HiddenInput
           id="file-input"
           type="file"
