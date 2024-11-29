@@ -50,6 +50,7 @@ const ManageProfile = () => {
   const [nickname, setNickname] = useState("");
   const [selectedBadge, setSelectedBadge] = useState("");
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const [selectedGenreId, setSelectedGenreId] = useState(null);
   const isErrorShown = useRef(false);
 
   useEffect(() => {
@@ -80,24 +81,30 @@ const ManageProfile = () => {
 
   const handleSaveClick = async () => {
     try {
-      const requestData = {
-        profileImage,
-        nickname,
-        mainBadge: selectedBadge,
-      };
+      const formData = new FormData();
+      if (profileImage) {
+        formData.append("profileImage", profileImage);
+      }
+      formData.append("nickname", nickname);
+      if (selectedBadge) {
+        formData.append("mainBadgeId", selectedBadge);
+      }
+      formData.append("genreId", selectedGenreId);
 
-      const response = await axiosInstance.post(
-        "/api/users/profileData",
-        requestData
-      );
+      const response = await axiosInstance.post("/api/users", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       if (response.data.response === "SUCCESS") {
         toast.success("프로필 저장이 완료되었습니다!");
       } else {
-        throw new Error("오류");
+        throw new Error("오류 발생");
       }
     } catch (error) {
       toast.error("프로필 저장에 실패했습니다.");
-      console.error("오류", error);
+      console.error("프로필 저장 실패:", error);
     }
   };
 
@@ -122,8 +129,10 @@ const ManageProfile = () => {
           onResetCheck={setIsNicknameChecked}
           isChecked={isNicknameChecked}
         />
-
-        <SetGenre />
+        <SetGenre
+          selectedGenreId={selectedGenreId}
+          onSelectGenre={(id) => setSelectedGenreId(id)}
+        />
         <SaveProfileButton onClick={handleSaveClick} />
       </ManageProfileContent>
     </ManageProfileContainer>
