@@ -12,7 +12,8 @@ import LikedReviews from "../pages/LikedRevies";
 import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
 import ReTokenPage from "../api/auth/ReTokenPage";
-import AdminLogin from "../pages/AdminLogin";
+import AdminLogin from "../pages/admin/AdminLogin";
+import AdminMovie from "../pages/admin/AdminMovie";
 
 export const AppRouteDef = {
   Main: {
@@ -140,6 +141,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <AdminLogin />
+      </PrivateRoute>
+    ),
+  },
+  AdminAddMovie: {
+    path: "/admin/movie",
+    element: (
+      <PrivateRoute>
+        <AdminMovie />
       </PrivateRoute>
     ),
   },

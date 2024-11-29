@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import GlobalStyle from "../styles/global";
-import SideBar from "../components/admin/SideBar";
-import CookieLogo from "../assets/images/admin/CookieAdmin.svg";
-import CookieImg from "../assets/images/admin/cookie_img.svg";
+import GlobalStyle from "../../styles/global";
+import SideBar from "../../components/admin/SideBar";
+import CookieLogo from "../../assets/images/admin/CookieAdmin.svg";
+import CookieImg from "../../assets/images/admin/cookie_img.svg";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axiosInstance from "../api/auth/axiosInstance";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const Viewport = styled.div`
   width: 100%;
@@ -103,11 +103,9 @@ function AdminLogin() {
   };
   return (
     <>
-      <GlobalStyle />
       <SideBar />
       <Viewport>
         <div>
-          Admin
           <img src={CookieLogo} />
           <img src={CookieImg} />
         </div>
