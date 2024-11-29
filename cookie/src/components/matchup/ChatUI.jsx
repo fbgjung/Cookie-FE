@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import ChatContainer from "./ChatContainer";
 import ChatMessages from "./ChatMessages";
@@ -22,7 +22,16 @@ const ChatWrapper = styled.div`
 
 const ChatUI = ({ stompClient }) => {
   const [messages, setMessages] = useState([]);
+  const [isInputTriggered, setIsInputTriggered] = useState(false);
   const matchUpId = 1;
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -58,7 +67,7 @@ const ChatUI = ({ stompClient }) => {
           ...prev,
           {
             id: newMessage.senderUserId,
-            username: newMessage.senderNickname,
+            nickname: newMessage.senderNickname,
             content: newMessage.content,
             timestamp: new Date(newMessage.sentAt).toLocaleTimeString(),
             profile: newMessage.senderProfileImage,
@@ -72,12 +81,20 @@ const ChatUI = ({ stompClient }) => {
     };
   }, [stompClient, matchUpId]);
 
+  useEffect(() => {
+    if (isInputTriggered) {
+      scrollToBottom();
+      setIsInputTriggered(false);
+    }
+  }, [messages, isInputTriggered]);
+
   const handleSend = (content) => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
         destination: `/app/chat/${matchUpId}/messages`,
         body: JSON.stringify({ content }),
       });
+      setIsInputTriggered(true); // 사용자가 입력한 메시지로 인해 트리거 발생
     } else {
       console.error("STOMP 연결이 활성화되지 않았습니다.");
     }
@@ -86,7 +103,11 @@ const ChatUI = ({ stompClient }) => {
   return (
     <ChatWrapper>
       <ChatContainer>
-        <ChatMessages messages={messages} currentUserId={1} />
+        <ChatMessages
+          messages={messages}
+          currentUserId={1}
+          messagesEndRef={messagesEndRef}
+        />
         <ChatInput onSend={handleSend} />
       </ChatContainer>
     </ChatWrapper>

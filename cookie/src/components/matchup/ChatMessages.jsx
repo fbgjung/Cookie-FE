@@ -1,4 +1,3 @@
-import { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const MessageWrapper = styled.div`
@@ -6,6 +5,10 @@ const MessageWrapper = styled.div`
   align-items: flex-start;
   margin: 10px 0;
   ${(props) => props.isUser && "flex-direction: row-reverse;"}
+
+  @media (max-width: 480px) {
+    margin: 5px 0;
+  }
 `;
 
 const ProfileImage = styled.img`
@@ -13,6 +16,12 @@ const ProfileImage = styled.img`
   height: 40px;
   border-radius: 50%;
   margin: 0 10px;
+
+  @media (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+  }
 `;
 
 const MessageContent = styled.div`
@@ -27,6 +36,10 @@ const Nickname = styled.span`
   color: #333;
   margin-bottom: 5px;
   ${(props) => props.isUser && "text-align: right;"}
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const MessageBubble = styled.p`
@@ -49,48 +62,34 @@ const MessageBubble = styled.p`
     border-color: transparent;
     ${(props) =>
       props.isUser
-        ? "border-left-color: #04012D;" // 내 메시지 색
-        : "border-right-color: #e5e5e5;"}// 상대방 메시지 색
+        ? "border-left-color: #04012D;"
+        : "border-right-color: #e5e5e5;"}
   }
-`;
 
-const Timestamp = styled.span`
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 5px;
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    max-width: 90%;
+  }
 `;
 
 const ChatMessagesContainer = styled.div`
   height: 100%;
   overflow-y: auto;
   padding: 15px;
+
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
 `;
-const ChatMessages = ({ messages, currentUserId }) => {
-  const messagesEndRef = useRef(null);
-  const [isFirstRender, setIsFirstRender] = useState(true);
 
-  console.log("내 아이디:", currentUserId);
-  useEffect(() => {
-    if (isFirstRender) {
-      setIsFirstRender(false);
-      return;
-    }
-
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
-
+const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
   return (
     <ChatMessagesContainer>
-      {messages.map((message) => {
-        console.log(messages);
+      {messages.map((message, index) => {
         const isUser = message.id === currentUserId;
-        console.log(isUser);
-        console.log(currentUserId);
-        console.log(message.id);
         return (
-          <MessageWrapper key={message.id} isUser={isUser}>
+          <MessageWrapper key={index} isUser={isUser}>
             {!isUser && (
               <ProfileImage
                 src={message.profile || "/default-profile.png"}
@@ -100,7 +99,7 @@ const ChatMessages = ({ messages, currentUserId }) => {
             <MessageContent isUser={isUser}>
               {!isUser && <Nickname>{message.nickname}</Nickname>}
               <MessageBubble isUser={isUser}>{message.content}</MessageBubble>
-              <Timestamp>{message.timestamp}</Timestamp>
+              <span>{message.timestamp}</span>
             </MessageContent>
           </MessageWrapper>
         );
