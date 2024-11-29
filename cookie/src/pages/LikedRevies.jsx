@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+
 import ReviewList from "../components/mypage/ReviewList";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
   padding-top: 20px;
@@ -80,7 +81,6 @@ const EmptyMessage = styled.div`
 
 const LikedReviews = () => {
   const navigate = useNavigate();
-  const userId = 1;
   const [reviews, setReviews] = useState([]);
 
   const handleBackClick = () => {
@@ -90,9 +90,7 @@ const LikedReviews = () => {
   useEffect(() => {
     const fetchLikedReviews = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/users/${userId}/reviewLiked`
-        );
+        const response = await axiosInstance.get("/api/users/likedReviewList/");
         const reviewsData = response.data.response;
 
         const transformedReviews = reviewsData.map((review) => ({
@@ -113,12 +111,12 @@ const LikedReviews = () => {
 
         setReviews(transformedReviews);
       } catch (error) {
-        console.error("실패", error);
+        console.error("리뷰 데이터 가져오기 실패:", error);
       }
     };
 
     fetchLikedReviews();
-  }, [userId]);
+  }, []);
 
   return (
     <Container>
