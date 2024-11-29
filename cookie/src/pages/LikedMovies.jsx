@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import ReviewList from "../components/mypage/ReviewList";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
@@ -11,14 +10,14 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #ffffff;
-  width: 100%;
-  max-width: 1000px;
+  min-height: 100vh;
+  max-width: 800px;
   margin: 0 auto;
   position: relative;
-  min-height: 100vh;
+
   @media (max-width: 768px) {
     padding-top: 15px;
-    max-width: 95%;
+    max-width: 90%;
   }
 `;
 
@@ -72,6 +71,102 @@ const HeartIcon = styled.img`
   }
 `;
 
+const MoviesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+  padding: 0 20px 30px;
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+`;
+
+const MovieCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+`;
+
+const Poster = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+
+  @media (max-width: 768px) {
+    height: 180px;
+  }
+
+  @media (max-width: 480px) {
+    height: 150px;
+  }
+`;
+
+const MovieInfo = styled.div`
+  padding: 10px;
+  text-align: center;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0 5px;
+
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.7rem;
+    }
+  }
+
+  .runtime,
+  .score {
+    font-size: 0.8rem;
+    margin-top: 5px;
+
+    @media (max-width: 768px) {
+      font-size: 0.7rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.6rem;
+    }
+  }
+`;
+
 const EmptyMessage = styled.div`
   font-size: 1rem;
   color: #999;
@@ -79,43 +174,39 @@ const EmptyMessage = styled.div`
   margin: 30px 0;
 `;
 
-const LikedReviews = () => {
+const LikedMovies = () => {
   const navigate = useNavigate();
-  const [reviews, setReviews] = useState([]);
+  const [movies, setMovies] = useState([]);
 
   const handleBackClick = () => {
     navigate(-1);
   };
 
   useEffect(() => {
-    const fetchLikedReviews = async () => {
+    const fetchLikedMovies = async () => {
       try {
-        const response = await axiosInstance.get("/api/users/likedReviewList/");
-        const reviewsData = response.data.response;
+        const response = await axiosInstance.get("/api/users/likedMovieList/");
+        const moviesData = response.data.response;
 
-        const transformedReviews = reviewsData.map((review) => ({
-          reviewId: review.reviewId,
-          content: review.content,
-          movieScore: review.movieScore,
-          reviewLike: review.reviewLike,
-          createdAt: review.createdAt,
-          movie: {
-            title: review.movie.title,
-            poster: review.movie.poster,
-          },
-          user: {
-            nickname: review.user.nickname,
-            profileImage: review.user.profileImage,
-          },
+        const transformedMovies = moviesData.map((movie) => ({
+          id: movie.id,
+          title: movie.title,
+          poster: movie.poster,
+          runtime: movie.runtime,
+          score: movie.score,
+          releasedAt: movie.releasedAt,
         }));
 
-        setReviews(transformedReviews);
+        setMovies(transformedMovies);
       } catch (error) {
-        console.error("리뷰 데이터 가져오기 실패:", error);
+        console.error(
+          "좋아하는 영화 데이터를 가져오는 데 실패했습니다.",
+          error
+        );
       }
     };
 
-    fetchLikedReviews();
+    fetchLikedMovies();
   }, []);
 
   return (
@@ -125,15 +216,27 @@ const LikedReviews = () => {
         alt="뒤로가기"
         onClick={handleBackClick}
       />
-      <Title>좋아하는 리뷰</Title>
+      <Title>좋아하는 영화</Title>
       <HeartIcon src="/src/assets/images/mypage/red-heart.svg" alt="하트" />
-      {reviews.length > 0 ? (
-        <ReviewList title="" reviews={reviews} />
+      {movies.length > 0 ? (
+        <MoviesGrid>
+          {movies.map((movie) => (
+            <MovieCard key={movie.id}>
+              <Poster src={movie.poster} alt={movie.title} />
+              <MovieInfo>
+                <h2>{movie.title}</h2>
+                <p>개봉일: {movie.releasedAt}</p>
+                <p className="runtime">상영시간: {movie.runtime}</p>
+                <p className="score">평점: {movie.score.toFixed(1)}</p>
+              </MovieInfo>
+            </MovieCard>
+          ))}
+        </MoviesGrid>
       ) : (
-        <EmptyMessage>좋아하는 리뷰를 선택해보세요!</EmptyMessage>
+        <EmptyMessage>좋아하는 영화를 선택해보세요!</EmptyMessage>
       )}
     </Container>
   );
 };
 
-export default LikedReviews;
+export default LikedMovies;
