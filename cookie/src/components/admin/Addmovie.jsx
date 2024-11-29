@@ -48,8 +48,8 @@ const SearchInput = styled.input`
 
 const SearchIconButton = styled.button`
   position: absolute;
-  top: 32px;
-  left: 320px;
+  top: 20px;
+  left: 255px;
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -68,13 +68,13 @@ const SearchIconButton = styled.button`
 `;
 
 const SearchTitle = styled.div`
-  width: 95%;
-  height: 30px;
+  width: 1175px;
+  height: 32px;
   border: none;
   background-color: #04012d;
   color: white;
   border-radius: 12px;
-  margin-top: 3rem;
+  margin: 3rem 1rem 0 1rem;
   padding: 0.8rem 2rem;
   display: flex;
   align-items: center;
