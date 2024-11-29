@@ -3,17 +3,17 @@ import styled from "styled-components";
 
 const MainContainer = styled.div`
   background-color: white;
-  min-height: 60vh; /* 화면 전체 높이 */
-  padding: 2rem 1rem 0 1rem; /* 위쪽 여백 줄임 */
+  min-height: 60vh;
+  padding: 2rem 1rem 0 1rem;
 
   @media (max-width: 768px) {
-    padding: 1.5rem 1rem 0 1rem; /* 태블릿 크기에서 패딩 조정 */
-    min-height: 40vh; /* 화면 전체 높이 */
+    padding: 1.5rem 1rem 0 1rem;
+    min-height: 40vh;
   }
 
   @media (max-width: 480px) {
-    padding: 1rem 0.5rem 0 0.5rem; /* 모바일 크기에서 패딩 최소화 */
-    min-height: 40vh; /* 화면 전체 높이 */
+    padding: 1rem 0.5rem 0 0.5rem;
+    min-height: 40vh;
   }
 `;
 
@@ -25,8 +25,8 @@ const SubTitle = styled.div`
     margin: 0;
     font-size: 1.2rem;
     margin-left: 10px;
-    text-align: center; /* 모바일에서 가운데 정렬 */
-    margin-left: 0; /* 왼쪽 여백 제거 */
+    text-align: center;
+    margin-left: 0;
 
     @media (max-width: 768px) {
       font-size: 1.3rem;
@@ -34,8 +34,8 @@ const SubTitle = styled.div`
 
     @media (max-width: 480px) {
       font-size: 1.1rem;
-      text-align: center; /* 모바일에서 가운데 정렬 */
-      margin-left: 0; /* 왼쪽 여백 제거 */
+      text-align: center;
+      margin-left: 0;
     }
   }
 
@@ -44,8 +44,8 @@ const SubTitle = styled.div`
     margin: 0;
     font-size: 1rem;
     margin-left: 10px;
-    text-align: center; /* 모바일에서 가운데 정렬 */
-    margin-left: 0; /* 왼쪽 여백 제거 */
+    text-align: center;
+    margin-left: 0;
 
     @media (max-width: 768px) {
       font-size: 0.9rem;
@@ -53,30 +53,30 @@ const SubTitle = styled.div`
 
     @media (max-width: 480px) {
       font-size: 0.8rem;
-      text-align: center; /* 모바일에서 가운데 정렬 */
-      margin-left: 0; /* 왼쪽 여백 제거 */
+      text-align: center;
+      margin-left: 0;
     }
   }
 `;
 
 const ThemeContainer = styled.div`
-  margin: 1rem auto; /* 위아래 간격과 좌우 가운데 정렬 */
+  margin: 1rem auto;
   display: flex;
-  flex-wrap: wrap; /* 여러 줄로 배치 가능 */
-  gap: 1rem; /* 버튼 간격 */
-  justify-content: center; /* 버튼 중앙 정렬 */
-  align-items: center; /* 버튼 수직 정렬 */
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
   width: 85%;
 
   @media (max-width: 768px) {
-    gap: 0.8rem; /* 태블릿 크기에서 버튼 간격 줄임 */
+    gap: 0.8rem;
     width: 75%;
   }
 
   @media (max-width: 480px) {
-    gap: 0.6rem; /* 모바일 크기에서 버튼 간격 줄임 */
+    gap: 0.6rem;
     width: 65%;
-    margin: 1rem auto; /* 좌우 여백 자동 */
+    margin: 1rem auto;
   }
 `;
 
@@ -89,7 +89,7 @@ const ThemeBtn = styled.button`
   border: none;
   cursor: pointer;
 
-  font-size: 1rem; /* 기본 버튼 폰트 크기 */
+  font-size: 1rem;
 
   &:hover {
     background-color: var(--main);
@@ -97,13 +97,13 @@ const ThemeBtn = styled.button`
   }
 
   @media (max-width: 768px) {
-    padding: 0.6rem 0.8rem; /* 태블릿 크기에서 패딩 줄임 */
-    font-size: 0.9rem; /* 버튼 글꼴 크기 줄임 */
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
   }
 
   @media (max-width: 480px) {
-    padding: 0.5rem 0.6rem; /* 모바일 크기에서 패딩 최소화 */
-    font-size: 0.8rem; /* 버튼 글꼴 크기 더 줄임 */
+    padding: 0.5rem 0.6rem;
+    font-size: 0.8rem;
   }
 `;
 
@@ -139,8 +139,9 @@ const SetGenre = () => {
   return (
     <MainContainer>
       <SubTitle>
-        <h3>어떤 장르로 수정할까요?👀</h3>
-        <p>좋아하는 장르 1개를 골라주세요</p>
+        <h3>좋아하는 장르 1개를 골라주세요👀</h3>
+
+        <p>해당 장르 영화의 새로운 리뷰 알림을 받아볼 수 있어요</p>
       </SubTitle>
       <ThemeContainer>
         {MovieGenre.map((item) => (
