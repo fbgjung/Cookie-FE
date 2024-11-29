@@ -43,9 +43,12 @@ const ToggleContainer = styled.div`
 
 const LabelText = styled.span`
   margin-left: 12px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: bold;
   color: #ffffff;
+  display: inline-block;
+  width: 60px;
+  text-align: left;
 `;
 
 const ToggleSwitch = () => {
