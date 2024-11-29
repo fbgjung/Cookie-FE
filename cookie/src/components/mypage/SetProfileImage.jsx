@@ -6,6 +6,14 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 40px;
+
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 10px;
+  }
 `;
 
 const BackButton = styled.img`
@@ -15,6 +23,20 @@ const BackButton = styled.img`
   width: 24px;
   height: 24px;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    top: 20px;
+    left: 15px;
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 480px) {
+    top: 15px;
+    left: 10px;
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 const ImageWrapper = styled.label`
@@ -23,12 +45,23 @@ const ImageWrapper = styled.label`
   border-radius: 20px;
   position: relative;
   margin-top: 10px;
-
   background-color: #ffffff;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 768px) {
+    width: 90px;
+    height: 90px;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 480px) {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+  }
 `;
 
 const ProfileImage = styled.img`
@@ -36,6 +69,14 @@ const ProfileImage = styled.img`
   height: 100%;
   border-radius: 20px;
   object-fit: cover;
+
+  @media (max-width: 768px) {
+    border-radius: 16px;
+  }
+
+  @media (max-width: 480px) {
+    border-radius: 12px;
+  }
 `;
 
 const HiddenInput = styled.input`
