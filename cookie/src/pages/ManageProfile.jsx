@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+
 import SetProfileImage from "../components/mypage/SetProfileImage";
 import BadgeSelector from "../components/mypage/BadgeSelector";
 import styled from "styled-components";
 import NicknameInput from "../components/mypage/NicknameInput";
 import SaveProfileButton from "../components/mypage/SaveProfileButton";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import SetGenre from "../components/mypage/SetGenre";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const ManageProfileContainer = styled.div`
   display: flex;
@@ -44,7 +45,6 @@ const ManageProfileContent = styled.div`
 `;
 
 const ManageProfile = () => {
-  const userId = 1;
   const [profileImage, setProfileImage] = useState("");
   const [badges, setBadges] = useState([]);
   const [nickname, setNickname] = useState("");
@@ -55,9 +55,7 @@ const ManageProfile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/users/${userId}/profileData`
-        );
+        const response = await axiosInstance.get("/api/users/profileData");
         const { profileImage, badges, nickname } = response.data.response;
 
         setProfileImage(profileImage);
@@ -78,14 +76,9 @@ const ManageProfile = () => {
     };
 
     fetchProfileData();
-  }, [userId]);
+  }, []);
 
   const handleSaveClick = async () => {
-    // if (!isNicknameChecked) {
-    //   toast.error("닉네임 중복 확인을 완료해주세요.");
-    //   return;
-    // }
-
     try {
       const requestData = {
         profileImage,
@@ -93,11 +86,10 @@ const ManageProfile = () => {
         mainBadge: selectedBadge,
       };
 
-      const response = await axios.post(
-        `http://localhost:8080/api/users/${userId}`,
+      const response = await axiosInstance.post(
+        "/api/users/profileData",
         requestData
       );
-
       if (response.data.response === "SUCCESS") {
         toast.success("프로필 저장이 완료되었습니다!");
       } else {
