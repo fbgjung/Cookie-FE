@@ -22,7 +22,7 @@ const useAdminMovieStore = create((set) => ({
     releaseDate: `2024-10-${(i % 30) + 1}`,
     certification: "15",
     country: "US",
-    plot: `이 영화는 영화 ${i + 1}에 대한 설명입니다. 극적인 전개로 관객을 사로잡습니다.`,
+    plot: `이 영화는 영화 ${i + 1}에 대한 설명입니다. 환상의 케미스트리의 에디 브록과 그의 심비오트 베놈은 그들을 노리는 정체불명 존재의 추격을 피해 같이 도망을 다니게 된다. 한편 베놈의 창조자 널은 고향 행성에서부터 그들을 찾아내기 위해 지구를 침략하고 에디와 베놈은 그동안 겪어보지 못한 최악의 위기를 맞이하게 되는데…`,
     youtube: `https://www.youtube.com/watch?v=videoId${i + 1}`,
     stillCuts: Array.from(
       { length: 3 },
@@ -54,6 +54,12 @@ const useAdminMovieStore = create((set) => ({
       console.log("스틸컷 업데이트:", updatedMovies);
       return { movieList: updatedMovies };
     }),
+
+  registeredMovies: [], // 등록된 영화 리스트
+  addRegisteredMovie: (movie) =>
+    set((state) => ({
+      registeredMovies: [...state.registeredMovies, movie],
+    })),
 }));
 
 // movieList: [],

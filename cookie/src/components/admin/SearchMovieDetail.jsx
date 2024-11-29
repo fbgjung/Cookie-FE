@@ -50,7 +50,7 @@ const TitleContainer = styled.div`
   }
 `;
 
-const MovieDetail = styled.div`
+export const MovieDetail = styled.div`
   display: flex;
   margin: 40px 50px;
   height: 600px;
@@ -58,7 +58,7 @@ const MovieDetail = styled.div`
   color: var(--main);
 `;
 
-const MovieContainer = styled.div`
+export const MovieContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
@@ -66,7 +66,7 @@ const MovieContainer = styled.div`
   border-radius: 8px;
 `;
 
-const MovieRow = styled.div`
+export const MovieRow = styled.div`
   display: flex;
   align-items: flex-start;
   margin-bottom: 1rem;
@@ -76,37 +76,37 @@ const MovieRow = styled.div`
   }
 `;
 
-const MovieInfo = styled.div`
+export const MovieInfo = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 1rem;
   width: 100%;
 `;
 
-const MovieTitle = styled.h1`
+export const MovieTitle = styled.h1`
   margin-bottom: 0.5rem;
 `;
 
-const Label = styled.p`
+export const Label = styled.p`
   font-weight: bold;
   font-size: 18px;
   margin-right: 1rem;
   width: 100px;
 `;
 
-const ActorProfile = styled.img`
+export const ActorProfile = styled.img`
   border-radius: 10px;
   margin-right: 0.5rem;
 `;
 
-const ButtonWrapper = styled.div`
+export const ButtonWrapper = styled.div`
   ${flexRowCenter}
   margin: 2rem;
   display: flex;
   justify-content: end;
 `;
 
-const SubmitBtn = styled.button`
+export const SubmitBtn = styled.button`
   background-color: var(--main);
   color: white;
   border-radius: 18px;
@@ -120,18 +120,18 @@ const SubmitBtn = styled.button`
     color: var(--main);
   }
 `;
-const MovieInfoSection = ({ label, children }) => {
+export const MovieInfoSection = ({ label, children }) => {
   return (
     <div style={{ display: "flex", marginBottom: "0.6rem" }}>
       <Label>{label}</Label>
-      <div style={{ display: "flex", flexDirection: "row", width: "850px" }}>
+      <div style={{ display: "flex", flexDirection: "row", width: "780px" }}>
         {children}
       </div>
     </div>
   );
 };
 
-const ActorItem = ({ actor }) => (
+export const ActorItem = ({ actor }) => (
   <div
     style={{
       display: "flex",
@@ -147,13 +147,16 @@ const ActorItem = ({ actor }) => (
 );
 
 const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
-  const { movieList, isSelected, setIsSelected } = useAdminMovieStore();
+  const { movieList, isSelected, setIsSelected, addRegisteredMovie } =
+    useAdminMovieStore();
 
   const movie = movieList.find((movie) => movie.movieId === selectedMovie);
   if (!movie) return <p>영화가 없습니다.</p>;
 
   const handleSelect = () => {
+    addRegisteredMovie(movie);
     setIsSelected(!isSelected);
+    alert("영화가 등록되었어요!");
   };
 
   return (
@@ -175,6 +178,7 @@ const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
               {[
                 { label: "러닝타임", value: `${movie.runtime}분` },
                 { label: "개봉일", value: movie.releaseDate },
+                { label: "연령", value: movie.certification },
                 { label: "국가", value: movie.country },
                 { label: "줄거리", value: movie.plot },
                 { label: "카테고리", value: movie.categories.join(", ") },

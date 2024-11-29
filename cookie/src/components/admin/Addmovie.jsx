@@ -19,7 +19,7 @@ const AddMovieContainer = styled.div`
     -3px 4px 8px rgba(0, 0, 0, 0.06),
     3px -4px 8px rgba(0, 0, 0, 0.06);
 `;
-const SearchBarContainer = styled.div`
+export const SearchBarContainer = styled.div`
   position: relative;
   left: 70%;
   margin: 0.625rem 0 1.875rem 0;
@@ -28,7 +28,7 @@ const SearchBarContainer = styled.div`
   max-width: 37.5rem;
 `;
 
-const SearchInput = styled.input`
+export const SearchInput = styled.input`
   width: 50%;
   height: 100%;
   padding: 0.625rem 3.125rem 0.625rem 1.25rem;
@@ -46,7 +46,7 @@ const SearchInput = styled.input`
   }
 `;
 
-const SearchIconButton = styled.button`
+export const SearchIconButton = styled.button`
   position: absolute;
   top: 20px;
   left: 255px;
@@ -67,7 +67,7 @@ const SearchIconButton = styled.button`
   }
 `;
 
-const SearchTitle = styled.div`
+export const SearchTitle = styled.div`
   width: 1175px;
   height: 32px;
   border: none;
@@ -78,6 +78,7 @@ const SearchTitle = styled.div`
   padding: 0.8rem 2rem;
   display: flex;
   align-items: center;
+  gap: 100px;
 
   p {
     font-size: 20px;
