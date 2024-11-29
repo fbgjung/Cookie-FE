@@ -1,4 +1,3 @@
-import { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const MessageWrapper = styled.div`
@@ -64,24 +63,13 @@ const MessageBubble = styled.p`
     ${(props) =>
       props.isUser
         ? "border-left-color: #04012D;"
-        : "border-right-color: #e5e5e5;"}// 상대방 메시지 색
+        : "border-right-color: #e5e5e5;"}
   }
 
   @media (max-width: 480px) {
     font-size: 0.9rem;
     padding: 8px 12px;
     max-width: 90%;
-  }
-`;
-
-const Timestamp = styled.span`
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 5px;
-
-  @media (max-width: 480px) {
-    font-size: 0.7rem;
-    margin-top: 3px;
   }
 `;
 
@@ -94,32 +82,14 @@ const ChatMessagesContainer = styled.div`
     padding: 10px;
   }
 `;
-const ChatMessages = ({ messages, currentUserId }) => {
-  const messagesEndRef = useRef(null);
-  const [isFirstRender, setIsFirstRender] = useState(true);
 
-  console.log("내 아이디:", currentUserId);
-  useEffect(() => {
-    if (isFirstRender) {
-      setIsFirstRender(false);
-      return;
-    }
-
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
-
+const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
   return (
     <ChatMessagesContainer>
-      {messages.map((message) => {
-        console.log(messages);
+      {messages.map((message, index) => {
         const isUser = message.id === currentUserId;
-        console.log(isUser);
-        console.log(currentUserId);
-        console.log(message.id);
         return (
-          <MessageWrapper key={message.id} isUser={isUser}>
+          <MessageWrapper key={index} isUser={isUser}>
             {!isUser && (
               <ProfileImage
                 src={message.profile || "/default-profile.png"}
@@ -129,7 +99,7 @@ const ChatMessages = ({ messages, currentUserId }) => {
             <MessageContent isUser={isUser}>
               {!isUser && <Nickname>{message.nickname}</Nickname>}
               <MessageBubble isUser={isUser}>{message.content}</MessageBubble>
-              <Timestamp>{message.timestamp}</Timestamp>
+              <span>{message.timestamp}</span>
             </MessageContent>
           </MessageWrapper>
         );

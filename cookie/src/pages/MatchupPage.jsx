@@ -10,6 +10,7 @@ import ProgressBar from "../components/matchup/ProgressBar";
 import ChartSection from "../components/matchup/ChartSection";
 import ChatUI from "../components/matchup/ChatUI";
 import { useParams, useLocation } from "react-router-dom";
+import ScrollToTop from "../components/ScrollToTop";
 
 const Container = styled.div`
   display: flex;
@@ -136,6 +137,7 @@ const MatchupPage = () => {
 
   return (
     <Container>
+      <ScrollToTop />
       <TitleSection
         matchUpTitle={matchUpData.matchUpTitle}
         endAt={matchUpData.entAt}
