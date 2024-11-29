@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
 import SearchBar from "../components/searchpage/SearchBar";
 import SearchResults from "../components/searchpage/SearchResults";
@@ -28,84 +29,130 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto; /* 스크롤 가능 */
-  background: #fffff;
+  overflow-y: auto;
+  background: #ffffff;
   border-radius: 10px;
-
   padding: 20px;
   box-sizing: border-box;
+`;
 
-  /* 스크롤바 스타일 */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+const Tabs = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+
+    &.active {
+      background-color: #04012d;
+      color: #fff;
+    }
+
+    &.inactive {
+      background-color: #f0f0f0;
+      color: #666;
+    }
+
+    &:hover {
+      background-color: #ddd;
+    }
   }
 `;
 
 const Search = () => {
-  const movies = Array.from({ length: 20 }, (_, i) => ({
-    id: i + 1,
-    title: `랜덤 영화 ${i + 1}`,
-    year: 2000 + (i % 23),
-    genre: ["스릴러", "액션", "코미디", "드라마", "판타지"][i % 5],
-    duration: `${90 + i}분`,
-    director: `감독 ${i + 1}`,
-    actors: [`배우 ${i + 1}`, `배우 ${i + 2}`],
-    imageUrl: `https://via.placeholder.com/80x120?text=영화+${i + 1}`,
-  }));
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [filteredDirectors, setFilteredDirectors] = useState([]);
-  const [filteredActors, setFilteredActors] = useState([]);
-  const [showTopButton, setShowTopButton] = useState(false);
-
   const navigate = useNavigate();
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("movie");
+  const [results, setResults] = useState([]);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [showTopButton, setShowTopButton] = useState(false);
+
+  // 디바운스 타이머를 저장할 변수
+  const [debounceTimer, setDebounceTimer] = useState(null);
+
+  // 스크롤 상태 감지
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
       setShowTopButton(scrollTop > 200);
+
+      if (
+        window.innerHeight + scrollTop + 1 >=
+        document.documentElement.scrollHeight
+      ) {
+        if (hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [hasMore]);
 
-  useEffect(() => {
-    if (!searchTerm) {
-      setFilteredMovies([]);
-      setFilteredDirectors([]);
-      setFilteredActors([]);
+  // 검색 API 호출
+  const fetchSearchResults = async () => {
+    if (!searchTerm.trim()) {
+      setResults([]);
+      setHasMore(false);
       return;
     }
 
-    const movieResults = movies.filter((movie) =>
-      movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const directorResults = movies.filter((movie) =>
-      movie.director.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const actorResults = movies.filter((movie) =>
-      movie.actors.some((actor) =>
-        actor.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/search`,
+        {
+          params: { type: activeTab, keyword: searchTerm, page },
+        }
+      );
 
-    setFilteredMovies(movieResults);
-    setFilteredDirectors(directorResults);
-    setFilteredActors(actorResults);
-  }, [searchTerm]);
+      const newResults = response.data.content;
+      setResults((prevResults) =>
+        page === 0 ? newResults : [...prevResults, ...newResults]
+      );
+      setHasMore(!response.data.last);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setResults([]); // 에러 발생 시 결과 초기화
+      setHasMore(false);
+    }
+  };
+
+  // 검색어와 탭 변경 시 API 호출 (디바운스 적용)
+  useEffect(() => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+
+    const timer = setTimeout(() => {
+      setPage(0); // 페이지 초기화
+      setHasMore(true);
+      fetchSearchResults();
+    }, 100); // 디바운스 딜레이 100ms
+
+    setDebounceTimer(timer);
+    return () => clearTimeout(timer);
+  }, [searchTerm, activeTab]);
+
+  // 페이지 변경 시 추가 데이터 로드
+  useEffect(() => {
+    if (page > 0) {
+      fetchSearchResults();
+    }
+  }, [page]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
 
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
@@ -123,10 +170,29 @@ const Search = () => {
           setSearchTerm={setSearchTerm}
           onSearch={() => {}}
         />
+        <Tabs>
+          <button
+            className={activeTab === "movie" ? "active" : "inactive"}
+            onClick={() => handleTabClick("movie")}
+          >
+            영화명
+          </button>
+          <button
+            className={activeTab === "actor" ? "active" : "inactive"}
+            onClick={() => handleTabClick("actor")}
+          >
+            배우명
+          </button>
+          <button
+            className={activeTab === "director" ? "active" : "inactive"}
+            onClick={() => handleTabClick("director")}
+          >
+            감독명
+          </button>
+        </Tabs>
         <SearchResults
-          filteredMovies={filteredMovies}
-          filteredDirectors={filteredDirectors}
-          filteredActors={filteredActors}
+          results={results}
+          activeTab={activeTab}
           onMovieClick={handleMovieClick}
         />
       </ContentWrapper>
