@@ -111,16 +111,6 @@ const ManageProfile = () => {
 
   return (
     <ManageProfileContainer>
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            marginTop: "10px",
-            fontSize: "1rem",
-          },
-        }}
-      />
       <ManageProfileContent>
         <SetProfileImage
           profileImage={profileImage}
