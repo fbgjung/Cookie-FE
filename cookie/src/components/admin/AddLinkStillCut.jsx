@@ -8,7 +8,7 @@ const YoutubeAndStillCutContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 0 6rem;
+  padding: 0 12rem;
 `;
 
 const YoutubeLink = styled.a`
@@ -18,7 +18,7 @@ const YoutubeLink = styled.a`
 
 const InfoContainer = styled.div`
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 `;
 const InfoTitle = styled.p`
   font-weight: 700;
