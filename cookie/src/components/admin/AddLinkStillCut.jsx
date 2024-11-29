@@ -3,7 +3,7 @@ import useAdminMovieStore from "../../stores/useAdminMovieStore";
 import deleteBtn from "../../assets/images/signUp/close_icon.svg";
 import { useState } from "react";
 import { useRef } from "react";
-const YoutubeAndStillCutContainer = styled.div`
+export const YoutubeAndStillCutContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,7 +11,7 @@ const YoutubeAndStillCutContainer = styled.div`
   padding: 0 12rem;
 `;
 
-const YoutubeLink = styled.a`
+export const YoutubeLink = styled.a`
   color: #0066cc;
   text-decoration: none;
 `;
@@ -42,7 +42,7 @@ const YoutubeUrl = styled.input`
   font-size: 18px;
 `;
 
-const StillCutContainer = styled.div`
+export const StillCutContainer = styled.div`
   display: inline-block;
   flex-direction: row;
   gap: 1rem;
@@ -59,7 +59,7 @@ const StillCutContainer = styled.div`
   }
 `;
 
-const SitllCut = styled.img`
+export const SitllCut = styled.img`
   width: 112px;
   height: 112px;
   border-radius: 12px;
@@ -67,7 +67,7 @@ const SitllCut = styled.img`
   margin-bottom: 1rem;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   background-color: var(--sub-btn);
   color: var(--main);
   border-radius: 18px;

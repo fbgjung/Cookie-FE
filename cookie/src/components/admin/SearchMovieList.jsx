@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const SearchedMovie = styled.div`
@@ -30,28 +31,56 @@ const SearchedMovie = styled.div`
   img {
     border-radius: 10px;
   }
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--main);
+    grid-column: 5 / 6;
+    justify-self: end;
+    padding: 0 1rem;
+  }
+  button:hover {
+    text-decoration: underline;
+  }
 `;
 
 function SearchMovieList({ movies, onMovieClick }) {
+  const [visibleCount, setVisibleCount] = useState(10);
+
+  const onShowMore = () => {
+    setVisibleCount((prevCount) => prevCount + 10);
+  };
+
+  const visibleMovies = movies.slice(0, visibleCount);
+
   return (
     <SearchedMovie>
-      {movies && movies.length > 0 ? (
-        movies.map((movie) => (
-          <div key={movie.movieId} className="movie__container">
-            <div
-              className="movie__info"
-              onClick={() => onMovieClick(movie.movieId)}
-            >
-              <img src={movie.posterPath} alt={movie.title} />
-              <h3>{movie.title}</h3>
-              <p>
-                {movie.releaseDate} | {movie.country}
-              </p>
+      {visibleMovies.length > 0 ? (
+        <>
+          {visibleMovies.map((movie) => (
+            <div key={movie.movieId} className="movie__container">
+              <div
+                className="movie__info"
+                onClick={() => onMovieClick(movie.movieId)}
+              >
+                <img src={movie.posterPath} alt={movie.title} />
+                <h3>{movie.title}</h3>
+                <p>
+                  {movie.releaseDate} | {movie.country}
+                </p>
+              </div>
             </div>
-          </div>
-        ))
+          ))}
+        </>
       ) : (
         <p>영화가 없습니다.</p>
+      )}
+      {movies.length > visibleCount && (
+        <button onClick={onShowMore} className="show-more-button">
+          더 보기
+        </button>
       )}
     </SearchedMovie>
   );
