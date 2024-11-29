@@ -6,19 +6,28 @@ const InputContainer = styled.div`
   display: flex;
   padding: 10px;
   background-color: #ffffff;
-
   align-items: center;
   border-radius: 20px;
 
   input {
     flex: 1;
     border: none;
-    padding: 20px;
+    padding: 15px;
     border-radius: 20px;
     margin-right: 10px;
     font-size: 1rem;
-    background-color: #f3f3f3; /* 배경색 조정 */
+    background-color: #f3f3f3;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+      padding: 12px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+      padding: 10px;
+    }
   }
 
   img {
@@ -26,8 +35,25 @@ const InputContainer = styled.div`
     height: 40px;
     cursor: pointer;
     border-radius: 50%;
+    padding: 5px;
 
-    padding: 5px; /* 이미지 여백 */
+    @media (max-width: 768px) {
+      width: 35px;
+      height: 35px;
+    }
+
+    @media (max-width: 480px) {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px;
   }
 `;
 
