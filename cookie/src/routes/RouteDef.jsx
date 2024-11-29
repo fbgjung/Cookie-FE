@@ -13,6 +13,13 @@ import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
 import ReTokenPage from "../api/auth/ReTokenPage";
 import AdminLogin from "../pages/admin/AdminLogin";
+// import Review from "../pages/Review";
+import ReviewFeed from "../pages/ReviewFeed";
+import ReviewForm from "../pages/ReviewForm";
+import SearchForReview from "../pages/SearchForReview";
+import MovieReviewForm from "../pages/MovieReviewForm";
+import MovieReviewFeed from "../pages/MovieReviewFeed";
+import ReviewDetail from "../pages/ReviewDetail";
 import AdminMovie from "../pages/admin/AdminMovie";
 
 export const AppRouteDef = {
@@ -37,6 +44,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <MovieDetail />
+      </PrivateRoute>
+    ),
+  },
+  ReviewFeed: {
+    path: "/review",
+    element: (
+      <PrivateRoute>
+        <ReviewFeed />
       </PrivateRoute>
     ),
   },
@@ -136,6 +151,15 @@ export const AppRouteDef = {
     ),
   },
 
+  ReviewForm: {
+    path: "/reviews/write",
+    element: (
+      <PrivateRoute>
+        <ReviewForm />
+      </PrivateRoute>
+    ),
+  },
+
   AdminLogin: {
     path: "/admin",
     element: (
@@ -144,6 +168,43 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
+
+  SearchForReview: {
+    path: "/searchmov",
+    element: (
+      <PrivateRoute>
+        <SearchForReview />
+      </PrivateRoute>
+    ),
+  },
+
+  MovieReviewForm: {
+    path: "/movie/:movieId/review",
+    element: (
+      <PrivateRoute>
+        <MovieReviewForm />
+      </PrivateRoute>
+    ),
+  },
+
+  MovieReviewFeed: {
+    path: "/reviews/movie/:movieId",
+    element: (
+      <PrivateRoute>
+        <MovieReviewFeed />
+      </PrivateRoute>
+    ),
+  },
+
+  ReviewDetails: {
+    path: "/reviews/:reviewId",
+    element: (
+      <PrivateRoute>
+        <ReviewDetail />
+      </PrivateRoute>
+    ),
+  },
+
   AdminAddMovie: {
     path: "/admin/movie",
     element: (

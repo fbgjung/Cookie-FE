@@ -22,38 +22,39 @@ const Container = styled.div`
   align-items: center;
   background: #ffffff;
   width: 100%;
-  max-width: 600px; // 데스크톱에서는 최대 너비 유지
+  max-width: 600px;
   margin: 0 auto;
 
   @media (max-width: 768px) {
-    max-width: 100%; // 모바일에서 전체 너비 사용
-    padding: 0; // 좌우 패딩 제거
+    max-width: 100%;
+    padding: 0;
   }
 `;
 
 const ViewArea = styled.div`
-  width: 100vw; // 뷰포트 전체 너비 사용
-  max-width: 100%; // 최대 너비 100%로 설정
+  width: 100vw;
+  max-width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 
   @media (min-width: 769px) {
-    max-width: 600px; // 데스크톱에서만 최대 너비 제한
+    max-width: 600px;
     border-left: 1px solid var(--border-divider);
     border-right: 1px solid var(--border-divider);
   }
 
   @media (max-width: 768px) {
-    width: 100%; // 모바일에서 100% 너비
-    border: none; // 보더 제거
-    margin: 0; // 마진 제거
+    width: 100%;
+    border: none;
+    margin: 0;
   }
 `;
 const HeaderContainer = styled.header`
-  width: 100%;
+  width: 100vw;
   display: flex;
+  max-width: 600px;
   align-items: center;
   justify-content: space-between;
   background-color: #04012d;
@@ -67,7 +68,8 @@ const HeaderContainer = styled.header`
 `;
 
 const NavContainer = styled.nav`
-  width: 100%;
+  width: 100vw;
+  max-width: 600px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -121,30 +123,36 @@ const Logo = styled.div`
     }
   }
 `;
-
 const MainContent = styled.main`
   flex: 1;
-  width: 100%; // 전체 너비 사용
-  max-width: 100%; // 최대 너비 100%
+  width: 100vw;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: calc(100vh - 130px); // 헤더와 네비게이션 높이 고려
+
+  height: calc(100vh - 130px);
 
   @media (max-width: 768px) {
-    width: 100vw; // 모바일에서 뷰포트 전체 너비
-    padding: 0; // 패딩 제거
+    width: 100vw;
+
+    margin: 0;
+    padding: 0;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
   }
-`;
 
+  @media (min-width: 769px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+`;
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 100%; // 전체 너비 사용
+  width: 100%;
   position: relative;
   background-color: white;
   margin: 0;
