@@ -1,5 +1,5 @@
+import React from "react";
 import styled from "styled-components";
-import GlobalStyle from "../../styles/global";
 import SideBar from "../../components/admin/SideBar";
 import CookieLogo from "../../assets/images/admin/CookieAdmin.svg";
 import CookieImg from "../../assets/images/admin/cookie_img.svg";
@@ -111,7 +111,7 @@ function AdminLogin() {
         </div>
         <form action="/submit" method="POST" onSubmit={handleLoginClick}>
           <FormContanier>
-            <label for="adminId">
+            <label htmlFor="adminId">
               아이디
               <input
                 type="text"
@@ -124,7 +124,7 @@ function AdminLogin() {
               />
             </label>
 
-            <label for="password">
+            <label htmlFor="password">
               비밀번호
               <input
                 type="password"
