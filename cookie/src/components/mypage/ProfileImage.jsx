@@ -78,7 +78,7 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
       {title && <Title>{title}</Title>}
       <ImageContainer>
         <Image image={image} />
-        <BadgeIcon src={badgeIcon} alt="Main Badge" />
+        {badgeIcon && <BadgeIcon src={badgeIcon} alt="Main Badge" />}
       </ImageContainer>
       <NameContainer>
         {name && <Name>{name}</Name>}
