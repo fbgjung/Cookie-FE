@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-
+import styled from "styled-components";
+import { toast } from "react-hot-toast";
+import axiosInstance from "../api/auth/axiosInstance";
 import SetProfileImage from "../components/mypage/SetProfileImage";
 import BadgeSelector from "../components/mypage/BadgeSelector";
-import styled from "styled-components";
 import NicknameInput from "../components/mypage/NicknameInput";
-import SaveProfileButton from "../components/mypage/SaveProfileButton";
-import { toast } from "react-hot-toast";
 import SetGenre from "../components/mypage/SetGenre";
-import axiosInstance from "../api/auth/axiosInstance";
+import SaveProfileButton from "../components/mypage/SaveProfileButton";
 
 const ManageProfileContainer = styled.div`
   display: flex;
@@ -49,19 +48,20 @@ const ManageProfile = () => {
   const [badges, setBadges] = useState([]);
   const [nickname, setNickname] = useState("");
   const [selectedBadge, setSelectedBadge] = useState("");
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
-  const [selectedGenreId, setSelectedGenreId] = useState(null);
+  const [selectedGenreId, setSelectedGenreId] = useState(null); // 초기 선택 장르
   const isErrorShown = useRef(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
         const response = await axiosInstance.get("/api/users/profileData");
-        const { profileImage, badges, nickname } = response.data.response;
+        const { profileImage, badges, nickname, genreId } =
+          response.data.response;
 
         setProfileImage(profileImage);
         setBadges(badges);
         setNickname(nickname);
+        setSelectedGenreId(genreId); // 장르 ID 초기화
 
         const mainBadge = badges.find((badge) => badge.main);
         if (mainBadge) {
@@ -89,7 +89,7 @@ const ManageProfile = () => {
       if (selectedBadge) {
         formData.append("mainBadgeId", selectedBadge);
       }
-      formData.append("genreId", selectedGenreId);
+      formData.append("genreId", selectedGenreId); // 선택된 장르 ID 전송
 
       const response = await axiosInstance.post("/api/users", formData, {
         headers: {
@@ -126,12 +126,10 @@ const ManageProfile = () => {
         <NicknameInput
           nickname={nickname}
           onChange={(newNickname) => setNickname(newNickname)}
-          onResetCheck={setIsNicknameChecked}
-          isChecked={isNicknameChecked}
         />
         <SetGenre
-          selectedGenreId={selectedGenreId}
-          onSelectGenre={(id) => setSelectedGenreId(id)}
+          selectedGenreId={selectedGenreId} // 초기 선택값 전달
+          onSelectGenre={(id) => setSelectedGenreId(id)} // 선택 변경 핸들링
         />
         <SaveProfileButton onClick={handleSaveClick} />
       </ManageProfileContent>
