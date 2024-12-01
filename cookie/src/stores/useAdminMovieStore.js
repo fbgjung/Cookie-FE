@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 const useAdminMovieStore = create((set) => ({
+  //검색상태
   searchTerm: "",
   setSearchTerm: (term) => set({ searchTerm: term }),
   filteredMovies: [],
@@ -9,6 +10,7 @@ const useAdminMovieStore = create((set) => ({
   setSelectedMovie: (movieId) => set({ selectedMovie: movieId }),
   isSelected: false,
   setIsSelected: (status) => set({ isSelected: status }),
+
   movieList: Array.from({ length: 20 }, (_, i) => ({
     movieId: 912640 + i,
     title: `영화 ${i + 1}`,
@@ -55,13 +57,23 @@ const useAdminMovieStore = create((set) => ({
       return { movieList: updatedMovies };
     }),
 
-  registeredMovies: [], // 등록된 영화 리스트
+  // 등록된 영화 리스트
+  registeredMovies: [],
   addRegisteredMovie: (movie) =>
     set((state) => ({
       registeredMovies: [...state.registeredMovies, movie],
     })),
-}));
 
+  //영화삭제
+  removeRegisteredMovie: (movieId) =>
+    set((state) => {
+      const updatedMovies = state.registeredMovies.filter(
+        (movie) => movie.movieId !== movieId // movieId로 필터링
+      );
+      console.log("삭제된 후의 등록된 영화 목록:", updatedMovies);
+      return { registeredMovies: updatedMovies };
+    }),
+}));
 // movieList: [],
 // setMovieList: (movies) => set({ movieList: movies }),
 
