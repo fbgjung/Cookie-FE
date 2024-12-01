@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import GlobalStyle from "../styles/global";
 import MatchUp from "../components/main/MatchUp";
 import RankMovie from "../components/main/RankMovie";
 import CookieMovies from "../components/main/CookieMovies";
@@ -59,27 +58,28 @@ const NavbarWrapper = styled(CommonContainer)`
     padding: 0 10px;
   }
 `;
-// FIX 일정 숫자부터  보이는 스크롤 오류 해결
 
 const WriteReviewButton = styled.button`
   position: fixed;
-  bottom: 80px;
-  right: 20px;
-  background-color: #cc5283;
+  bottom: 150px;
+  right: calc(50% - 334px);
+  transform: translateX(-50%);
+  background-color: var(--main);
   color: white;
   font-size: 16px;
+  font-weight: 700;
   padding: 10px 20px;
   border-radius: 50px;
   border: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  z-index: 200;
+  z-index: 1000;
 
   &:hover {
-    background-color: #b44d78;
+    background-color: var(--main);
   }
 `;
-
+// FIX 일정 숫자부터  보이는 스크롤 오류 해결
 const Main = () => {
   const dummyMovies = [
     {
@@ -106,6 +106,7 @@ const Main = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -116,9 +117,9 @@ const Main = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <>
-      <GlobalStyle />
       <HeaderWrapper></HeaderWrapper>
       <MainContainer>
         <img src={"https://via.placeholder.com/600x250"} alt="배너" />

@@ -8,7 +8,7 @@ const BottomModalContainer = styled.div`
   display: flex;
   top: 0;
   left: 0;
-  right: 18px;
+  right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: ${(props) => (props.isOpen ? "flex" : "none")};
@@ -58,6 +58,10 @@ const ModalContent = styled.div`
     align-items: center;
     cursor: pointer;
     margin-bottom: 0 0 1rem 0;
+
+    &:hover {
+      background-color: #0b0849;
+    }
   }
 
   .modalBtn__container {
