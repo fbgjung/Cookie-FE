@@ -15,13 +15,15 @@ const GenreMovieList = styled.div`
   }
   .genreBtn__contianer {
     margin-bottom: 1rem;
+    padding: 0 0.5rem;
   }
   .genre__movie {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1rem;
+    gap: 0.9rem;
     flex-wrap: wrap;
+    padding: 0.625rem;
   }
 
   .genre__movie--list {
@@ -49,7 +51,7 @@ const GenreBtn = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  margin: 0 0.3rem 0.3rem 0;
+  margin: 0 0.8rem 0.3rem 0;
   font-size: 1rem;
   color: ${(props) => (props.$isSelected ? "var(--main)" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
