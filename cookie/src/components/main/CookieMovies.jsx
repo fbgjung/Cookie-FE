@@ -21,6 +21,8 @@ const CookieMovieList = styled.div`
     flex-direction: row;
     align-items: center;
     overflow-x: auto;
+    padding: 0.625rem;
+    cursor: pointer;
     gap: 1rem;
     &:hover {
       overflow-x: scroll;
