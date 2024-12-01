@@ -99,6 +99,23 @@ const Main = () => {
         },
       ],
     },
+    {
+      matchTitle: "모두를 감동시킨 디즈니 영화",
+      data: [
+        {
+          id: 1,
+          poster: "https://via.placeholder.com/83x118",
+          movie: "인사이드 아웃",
+          matchDate: "2024-12-31",
+        },
+        {
+          id: 2,
+          poster: "https://via.placeholder.com/83x118",
+          movie: "엘리멘탈",
+          matchDate: "2024-12-31",
+        },
+      ],
+    },
   ];
   const [showTopButton, setShowTopButton] = useState(false);
   const navigate = useNavigate();
