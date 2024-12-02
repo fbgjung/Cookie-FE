@@ -195,12 +195,19 @@ const LikedMovies = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get("/api/users/likedMovieList/", {
+      console.log("Fetching liked movies with params:", {
+        page: page - 1,
+        size: 10,
+      });
+
+      const response = await axiosInstance.get("/api/users/likedMovieList", {
         params: {
           page: page - 1,
           size: 10,
         },
       });
+
+      console.log("Response:", response.data);
 
       const { reviews, totalPages } = response.data.response;
 
@@ -216,7 +223,7 @@ const LikedMovies = () => {
       setMovies((prev) => [...prev, ...newMovies]);
       setTotalPages(totalPages);
     } catch (error) {
-      console.error("영화 데이터를 가져오는 데 실패했습니다.", error);
+      console.error("API 요청 실패:", error.response?.data || error.message);
     } finally {
       setLoading(false);
     }
