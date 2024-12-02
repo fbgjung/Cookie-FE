@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { SearchBarContainer, SearchIconButton, SearchInput } from "./AddMovie";
+import { SearchBarContainer, SearchIconButton, SearchInput } from "./Addmovie";
 import SearchIcon from "@mui/icons-material/Search";
 import useAdminMovieStore from "../../stores/useAdminMovieStore";
 import { useEffect, useState } from "react";
