@@ -44,6 +44,8 @@ const MyPage = () => {
         const { nickname, profileImage, badge, genreScores, reviews } =
           response.data.response;
 
+        console.log("API Response:", response.data);
+
         setUserData({ nickname, profileImage });
         setBadgeData(
           badge.map((b) => ({
