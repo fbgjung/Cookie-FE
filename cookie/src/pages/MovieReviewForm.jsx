@@ -189,7 +189,7 @@ const MovieReviewForm = () => {
   
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/api/reviews/`,
+        `/api/reviews/`,
         payload
       );
       if (response.status === 200) {

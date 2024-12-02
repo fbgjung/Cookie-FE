@@ -84,7 +84,7 @@ const MovieReviewFeed = ({ movieId }) => {
     const fetchReviews = async () => {
       try {
         const response = await axiosInstance.get(
-          `http://localhost:8080/api/{movies}/${movieId}/reviews`
+          `/api/{movies}/${movieId}/reviews`
         );
         setReviews(response.data);
         setFilteredReviews(response.data);
