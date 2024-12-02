@@ -179,9 +179,7 @@ const MovieReviewForm = () => {
     navigate(-1); // 이전 페이지로 돌아가기
   };
 
-  const handleSubmit = async () => {
-    const userId = 1; // 사용자 ID를 여기에 설정 (로그인된 사용자 ID 필요)
-  
+  const handleSubmit = async () => {  
     const payload = {
       movieId: 1,
       movieScore,
