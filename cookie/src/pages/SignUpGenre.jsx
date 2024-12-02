@@ -40,7 +40,7 @@ const SubTitle = styled.div`
   }
 `;
 
-const ThemeContainer = styled.div`
+const GenreContainer = styled.div`
   margin: 2.5rem 3.3rem;
   display: flex;
   flex-wrap: wrap;
@@ -48,7 +48,7 @@ const ThemeContainer = styled.div`
   width: 70%;
 `;
 
-const ThemeBtn = styled.button`
+const GenreBtn = styled.button`
   background-color: ${(props) =>
     props.$isSelected ? "var(--main)" : "var(--sub-btn)"};
   color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
@@ -285,17 +285,17 @@ function SignUpGenre() {
           <h3>어떤 장르를 좋아하나요?👀</h3>
           <p>좋아하는 장르 1개를 골라주세요</p>
         </SubTitle>
-        <ThemeContainer>
+        <GenreContainer>
           {MovieGenre.map((item) => (
-            <ThemeBtn
+            <GenreBtn
               key={item.id}
               $isSelected={selectedGenreId === item.id}
               onClick={() => handleButtonClick(item.id)}
             >
               {item.genre}
-            </ThemeBtn>
+            </GenreBtn>
           ))}
-        </ThemeContainer>
+        </GenreContainer>
         <SubmitBtn>
           <button type="button" onClick={handleSubmit}>
             완료

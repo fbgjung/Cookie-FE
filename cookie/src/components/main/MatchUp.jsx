@@ -40,7 +40,7 @@ const MatchUpContainer = styled.div`
   }
 
   .matchUp__overlay button {
-    width: 16rem;
+    width: 13rem;
     height: 3.19rem;
     background-color: var(--sub);
     color: white;
@@ -69,9 +69,15 @@ const MatchUpContainer = styled.div`
     padding: 5px 10px;
     border: 1px solid var(--sub-btn);
   }
-
+  .matchUp__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+  }
   .matchUp__movie--container {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     gap: 3rem;
     margin-top: 1rem;
@@ -95,8 +101,8 @@ const MatchUpContainer = styled.div`
 
   .matchUp__movie--icon {
     position: absolute;
-    top: 5.5rem;
-    left: 15rem;
+    top: 5.2rem;
+    left: 5.8rem;
   }
 `;
 
@@ -113,31 +119,37 @@ function MatchUp({ matchDate, dummydata }) {
         <img src={matchUp} alt="matchUp_icon" />
         <h2> 이번주 영화 매치업! D-{leftDay}</h2>
       </div>
-      {dummydata.length > 0 && (
-        <div className="matchUp__movie">
-          <img className="matchUp__movie--icon" src={fight} alt="fight_icon" />
-          <div className="matchUp__overlay">
-            <button onClick={() => navigate("/matchup")}>
-              투표하러 가기👀
-            </button>
-          </div>
-          <p className="matchUp__movie--title">{dummydata[0].matchTitle}</p>
-          {dummydata.map((group) => (
-            <div key={group.matchTitle} className="matchUp__movie--container">
+      <div className="matchUp__content">
+        {dummydata.map((group, index) => (
+          <div className="matchUp__movie" key={index}>
+            <img
+              className="matchUp__movie--icon"
+              src={fight}
+              alt="fight_icon"
+            />
+            <div className="matchUp__overlay">
+              <button onClick={() => navigate("/matchup")}>
+                투표하러 가기👀
+              </button>
+            </div>
+            <p className="matchUp__movie--title">{group.matchTitle}</p>
+            <div className="matchUp__movie--container">
               {group.data.map((movie) => (
-                <div key={movie.id} className="matchUp__movie--list">
-                  <img
-                    className="matchUp__movie--poster"
-                    src={movie.poster}
-                    alt={movie.movie}
-                  />
-                  <p>{movie.movie}</p>
+                <div key={movie.id}>
+                  <div className="matchUp__movie--list">
+                    <img
+                      className="matchUp__movie--poster"
+                      src={movie.poster}
+                      alt={movie.movie}
+                    />
+                    <p>{movie.movie}</p>
+                  </div>
                 </div>
               ))}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </MatchUpContainer>
   );
 }

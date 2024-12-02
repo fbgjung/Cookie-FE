@@ -2,9 +2,9 @@ import styled from "styled-components";
 import SideBar from "../../components/admin/SideBar";
 import { useState } from "react";
 import Addmovie from "../../components/admin/AddMovie";
-import MovieList from "../../components/admin/MovieList";
 import movie from "../../assets/images/admin/cookieMovie.svg";
 import cookieSm from "../../assets/images/admin/cookie_sm.svg";
+import CookieMovieList from "../../components/admin/CookieMovieList";
 
 const Viewport = styled.div`
   width: 100%;
@@ -55,7 +55,7 @@ function AdminMovie() {
           </TabBtn>
         </TabBtnContainer>
         {activeTab === 1 && <Addmovie />}
-        {activeTab === 2 && <MovieList />}
+        {activeTab === 2 && <CookieMovieList />}
       </Viewport>
     </>
   );

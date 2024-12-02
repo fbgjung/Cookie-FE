@@ -27,8 +27,8 @@ const MovieRankList = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    overflow-x: scroll;
+    justify-content: start;
+    overflow-x: auto;
     gap: 1rem;
     padding: 0.625rem;
   }
@@ -89,9 +89,8 @@ function MovieRank() {
   ];
   const navigate = useNavigate();
 
-  const { id } = useParams();
-  const handleMovieClick = (id) => {
-    navigate(`/movie/${id}`);
+  const handleMovieClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
   };
 
   return (
