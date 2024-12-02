@@ -21,11 +21,11 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #04012d;
   color: #ffffff;
+  padding-top: 10px;
   font-family: "Arial", sans-serif;
-  padding-top: 80px;
+
   overflow-y: auto;
   overflow-x: hidden;
-  padding-bottom: 60px;
 `;
 
 const sampleData = {
@@ -106,9 +106,19 @@ const MatchupPage = () => {
   };
 
   useEffect(() => {
+    const token = sessionStorage.getItem("accessToken");
+
+    if (!token) {
+      console.error("인증 토큰이 없습니다.");
+      return;
+    }
+
     const socket = new SockJS("http://localhost:8080/ws");
     const client = new Client({
       webSocketFactory: () => socket,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
       debug: (str) => console.log(str),
       onConnect: () => {
         console.log("WebSocket 연결 성공");
@@ -117,6 +127,9 @@ const MatchupPage = () => {
       onDisconnect: () => {
         console.log("WebSocket 연결 종료");
         setIsConnected(false);
+      },
+      onStompError: (frame) => {
+        console.error("STOMP 오류:", frame.headers["message"], frame.body);
       },
     });
 
