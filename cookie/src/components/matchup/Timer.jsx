@@ -97,7 +97,6 @@ const Timer = ({ endAt, onVoteEnd }) => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0); // 배경 위치 저장
 
   useEffect(() => {
     const targetDate = new Date(endAt);
@@ -134,18 +133,12 @@ const Timer = ({ endAt, onVoteEnd }) => {
   const [s1, s2] = splitDigits(timeLeft.seconds);
 
   const openModal = () => {
-    setScrollPosition(window.scrollY);
-    document.body.style.overflow = "hidden";
-    document.body.style.top = `-${window.scrollY}px`;
-    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden"; // 배경 스크롤 방지
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    document.body.style.position = ""; // 고정 해제
-    document.body.style.top = ""; // 초기화
-    document.body.style.width = ""; // 초기화
-    window.scrollTo(0, scrollPosition); // 스크롤 위치 복원
+    document.body.style.overflow = ""; // 배경 스크롤 복원
     setIsModalOpen(false);
   };
 
@@ -172,24 +165,23 @@ const Timer = ({ endAt, onVoteEnd }) => {
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.7)",
-          },
-          content: {
-            backgroundColor: "#ffffff",
-            borderRadius: "15px",
-            width: "90%",
-            maxWidth: "400px",
-            maxHeight: "20vh",
-            margin: "auto",
-            textAlign: "center",
-
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
+            justifyContent: "center",
             alignItems: "center",
           },
+          content: {
+            position: "absolute",
+            inset: "auto",
+            backgroundColor: "#ffffff",
+            borderRadius: "15px",
+            padding: "20px",
+            width: "90%",
+            maxWidth: "400px",
+            textAlign: "center",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
+            overflow: "hidden",
+          },
         }}
-        ariaHideApp={false}
       >
         <ModalContent>
           투표가 종료되었습니다.
