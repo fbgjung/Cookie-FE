@@ -63,7 +63,7 @@ const HeaderContainer = styled.header`
   height: 70px;
   box-sizing: border-box;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 100;
 
@@ -85,7 +85,7 @@ const NavContainer = styled.nav`
   height: 60px;
   box-sizing: border-box;
   border-top: 1px solid #e5e7eb;
-  position: sticky;
+  position: fixed;
   bottom: 0;
   z-index: 100;
 
