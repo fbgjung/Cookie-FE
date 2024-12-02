@@ -79,44 +79,41 @@ const WriteReviewButton = styled.button`
     background-color: var(--main);
   }
 `;
-// FIX 일정 숫자부터  보이는 스크롤 오류 해결
+
 const Main = () => {
   const dummyMovies = [
     {
-      matchTitle: "박찬욱 감독의 복수 3부작 빅매치",
-      data: [
-        {
-          id: 1,
-          poster: "https://via.placeholder.com/83x118",
-          movie: "올드보이",
-          matchDate: "2024-12-31",
-        },
-        {
-          id: 2,
-          poster: "https://via.placeholder.com/83x118",
-          movie: "복수는나의 것",
-          matchDate: "2024-12-31",
-        },
-      ],
+      matchUpId: 1,
+      matchUpTitle: "박찬욱 감독의 복수 3부작 빅매치",
+      type: "GENRE",
+      movie1: {
+        movieTitle: "올드보이",
+        moviePoster: "https://via.placeholder.com/83x118",
+        matchDate: "2024-12-31",
+      },
+      movie2: {
+        movieTitle: "복수는나의 것",
+        moviePoster: "https://via.placeholder.com/83x118",
+        matchDate: "2024-12-31",
+      },
     },
     {
-      matchTitle: "모두를 감동시킨 디즈니 영화",
-      data: [
-        {
-          id: 1,
-          poster: "https://via.placeholder.com/83x118",
-          movie: "인사이드 아웃",
-          matchDate: "2024-12-31",
-        },
-        {
-          id: 2,
-          poster: "https://via.placeholder.com/83x118",
-          movie: "엘리멘탈",
-          matchDate: "2024-12-31",
-        },
-      ],
+      matchUpId: 2,
+      matchUpTitle: "모두를 감동시킨 디즈니 영화",
+      type: "SHOW",
+      movie1: {
+        movieTitle: "인사이드 아웃",
+        moviePoster: "https://via.placeholder.com/83x118",
+        matchDate: "2024-12-31",
+      },
+      movie2: {
+        movieTitle: "엘리멘탈",
+        moviePoster: "https://via.placeholder.com/83x118",
+        matchDate: "2024-12-31",
+      },
     },
   ];
+
   const [showTopButton, setShowTopButton] = useState(false);
   const navigate = useNavigate();
 
