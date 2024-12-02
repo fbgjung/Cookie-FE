@@ -48,8 +48,9 @@ const ManageProfile = () => {
   const [badges, setBadges] = useState([]);
   const [nickname, setNickname] = useState("");
   const [selectedBadge, setSelectedBadge] = useState("");
-  const [selectedGenreId, setSelectedGenreId] = useState(null); // 초기 선택 장르
+  const [selectedGenreId, setSelectedGenreId] = useState(null);
   const isErrorShown = useRef(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -61,7 +62,8 @@ const ManageProfile = () => {
         setProfileImage(profileImage);
         setBadges(badges);
         setNickname(nickname);
-        setSelectedGenreId(genreId); // 장르 ID 초기화
+        setSelectedGenreId(genreId);
+        setProfileImage({ file: null, preview: profileImage });
 
         const mainBadge = badges.find((badge) => badge.main);
         if (mainBadge) {
@@ -82,14 +84,18 @@ const ManageProfile = () => {
   const handleSaveClick = async () => {
     try {
       const formData = new FormData();
-      if (profileImage) {
-        formData.append("profileImage", profileImage);
+
+      if (profileImage.file) {
+        formData.append("profileImage", profileImage.file);
       }
+
       formData.append("nickname", nickname);
+
       if (selectedBadge) {
         formData.append("mainBadgeId", selectedBadge);
       }
-      formData.append("genreId", selectedGenreId); // 선택된 장르 ID 전송
+
+      formData.append("genreId", selectedGenreId);
 
       const response = await axiosInstance.post("/api/users", formData, {
         headers: {
@@ -98,6 +104,12 @@ const ManageProfile = () => {
       });
 
       if (response.data.response === "SUCCESS") {
+        if (response.data.profileImageUrl) {
+          setProfileImage({
+            file: null,
+            preview: response.data.profileImageUrl,
+          });
+        }
         toast.success("프로필 저장이 완료되었습니다!");
       } else {
         throw new Error("오류 발생");
@@ -106,6 +118,10 @@ const ManageProfile = () => {
       toast.error("프로필 저장에 실패했습니다.");
       console.error("프로필 저장 실패:", error);
     }
+  };
+
+  const handleResetCheck = (value) => {
+    setIsNicknameChecked(value);
   };
 
   return (
@@ -125,11 +141,14 @@ const ManageProfile = () => {
         />
         <NicknameInput
           nickname={nickname}
-          onChange={(newNickname) => setNickname(newNickname)}
+          onChange={setNickname}
+          onResetCheck={handleResetCheck}
+          isChecked={isNicknameChecked}
         />
+        ;
         <SetGenre
-          selectedGenreId={selectedGenreId} // 초기 선택값 전달
-          onSelectGenre={(id) => setSelectedGenreId(id)} // 선택 변경 핸들링
+          selectedGenreId={selectedGenreId}
+          onSelectGenre={(id) => setSelectedGenreId(id)}
         />
         <SaveProfileButton onClick={handleSaveClick} />
       </ManageProfileContent>
