@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import axios from "axios";
+
 import TitleSection from "../components/matchup/TitleSection";
 import Timer from "../components/matchup/Timer";
 import PosterList from "../components/matchup/PosterList";
@@ -11,6 +11,7 @@ import ChartSection from "../components/matchup/ChartSection";
 import ChatUI from "../components/matchup/ChatUI";
 import { useParams, useLocation } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
   display: flex;
@@ -21,8 +22,8 @@ const Container = styled.div`
   background-color: #04012d;
   color: #ffffff;
   font-family: "Arial", sans-serif;
-  padding-top: 50px;
-  overflow-y: auto;
+  padding-top: 100px;
+  padding-bottom: 60px;
   overflow-x: hidden;
 `;
 
@@ -88,11 +89,11 @@ const MatchupPage = () => {
 
   const fetchMatchUpData = async () => {
     try {
-      // const endpoint = matchUpId
-      //   ? `http://localhost:8080/api/matchups/${matchUpId}/history`
-      //   : `http://localhost:8080/api/matchups/current`;
+      const endpoint = matchUpId
+        ? `/api/matchups/${matchUpId}/history`
+        : `/api/matchups/current`;
 
-      const response = await axios.get(`http://localhost:8080/api/matchups/1`);
+      const response = await axiosInstance.get(endpoint);
       setMatchUpData(response.data.response || sampleData);
     } catch (error) {
       console.error("API 요청 실패:", error);
