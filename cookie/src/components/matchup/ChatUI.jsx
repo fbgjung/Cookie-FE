@@ -3,7 +3,7 @@ import styled from "styled-components";
 import ChatContainer from "./ChatContainer";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
-import axios from "axios";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const ChatWrapper = styled.div`
   display: flex;
@@ -36,8 +36,8 @@ const ChatUI = ({ stompClient }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/matchup-chat/${matchUpId}/messages`
+        const response = await axiosInstance.get(
+          `/api/matchup-chat/${matchUpId}/messages`
         );
         setMessages(
           response.data.response.map((message) => ({
@@ -94,7 +94,7 @@ const ChatUI = ({ stompClient }) => {
         destination: `/app/chat/${matchUpId}/messages`,
         body: JSON.stringify({ content }),
       });
-      setIsInputTriggered(true); // 사용자가 입력한 메시지로 인해 트리거 발생
+      setIsInputTriggered(true);
     } else {
       console.error("STOMP 연결이 활성화되지 않았습니다.");
     }

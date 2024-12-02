@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import axios from "axios";
+
 import TitleSection from "../components/matchup/TitleSection";
 import Timer from "../components/matchup/Timer";
 import PosterList from "../components/matchup/PosterList";
@@ -11,6 +11,7 @@ import ChartSection from "../components/matchup/ChartSection";
 import ChatUI from "../components/matchup/ChatUI";
 import { useParams, useLocation } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
   display: flex;
@@ -20,8 +21,9 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #04012d;
   color: #ffffff;
+  padding-top: 10px;
   font-family: "Arial", sans-serif;
-  padding-top: 50px;
+
   overflow-y: auto;
   overflow-x: hidden;
 `;
@@ -88,11 +90,14 @@ const MatchupPage = () => {
 
   const fetchMatchUpData = async () => {
     try {
-      // const endpoint = matchUpId
-      //   ? `http://localhost:8080/api/matchups/${matchUpId}/history`
-      //   : `http://localhost:8080/api/matchups/current`;
+      if (!matchUpId) {
+        console.error("matchUpId가 없습니다.");
+        setMatchUpData(sampleData);
+        return;
+      }
 
-      const response = await axios.get(`http://localhost:8080/api/matchups/1`);
+      const endpoint = `/api/matchups/1`;
+      const response = await axiosInstance.get(endpoint);
       setMatchUpData(response.data.response || sampleData);
     } catch (error) {
       console.error("API 요청 실패:", error);
@@ -101,9 +106,19 @@ const MatchupPage = () => {
   };
 
   useEffect(() => {
+    const token = sessionStorage.getItem("accessToken");
+
+    if (!token) {
+      console.error("인증 토큰이 없습니다.");
+      return;
+    }
+
     const socket = new SockJS("http://localhost:8080/ws");
     const client = new Client({
       webSocketFactory: () => socket,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
       debug: (str) => console.log(str),
       onConnect: () => {
         console.log("WebSocket 연결 성공");
@@ -112,6 +127,9 @@ const MatchupPage = () => {
       onDisconnect: () => {
         console.log("WebSocket 연결 종료");
         setIsConnected(false);
+      },
+      onStompError: (frame) => {
+        console.error("STOMP 오류:", frame.headers["message"], frame.body);
       },
     });
 

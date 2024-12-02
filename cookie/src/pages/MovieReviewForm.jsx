@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const PageWrapper = styled.div`
     width: 90%;
@@ -178,9 +179,7 @@ const MovieReviewForm = () => {
     navigate(-1); // 이전 페이지로 돌아가기
   };
 
-  const handleSubmit = async () => {
-    const userId = 1; // 사용자 ID를 여기에 설정 (로그인된 사용자 ID 필요)
-  
+  const handleSubmit = async () => {  
     const payload = {
       movieId: 1,
       movieScore,
@@ -189,8 +188,8 @@ const MovieReviewForm = () => {
     };
   
     try {
-      const response = await axios.post(
-        `http://localhost:8080/api/reviews/${userId}`,
+      const response = await axiosInstance.post(
+        `http://localhost:8080/api/reviews/`,
         payload
       );
       if (response.status === 200) {
