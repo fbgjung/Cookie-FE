@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import SideBar from "../../components/admin/SideBar";
 import { useState } from "react";
-import Addmovie from "../../components/admin/AddMovie";
+import Addmovie from "../../components/admin/Addmovie";
 import movie from "../../assets/images/admin/cookieMovie.svg";
 import cookieSm from "../../assets/images/admin/cookie_sm.svg";
 import CookieMovieList from "../../components/admin/CookieMovieList";
