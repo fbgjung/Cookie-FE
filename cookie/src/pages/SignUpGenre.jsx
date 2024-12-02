@@ -230,12 +230,10 @@ function SignUpGenre() {
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
 
-        const { accessToken, refreshToken } = response.data.response;
-        if (accessToken && refreshToken) {
+        const { accessToken } = response.data.response;
+        if (accessToken) {
           sessionStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
           console.log("AccessToken: ", accessToken);
-          console.log("RefreshToken: ", refreshToken);
 
           const eventSource = new EventSource(
             `${serverBaseUrl}/api/reviews/subscribe/push-notification`,
