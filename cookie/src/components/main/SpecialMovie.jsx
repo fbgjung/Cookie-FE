@@ -24,6 +24,7 @@ const SpecialMovieList = styled.div`
   .specialMovie__list {
     display: flex;
     align-items: center;
+    padding: 0.625rem;
     gap: 1rem;
     overflow-x: scroll;
   }
@@ -55,7 +56,7 @@ const ThemeBtn = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  margin-right: 0.3rem;
+  margin-right: 0.8rem;
   font-size: 1rem;
   color: ${(props) => (props.$isSelected ? "var(--main)" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
