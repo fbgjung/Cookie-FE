@@ -7,9 +7,11 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const accessToken = sessionStorage.getItem("accessToken");
-  if (accessToken) {
-    config.headers["Authorization"] = `Bearer ${accessToken}`;
+  if (!config.headers["Authorization"]) {
+    const accessToken = sessionStorage.getItem("accessToken");
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    }
   }
   return config;
 });
@@ -68,6 +70,7 @@ const refreshAccessToken = async () => {
     const { accessToken } = response.data.response;
     if (accessToken) {
       sessionStorage.setItem("accessToken", accessToken);
+      console.log("새로운 액세스 토큰 발급 완료:", accessToken);
       return accessToken;
     } else {
       throw new Error("새로운 액세스 토큰 발급 실패");
