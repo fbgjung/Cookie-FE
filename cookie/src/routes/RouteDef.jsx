@@ -125,7 +125,7 @@ export const AppRouteDef = {
   },
 
   MatchUp: {
-    path: "/matchup",
+    path: "/matchup/:matchUpId",
     element: (
       <PrivateRoute>
         <MatchupPage />
