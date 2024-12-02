@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const PageWrapper = styled.div`
     width: 90%;
@@ -82,8 +83,8 @@ const MovieReviewFeed = ({ movieId }) => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/reviews/movie/${movieId}`
+        const response = await axiosInstance.get(
+          `http://localhost:8080/api/{movies}/${movieId}/reviews`
         );
         setReviews(response.data);
         setFilteredReviews(response.data);

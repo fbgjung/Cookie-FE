@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const PageWrapper = styled.div`
     width: 90%;
@@ -189,8 +190,8 @@ const MovieReviewForm = () => {
     };
   
     try {
-      const response = await axios.post(
-        `http://localhost:8080/api/reviews/${userId}`,
+      const response = await axiosInstance.post(
+        `http://localhost:8080/api/reviews/`,
         payload
       );
       if (response.status === 200) {
