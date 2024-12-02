@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
@@ -223,7 +224,7 @@ useEffect(() => {
 
       console.log(`Fetching page ${page}...`);
 
-      const response = await axios.get(endpoint, {
+      const response = await axiosInstance.get(endpoint, {
         params: { page, size: 10 },
       });
 
