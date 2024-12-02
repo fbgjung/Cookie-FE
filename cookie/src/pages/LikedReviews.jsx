@@ -96,7 +96,7 @@ const LikedReviews = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get("/api/users/likedReviewList/", {
+      const response = await axiosInstance.get("/api/users/likedReviewList", {
         params: {
           page: page - 1,
           size: 10,
