@@ -22,8 +22,8 @@ const Container = styled.div`
   background-color: #04012d;
   color: #ffffff;
   font-family: "Arial", sans-serif;
-  padding-top: 100px;
-  padding-bottom: 60px;
+  padding-top: 50px;
+  overflow-y: auto;
   overflow-x: hidden;
 `;
 
@@ -89,10 +89,13 @@ const MatchupPage = () => {
 
   const fetchMatchUpData = async () => {
     try {
-      const endpoint = matchUpId
-        ? `/api/matchups/${matchUpId}/history`
-        : `/api/matchups/current`;
+      if (!matchUpId) {
+        console.error("matchUpId가 없습니다.");
+        setMatchUpData(sampleData);
+        return;
+      }
 
+      const endpoint = `/api/matchups/${matchUpId}`;
       const response = await axiosInstance.get(endpoint);
       setMatchUpData(response.data.response || sampleData);
     } catch (error) {
