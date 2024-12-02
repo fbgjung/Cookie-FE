@@ -90,7 +90,8 @@ const SetProfileImage = ({ profileImage, onChange }) => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      onChange(imageUrl);
+      console.log(imageUrl);
+      onChange({ file, preview: imageUrl });
     }
   };
 
@@ -107,7 +108,10 @@ const SetProfileImage = ({ profileImage, onChange }) => {
       />
       <ImageWrapper htmlFor="file-input">
         <ProfileImage
-          src={profileImage || "/src/assets/images/mypage/setdefaultImage.svg"}
+          src={
+            profileImage.preview ||
+            "/src/assets/images/mypage/setdefaultImage.svg"
+          } // 미리보기 URL 사용
           alt="Profile"
         />
         <HiddenInput
