@@ -22,10 +22,10 @@ const Container = styled.div`
   background-color: #04012d;
   color: #ffffff;
   font-family: "Arial", sans-serif;
-  padding-top: 80px;
+  padding-top: 50px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-bottom: 57px;
+  padding-bottom: 60px;
 `;
 
 const sampleData = {
