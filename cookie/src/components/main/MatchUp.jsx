@@ -128,24 +128,28 @@ function MatchUp({ matchDate, dummydata }) {
               alt="fight_icon"
             />
             <div className="matchUp__overlay">
-              <button onClick={() => navigate("/matchup")}>
+              <button onClick={() => navigate(`/matchup/${group.matchUpId}`)}>
                 투표하러 가기👀
               </button>
             </div>
-            <p className="matchUp__movie--title">{group.matchTitle}</p>
+            <p className="matchUp__movie--title">{group.matchUpTitle}</p>
             <div className="matchUp__movie--container">
-              {group.data.map((movie) => (
-                <div key={movie.id}>
-                  <div className="matchUp__movie--list">
-                    <img
-                      className="matchUp__movie--poster"
-                      src={movie.poster}
-                      alt={movie.movie}
-                    />
-                    <p>{movie.movie}</p>
-                  </div>
-                </div>
-              ))}
+              <div className="matchUp__movie--list">
+                <img
+                  className="matchUp__movie--poster"
+                  src={group.movie1.moviePoster}
+                  alt={group.movie1.movieTitle}
+                />
+                <p>{group.movie1.movieTitle}</p>
+              </div>
+              <div className="matchUp__movie--list">
+                <img
+                  className="matchUp__movie--poster"
+                  src={group.movie2.moviePoster}
+                  alt={group.movie2.movieTitle}
+                />
+                <p>{group.movie2.movieTitle}</p>
+              </div>
             </div>
           </div>
         ))}
