@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState, useRef, useCallback } from "react";
+
 import ReviewList from "../components/mypage/ReviewList";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
   padding-top: 20px;
@@ -80,45 +81,67 @@ const EmptyMessage = styled.div`
 
 const LikedReviews = () => {
   const navigate = useNavigate();
-  const userId = 1;
   const [reviews, setReviews] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const observer = useRef();
 
   const handleBackClick = () => {
     navigate(-1);
   };
 
+  const fetchLikedReviews = async () => {
+    if (loading || page > totalPages) return;
+    setLoading(true);
+
+    try {
+      const response = await axiosInstance.get("/api/users/likedReviewList", {
+        params: {
+          page: page - 1,
+          size: 10,
+        },
+      });
+
+      const { movies, totalPages } = response.data.response;
+
+      const newReviews = movies.map((movie) => ({
+        title: movie.title,
+        poster: movie.poster,
+        releasedAt: movie.releasedAt,
+        country: movie.country,
+        reviews: movie.reviews,
+      }));
+
+      setReviews((prev) => [...prev, ...newReviews]);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error("리뷰 데이터를 가져오는 데 실패했습니다:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const lastReviewRef = useCallback(
+    (node) => {
+      if (loading) return;
+
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && page < totalPages) {
+          setPage((prev) => prev + 1);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [loading, page, totalPages]
+  );
+
   useEffect(() => {
-    const fetchLikedReviews = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/users/${userId}/reviewLiked`
-        );
-        const reviewsData = response.data.response;
-
-        const transformedReviews = reviewsData.map((review) => ({
-          reviewId: review.reviewId,
-          content: review.content,
-          movieScore: review.movieScore,
-          reviewLike: review.reviewLike,
-          createdAt: review.createdAt,
-          movie: {
-            title: review.movie.title,
-            poster: review.movie.poster,
-          },
-          user: {
-            nickname: review.user.nickname,
-            profileImage: review.user.profileImage,
-          },
-        }));
-
-        setReviews(transformedReviews);
-      } catch (error) {
-        console.error("실패", error);
-      }
-    };
-
     fetchLikedReviews();
-  }, [userId]);
+  }, [page]);
 
   return (
     <Container>
@@ -130,7 +153,7 @@ const LikedReviews = () => {
       <Title>좋아하는 리뷰</Title>
       <HeartIcon src="/src/assets/images/mypage/red-heart.svg" alt="하트" />
       {reviews.length > 0 ? (
-        <ReviewList title="" reviews={reviews} />
+        <ReviewList title="" reviews={reviews} lastReviewRef={lastReviewRef} />
       ) : (
         <EmptyMessage>좋아하는 리뷰를 선택해보세요!</EmptyMessage>
       )}

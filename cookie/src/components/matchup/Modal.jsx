@@ -26,6 +26,16 @@ const ModalContainer = styled.div`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   position: relative;
   text-align: center;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 10px;
+  }
+
+  @media (max-width: 480px) {
+    width: 95%;
+    padding: 8px;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -41,6 +51,16 @@ const ImageContainer = styled.div`
     height: 100%;
     object-fit: cover;
   }
+
+  @media (max-width: 768px) {
+    width: 120px;
+    height: 180px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100px;
+    height: 150px;
+  }
 `;
 
 const Title = styled.h2`
@@ -48,12 +68,28 @@ const Title = styled.h2`
   font-weight: bold;
   color: #333333;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.1rem;
+  }
 `;
 
 const Description = styled.p`
   font-size: 1rem;
   color: #666666;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const TagsContainer = styled.div`
@@ -62,6 +98,14 @@ const TagsContainer = styled.div`
   gap: 10px;
   justify-content: center;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 5px;
+  }
 `;
 
 const Tag = styled.div`
@@ -80,6 +124,16 @@ const Tag = styled.div`
     background-color: ${(props) => (props.selected ? "#04012D" : "#04012D")};
     color: #ffffff;
   }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+  }
 `;
 
 const VoteButton = styled.button`
@@ -95,6 +149,16 @@ const VoteButton = styled.button`
 
   &:hover {
     background-color: #04012d;
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
 `;
 

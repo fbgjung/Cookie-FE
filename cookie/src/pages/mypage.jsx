@@ -1,6 +1,5 @@
-import styled from "styled-components";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import styled from "styled-components";
 
 import ProfileImage from "../components/mypage/ProfileImage";
 import BadgeList from "../components/mypage/BadgeList";
@@ -8,6 +7,7 @@ import GenreChart from "../components/mypage/GenreChart";
 import FavoriteList from "../components/mypage/FavoriteList";
 import ReviewList from "../components/mypage/ReviewList";
 import LogoutAndWithdraw from "../components/mypage/LogoutAndWithdraw";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const MypageContainer = styled.div`
   display: flex;
@@ -32,8 +32,6 @@ const MypageContent = styled.div`
 `;
 
 const MyPage = () => {
-  const userId = 1;
-
   const [userData, setUserData] = useState({ nickname: "", profileImage: "" });
   const [badgeData, setBadgeData] = useState([]);
   const [genreScores, setGenreScores] = useState([]);
@@ -42,13 +40,12 @@ const MyPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(
-          `https://www.cookiekie.com/api/users/${userId}`
-        );
+        const response = await axiosInstance.get("/api/users");
         const { nickname, profileImage, badge, genreScores, reviews } =
           response.data.response;
 
-        console.log(response.data.response);
+        console.log("API Response:", response.data);
+
         setUserData({ nickname, profileImage });
         setBadgeData(
           badge.map((b) => ({
@@ -85,17 +82,21 @@ const MyPage = () => {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, []);
 
   const mainBadge = badgeData.find((badge) => badge.main) || {};
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
   const handleLogout = () => {
     console.log("로그아웃");
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = "/login";
   };
 
   const handleWithdraw = () => {
     console.log("탈퇴하기");
+    // 탈퇴 처리 로직 추가
   };
 
   return (
@@ -119,22 +120,13 @@ const MyPage = () => {
         />
       </div>
       <MypageContent>
-        {/* 뱃지 리스트 */}
         <BadgeList title={`${userData.nickname}의 배지`} badges={badgeData} />
-
-        {/* 장르 차트 */}
         <GenreChart data={genreScores} />
-
-        {/* 좋아요 목록 */}
         <FavoriteList title="좋아요" items={favoriteItems} />
-
-        {/* 리뷰 리스트 */}
         <ReviewList
           title={`${userData.nickname}의 리뷰`}
           reviews={reviewData}
         />
-
-        {/* 로그아웃 및 탈퇴 */}
         <LogoutAndWithdraw
           onLogout={handleLogout}
           onWithdraw={handleWithdraw}
