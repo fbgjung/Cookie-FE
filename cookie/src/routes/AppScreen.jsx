@@ -224,7 +224,7 @@ const AppScreen = () => {
               <Link to="/review">
                 <img src={ReviewIcon} alt="리뷰" />
               </Link>
-              <Link to="/matchup">
+              <Link to="/matchup/1">
                 <img src={MatchupIcon} alt="매치업" />
               </Link>
               <Link to="/mypage">

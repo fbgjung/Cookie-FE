@@ -22,7 +22,7 @@ const Container = styled.div`
   background-color: #04012d;
   color: #ffffff;
   font-family: "Arial", sans-serif;
-  padding-top: 50px;
+  padding-top: 80px;
   overflow-y: auto;
   overflow-x: hidden;
   padding-bottom: 60px;
@@ -96,7 +96,7 @@ const MatchupPage = () => {
         return;
       }
 
-      const endpoint = `/api/matchups/${matchUpId}`;
+      const endpoint = `/api/matchups/1`;
       const response = await axiosInstance.get(endpoint);
       setMatchUpData(response.data.response || sampleData);
     } catch (error) {
