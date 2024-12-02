@@ -31,7 +31,7 @@ const Container = styled.div`
 const sampleData = {
   matchUpTitle: "테스트 빅매치",
   startAt: "2024-11-21T17:21:03",
-  entAt: "2024-11-30T18:29:50",
+  entAt: "2024-12-03T02:48:05",
   movie1: {
     movieTitle: "테스트 영화 1",
     moviePoster: null,
@@ -90,18 +90,11 @@ const MatchupPage = () => {
 
   const fetchMatchUpData = async () => {
     try {
-      if (!matchUpId) {
-        console.error("matchUpId가 없습니다.");
-        setMatchUpData(sampleData);
-        return;
-      }
-
-      const endpoint = `/api/matchups/1`;
+      const endpoint = `/api/matchups/${matchUpId || 1}`;
       const response = await axiosInstance.get(endpoint);
-      setMatchUpData(response.data.response || sampleData);
+      setMatchUpData(response.data.response);
     } catch (error) {
       console.error("API 요청 실패:", error);
-      setMatchUpData(sampleData);
     }
   };
 

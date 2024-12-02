@@ -174,8 +174,20 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
   const calculateDDay = () => {
     const now = new Date();
     const endDate = new Date(endAt);
-    const difference = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
-    return difference > 0 ? `D-${difference}` : "투표 종료";
+
+    // 남은 시간 계산 (밀리초 -> 일 단위로 변환)
+    const difference = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24)) - 1;
+
+    if (difference < 0) {
+      // 투표 종료
+      return "투표 종료";
+    } else if (difference === 0) {
+      // D-Day
+      return "D-Day";
+    } else {
+      // D-1, D-2 ...
+      return `D-${difference}`;
+    }
   };
 
   const handleTimerEnd = () => {
