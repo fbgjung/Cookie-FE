@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -18,7 +19,10 @@ const Image = styled.div`
   height: 100px;
   border-radius: 20px;
   background-color: #fff;
-  background-image: url(${(props) => props.image || "defaultImage.png"});
+  background-image: ${(props) =>
+    props.image
+      ? `url("${props.image}")`
+      : `url("/src/assets/images/defaultImage.png")`};
   background-size: cover;
   background-position: center;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
@@ -68,6 +72,9 @@ const ManageProfileIcon = styled.img`
 
 const ProfileImage = ({ title, name, image, badgeIcon }) => {
   const navigate = useNavigate();
+  const [isBadgeVisible, setIsBadgeVisible] = useState(true);
+
+  console.log("이미지 프롭", image);
 
   const handleManageClick = () => {
     navigate("/manageprofile");
@@ -78,7 +85,14 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
       {title && <Title>{title}</Title>}
       <ImageContainer>
         <Image image={image} />
-        <BadgeIcon src={badgeIcon} alt="Main Badge" />
+
+        {badgeIcon && isBadgeVisible && (
+          <BadgeIcon
+            src={badgeIcon}
+            alt=""
+            onError={() => setIsBadgeVisible(false)}
+          />
+        )}
       </ImageContainer>
       <NameContainer>
         {name && <Name>{name}</Name>}

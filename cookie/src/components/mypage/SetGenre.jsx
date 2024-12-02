@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 
 const MainContainer = styled.div`
@@ -107,7 +106,7 @@ const ThemeBtn = styled.button`
   }
 `;
 
-const SetGenre = () => {
+const SetGenre = ({ selectedGenreId, onSelectGenre }) => {
   const MovieGenre = [
     { id: 1, genre: "로맨스" },
     { id: 2, genre: "공포" },
@@ -130,17 +129,14 @@ const SetGenre = () => {
     { id: 19, genre: "모험" },
   ];
 
-  const [selectedGenreId, setSelectedGenreId] = useState(null);
-
   const handleButtonClick = (id) => {
-    setSelectedGenreId(id);
+    onSelectGenre(id); // 선택한 장르 ID 업데이트
   };
 
   return (
     <MainContainer>
       <SubTitle>
         <h3>좋아하는 장르 1개를 골라주세요👀</h3>
-
         <p>해당 장르 영화의 새로운 리뷰 알림을 받아볼 수 있어요</p>
       </SubTitle>
       <ThemeContainer>

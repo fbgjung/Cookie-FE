@@ -60,6 +60,9 @@ const modalCustomStyles = {
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.7)",
     zIndex: 999,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   content: {
     backgroundColor: "#ffffff",
@@ -67,9 +70,18 @@ const modalCustomStyles = {
     padding: "20px",
     width: "90%",
     maxWidth: "400px",
-    margin: "auto",
     textAlign: "center",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: "auto",
+    minHeight: "500px",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    margin: 0,
   },
 };
 
@@ -119,7 +131,7 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [historyData, setHistoryData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isVoteEnded, setIsVoteEnded] = useState(false); // 투표 종료 상태 관리
+  const [isVoteEnded, setIsVoteEnded] = useState(false);
   const navigate = useNavigate();
 
   const handleModalToggle = () => {
@@ -169,7 +181,7 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
   };
 
   const handleTimerEnd = () => {
-    setIsVoteEnded(true); // 타이머 종료 시 투표 종료 상태 업데이트
+    setIsVoteEnded(true);
   };
 
   const handleNavigate = (matchUpId) => {

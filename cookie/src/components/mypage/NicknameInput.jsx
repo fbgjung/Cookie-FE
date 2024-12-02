@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import axios from "axios";
+
 import toast from "react-hot-toast";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const NicknameContainer = styled.div`
   display: flex;
@@ -22,25 +23,23 @@ const Label = styled.label`
   margin-bottom: 8px;
   margin-left: 40px;
   color: #333;
-  
 
   @media (max-width: 768px) {
     font-size: 1rem;
-     margin- top :10px;
-         margin-left:30px;
+    margin-top: 10px;
+    margin-left: 30px;
   }
 
   @media (max-width: 480px) {
     font-size: 0.9rem;
-     margin- top :10px;
-     margin-left:30px;
+    margin-top: 10px;
+    margin-left: 30px;
   }
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   align-items: center;
-
   justify-content: space-between;
   width: 85%;
   margin-left: 40px;
@@ -92,7 +91,7 @@ const CheckButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
-  flex-shrink: 0; /* 버튼 크기 고정 */
+  flex-shrink: 0;
   margin-left: 2%;
 
   &:disabled {
@@ -108,18 +107,15 @@ const CheckButton = styled.button`
   @media (max-width: 480px) {
     font-size: 0.8rem;
     padding: 7px;
-    width: 60px; /* 작은 화면에서 버튼 크기 고정 */
+    width: 60px;
   }
 `;
 
 const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
   const handleCheckNickname = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/check-nickname",
-        {
-          nickname,
-        }
+      const response = await axiosInstance.get(
+        `/api/auth/check-nickname?nickname=${nickname}`
       );
 
       if (response.data.response === "SUCCESS") {
