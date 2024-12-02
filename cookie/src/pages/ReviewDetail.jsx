@@ -155,7 +155,7 @@ const ReviewDetail = () => {
     const fetchReviewData = async () => {
       try {
         const response = await axiosInstance.get(
-          `http://localhost:8080/api/reviews/${reviewId}`
+          `/api/reviews/${reviewId}`
         );
         const review = response.data.response; // API 응답 데이터
         setReviewData(review);

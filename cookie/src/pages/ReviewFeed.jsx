@@ -219,8 +219,8 @@ useEffect(() => {
     try {
       setIsLoading(true); // 로딩 시작
       const endpoint = showSpoilerOnly
-        ? "http://localhost:8080/api/reviews/spoiler"
-        : "http://localhost:8080/api/reviews";
+        ? "/api/reviews/spoiler"
+        : "/api/reviews";
 
       console.log(`Fetching page ${page}...`);
 
