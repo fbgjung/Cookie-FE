@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import axios from "axios";
 import TopicImage from "/src/assets/images/matchup/topic_image.svg";
 import { FiChevronDown } from "react-icons/fi";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 Modal.setAppElement("#root");
 
@@ -141,9 +141,7 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
   const fetchHistoryData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/matchups/history"
-      );
+      const response = await axiosInstance.get("/api/matchups/history");
       setHistoryData(response.data.response);
     } catch (error) {
       console.error("히스토리 데이터 요청 실패:", error);

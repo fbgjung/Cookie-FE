@@ -134,10 +134,10 @@ const Timer = ({ endAt, onVoteEnd }) => {
   const [s1, s2] = splitDigits(timeLeft.seconds);
 
   const openModal = () => {
-    setScrollPosition(window.scrollY); // 현재 스크롤 위치 저장
-    document.body.style.position = "fixed"; // 배경 고정
-    document.body.style.top = `-${window.scrollY}px`; // 현재 위치 유지
-    document.body.style.width = "100%"; // 화면 크기 유지
+    setScrollPosition(window.scrollY);
+    document.body.style.overflow = "hidden";
+    document.body.style.top = `-${window.scrollY}px`;
+    document.body.style.width = "100%";
     setIsModalOpen(true);
   };
 
@@ -181,13 +181,12 @@ const Timer = ({ endAt, onVoteEnd }) => {
             maxHeight: "20vh",
             margin: "auto",
             textAlign: "center",
-            padding: "20px",
+
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-start",
             alignItems: "center",
-            overflowY: "auto",
           },
         }}
         ariaHideApp={false}
