@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import styled from "styled-components";
+import { toast } from "react-hot-toast";
+import axiosInstance from "../api/auth/axiosInstance";
 import SetProfileImage from "../components/mypage/SetProfileImage";
 import BadgeSelector from "../components/mypage/BadgeSelector";
-import styled from "styled-components";
 import NicknameInput from "../components/mypage/NicknameInput";
-import SaveProfileButton from "../components/mypage/SaveProfileButton";
-import { Toaster, toast } from "react-hot-toast";
 import SetGenre from "../components/mypage/SetGenre";
+import SaveProfileButton from "../components/mypage/SaveProfileButton";
 
 const ManageProfileContainer = styled.div`
   display: flex;
@@ -44,25 +44,26 @@ const ManageProfileContent = styled.div`
 `;
 
 const ManageProfile = () => {
-  const userId = 1;
   const [profileImage, setProfileImage] = useState("");
   const [badges, setBadges] = useState([]);
   const [nickname, setNickname] = useState("");
   const [selectedBadge, setSelectedBadge] = useState("");
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const [selectedGenreId, setSelectedGenreId] = useState(null);
   const isErrorShown = useRef(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/users/${userId}/profileData`
-        );
-        const { profileImage, badges, nickname } = response.data.response;
+        const response = await axiosInstance.get("/api/users/profileData");
+        const { profileImage, badges, nickname, genreId } =
+          response.data.response;
 
         setProfileImage(profileImage);
         setBadges(badges);
         setNickname(nickname);
+        setSelectedGenreId(genreId);
+        setProfileImage({ file: null, preview: profileImage });
 
         const mainBadge = badges.find((badge) => badge.main);
         if (mainBadge) {
@@ -78,35 +79,49 @@ const ManageProfile = () => {
     };
 
     fetchProfileData();
-  }, [userId]);
+  }, []);
 
   const handleSaveClick = async () => {
-    // if (!isNicknameChecked) {
-    //   toast.error("닉네임 중복 확인을 완료해주세요.");
-    //   return;
-    // }
-
     try {
-      const requestData = {
-        profileImage,
-        nickname,
-        mainBadge: selectedBadge,
-      };
+      const formData = new FormData();
 
-      const response = await axios.post(
-        `http://localhost:8080/api/users/${userId}`,
-        requestData
-      );
+      if (profileImage.file) {
+        formData.append("profileImage", profileImage.file);
+      }
+
+      formData.append("nickname", nickname);
+
+      if (selectedBadge) {
+        formData.append("mainBadgeId", selectedBadge);
+      }
+
+      formData.append("genreId", selectedGenreId);
+
+      const response = await axiosInstance.post("/api/users", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.data.response === "SUCCESS") {
+        if (response.data.profileImageUrl) {
+          setProfileImage({
+            file: null,
+            preview: response.data.profileImageUrl,
+          });
+        }
         toast.success("프로필 저장이 완료되었습니다!");
       } else {
-        throw new Error("오류");
+        throw new Error("오류 발생");
       }
     } catch (error) {
       toast.error("프로필 저장에 실패했습니다.");
-      console.error("오류", error);
+      console.error("프로필 저장 실패:", error);
     }
+  };
+
+  const handleResetCheck = (value) => {
+    setIsNicknameChecked(value);
   };
 
   return (
@@ -126,12 +141,15 @@ const ManageProfile = () => {
         />
         <NicknameInput
           nickname={nickname}
-          onChange={(newNickname) => setNickname(newNickname)}
-          onResetCheck={setIsNicknameChecked}
+          onChange={setNickname}
+          onResetCheck={handleResetCheck}
           isChecked={isNicknameChecked}
         />
-
-        <SetGenre />
+        ;
+        <SetGenre
+          selectedGenreId={selectedGenreId}
+          onSelectGenre={(id) => setSelectedGenreId(id)}
+        />
         <SaveProfileButton onClick={handleSaveClick} />
       </ManageProfileContent>
     </ManageProfileContainer>

@@ -8,7 +8,7 @@ import SignUpGenre from "../pages/SignUpGenre";
 import MyPage from "../pages/mypage";
 import ManageProfile from "../pages/ManageProfile";
 import LikedMovies from "../pages/LikedMovies";
-import LikedReviews from "../pages/LikedRevies";
+import LikedReviews from "../pages/LikedReviews";
 import DetailReview from "../pages/DetailReview";
 import MatchupPage from "../pages/MatchupPage";
 import ReTokenPage from "../api/auth/ReTokenPage";
