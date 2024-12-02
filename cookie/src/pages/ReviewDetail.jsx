@@ -7,6 +7,7 @@ import ReviewContentSection from "../components/mypage/ReviewContentSection";
 import ReviewTextSection from "../components/mypage/ReviewTextSection";
 import FooterSection from "../components/mypage/FooterSection";
 import { toast } from "react-hot-toast";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
   padding: 20px;
@@ -153,7 +154,7 @@ const ReviewDetail = () => {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `http://localhost:8080/api/reviews/${reviewId}`
         );
         const review = response.data.response; // API 응답 데이터
@@ -176,8 +177,8 @@ const ReviewDetail = () => {
     if (!newComment.trim()) return;
 
     try {
-      const response = await axios.post(
-        `http://localhost:5173/api/reviews/${reviewId}/comments/${userId}`,
+      const response = await axiosInstance.post(
+        `http://localhost:5173/api/reviews/${reviewId}/comments`,
         { comment: newComment } // POST 요청 본문
       );
 

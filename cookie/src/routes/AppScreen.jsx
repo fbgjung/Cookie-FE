@@ -63,7 +63,7 @@ const HeaderContainer = styled.header`
   height: 70px;
   box-sizing: border-box;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 100;
 
@@ -85,7 +85,7 @@ const NavContainer = styled.nav`
   height: 60px;
   box-sizing: border-box;
   border-top: 1px solid #e5e7eb;
-  position: sticky;
+  position: fixed;
   bottom: 0;
   z-index: 100;
 
@@ -137,14 +137,13 @@ const MainContent = styled.main`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-
-  height: calc(100vh - 130px);
+  margin-top: 70px; /* 헤더 높이 반영 */
+  margin-bottom: 60px; /* 네비게이션 높이 반영 */
+  padding: 0;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     width: 100vw;
-
-    margin: 0;
-    padding: 0;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
@@ -224,7 +223,7 @@ const AppScreen = () => {
               <Link to="/review">
                 <img src={ReviewIcon} alt="리뷰" />
               </Link>
-              <Link to="/matchup">
+              <Link to="/matchup/1">
                 <img src={MatchupIcon} alt="매치업" />
               </Link>
               <Link to="/mypage">
