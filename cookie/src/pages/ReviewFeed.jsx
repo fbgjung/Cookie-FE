@@ -184,7 +184,7 @@ const ReviewFeed = () => {
   // SSE 연결
 useEffect(() => {
   const eventSource = new EventSource(
-    "http://localhost:8080/api/reviews/subscribe/feed"
+    "/api/reviews/subscribe/feed"
   );
 
   eventSource.addEventListener("message", (event) => {
