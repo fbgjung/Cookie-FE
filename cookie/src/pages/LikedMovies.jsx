@@ -155,20 +155,6 @@ const MovieInfo = styled.div`
       font-size: 0.7rem;
     }
   }
-
-  .runtime,
-  .score {
-    font-size: 0.8rem;
-    margin-top: 5px;
-
-    @media (max-width: 768px) {
-      font-size: 0.7rem;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 0.6rem;
-    }
-  }
 `;
 
 const EmptyMessage = styled.div`
@@ -195,29 +181,20 @@ const LikedMovies = () => {
     setLoading(true);
 
     try {
-      console.log("Fetching liked movies with params:", {
-        page: page - 1,
-        size: 10,
-      });
-
       const response = await axiosInstance.get("/api/users/likedMovieList", {
-        params: {
-          page: page - 1,
-          size: 10,
-        },
+        params: { page: page - 1, size: 10 },
       });
 
-      console.log("Response:", response.data);
+      const { movies = [], totalPages = 1 } = response.data.response || {};
 
-      const { reviews, totalPages } = response.data.response;
-
-      const newMovies = reviews.map((review) => ({
-        id: review.reviewId,
-        title: review.movie.title,
-        poster: review.movie.poster,
-        runtime: review.movie.runtime,
-        score: review.movieScore,
-        releasedAt: review.createdAt,
+      const newMovies = movies.map((movie) => ({
+        id: movie.id,
+        title: movie.title,
+        poster: movie.poster || "/src/assets/images/default-poster.jpg",
+        releasedAt: new Date(movie.releasedAt).toLocaleDateString(),
+        country: movie.country || "미상",
+        likes: movie.likes || 0,
+        reviews: movie.reviews || 0,
       }));
 
       setMovies((prev) => [...prev, ...newMovies]);
@@ -248,10 +225,8 @@ const LikedMovies = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // 데이터 로딩
     fetchLikedMovies();
-  }, []);
+  }, [page]);
 
   return (
     <Container>
@@ -264,31 +239,21 @@ const LikedMovies = () => {
       <HeartIcon src="/src/assets/images/mypage/red-heart.svg" alt="하트" />
       {movies.length > 0 ? (
         <MoviesGrid>
-          {movies.map((movie, index) => {
-            if (movies.length === index + 1) {
-              return (
-                <MovieCard ref={lastMovieRef} key={movie.id}>
-                  <Poster src={movie.poster} alt={movie.title} />
-                  <MovieInfo>
-                    <h2>{movie.title}</h2>
-                    <p>작성일: {movie.releasedAt}</p>
-                    <p className="runtime">평점: {movie.score.toFixed(1)}</p>
-                  </MovieInfo>
-                </MovieCard>
-              );
-            } else {
-              return (
-                <MovieCard key={movie.id}>
-                  <Poster src={movie.poster} alt={movie.title} />
-                  <MovieInfo>
-                    <h2>{movie.title}</h2>
-                    <p>작성일: {movie.releasedAt}</p>
-                    <p className="runtime">평점: {movie.score.toFixed(1)}</p>
-                  </MovieInfo>
-                </MovieCard>
-              );
-            }
-          })}
+          {movies.map((movie, index) => (
+            <MovieCard
+              ref={movies.length === index + 1 ? lastMovieRef : null}
+              key={movie.id}
+            >
+              <Poster src={movie.poster} alt={movie.title} />
+              <MovieInfo>
+                <h2>{movie.title}</h2>
+                <p>출시일: {movie.releasedAt}</p>
+                <p>국가: {movie.country}</p>
+                <p>좋아요: {movie.likes}</p>
+                <p>리뷰: {movie.reviews}</p>
+              </MovieInfo>
+            </MovieCard>
+          ))}
         </MoviesGrid>
       ) : (
         <EmptyMessage>좋아하는 영화를 선택해보세요!</EmptyMessage>
