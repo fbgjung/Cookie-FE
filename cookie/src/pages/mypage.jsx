@@ -43,7 +43,7 @@ const MyPage = () => {
         console.log("fetch");
         const response = await axiosInstance.get("/api/users");
 
-        console.log("api response", response.data);
+        console.log("api response", response.data.response);
 
         const { nickname, profileImage, badge, genreScores, reviews } =
           response.data.response;
