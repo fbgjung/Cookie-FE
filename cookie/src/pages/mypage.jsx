@@ -13,7 +13,7 @@ const MypageContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #04012d;
+  background-color: #fff4b9;
   position: relative;
 `;
 
@@ -40,13 +40,22 @@ const MyPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        console.log("fetch");
         const response = await axiosInstance.get("/api/users");
+
+        console.log("api response", response.data);
+
         const { nickname, profileImage, badge, genreScores, reviews } =
           response.data.response;
 
-        console.log("API Response:", response.data);
+        console.log("닉네임 프로필이미지", {
+          nickname,
+          profileImage,
+        });
 
         setUserData({ nickname, profileImage });
+
+        console.log("뱃지데이터", badge);
         setBadgeData(
           badge.map((b) => ({
             name: b.name,
@@ -55,11 +64,14 @@ const MyPage = () => {
           }))
         );
 
+        console.log("장르데이터", genreScores);
         const genreData = Object.entries(genreScores[0])
           .filter(([key]) => key !== "id" && key !== "userId")
           .map(([name, points]) => ({ name, points }));
+        console.log("Transformed genre scores:", genreData);
         setGenreScores(genreData);
 
+        console.log("리뷰데이터", reviews);
         const transformedReviews = reviews.map((review) => ({
           reviewId: review.reviewId,
           content: review.content,
@@ -75,9 +87,10 @@ const MyPage = () => {
             profileImage: review.user.profileImage,
           },
         }));
+        console.log("ㅎㅎ", transformedReviews);
         setReviewData(transformedReviews);
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
+        console.error("fail111", error);
       }
     };
 
@@ -88,14 +101,14 @@ const MyPage = () => {
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
   const handleLogout = () => {
-    console.log("로그아웃");
+    console.log("Logging out...");
     sessionStorage.clear();
     localStorage.clear();
     window.location.href = "/login";
   };
 
   const handleWithdraw = () => {
-    console.log("탈퇴하기");
+    console.log("Withdrawing account...");
     // 탈퇴 처리 로직 추가
   };
 
