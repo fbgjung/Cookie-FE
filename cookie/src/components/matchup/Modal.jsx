@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const ModalBackground = styled.div`
   position: fixed;
@@ -237,8 +238,8 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
     };
 
     try {
-      const response = await axios.post(
-        `http://localhost:8080/api/matchups/${matchUpId}/movies/${matchUpMovieId}/vote`,
+      const response = await axiosInstance.post(
+        `/api/matchups/${matchUpId}/movies/${matchUpMovieId}/vote`,
         payload
       );
       if (response.data.response === "SUCCESS") {
