@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
-  padding-top: 20px;
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,27 +15,38 @@ const Container = styled.div`
   position: relative;
 
   @media (max-width: 768px) {
-    padding-top: 15px;
+    padding-top: 30px;
     max-width: 90%;
   }
 `;
 
 const BackButton = styled.img`
   position: absolute;
-  top: 20px;
-  left: -90%;
+  top: 5%;
+  left: -85%;
   width: 24px;
   height: 24px;
   cursor: pointer;
 
   @media (max-width: 768px) {
+    top: 4%;
+    left: -60%;
     width: 20px;
-    left: -140px;
     height: 20px;
   }
 
   @media (max-width: 480px) {
-    left: -90px;
+    top: 4%;
+    left: -40%;
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 360px) {
+    top: 2%;
+    left: -20%;
+    width: 16px;
+    height: 16px;
   }
 `;
 
@@ -155,6 +166,20 @@ const MovieInfo = styled.div`
       font-size: 0.7rem;
     }
   }
+
+  .runtime,
+  .score {
+    font-size: 0.8rem;
+    margin-top: 5px;
+
+    @media (max-width: 768px) {
+      font-size: 0.7rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.6rem;
+    }
+  }
 `;
 
 const EmptyMessage = styled.div`
@@ -181,20 +206,29 @@ const LikedMovies = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get("/api/users/likedMovieList", {
-        params: { page: page - 1, size: 10 },
+      console.log("Fetching liked movies with params:", {
+        page: page - 1,
+        size: 10,
       });
 
-      const { movies = [], totalPages = 1 } = response.data.response || {};
+      const response = await axiosInstance.get("/api/users/likedMovieList", {
+        params: {
+          page: page - 1,
+          size: 10,
+        },
+      });
 
-      const newMovies = movies.map((movie) => ({
-        id: movie.id,
-        title: movie.title,
-        poster: movie.poster || "/src/assets/images/default-poster.jpg",
-        releasedAt: new Date(movie.releasedAt).toLocaleDateString(),
-        country: movie.country || "미상",
-        likes: movie.likes || 0,
-        reviews: movie.reviews || 0,
+      console.log("Response:", response.data);
+
+      const { reviews, totalPages } = response.data.response;
+
+      const newMovies = reviews.map((review) => ({
+        id: review.reviewId,
+        title: review.movie.title,
+        poster: review.movie.poster,
+        runtime: review.movie.runtime,
+        score: review.movieScore,
+        releasedAt: review.createdAt,
       }));
 
       setMovies((prev) => [...prev, ...newMovies]);
@@ -225,8 +259,10 @@ const LikedMovies = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // 데이터 로딩
     fetchLikedMovies();
-  }, [page]);
+  }, []);
 
   return (
     <Container>
@@ -239,21 +275,31 @@ const LikedMovies = () => {
       <HeartIcon src="/src/assets/images/mypage/red-heart.svg" alt="하트" />
       {movies.length > 0 ? (
         <MoviesGrid>
-          {movies.map((movie, index) => (
-            <MovieCard
-              ref={movies.length === index + 1 ? lastMovieRef : null}
-              key={movie.id}
-            >
-              <Poster src={movie.poster} alt={movie.title} />
-              <MovieInfo>
-                <h2>{movie.title}</h2>
-                <p>출시일: {movie.releasedAt}</p>
-                <p>국가: {movie.country}</p>
-                <p>좋아요: {movie.likes}</p>
-                <p>리뷰: {movie.reviews}</p>
-              </MovieInfo>
-            </MovieCard>
-          ))}
+          {movies.map((movie, index) => {
+            if (movies.length === index + 1) {
+              return (
+                <MovieCard ref={lastMovieRef} key={movie.id}>
+                  <Poster src={movie.poster} alt={movie.title} />
+                  <MovieInfo>
+                    <h2>{movie.title}</h2>
+                    <p>작성일: {movie.releasedAt}</p>
+                    <p className="runtime">평점: {movie.score.toFixed(1)}</p>
+                  </MovieInfo>
+                </MovieCard>
+              );
+            } else {
+              return (
+                <MovieCard key={movie.id}>
+                  <Poster src={movie.poster} alt={movie.title} />
+                  <MovieInfo>
+                    <h2>{movie.title}</h2>
+                    <p>작성일: {movie.releasedAt}</p>
+                    <p className="runtime">평점: {movie.score.toFixed(1)}</p>
+                  </MovieInfo>
+                </MovieCard>
+              );
+            }
+          })}
         </MoviesGrid>
       ) : (
         <EmptyMessage>좋아하는 영화를 선택해보세요!</EmptyMessage>
