@@ -16,6 +16,7 @@ const Container = styled.div`
   margin: 0 auto;
   position: relative;
   min-height: 100vh;
+
   @media (max-width: 768px) {
     padding-top: 15px;
     max-width: 95%;
@@ -103,14 +104,25 @@ const LikedReviews = () => {
         },
       });
 
-      const { movies, totalPages } = response.data.response;
+      const { reviews = [], totalPages = 1 } = response.data.response || {};
 
-      const newReviews = movies.map((movie) => ({
-        title: movie.title,
-        poster: movie.poster,
-        releasedAt: movie.releasedAt,
-        country: movie.country,
-        reviews: movie.reviews,
+      const newReviews = reviews.map((review) => ({
+        id: review.reviewId,
+        content: review.content,
+        score: review.movieScore,
+        likes: review.reviewLike,
+        createdAt: new Date(review.createdAt).toLocaleDateString(),
+        updatedAt: new Date(review.updatedAt).toLocaleDateString(),
+        movie: {
+          title: review.movie.title,
+          poster:
+            review.movie.poster || "/src/assets/images/default-poster.jpg",
+        },
+        user: {
+          nickname: review.user.nickname,
+          profileImage: review.user.profileImage,
+          badgeImage: review.user.mainBadgeImage,
+        },
       }));
 
       setReviews((prev) => [...prev, ...newReviews]);
