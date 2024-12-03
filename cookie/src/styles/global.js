@@ -49,6 +49,7 @@ const GlobalStyle = createGlobalStyle`
    html, body {
   margin: 0;
   padding: 0;
+overscroll-behavior: none;
    overflow-x: hidden;
 }
 
@@ -58,6 +59,8 @@ const GlobalStyle = createGlobalStyle`
     justify-content: center; 
     
   }
+
+  
 `;
 
 export const Content = styled.div`
