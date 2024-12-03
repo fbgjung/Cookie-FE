@@ -14,7 +14,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background: white;
+  background: #fff4b9;
   padding: 30px;
   border-radius: 8px;
   display: flex;
@@ -35,17 +35,16 @@ const ModalContainer = styled.div`
 `;
 
 const ModalButton = styled.button`
-  background-color: ${(props) =>
-    props.$isSelected ? "var(--main)" : "var(--sub-btn)"};
-  color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
+  background-color: ${(props) => (props.$isSelected ? "#724b2e" : "#aad6e7")};
+  color: ${(props) => (props.$isSelected ? "white" : "#724b2e")};
   border-radius: 5rem;
   padding: 0.8rem 1rem;
   border: none;
   cursor: pointer;
   font-size: 1rem;
   &:hover {
-    background-color: var(--main);
-    color: white;
+    background-color: #aad6e7;
+    color: "#724b2e";
   }
 `;
 
