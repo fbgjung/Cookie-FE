@@ -39,6 +39,7 @@ const ViewArea = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow: hidden;
 
   @media (min-width: 769px) {
     max-width: 600px;
@@ -58,7 +59,7 @@ const HeaderContainer = styled.header`
   max-width: 600px;
   align-items: center;
   justify-content: space-between;
-  background-color: #04012d;
+  background-color: #fff4b9;
   padding: 15px 20px;
   height: 70px;
   box-sizing: border-box;
@@ -137,8 +138,8 @@ const MainContent = styled.main`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  margin-top: 70px; /* 헤더 높이 반영 */
-  margin-bottom: 60px; /* 네비게이션 높이 반영 */
+  margin-top: 70px;
+  margin-bottom: 60px;
   padding: 0;
   box-sizing: border-box;
 
