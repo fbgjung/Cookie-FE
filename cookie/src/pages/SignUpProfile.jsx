@@ -65,6 +65,7 @@ const UserInfo = styled.div`
   p {
     margin: 1.5rem 0 0.5rem 0;
     color: #724b2e;
+    font-weight: 500;
   }
 
   .user__nickName {
@@ -100,6 +101,7 @@ const UserInfo = styled.div`
     font-size: 1rem;
     margin-bottom: 1rem;
     color: #724b2e;
+    font-weight: 700;
   }
 
   input {
@@ -109,7 +111,7 @@ const UserInfo = styled.div`
     border-radius: 0.75rem;
     border: none;
     box-shadow: 0.5rem 0.625rem 12rem 5rem #ffeb7d;
-    font-size: 1.2rem;
+    font-size: 1rem;
     padding: 0.5rem;
     margin-top: 0.5rem;
     background-color: white;
