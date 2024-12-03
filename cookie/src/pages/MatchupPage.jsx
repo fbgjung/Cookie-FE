@@ -19,7 +19,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  background-color: #04012d;
+  background-color: #fff4b9;
   color: #ffffff;
   padding-top: 10px;
   font-family: "Arial", sans-serif;
@@ -31,7 +31,7 @@ const Container = styled.div`
 const sampleData = {
   matchUpTitle: "테스트 빅매치",
   startAt: "2024-11-21T17:21:03",
-  entAt: "2024-12-03T02:48:05",
+  entAt: "2024-12-05T02:48:05",
   movie1: {
     movieTitle: "테스트 영화 1",
     moviePoster: null,
@@ -92,9 +92,10 @@ const MatchupPage = () => {
     try {
       const endpoint = `/api/matchups/${matchUpId || 1}`;
       const response = await axiosInstance.get(endpoint);
-      setMatchUpData(response.data.response);
+      setMatchUpData(response.data.response || sampleData);
     } catch (error) {
       console.error("API 요청 실패:", error);
+      setMatchUpData(sampleData);
     }
   };
 
