@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
-import { getToken } from "../firebase";
-import { messaging } from "../firebase";
+import { requestNotificationPermission } from "../firebase/firebaseMessaging";
+import { messaging } from "../firebase/firebase";
 import axios from "axios";
 
 const MainContainer = styled.div`
@@ -144,21 +144,7 @@ function SignUpGenre() {
 
   const handleFormDataSubmission = async () => {
     try {
-      // 알림 권한 요청
-      const permission = await Notification.requestPermission();
-      console.Log("알림 권한 요청 성공");
-      if (permission != "granted") {
-        toast.error("알림 권한이 거부되었습니다.");
-        console.Log("알림 권한 요청 실패");
-        return;
-      }
-
-      // FCM 토큰 가져오기
-      const fcmToken = await getToken(messaging, {
-        vapidKey:
-          "BM5WUtx7Zas7i4d3Xvktco8QHWM4gP2UwkXAZlKhuHCTwUN7YfldZy9y9rJEVCvxxA63bRDvm2RUar48SLC8jAw",
-      });
-
+      const fcmToken = await requestNotificationPermission();
       if (!fcmToken) {
         toast.error("FCM 토큰을 가져올 수 없습니다.");
         return;
@@ -178,7 +164,7 @@ function SignUpGenre() {
       formData.append("fcmToken", fcmToken);
 
       const response = await axios.post(
-        `${serverBaseUrl}/api/auth/register`,
+        `http://localhost:8080/api/auth/register`,
         formData,
         {
           headers: {
@@ -189,15 +175,10 @@ function SignUpGenre() {
 
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
-        sessionStorage.setItem(
-          "accessToken",
-          response.data.response.token.accessToken
-        );
-
         setShowModal(false);
         setTimeout(() => {
           navigate("/");
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       console.error("오류 발생:", error);
