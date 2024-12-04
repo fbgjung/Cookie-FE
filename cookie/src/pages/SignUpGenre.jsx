@@ -184,6 +184,10 @@ function SignUpGenre() {
 
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
+        sessionStorage.setItem(
+          "accessToken",
+          response.data.response.token.accessToken
+        );
         setShowModal(false);
         setIsSubmitting(false);
 
