@@ -126,28 +126,26 @@ function SignUpGenre() {
     }
     setShowModal(true);
   };
-
   const handlePushNotification = () => {
-    setPushEnabled("true");
-    setEmailEnabled("false");
-    // Immediately submit the form after selecting push notification
-    handleCloseModal();
+    handleCloseModal("true", "false");
   };
 
   const handleEmailNotification = () => {
-    setEmailEnabled("true");
-    setPushEnabled("false");
+    handleCloseModal("false", "true");
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (pushValue, emailValue) => {
+    setPushEnabled(pushValue);
+    setEmailEnabled(emailValue);
+
     setShowModal(false);
 
     if (!isSubmitting) {
-      handleFormDataSubmission();
+      handleFormDataSubmission(pushValue, emailValue);
     }
   };
 
-  const handleFormDataSubmission = async () => {
+  const handleFormDataSubmission = async (pushValue, emailValue) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -166,11 +164,15 @@ function SignUpGenre() {
       formData.append("socialId", userProfileData.socialId);
       formData.append("email", userProfileData.email);
       formData.append("nickname", userProfileData.nickname);
-      formData.append("pushEnabled", pushEnabled);
-      formData.append("emailEnabled", emailEnabled);
+      formData.append("pushEnabled", pushValue);
+      formData.append("emailEnabled", emailValue);
       formData.append("genreId", selectedGenreId.toString());
       formData.append("profileImage", userProfileData.profileImage);
       formData.append("fcmToken", fcmToken);
+
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
 
       const response = await axios.post(
         `http://localhost:8080/api/auth/register`,
