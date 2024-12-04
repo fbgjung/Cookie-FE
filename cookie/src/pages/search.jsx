@@ -68,7 +68,16 @@ const Tabs = styled.div`
 `;
 
 const Search = () => {
-  const navigate = useNavigate();
+  const movies = Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    title: `랜덤 영화 ${i + 1}`,
+    year: 2000 + (i % 23),
+    genre: ["스릴러", "액션", "코미디", "드라마", "판타지"][i % 5],
+    duration: `${90 + i}분`,
+    director: `감독 ${i + 1}`,
+    actors: [`배우 ${i + 1}`, `배우 ${i + 2}`],
+    imageUrl: `https://via.placeholder.com/80x120?text=영화+${i + 1}`,
+  }));
 
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("movie");
@@ -109,50 +118,22 @@ const Search = () => {
       return;
     }
 
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/search`,
-        {
-          params: { type: activeTab, keyword: searchTerm, page },
-        }
-      );
+    const movieResults = movies.filter((movie) =>
+      movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const directorResults = movies.filter((movie) =>
+      movie.director.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const actorResults = movies.filter((movie) =>
+      movie.actors.some((actor) =>
+        actor.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
 
-      const newResults = response.data.content;
-      setResults((prevResults) =>
-        page === 0 ? newResults : [...prevResults, ...newResults]
-      );
-      setHasMore(!response.data.last);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-      setResults([]); // 에러 발생 시 결과 초기화
-      setHasMore(false);
-    }
-  };
-
-  // 검색어와 탭 변경 시 API 호출 (디바운스 적용)
-  useEffect(() => {
-    if (debounceTimer) clearTimeout(debounceTimer);
-
-    const timer = setTimeout(() => {
-      setPage(0); // 페이지 초기화
-      setHasMore(true);
-      fetchSearchResults();
-    }, 100); // 디바운스 딜레이 100ms
-
-    setDebounceTimer(timer);
-    return () => clearTimeout(timer);
-  }, [searchTerm, activeTab]);
-
-  // 페이지 변경 시 추가 데이터 로드
-  useEffect(() => {
-    if (page > 0) {
-      fetchSearchResults();
-    }
-  }, [page]);
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
+    setFilteredMovies(movieResults);
+    setFilteredDirectors(directorResults);
+    setFilteredActors(actorResults);
+  }, [searchTerm]);
 
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
