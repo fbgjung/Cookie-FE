@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const MainContainer = styled.div`
-  background-color: white;
+  background-color: #fff4b9;
   height: 100vh;
   padding: 4.375rem 0 0 0;
 `;
@@ -19,7 +19,7 @@ const MainTitle = styled.div`
 
   h2 {
     margin: 0.8rem;
-    color: var(--main);
+    color: #724b2e;
   }
 `;
 const UserInfo = styled.div`
@@ -64,7 +64,8 @@ const UserInfo = styled.div`
 
   p {
     margin: 1.5rem 0 0.5rem 0;
-    color: var(--main);
+    color: #724b2e;
+    font-weight: 500;
   }
 
   .user__nickName {
@@ -84,15 +85,14 @@ const UserInfo = styled.div`
   }
   .nickName__valid--btn {
     margin: 8px 0 0 0;
-    background-color: ${(props) =>
-      props.$isSelected ? "var(--sub-bg)" : "white"};
-    color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
+    background-color: ${(props) => (props.$isSelected ? "#724b2e" : "#aad6e7")};
+    color: ${(props) => (props.$isSelected ? "white" : "#724b2e")};
     border-radius: 0.75rem;
     padding: 0.5rem 1rem;
     border: none;
     cursor: pointer;
     &:hover {
-      background-color: var(--main);
+      background-color: #724b2e;
       color: white;
     }
   }
@@ -100,7 +100,8 @@ const UserInfo = styled.div`
     display: block;
     font-size: 1rem;
     margin-bottom: 1rem;
-    color: var(--main);
+    color: #724b2e;
+    font-weight: 700;
   }
 
   input {
@@ -109,15 +110,15 @@ const UserInfo = styled.div`
     height: 3rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 3rem 4.38rem 12.5rem rgba(3, 6, 59, 0.5);
-    font-size: 1.2rem;
+    box-shadow: 0.5rem 0.625rem 12rem 5rem #ffeb7d;
+    font-size: 1rem;
     padding: 0.5rem;
     margin-top: 0.5rem;
     background-color: white;
     color: var(--main);
   }
   input:focus {
-    outline: 1px solid var(--main);
+    outline: 1px solid #724b2e;
   }
 `;
 
@@ -127,14 +128,14 @@ const SubmitBtn = styled.div`
   margin-top: 14.5rem;
 
   button {
-    background-color: var(--main);
-    color: white;
+    background-color: #aad6e7;
+    color: #724b2e;
     width: 29rem;
     height: 4rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0 0.625rem 6.25rem rgba(3, 6, 59, 0.5);
     font-size: 1.2rem;
+    font-weight: 700;
     outline: none;
     cursor: pointer;
   }

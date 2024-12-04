@@ -7,11 +7,13 @@ import Modal from "../components/signUp/Modal";
 import useNotificationStore from "../stores/notificationStore";
 import serverBaseUrl from "../config/apiConfig";
 import axios from "axios";
+import useUserStore from "../stores/useUserStore";
 
 const MainContainer = styled.div`
-  background-color: white;
+  background-color: #fff4b9;
   height: 100vh;
   padding: 4.375rem 0 0 0;
+  margin: 0 auto;
 `;
 const MainTitle = styled.div`
   display: flex;
@@ -21,7 +23,7 @@ const MainTitle = styled.div`
 
   h2 {
     margin: 0.8rem;
-    color: var(--main);
+    color: #724b2e;
   }
 `;
 
@@ -29,12 +31,12 @@ const SubTitle = styled.div`
   margin: 2.5rem 3.3rem;
 
   h3 {
-    color: var(--main);
+    color: #724b2e;
     margin: 0;
   }
 
   p {
-    color: var(--main);
+    color: #235b97;
     margin: 0;
     font-size: 0.9rem;
   }
@@ -45,37 +47,37 @@ const GenreContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
-  width: 70%;
+  width: 75%;
 `;
 
 const GenreBtn = styled.button`
-  background-color: ${(props) =>
-    props.$isSelected ? "var(--main)" : "var(--sub-btn)"};
-  color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
-  border-radius: 5rem;
+  background-color: ${(props) => (props.$isSelected ? "#aad6e7" : "white")};
+  color: ${(props) => (props.$isSelected ? "#724b2e" : "#724b2e")};
+  border-radius: 12px;
   padding: 0.8rem 1rem;
-  border: none;
+  border: 1px solid #aad6e7;
   cursor: pointer;
   &:hover {
-    background-color: var(--main);
-    color: white;
+    background-color: #aad6e7;
+    color: #724b2e;
   }
 `;
 
 const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20.6rem;
+  margin-top: 15rem;
 
   button {
-    background-color: var(--main);
-    color: white;
+    background-color: #aad6e7;
+    color: #724b2e;
     width: 29rem;
     height: 4rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0 0.625rem 6.25rem rgba(3, 6, 59, 0.5);
+    box-shadow: 0.5rem 0.625rem 12rem 3rem #ffeb7d;
     font-size: 1.2rem;
+    font-weight: 700;
     outline: none;
     cursor: pointer;
   }
@@ -234,6 +236,17 @@ function SignUpGenre() {
         if (accessToken) {
           sessionStorage.setItem("accessToken", accessToken);
           console.log("AccessToken: ", accessToken);
+
+          const userResponse = response.data.response.user;
+          const setUserInfo = useUserStore.getState().setUserInfo;
+          const userInfo = {
+            userId: userResponse.userId,
+            nickname: userResponse.nickname,
+            profileImage: userResponse.profileImage,
+            genreId: userResponse.genreId,
+          };
+          setUserInfo(userInfo);
+          console.log("저장된 유저 정보:", userInfo);
 
           const eventSource = new EventSource(
             `${serverBaseUrl}/api/reviews/subscribe/push-notification`,
