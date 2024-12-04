@@ -47,7 +47,7 @@ const GenreContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
-  width: 70%;
+  width: 75%;
 `;
 
 const GenreBtn = styled.button`
