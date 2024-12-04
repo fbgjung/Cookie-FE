@@ -4,8 +4,7 @@ import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
-import useNotificationStore from "../stores/notificationStore";
-import serverBaseUrl from "../config/apiConfig";
+import { getToken } from "../firebase"; // Firebase 설정 가져오기
 import axios from "axios";
 
 const MainContainer = styled.div`
@@ -13,6 +12,7 @@ const MainContainer = styled.div`
   height: 100vh;
   padding: 4.375rem 0 0 0;
 `;
+
 const MainTitle = styled.div`
   display: flex;
   flex-direction: column;
@@ -83,83 +83,27 @@ const SubmitBtn = styled.div`
 
 function SignUpGenre() {
   const MovieGenre = [
-    {
-      id: 1,
-      genre: "로맨스",
-    },
-    {
-      id: 2,
-      genre: "공포",
-    },
-    {
-      id: 3,
-      genre: "코미디",
-    },
-    {
-      id: 4,
-      genre: "액션",
-    },
-    {
-      id: 5,
-      genre: "판타지",
-    },
-    {
-      id: 6,
-      genre: "애니메이션",
-    },
-    {
-      id: 7,
-      genre: "범죄",
-    },
-    {
-      id: 8,
-      genre: "SF",
-    },
-    {
-      id: 9,
-      genre: "음악",
-    },
-    {
-      id: 10,
-      genre: "스릴러",
-    },
-    {
-      id: 11,
-      genre: "전쟁",
-    },
-    {
-      id: 12,
-      genre: "다큐멘터리",
-    },
-    {
-      id: 13,
-      genre: "드라마",
-    },
-    {
-      id: 14,
-      genre: "가족",
-    },
-    {
-      id: 15,
-      genre: "역사",
-    },
-    {
-      id: 16,
-      genre: "미스터리",
-    },
-    {
-      id: 17,
-      genre: "TV영화",
-    },
-    {
-      id: 18,
-      genre: "서부극",
-    },
-    {
-      id: 19,
-      genre: "모험",
-    },
+    { id: 1, genre: "로맨스" },
+    { id: 2, genre: "공포" },
+    { id: 3, genre: "코미디" },
+    { id: 4, genre: "액션" },
+    { id: 5, genre: "판타지" },
+    { id: 6, genre: "애니메이션" },
+    { id: 7, genre: "범죄" },
+    { id: 8, genre: "SF" },
+    { id: 9, genre: "음악" },
+    { id: 10, genre: "스릴러" },
+    { id: 11, genre: "전쟁" },
+    { id: 12, genre: "다큐멘터리" },
+    { id: 13, genre: "드라마" },
+    { id: 14, genre: "가족" },
+    { id: 15, genre: "역사" },
+    { id: 16, genre: "미스터리" },
+    { id: 17, genre: "TV영화" },
+    { id: 18, genre: "서부극" },
+    { id: 19, genre: "모험" },
   ];
+
   const [selectedGenreId, setSelectedGenreId] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -174,19 +118,12 @@ function SignUpGenre() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!selectedGenreId) {
       alert("장르를 선택해주세요.");
       return;
     }
     setShowModal(true);
   };
-
-  useEffect(() => {
-    if (pushEnabled === "true" || emailEnabled === "true") {
-      handleFormDataSubmission();
-    }
-  }, [pushEnabled, emailEnabled]);
 
   const handlePushNotification = () => {
     setPushEnabled("true");
@@ -201,23 +138,32 @@ function SignUpGenre() {
   const handleCloseModal = () => {
     setEmailEnabled("false");
     setPushEnabled("false");
-    setTimeout(() => {
-      handleFormDataSubmission();
-    }, 0);
+    handleFormDataSubmission();
   };
 
   const handleFormDataSubmission = async () => {
-    const formData = new FormData();
-    formData.append("socialProvider", userProfileData.socialProvider);
-    formData.append("socialId", userProfileData.socialId);
-    formData.append("email", userProfileData.email);
-    formData.append("nickname", userProfileData.nickname);
-    formData.append("pushEnabled", pushEnabled);
-    formData.append("emailEnabled", emailEnabled);
-    formData.append("genreId", selectedGenreId.toString());
-    formData.append("profileImage", userProfileData.profileImage);
-
     try {
+      const fcmToken = await getToken({
+        vapidKey:
+          "BM5WUtx7Zas7i4d3Xvktco8QHWM4gP2UwkXAZlKhuHCTwUN7YfldZy9y9rJEVCvxxA63bRDvm2RUar48SLC8jAw",
+      });
+
+      if (!fcmToken) {
+        toast.error("FCM 토큰을 가져올 수 없습니다.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("socialProvider", userProfileData.socialProvider);
+      formData.append("socialId", userProfileData.socialId);
+      formData.append("email", userProfileData.email);
+      formData.append("nickname", userProfileData.nickname);
+      formData.append("pushEnabled", pushEnabled);
+      formData.append("emailEnabled", emailEnabled);
+      formData.append("genreId", selectedGenreId.toString());
+      formData.append("profileImage", userProfileData.profileImage);
+      formData.append("fcmToken", fcmToken);
+
       const response = await axios.post(
         `${serverBaseUrl}/api/auth/register`,
         formData,
@@ -227,43 +173,18 @@ function SignUpGenre() {
           },
         }
       );
+
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
+        sessionStorage.setItem(
+          "accessToken",
+          response.data.response.token.accessToken
+        );
 
-        const { accessToken } = response.data.response.token;
-        if (accessToken) {
-          sessionStorage.setItem("accessToken", accessToken);
-          console.log("AccessToken: ", accessToken);
-
-          const eventSource = new EventSource(
-            `${serverBaseUrl}/api/reviews/subscribe/push-notification`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-
-          const addNotification =
-            useNotificationStore.getState().addNotification;
-
-          eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            addNotification(data);
-          };
-
-          eventSource.onerror = (error) => {
-            console.error("SSE 연결 에러:", error);
-            eventSource.close();
-          };
-
-          setShowModal(false);
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        } else {
-          throw new Error("토큰 발급에 실패했습니다.");
-        }
+        setShowModal(false);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       }
     } catch (error) {
       console.error("오류 발생:", error);
