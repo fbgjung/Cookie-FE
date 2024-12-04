@@ -4,7 +4,8 @@ import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
-import { getToken } from "../firebase"; // Firebase 설정 가져오기
+import { getToken } from "../firebase";
+import { messaging } from "../firebase";
 import axios from "axios";
 
 const MainContainer = styled.div`
@@ -143,7 +144,17 @@ function SignUpGenre() {
 
   const handleFormDataSubmission = async () => {
     try {
-      const fcmToken = await getToken({
+      // 알림 권한 요청
+      const permission = await Notification.requestPermission();
+      console.Log("알림 권한 요청 성공");
+      if (permission != "granted") {
+        toast.error("알림 권한이 거부되었습니다.");
+        console.Log("알림 권한 요청 실패");
+        return;
+      }
+
+      // FCM 토큰 가져오기
+      const fcmToken = await getToken(messaging, {
         vapidKey:
           "BM5WUtx7Zas7i4d3Xvktco8QHWM4gP2UwkXAZlKhuHCTwUN7YfldZy9y9rJEVCvxxA63bRDvm2RUar48SLC8jAw",
       });
@@ -152,6 +163,8 @@ function SignUpGenre() {
         toast.error("FCM 토큰을 가져올 수 없습니다.");
         return;
       }
+
+      console.log("FCM 토큰:", fcmToken);
 
       const formData = new FormData();
       formData.append("socialProvider", userProfileData.socialProvider);
