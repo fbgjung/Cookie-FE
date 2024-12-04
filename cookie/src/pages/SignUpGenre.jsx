@@ -7,11 +7,13 @@ import Modal from "../components/signUp/Modal";
 import useNotificationStore from "../stores/notificationStore";
 import serverBaseUrl from "../config/apiConfig";
 import axios from "axios";
+import useUserStore from "../stores/useUserStore";
 
 const MainContainer = styled.div`
   background-color: #fff4b9;
   height: 100vh;
   padding: 4.375rem 0 0 0;
+  margin: 0 auto;
 `;
 const MainTitle = styled.div`
   display: flex;
@@ -64,7 +66,7 @@ const GenreBtn = styled.button`
 const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20.6rem;
+  margin-top: 15rem;
 
   button {
     background-color: #aad6e7;
@@ -230,10 +232,21 @@ function SignUpGenre() {
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
 
-        const { accessToken } = response.data.response;
+        const { accessToken } = response.data.response.token;
         if (accessToken) {
           sessionStorage.setItem("accessToken", accessToken);
           console.log("AccessToken: ", accessToken);
+
+          const userResponse = response.data.response.user;
+          const setUserInfo = useUserStore.getState().setUserInfo;
+          const userInfo = {
+            userId: userResponse.userId,
+            nickname: userResponse.nickname,
+            profileImage: userResponse.profileImage,
+            genreId: userResponse.genreId,
+          };
+          setUserInfo(userInfo);
+          console.log("저장된 유저 정보:", userInfo);
 
           const eventSource = new EventSource(
             `${serverBaseUrl}/api/reviews/subscribe/push-notification`,
