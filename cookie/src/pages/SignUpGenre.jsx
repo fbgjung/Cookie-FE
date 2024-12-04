@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
 import { requestNotificationPermission } from "../firebase/firebaseMessaging";
-import { messaging } from "../firebase/firebase";
+
 import axios from "axios";
 
 const MainContainer = styled.div`
@@ -112,6 +112,7 @@ function SignUpGenre() {
   const [showModal, setShowModal] = useState(false);
   const [pushEnabled, setPushEnabled] = useState("false");
   const [emailEnabled, setEmailEnabled] = useState("false");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleButtonClick = (id) => {
     setSelectedGenreId(id);
@@ -137,16 +138,22 @@ function SignUpGenre() {
   };
 
   const handleCloseModal = () => {
-    setEmailEnabled("false");
-    setPushEnabled("false");
-    handleFormDataSubmission();
+    setShowModal(false);
+
+    if (!isSubmitting) {
+      handleFormDataSubmission();
+    }
   };
 
   const handleFormDataSubmission = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const fcmToken = await requestNotificationPermission();
       if (!fcmToken) {
         toast.error("FCM 토큰을 가져올 수 없습니다.");
+        setIsSubmitting(false);
         return;
       }
 
@@ -176,13 +183,15 @@ function SignUpGenre() {
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
         setShowModal(false);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+        setIsSubmitting(false);
+
+        navigate("/");
       }
     } catch (error) {
       console.error("오류 발생:", error);
       toast.error(`가입 실패: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
