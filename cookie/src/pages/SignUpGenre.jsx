@@ -130,6 +130,8 @@ function SignUpGenre() {
   const handlePushNotification = () => {
     setPushEnabled("true");
     setEmailEnabled("false");
+    // Immediately submit the form after selecting push notification
+    handleCloseModal();
   };
 
   const handleEmailNotification = () => {
