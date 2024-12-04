@@ -1,36 +1,68 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import axiosInstance from "../api/auth/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
-const PageWrapper = styled.div`
-    width: 90%;
-  padding: 20px;
+const ReviewFeedWrapper = styled.div`
+  width: 100%;
   margin: 0 auto;
+  max-width: 900px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
   height: 100vh;
 `;
 
-const TabContainer = styled.div`
+const ReviewTitle = styled.div`
+  text-align: center;
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h2 {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #b29463;
+    margin-top: 10px;
+  }
+`;
+
+const FilterButtons = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 10px;
   margin-bottom: 20px;
 
   button {
     padding: 10px 20px;
-    border: none;
-    background-color: #555;
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
+    font-size: 1rem;
+    border-radius: 20px;
     cursor: pointer;
-
-    &:hover {
-      background-color: #000;
-    }
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 
     &.active {
       background-color: #04012d;
+      color: #fff;
+    }
+
+    &.inactive {
+      background-color: #f0f0f0;
+      color: #666;
+    }
+
+    &:hover {
+      background-color: #ddd;
     }
   }
 `;
@@ -41,104 +73,208 @@ const ReviewContainer = styled.div`
   gap: 20px;
 `;
 
-const ReviewCard = styled.div`
+const ReviewTicket = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 15px;
-  border: 1px solid #ddd;
+  background-image: url("/src/assets/images/mypage/reviewticket.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 30px;
   border-radius: 8px;
-  background-color: #fff;
-  position: relative;
-  filter: ${(props) => (props.spoiler ? "blur(5px)" : "none")};
+  box-sizing: border-box;
+  min-height: 180px;
+  cursor: pointer;
+  width: 90%;
+  margin: 0 auto;
+`;
 
-  .review-info {
-    flex: 1;
-    margin-left: 15px;
+const ReviewLeft = styled.div`
+  flex: 0 0 100px;
 
-    .username {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 5px;
+  img {
+    width: 80px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+`;
+
+const ReviewCenter = styled.div`
+  flex: 1;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+
+  .profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
     }
 
-    .content {
-      font-size: 14px;
-      color: #666;
-    }
+    .user-info {
+      .name {
+        font-size: 0.9rem;
+        font-weight: bold;
+      }
 
-    .likes {
-      font-size: 14px;
-      color: #cc5283;
-      margin-top: 10px;
+      .date {
+        font-size: 0.8rem;
+        color: #888;
+      }
+    }
+  }
+
+  .comment {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+`;
+
+const ReviewRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .score {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 20px;
+      height: 20px;
     }
   }
 `;
 
-const MovieReviewFeed = ({ movieId }) => {
+const MovieReviewFeed = () => {
+  const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
-  const [filteredReviews, setFilteredReviews] = useState([]);
-  const [tab, setTab] = useState("all");
+  const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchReviews = useCallback(async () => {
+    if (isLoading || !hasMore) return;
+
+    try {
+      setIsLoading(true);
+
+      const endpoint = showSpoilerOnly
+        ? "http://localhost:8080/api/reviews/spoiler"
+        : "http://localhost:8080/api/reviews";
+
+      const response = await axios.get(endpoint, {
+        params: { page, size: 10 },
+      });
+
+      const newReviews = response.data.response.reviews;
+
+      setReviews((prevReviews) =>
+        page === 0 ? newReviews : [...prevReviews, ...newReviews]
+      );
+
+      if (newReviews.length < 10 || response.data.response.lastPage) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("리뷰 불러오기 실패:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, hasMore, page, showSpoilerOnly]);
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/api/{movies}/${movieId}/reviews`
-        );
-        setReviews(response.data);
-        setFilteredReviews(response.data);
-      } catch (error) {
-        console.error("리뷰 불러오기 실패:", error);
-      }
-    };
-
     fetchReviews();
-  }, [movieId]);
+  }, [fetchReviews]);
 
-  const handleTabClick = (tab) => {
-    setTab(tab);
-    if (tab === "all") {
-      setFilteredReviews(reviews);
-    } else if (tab === "spoiler") {
-      setFilteredReviews(reviews.filter((review) => review.containsSpoiler));
-    }
+  const filterReviews = (showSpoilers) => {
+    setShowSpoilerOnly(showSpoilers);
+    setPage(0);
+    setReviews([]);
+    setHasMore(true);
+  };
+
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`);
   };
 
   return (
-    <PageWrapper>
-      <h2>영화 리뷰</h2>
-      <TabContainer>
+    <ReviewFeedWrapper>
+      <ReviewTitle>
+        <h1>Cookie Review</h1>
+        <h2>"소년시절의 나" 의 작품 리뷰</h2>
+      </ReviewTitle>
+      <FilterButtons>
         <button
-          className={tab === "all" ? "active" : ""}
-          onClick={() => handleTabClick("all")}
+          className={!showSpoilerOnly ? "active" : "inactive"}
+          onClick={() => filterReviews(false)}
         >
           전체 리뷰
         </button>
         <button
-          className={tab === "spoiler" ? "active" : ""}
-          onClick={() => handleTabClick("spoiler")}
+          className={showSpoilerOnly ? "active" : "inactive"}
+          onClick={() => filterReviews(true)}
         >
           스포일러 리뷰
         </button>
-      </TabContainer>
+      </FilterButtons>
       <ReviewContainer>
-        {filteredReviews.map((review) => (
-          <ReviewCard key={review.id} spoiler={review.containsSpoiler && tab === "all"}>
-            <img
-              src={review.user.profileImage || "/assets/images/default-user.png"}
-              alt={review.user.nickname}
-              style={{ width: "60px", height: "60px", borderRadius: "50%" }}
-            />
-            <div className="review-info">
-              <div className="username">{review.user.nickname}</div>
-              <div className="content">{review.content}</div>
-              <div className="likes">❤️ {review.reviewLike}</div>
-            </div>
-          </ReviewCard>
+        {reviews.map((review, index) => (
+          <ReviewTicket
+            key={`${review.reviewId}-${index}`}
+            onClick={() => handleReviewClick(review.reviewId)}
+          >
+            <ReviewLeft>
+              <img src={review.movie.poster} alt={review.movie.title} />
+              <div className="title">{review.movie.title}</div>
+            </ReviewLeft>
+            <ReviewCenter>
+              <div className="profile">
+                <img
+                  src={review.user.profileImage}
+                  alt={review.user.nickname}
+                />
+                <div className="user-info">
+                  <div className="name">{review.user.nickname}</div>
+                  <div className="date">
+                    {new Date(review.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+              </div>
+              <div className="comment">{review.content}</div>
+            </ReviewCenter>
+            <ReviewRight>
+              <div className="score">
+                {Array.from({ length: Math.round(review.movieScore) }).map(
+                  (_, i) => (
+                    <img
+                      key={`${review.reviewId}-score-${i}`}
+                      src="/src/assets/images/mypage/cookiescore.svg"
+                      alt="score"
+                    />
+                  )
+                )}
+              </div>
+            </ReviewRight>
+          </ReviewTicket>
         ))}
       </ReviewContainer>
-    </PageWrapper>
+      {isLoading && <p>Loading more reviews...</p>}
+      {!hasMore && <p>No more reviews available.</p>}
+    </ReviewFeedWrapper>
   );
 };
 

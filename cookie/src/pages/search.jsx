@@ -77,10 +77,8 @@ const Search = () => {
   const [hasMore, setHasMore] = useState(true);
   const [showTopButton, setShowTopButton] = useState(false);
 
-  // 디바운스 타이머를 저장할 변수
   const [debounceTimer, setDebounceTimer] = useState(null);
 
-  // 스크롤 상태 감지
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -101,7 +99,6 @@ const Search = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore]);
 
-  // 검색 API 호출
   const fetchSearchResults = async () => {
     if (!searchTerm.trim()) {
       setResults([]);
@@ -110,12 +107,9 @@ const Search = () => {
     }
 
     try {
-      const response = await axios.get(
-        `http://localhost:8080/api/search`,
-        {
-          params: { type: activeTab, keyword: searchTerm, page },
-        }
-      );
+      const response = await axios.get(`http://localhost:8080/api/search`, {
+        params: { type: activeTab, keyword: searchTerm, page },
+      });
 
       const newResults = response.data.content;
       setResults((prevResults) =>
@@ -124,26 +118,28 @@ const Search = () => {
       setHasMore(!response.data.last);
     } catch (error) {
       console.error("Error fetching search results:", error);
-      setResults([]); // 에러 발생 시 결과 초기화
+      setResults([]);
       setHasMore(false);
     }
   };
 
-  // 검색어와 탭 변경 시 API 호출 (디바운스 적용)
   useEffect(() => {
     if (debounceTimer) clearTimeout(debounceTimer);
 
     const timer = setTimeout(() => {
-      setPage(0); // 페이지 초기화
-      setHasMore(true);
-      fetchSearchResults();
-    }, 100); // 디바운스 딜레이 100ms
+      if (searchTerm.trim()) {
+        setPage(0);
+        setHasMore(true);
+        fetchSearchResults();
+      } else {
+        setResults([]);
+      }
+    }, 300);
 
     setDebounceTimer(timer);
     return () => clearTimeout(timer);
   }, [searchTerm, activeTab]);
 
-  // 페이지 변경 시 추가 데이터 로드
   useEffect(() => {
     if (page > 0) {
       fetchSearchResults();
@@ -190,13 +186,9 @@ const Search = () => {
             감독명
           </button>
         </Tabs>
-        <SearchResults
-          results={results}
-          activeTab={activeTab}
-          onMovieClick={handleMovieClick}
-        />
+        <SearchResults results={results} onMovieClick={handleMovieClick} />
       </ContentWrapper>
-      <TopButton visible={showTopButton} onClick={scrollToTop} />
+      {showTopButton && <TopButton onClick={scrollToTop} />}
     </Container>
   );
 };

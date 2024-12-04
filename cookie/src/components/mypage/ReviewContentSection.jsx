@@ -57,11 +57,6 @@ const ReviewContentContainer = styled.div`
         font-weight: bold;
         color: #04012d;
       }
-
-      .movie-year-country {
-        font-size: 0.8rem;
-        color: #666;
-      }
     }
 
     .cookie-score {
@@ -123,7 +118,6 @@ const ReviewContentSection = ({
   name,
   date,
   movieTitle,
-  movieYearCountry,
   cookieScoreCount,
   isMenuOpen,
   toggleMenu,
@@ -145,7 +139,6 @@ const ReviewContentSection = ({
 
         <div className="movie-info">
           <span className="movie-title">{movieTitle}</span>
-          <span className="movie-year-country">{movieYearCountry}</span>
         </div>
 
         <div className="cookie-score">
@@ -178,7 +171,6 @@ ReviewContentSection.propTypes = {
   name: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   movieTitle: PropTypes.string.isRequired,
-  movieYearCountry: PropTypes.string.isRequired,
   cookieScoreCount: PropTypes.number.isRequired,
   isMenuOpen: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
