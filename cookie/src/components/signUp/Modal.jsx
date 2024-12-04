@@ -20,26 +20,31 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 420px;
+  width: 470px;
 
   h2 {
     margin: 0 0 2rem 0;
+    color: #724b2e;
   }
   h3 {
     margin: 0 0 0.3rem 0;
+    color: #724b2e;
   }
   div {
     display: flex;
     margin: 2rem 0 2rem 0;
   }
+  p {
+    color: #724b2e;
+  }
 `;
 
 const ModalButton = styled.button`
-  background-color: ${(props) => (props.$isSelected ? "#724b2e" : "#aad6e7")};
-  color: ${(props) => (props.$isSelected ? "white" : "#724b2e")};
+  background-color: ${(props) => (props.$isSelected ? "#aad6e7" : "white")};
+  color: ${(props) => (props.$isSelected ? "#724b2e" : "#724b2e")};
   border-radius: 5rem;
   padding: 0.8rem 1rem;
-  border: none;
+  border: 1px solid #aad6e7;
   cursor: pointer;
   font-size: 1rem;
   &:hover {
