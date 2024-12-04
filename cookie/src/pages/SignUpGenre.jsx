@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
 import { requestNotificationPermission } from "../firebase/firebaseMessaging";
-
 import axios from "axios";
 
 const MainContainer = styled.div`
@@ -110,8 +109,6 @@ function SignUpGenre() {
   const location = useLocation();
   const userProfileData = location.state;
   const [showModal, setShowModal] = useState(false);
-  const [pushEnabled, setPushEnabled] = useState("false");
-  const [emailEnabled, setEmailEnabled] = useState("false");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleButtonClick = (id) => {
@@ -128,26 +125,24 @@ function SignUpGenre() {
   };
 
   const handlePushNotification = () => {
-    setPushEnabled("true");
-    setEmailEnabled("false");
-    // Immediately submit the form after selecting push notification
-    handleCloseModal();
+    handleCloseModal("true", "false");
   };
 
   const handleEmailNotification = () => {
-    setEmailEnabled("true");
-    setPushEnabled("false");
+    handleCloseModal("false", "true");
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (pushEnabledValue, emailEnabledValue) => {
     setShowModal(false);
-
     if (!isSubmitting) {
-      handleFormDataSubmission();
+      handleFormDataSubmission(pushEnabledValue, emailEnabledValue);
     }
   };
 
-  const handleFormDataSubmission = async () => {
+  const handleFormDataSubmission = async (
+    pushEnabledValue,
+    emailEnabledValue
+  ) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -166,8 +161,8 @@ function SignUpGenre() {
       formData.append("socialId", userProfileData.socialId);
       formData.append("email", userProfileData.email);
       formData.append("nickname", userProfileData.nickname);
-      formData.append("pushEnabled", pushEnabled);
-      formData.append("emailEnabled", emailEnabled);
+      formData.append("pushEnabled", pushEnabledValue);
+      formData.append("emailEnabled", emailEnabledValue);
       formData.append("genreId", selectedGenreId.toString());
       formData.append("profileImage", userProfileData.profileImage);
       formData.append("fcmToken", fcmToken);
