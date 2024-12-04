@@ -6,7 +6,7 @@ import SpecialMovie from "../components/main/SpecialMovie";
 import GenreMovie from "../components/main/GenreMovie";
 import TopButton from "../components/searchpage/TopButton";
 import { useEffect, useState } from "react";
-import LoginModal from "../components/LoginModal";
+import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
 
 const CommonContainer = styled.div`
