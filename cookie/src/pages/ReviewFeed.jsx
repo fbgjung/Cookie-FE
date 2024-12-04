@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 
@@ -18,7 +17,6 @@ const ReviewFeedWrapper = styled.div`
 const ReviewTitle = styled.div`
   text-align: center; /* 텍스트를 중앙 정렬 */
   margin-bottom: 20px;
-  transform: translateX(-20px);
 
   h1 {
     font-size: 2.5rem;
@@ -48,7 +46,6 @@ const FilterButtons = styled.div`
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
-  transform: translateX(-20px);
 
   button {
     padding: 10px 20px;
@@ -92,9 +89,8 @@ const ReviewTicket = styled.div`
   box-sizing: border-box;
   min-height: 180px;
   cursor: pointer;
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
-  transform: translateX(-20px);
 `;
 
 const ReviewLeft = styled.div`
