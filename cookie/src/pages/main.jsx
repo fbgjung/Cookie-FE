@@ -8,6 +8,7 @@ import TopButton from "../components/searchpage/TopButton";
 import { useEffect, useState } from "react";
 import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
+import useUserStore from "../stores/useUserStore";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -116,6 +117,7 @@ const Main = () => {
 
   const [showTopButton, setShowTopButton] = useState(false);
   const { isLogined } = useAuthStore();
+  const userInfo = useUserStore((state) => state.getUserInfo());
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -143,6 +145,14 @@ const Main = () => {
           <CookieMovies />
           <SpecialMovie />
           <GenreMovie />
+          <div>
+            <h1>유저 프로필</h1>
+            <p>닉네임: {userInfo.nickname}</p>
+            <p>유저아이디: {userInfo.userId}</p>
+            <p>장르 ID: {userInfo.genreId}</p>
+            <p>프로필 이미지:</p>
+            <img src={userInfo.profileImage} alt="Profile" />
+          </div>
         </Content>
         <LoginModal />
         <WriteReviewButton onClick={() => isLogined("/searchmov")}>
