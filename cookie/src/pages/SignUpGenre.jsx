@@ -5,14 +5,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
 import { requestNotificationPermission } from "../firebase/firebaseMessaging";
+
 import axios from "axios";
-import useUserStore from "../stores/useUserStore";
 
 const MainContainer = styled.div`
-  background-color: #fff4b9;
+  background-color: white;
   height: 100vh;
   padding: 4.375rem 0 0 0;
-  margin: 0 auto;
 `;
 
 const MainTitle = styled.div`
@@ -23,7 +22,7 @@ const MainTitle = styled.div`
 
   h2 {
     margin: 0.8rem;
-    color: #724b2e;
+    color: var(--main);
   }
 `;
 
@@ -31,12 +30,12 @@ const SubTitle = styled.div`
   margin: 2.5rem 3.3rem;
 
   h3 {
-    color: #724b2e;
+    color: var(--main);
     margin: 0;
   }
 
   p {
-    color: #235b97;
+    color: var(--main);
     margin: 0;
     font-size: 0.9rem;
   }
@@ -47,37 +46,37 @@ const GenreContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
-  width: 75%;
+  width: 70%;
 `;
 
 const GenreBtn = styled.button`
-  background-color: ${(props) => (props.$isSelected ? "#aad6e7" : "white")};
-  color: ${(props) => (props.$isSelected ? "#724b2e" : "#724b2e")};
-  border-radius: 12px;
+  background-color: ${(props) =>
+    props.$isSelected ? "var(--main)" : "var(--sub-btn)"};
+  color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
+  border-radius: 5rem;
   padding: 0.8rem 1rem;
-  border: 1px solid #aad6e7;
+  border: none;
   cursor: pointer;
   &:hover {
-    background-color: #aad6e7;
-    color: #724b2e;
+    background-color: var(--main);
+    color: white;
   }
 `;
 
 const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 15rem;
+  margin-top: 20.6rem;
 
   button {
-    background-color: #aad6e7;
-    color: #724b2e;
+    background-color: var(--main);
+    color: white;
     width: 29rem;
     height: 4rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0.5rem 0.625rem 12rem 3rem #ffeb7d;
+    box-shadow: 0 0.625rem 6.25rem rgba(3, 6, 59, 0.5);
     font-size: 1.2rem;
-    font-weight: 700;
     outline: none;
     cursor: pointer;
   }
@@ -111,6 +110,8 @@ function SignUpGenre() {
   const location = useLocation();
   const userProfileData = location.state;
   const [showModal, setShowModal] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState("false");
+  const [emailEnabled, setEmailEnabled] = useState("false");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleButtonClick = (id) => {
@@ -127,24 +128,26 @@ function SignUpGenre() {
   };
 
   const handlePushNotification = () => {
-    handleCloseModal("true", "false");
+    setPushEnabled("true");
+    setEmailEnabled("false");
+    // Immediately submit the form after selecting push notification
+    handleCloseModal();
   };
 
   const handleEmailNotification = () => {
-    handleCloseModal("false", "true");
+    setEmailEnabled("true");
+    setPushEnabled("false");
   };
 
-  const handleCloseModal = (pushEnabledValue, emailEnabledValue) => {
+  const handleCloseModal = () => {
     setShowModal(false);
+
     if (!isSubmitting) {
-      handleFormDataSubmission(pushEnabledValue, emailEnabledValue);
+      handleFormDataSubmission();
     }
   };
 
-  const handleFormDataSubmission = async (
-    pushEnabledValue,
-    emailEnabledValue
-  ) => {
+  const handleFormDataSubmission = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -163,8 +166,8 @@ function SignUpGenre() {
       formData.append("socialId", userProfileData.socialId);
       formData.append("email", userProfileData.email);
       formData.append("nickname", userProfileData.nickname);
-      formData.append("pushEnabled", pushEnabledValue);
-      formData.append("emailEnabled", emailEnabledValue);
+      formData.append("pushEnabled", pushEnabled);
+      formData.append("emailEnabled", emailEnabled);
       formData.append("genreId", selectedGenreId.toString());
       formData.append("profileImage", userProfileData.profileImage);
       formData.append("fcmToken", fcmToken);
@@ -182,40 +185,14 @@ function SignUpGenre() {
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
 
-        const { accessToken } = response.data.response.token;
-        if (accessToken) {
-          sessionStorage.setItem("accessToken", accessToken);
-          console.log("AccessToken: ", accessToken);
+        sessionStorage.setItem(
+          "accessToken",
+          response.data.response.token.accessToken
+        );
+        setShowModal(false);
+        setIsSubmitting(false);
 
-          const eventSource = new EventSource(
-            `${serverBaseUrl}/api/reviews/subscribe/push-notification`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-
-          const addNotification =
-            useNotificationStore.getState().addNotification;
-
-          eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            addNotification(data);
-          };
-
-          eventSource.onerror = (error) => {
-            console.error("SSE 연결 에러:", error);
-            eventSource.close();
-          };
-
-          setShowModal(false);
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        } else {
-          throw new Error("토큰 발급에 실패했습니다.");
-        }
+        navigate("/");
       }
     } catch (error) {
       console.error("오류 발생:", error);
