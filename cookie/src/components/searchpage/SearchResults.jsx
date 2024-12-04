@@ -104,14 +104,15 @@ const SearchResults = ({ results, onMovieClick, isLoading }) => {
 };
 
 SearchResults.propTypes = {
-  results: PropTypes.array.isRequired,
-  onMovieClick: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
+  results: PropTypes.array.isRequired, // 검색 결과 배열
+  activeTab: PropTypes.string.isRequired, // 활성화된 탭 (movie, actor, director)
+  onMovieClick: PropTypes.func.isRequired, // 영화 클릭 핸들러
+  isLoading: PropTypes.bool, // 로딩 상태
 };
 
 SearchResults.defaultProps = {
-  results: [],
-  isLoading: false,
+  results: [], // 기본 검색 결과는 빈 배열
+  isLoading: false, // 기본 로딩 상태는 false
 };
 
 export default SearchResults;
