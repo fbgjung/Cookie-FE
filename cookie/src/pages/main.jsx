@@ -66,7 +66,7 @@ const WriteReviewButton = styled.button`
   right: calc(50% - 334px);
   transform: translateX(-50%);
   background-color: var(--main);
-  color: white;
+  color: var(--text);
   font-size: 16px;
   font-weight: 700;
   padding: 10px 20px;
@@ -81,43 +81,51 @@ const WriteReviewButton = styled.button`
   }
 `;
 
+const categoryData = [
+  { id: 1, mainCategory: "장르", subCategory: "로맨스" },
+  { id: 2, mainCategory: "장르", subCategory: "공포" },
+  { id: 3, mainCategory: "장르", subCategory: "코미디" },
+  { id: 4, mainCategory: "장르", subCategory: "액션" },
+  { id: 5, mainCategory: "장르", subCategory: "판타지" },
+  { id: 6, mainCategory: "장르", subCategory: "애니메이션" },
+  { id: 7, mainCategory: "장르", subCategory: "범죄" },
+  { id: 8, mainCategory: "장르", subCategory: "SF" },
+  { id: 9, mainCategory: "장르", subCategory: "음악" },
+  { id: 10, mainCategory: "장르", subCategory: "스릴러" },
+  { id: 11, mainCategory: "장르", subCategory: "전쟁" },
+  { id: 12, mainCategory: "장르", subCategory: "다큐멘터리" },
+  { id: 13, mainCategory: "장르", subCategory: "드라마" },
+  { id: 14, mainCategory: "장르", subCategory: "가족" },
+  { id: 15, mainCategory: "장르", subCategory: "역사" },
+  { id: 16, mainCategory: "장르", subCategory: "미스터리" },
+  { id: 17, mainCategory: "장르", subCategory: "TV 영화" },
+  { id: 18, mainCategory: "장르", subCategory: "서부극" },
+  { id: 19, mainCategory: "장르", subCategory: "모험" },
+  { id: 20, mainCategory: "장르", subCategory: "N/A" },
+  { id: 21, mainCategory: "시즌", subCategory: "설레는 봄" },
+  { id: 22, mainCategory: "시즌", subCategory: "청량한 여름" },
+  { id: 23, mainCategory: "시즌", subCategory: "포근한 가을" },
+  { id: 24, mainCategory: "시즌", subCategory: "눈 오는 겨울" },
+  { id: 25, mainCategory: "시즌", subCategory: "어린이날" },
+  { id: 26, mainCategory: "시즌", subCategory: "크리스마스" },
+  { id: 27, mainCategory: "시즌", subCategory: "새해" },
+  { id: 28, mainCategory: "시즌", subCategory: "명절" },
+  { id: 29, mainCategory: "테마", subCategory: "심화를 소재로 한" },
+  { id: 30, mainCategory: "테마", subCategory: "가족과 함께" },
+  { id: 31, mainCategory: "테마", subCategory: "연인과 함께" },
+  { id: 32, mainCategory: "테마", subCategory: "열린결말" },
+  { id: 33, mainCategory: "테마", subCategory: "비 오는 날" },
+  { id: 34, mainCategory: "테마", subCategory: "킬링타임" },
+  { id: 35, mainCategory: "테마", subCategory: "디즈니" },
+  { id: 36, mainCategory: "연령대", subCategory: "10대" },
+  { id: 37, mainCategory: "연령대", subCategory: "20대" },
+  { id: 38, mainCategory: "연령대", subCategory: "30대" },
+  { id: 39, mainCategory: "연령대", subCategory: "40대" },
+  { id: 40, mainCategory: "연령대", subCategory: "50대" },
+];
 const Main = () => {
-  const dummyMovies = [
-    {
-      matchUpId: 1,
-      matchUpTitle: "박찬욱 감독의 복수 3부작 빅매치",
-      type: "GENRE",
-      movie1: {
-        movieTitle: "올드보이",
-        moviePoster: "https://via.placeholder.com/83x118",
-        matchDate: "2024-12-31",
-      },
-      movie2: {
-        movieTitle: "복수는나의 것",
-        moviePoster: "https://via.placeholder.com/83x118",
-        matchDate: "2024-12-31",
-      },
-    },
-    {
-      matchUpId: 2,
-      matchUpTitle: "모두를 감동시킨 디즈니 영화",
-      type: "SHOW",
-      movie1: {
-        movieTitle: "인사이드 아웃",
-        moviePoster: "https://via.placeholder.com/83x118",
-        matchDate: "2024-12-31",
-      },
-      movie2: {
-        movieTitle: "엘리멘탈",
-        moviePoster: "https://via.placeholder.com/83x118",
-        matchDate: "2024-12-31",
-      },
-    },
-  ];
-
   const [showTopButton, setShowTopButton] = useState(false);
   const { isLogined } = useAuthStore();
-  const userInfo = useUserStore((state) => state.getUserInfo());
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -140,19 +148,11 @@ const Main = () => {
       <MainContainer>
         <img src={"https://via.placeholder.com/600x250"} alt="배너" />
         <Content>
-          <MatchUp dummydata={dummyMovies} />
+          <MatchUp />
           <RankMovie />
           <CookieMovies />
-          <SpecialMovie />
-          <GenreMovie />
-          <div>
-            <h1>유저 프로필</h1>
-            <p>닉네임: {userInfo.nickname}</p>
-            <p>유저아이디: {userInfo.userId}</p>
-            <p>장르 ID: {userInfo.genreId}</p>
-            <p>프로필 이미지:</p>
-            <img src={userInfo.profileImage} alt="Profile" />
-          </div>
+          <SpecialMovie categorydata={categoryData} />
+          <GenreMovie categorydata={categoryData} />
         </Content>
         <LoginModal />
         <WriteReviewButton onClick={() => isLogined("/searchmov")}>
