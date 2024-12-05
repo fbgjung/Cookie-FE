@@ -13,7 +13,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
-
 messaging.onBackgroundMessage(function (payload) {
   console.log("백그라운드에서 푸시 알림 받음:", payload);
 
@@ -22,5 +21,17 @@ messaging.onBackgroundMessage(function (payload) {
   self.registration.showNotification(title, {
     body: body,
     icon: icon,
+  });
+
+  self.clients.matchAll().then((clients) => {
+    clients.forEach((client) =>
+      client.postMessage({
+        type: "NEW_NOTIFICATION",
+        payload: {
+          body,
+          timestamp: new Date().toLocaleString(),
+        },
+      })
+    );
   });
 });
