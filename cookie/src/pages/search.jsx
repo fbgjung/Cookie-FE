@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-
 import SearchBar from "../components/searchpage/SearchBar";
 import SearchResults from "../components/searchpage/SearchResults";
 import TopButton from "../components/searchpage/TopButton";

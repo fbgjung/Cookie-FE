@@ -75,7 +75,6 @@ const FilterButtons = styled.div`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
 `;
 
 const ReviewTicket = styled.div`
