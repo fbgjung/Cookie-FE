@@ -69,14 +69,46 @@ const Tabs = styled.div`
 const Search = () => {
   const navigate = useNavigate();
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("movie");
-  const [results, setResults] = useState([]);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [showTopButton, setShowTopButton] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
+  const [activeTab, setActiveTab] = useState("movie"); // 활성 탭 상태
+  const [results, setResults] = useState([]); // 검색 결과
+  const [page, setPage] = useState(0); // 페이지 번호
+  const [hasMore, setHasMore] = useState(true); // 추가 데이터 여부
+  const [showTopButton, setShowTopButton] = useState(false); // 상단 이동 버튼 상태
 
-  const [debounceTimer, setDebounceTimer] = useState(null);
+  const fetchSearchResults = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/search", {
+        params: { type: activeTab, keyword: searchTerm, page },
+      });
+
+      const newResults = response.data?.content || []; // 데이터가 없을 때 빈 배열로 초기화
+
+      setResults((prevResults) =>
+        page === 0 ? newResults : [...prevResults, ...newResults]
+      );
+
+      setHasMore(!response.data?.last); // 마지막 페이지 여부
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setHasMore(false);
+    }
+  };
+
+  useEffect(() => {
+    if (searchTerm.trim()) {
+      setPage(0);
+      fetchSearchResults();
+    } else {
+      setResults([]); // 검색어가 없으면 결과 초기화
+    }
+  }, [searchTerm, activeTab]);
+
+  useEffect(() => {
+    if (page > 0) {
+      fetchSearchResults();
+    }
+  }, [page]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -98,53 +130,6 @@ const Search = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore]);
 
-  const fetchSearchResults = async () => {
-    if (!searchTerm.trim()) {
-      setResults([]);
-      setHasMore(false);
-      return;
-    }
-
-    try {
-      const response = await axios.get(`http://localhost:8080/api/search`, {
-        params: { type: activeTab, keyword: searchTerm, page },
-      });
-
-      const newResults = response.data.content;
-      setResults((prevResults) =>
-        page === 0 ? newResults : [...prevResults, ...newResults]
-      );
-      setHasMore(!response.data.last);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-      setResults([]);
-      setHasMore(false);
-    }
-  };
-
-  useEffect(() => {
-    if (debounceTimer) clearTimeout(debounceTimer);
-
-    const timer = setTimeout(() => {
-      if (searchTerm.trim()) {
-        setPage(0);
-        setHasMore(true);
-        fetchSearchResults();
-      } else {
-        setResults([]);
-      }
-    }, 300);
-
-    setDebounceTimer(timer);
-    return () => clearTimeout(timer);
-  }, [searchTerm, activeTab]);
-
-  useEffect(() => {
-    if (page > 0) {
-      fetchSearchResults();
-    }
-  }, [page]);
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -163,7 +148,7 @@ const Search = () => {
         <SearchBar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          onSearch={() => {}}
+          onSearch={fetchSearchResults}
         />
         <Tabs>
           <button
@@ -185,7 +170,12 @@ const Search = () => {
             감독명
           </button>
         </Tabs>
-        <SearchResults results={results} onMovieClick={handleMovieClick} />
+        <SearchResults
+          results={results || []} // results가 undefined인 경우 빈 배열로 전달
+          onMovieClick={handleMovieClick}
+          isLoading={results.length === 0 && searchTerm.trim()} // 로딩 상태 처리
+          activeTab={activeTab}
+        />
       </ContentWrapper>
       {showTopButton && <TopButton onClick={scrollToTop} />}
     </Container>
