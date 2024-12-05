@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import matchUp from "../../assets/images/main/matchup_icon.svg";
 import fight from "../../assets/images/main/fight_icon.svg";
 import { useNavigate } from "react-router-dom";
+import serverBaseUrl from "../../config/apiConfig";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const MatchUpContainer = styled.div`
   position: relative;
@@ -40,10 +42,9 @@ const MatchUpContainer = styled.div`
   }
 
   .matchUp__overlay button {
-    width: 13rem;
-    height: 3.19rem;
+    width: 14rem;
     background-color: var(--sub);
-    color: white;
+    color: var(--text);
     border: none;
     font-size: 1.125rem;
     font-weight: 700;
@@ -56,6 +57,7 @@ const MatchUpContainer = styled.div`
     opacity: 0;
     visibility: visible;
     transition: opacity 0.3s ease;
+    padding: 1rem;
   }
 
   .matchUp__overlay:hover button {
@@ -64,10 +66,9 @@ const MatchUpContainer = styled.div`
   }
 
   .matchUp__movie--title {
-    background-color: white;
+    background-color: var(--sub);
     border-radius: 12px;
     padding: 5px 10px;
-    border: 1px solid var(--sub-btn);
   }
   .matchUp__content {
     display: flex;
@@ -97,6 +98,8 @@ const MatchUpContainer = styled.div`
   .matchUp__movie--poster {
     border-radius: 0.625rem;
     margin: 0 0 0.625rem 0;
+    width: 83px;
+    height: 118px;
   }
 
   .matchUp__movie--icon {
@@ -106,12 +109,42 @@ const MatchUpContainer = styled.div`
   }
 `;
 
-function MatchUp({ matchDate, dummydata }) {
+function MatchUp({ matchDate }) {
   const today = new Date();
-  matchDate = new Date("2024-12-31");
+  matchDate = new Date(matchUp.startAt);
   const leftTime = matchDate - today;
   const leftDay = Math.ceil(leftTime / (1000 * 3600 * 24));
   const navigate = useNavigate();
+
+  const [matchUps, setMatchUps] = useState([]);
+  const [access, setAccess] = useState(true);
+  useEffect(() => {
+    const fetchMainPageMovies = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `${serverBaseUrl}/api/movies/mainPage`
+        );
+        const matchUpData = response.data.response.matchUp;
+        if (matchUpData) {
+          console.log(matchUpData);
+          setMatchUps(matchUpData.matchUps);
+
+          const today = new Date();
+          const dayOfWeek = today.getDay();
+
+          if (dayOfWeek === 0) {
+            setAccess(false);
+          } else {
+            setAccess(matchUpData.access);
+          }
+        }
+      } catch (error) {
+        console.error("API 호출 오류 발생:", error);
+      }
+    };
+
+    fetchMainPageMovies();
+  }, []);
 
   return (
     <MatchUpContainer>
@@ -120,35 +153,46 @@ function MatchUp({ matchDate, dummydata }) {
         <h2> 이번주 영화 매치업! D-{leftDay}</h2>
       </div>
       <div className="matchUp__content">
-        {dummydata.map((group, index) => (
-          <div className="matchUp__movie" key={index}>
+        {matchUps.map((matchUp) => (
+          <div className="matchUp__movie" key={matchUp.matchUpId}>
             <img
               className="matchUp__movie--icon"
               src={fight}
               alt="fight_icon"
             />
             <div className="matchUp__overlay">
-              <button onClick={() => navigate(`/matchup/${group.matchUpId}`)}>
-                투표하러 가기👀
+              <button
+                onClick={() => navigate(`/matchup/${matchUp.matchUpId}`)}
+                disabled={!access}
+              >
+                {access
+                  ? "투표하러 가기👀 "
+                  : "오늘은 투표일이 아니에요🥲 내일 만나요"}
               </button>
             </div>
-            <p className="matchUp__movie--title">{group.matchUpTitle}</p>
+            <p className="matchUp__movie--title">{matchUp.matchUpTitle}</p>
             <div className="matchUp__movie--container">
               <div className="matchUp__movie--list">
                 <img
                   className="matchUp__movie--poster"
-                  src={group.movie1.moviePoster}
-                  alt={group.movie1.movieTitle}
+                  // src={matchUp.movie1.moviePoster}
+                  src={
+                    "https://image.tmdb.org/t/p/w500/4Zb4Z2HjX1t5zr1qYOTdVoisJKp.jpg"
+                  }
+                  alt={matchUp.movie1.movieTitle}
                 />
-                <p>{group.movie1.movieTitle}</p>
+                <p>{matchUp.movie1.movieTitle}</p>
               </div>
               <div className="matchUp__movie--list">
                 <img
                   className="matchUp__movie--poster"
-                  src={group.movie2.moviePoster}
-                  alt={group.movie2.movieTitle}
+                  // src={matchUp.movie2.moviePoster}
+                  src={
+                    "https://image.tmdb.org/t/p/w500//1ZNOOMmILNUzVYbzG1j7GYb5bEV.jpg"
+                  }
+                  alt={matchUp.movie2.movieTitle}
                 />
-                <p>{group.movie2.movieTitle}</p>
+                <p>{matchUp.movie2.movieTitle}</p>
               </div>
             </div>
           </div>
