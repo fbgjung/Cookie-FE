@@ -1,3 +1,4 @@
+import useNotificationStore from "../stores/notificationStore";
 import { messaging } from "./firebase";
 import { getToken, onMessage } from "firebase/messaging";
 
@@ -24,10 +25,21 @@ export const requestNotificationPermission = async () => {
 };
 
 export const setupOnMessageHandler = () => {
+  const addNotification = useNotificationStore.getState().addNotification;
   onMessage(messaging, (payload) => {
     console.log("알림 내용: ", payload);
 
     const notificationTitle = payload.notification.title;
+    const notificationBody = payload.notification.body;
+
+    const notificationData = {
+      title: notificationTitle,
+      body: notificationBody,
+      timestamp: new Date().toLocaleString(),
+    };
+
+    addNotification(notificationData);
+
     const notificationOptions = {
       body: payload.notification.body,
       image: payload.notification.image,
