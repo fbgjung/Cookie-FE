@@ -41,7 +41,7 @@ const CommentsSectionContainer = styled.div`
       font-size: 1rem;
       outline: none;
       margin-right: 10px;
-      height: 20px;
+      height: 40px;
     }
 
     button {
