@@ -29,11 +29,9 @@ export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
     console.log("알림 내용: ", payload);
 
-    const notificationTitle = payload.notification.title;
     const notificationBody = payload.notification.body;
 
     const notificationData = {
-      title: notificationTitle,
       body: notificationBody,
       timestamp: new Date().toLocaleString(),
     };
