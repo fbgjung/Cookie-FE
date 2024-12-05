@@ -28,6 +28,20 @@ export default defineConfig({
             type: "image/png",
           },
         ],
+        screenshots: [
+          {
+            src: "/screenshots/desktop-screenshot.png",
+            sizes: "1920x1080",
+            type: "image/png",
+            form_factor: "wide",
+          },
+          {
+            src: "/screenshots/mobile-screenshot.png",
+            sizes: "720x1280",
+            type: "image/png",
+            form_factor: "narrow",
+          },
+        ],
       },
       workbox: {
         runtimeCaching: [
