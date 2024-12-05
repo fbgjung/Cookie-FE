@@ -6,7 +6,7 @@ import axiosInstance from "../api/auth/axiosInstance";
 import DetailHeader from "../components/mypage/DetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
-import FooterSection from "../components/mypage/FooterSection";
+import { FaHeart, FaComment } from "react-icons/fa";
 
 const Container = styled.div`
   padding: 20px;
@@ -16,6 +16,35 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+`;
+
+const FooterSectionStyled = styled.div`
+  display: flex;
+  gap: 20px; 
+  margin-top: 20px;
+  align-items: center;
+
+  .icon-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      transition: fill 0.2s ease;
+    }
+
+    .liked {
+      fill: red;
+    }
+
+    span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  }
 `;
 
 const CommentsSectionContainer = styled.div`
@@ -124,8 +153,19 @@ const ReviewDetail = () => {
   const [editingCommentText, setEditingCommentText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [likedByUser, setLikedByUser] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  const toggleLike = () => {
+    setLikedByUser((prev) => !prev);
+    setReviewData((prevData) => ({
+      ...prevData,
+      reviewLike: likedByUser
+        ? prevData.reviewLike - 1
+        : prevData.reviewLike + 1,
+    }));
+  };
 
   useEffect(() => {
     const fetchReviewData = async () => {
@@ -181,57 +221,10 @@ const ReviewDetail = () => {
       }));
 
       toast.success("댓글이 작성되었습니다!");
-      setNewComment("");
+      window.location.reload();
     } catch (error) {
       console.error("Error during comment submission:", error);
       toast.error("댓글 작성에 실패했습니다.");
-    }
-  };
-
-  const handleEditComment = async (commentId) => {
-    if (!editingCommentText.trim()) {
-      toast.error("댓글 내용을 입력해주세요.");
-      return;
-    }
-
-    try {
-      await axiosInstance.post(`/api/reviews/comments/${commentId}`, {
-        comment: editingCommentText,
-      });
-
-      setReviewData((prevData) => ({
-        ...prevData,
-        comments: prevData.comments.map((comment) =>
-          comment.id === commentId
-            ? { ...comment, comment: editingCommentText }
-            : comment
-        ),
-      }));
-
-      toast.success("댓글이 수정되었습니다!");
-      setEditingCommentId(null);
-      setEditingCommentText("");
-    } catch (error) {
-      console.error("Error during comment edit:", error);
-      toast.error("댓글 수정에 실패했습니다.");
-    }
-  };
-
-  const handleDeleteComment = async (commentId) => {
-    try {
-      await axiosInstance.delete(`/api/reviews/comments/${commentId}`);
-
-      setReviewData((prevData) => ({
-        ...prevData,
-        comments: prevData.comments.filter(
-          (comment) => comment.id !== commentId
-        ),
-      }));
-
-      toast.success("댓글이 삭제되었습니다!");
-    } catch (error) {
-      console.error("Error during comment deletion:", error);
-      toast.error("댓글 삭제에 실패했습니다.");
     }
   };
 
@@ -257,10 +250,19 @@ const ReviewDetail = () => {
         toggleMenu={toggleMenu}
       />
       <ReviewTextSection reviewText={reviewData.content} />
-      <FooterSection
-        likes={reviewData.reviewLike}
-        comments={reviewData.comments.length}
-      />
+      <FooterSectionStyled>
+        <div className="icon-container">
+          <FaHeart
+            onClick={toggleLike}
+            className={likedByUser ? "liked" : ""}
+          />
+          <span>{reviewData.reviewLike}</span>
+        </div>
+        <div className="icon-container">
+          <FaComment />
+          <span>{reviewData.comments.length}</span>
+        </div>
+      </FooterSectionStyled>
       <CommentsSectionContainer>
         <h3>Comment</h3>
         <div className="comment-input">
