@@ -25,15 +25,20 @@ messaging.onBackgroundMessage(function (payload) {
   });
 
   self.clients.matchAll().then((clients) => {
-    clients.forEach((client) =>
+    clients.forEach((client) => {
+      console.log("클라이언트로 데이터 전달:", {
+        title,
+        body,
+        timestamp: new Date().toLocaleString(),
+      });
       client.postMessage({
         type: "NEW_NOTIFICATION",
         payload: {
-          title: title,
-          body: body,
+          title,
+          body,
           timestamp: new Date().toLocaleString(),
         },
-      })
-    );
+      });
+    });
   });
 });
