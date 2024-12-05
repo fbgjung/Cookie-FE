@@ -68,16 +68,7 @@ const Tabs = styled.div`
 `;
 
 const Search = () => {
-  const movies = Array.from({ length: 20 }, (_, i) => ({
-    id: i + 1,
-    title: `랜덤 영화 ${i + 1}`,
-    year: 2000 + (i % 23),
-    genre: ["스릴러", "액션", "코미디", "드라마", "판타지"][i % 5],
-    duration: `${90 + i}분`,
-    director: `감독 ${i + 1}`,
-    actors: [`배우 ${i + 1}`, `배우 ${i + 2}`],
-    imageUrl: `https://via.placeholder.com/80x120?text=영화+${i + 1}`,
-  }));
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("movie");
@@ -86,10 +77,8 @@ const Search = () => {
   const [hasMore, setHasMore] = useState(true);
   const [showTopButton, setShowTopButton] = useState(false);
 
-  // 디바운스 타이머를 저장할 변수
   const [debounceTimer, setDebounceTimer] = useState(null);
 
-  // 스크롤 상태 감지
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -110,7 +99,6 @@ const Search = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore]);
 
-  // 검색 API 호출
   const fetchSearchResults = async () => {
     if (!searchTerm.trim()) {
       setResults([]);
@@ -118,22 +106,49 @@ const Search = () => {
       return;
     }
 
-    const movieResults = movies.filter((movie) =>
-      movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const directorResults = movies.filter((movie) =>
-      movie.director.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const actorResults = movies.filter((movie) =>
-      movie.actors.some((actor) =>
-        actor.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+    try {
+      const response = await axios.get(`http://localhost:8080/api/search`, {
+        params: { type: activeTab, keyword: searchTerm, page },
+      });
 
-    setFilteredMovies(movieResults);
-    setFilteredDirectors(directorResults);
-    setFilteredActors(actorResults);
-  }, [searchTerm]);
+      const newResults = response.data.content;
+      setResults((prevResults) =>
+        page === 0 ? newResults : [...prevResults, ...newResults]
+      );
+      setHasMore(!response.data.last);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setResults([]);
+      setHasMore(false);
+    }
+  };
+
+  useEffect(() => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+
+    const timer = setTimeout(() => {
+      if (searchTerm.trim()) {
+        setPage(0);
+        setHasMore(true);
+        fetchSearchResults();
+      } else {
+        setResults([]);
+      }
+    }, 300);
+
+    setDebounceTimer(timer);
+    return () => clearTimeout(timer);
+  }, [searchTerm, activeTab]);
+
+  useEffect(() => {
+    if (page > 0) {
+      fetchSearchResults();
+    }
+  }, [page]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
 
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
@@ -171,11 +186,7 @@ const Search = () => {
             감독명
           </button>
         </Tabs>
-        <SearchResults
-          results={results}
-          activeTab={activeTab}
-          onMovieClick={handleMovieClick}
-        />
+        <SearchResults results={results} onMovieClick={handleMovieClick} />
       </ContentWrapper>
       {showTopButton && <TopButton onClick={scrollToTop} />}
     </Container>
