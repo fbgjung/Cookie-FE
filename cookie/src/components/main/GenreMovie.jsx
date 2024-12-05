@@ -30,7 +30,7 @@ const GenreMovieList = styled.div`
   .genre__movie--list {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     gap: 0.5rem;
     cursor: pointer;
   }
@@ -57,7 +57,7 @@ const GenreBtn = styled.button`
   cursor: pointer;
   margin: 0 0.8rem 0.3rem 0;
   font-size: 1rem;
-  color: ${(props) => (props.$isSelected ? "var(--main)" : "#afafaf")};
+  color: ${(props) => (props.$isSelected ? "var(--text)" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
 `;
 

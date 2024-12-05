@@ -32,6 +32,17 @@ const useUserStore = create((set, get) => ({
       userInfo: { ...state.userInfo, genreId },
     })),
 
+  //로그아웃
+  logout: () =>
+    set(() => ({
+      userInfo: {
+        userId: null,
+        nickname: "",
+        profileImage: "",
+        genreId: null,
+      },
+    })),
+
   getUserInfo: () => {
     const state = get();
     return state.userInfo;

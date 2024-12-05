@@ -16,7 +16,7 @@ const CookieMovieList = styled.div`
     margin-bottom: 1rem;
   }
   .cookieMovie__title span {
-    color: var(--cookie);
+    color: var(--text);
   }
 
   .cookie__movie {
@@ -80,7 +80,7 @@ function CookieMovies() {
         <div className="cookieMovie__title">
           <img src={cookieMovie} alt="cookie_icon" />
           <h2>
-            <span>쿠키</span>의 맞춤 추천영화 (<span>쿠키</span>리즘)
+            <span>{userInfo.nickname}</span>님의 <span>쿠키</span>리즘
           </h2>
         </div>
         <div className="cookie__movie">
