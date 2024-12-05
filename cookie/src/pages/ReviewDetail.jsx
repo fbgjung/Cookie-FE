@@ -4,8 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../api/auth/axiosInstance";
 import DetailHeader from "../components/mypage/DetailHeader";
-import ReviewContentSection from "../components/mypage/ReviewContentSection";
-import ReviewTextSection from "../components/mypage/ReviewTextSection";
+import ReviewContentSection from "../components/searchpage/ReviewContentSection";
+import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import FooterSection from "../components/mypage/FooterSection";
 
 const Container = styled.div`
@@ -122,7 +122,10 @@ const ReviewDetail = () => {
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingCommentText, setEditingCommentText] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   useEffect(() => {
     const fetchReviewData = async () => {
@@ -162,10 +165,13 @@ const ReviewDetail = () => {
     if (!userId || !newComment.trim()) return;
 
     try {
-      const response = await axiosInstance.post(`/api/reviews/${reviewId}/comments`, {
-        userId,
-        comment: newComment,
-      });
+      const response = await axiosInstance.post(
+        `/api/reviews/${reviewId}/comments`,
+        {
+          userId,
+          comment: newComment,
+        }
+      );
 
       const updatedComment = response.data.response;
 
@@ -217,7 +223,9 @@ const ReviewDetail = () => {
 
       setReviewData((prevData) => ({
         ...prevData,
-        comments: prevData.comments.filter((comment) => comment.id !== commentId),
+        comments: prevData.comments.filter(
+          (comment) => comment.id !== commentId
+        ),
       }));
 
       toast.success("댓글이 삭제되었습니다!");
@@ -245,6 +253,8 @@ const ReviewDetail = () => {
         date={new Date(reviewData.createdAt).toLocaleDateString()}
         movieTitle={reviewData.movie.title}
         cookieScoreCount={reviewData.movieScore}
+        isMenuOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
       />
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSection
@@ -289,10 +299,12 @@ const ReviewDetail = () => {
             {comment.user.id === getUserIdFromToken() && (
               <div className="comment-actions">
                 {editingCommentId === comment.id ? (
-                  <button onClick={() => handleEditComment(comment.id)}>저장</button>
+                  <button onClick={() => handleEditComment(comment.id)}>
+                    저장
+                  </button>
                 ) : (
                   <>
-                  <button
+                    <button
                       onClick={() => {
                         setEditingCommentId(comment.id);
                         setEditingCommentText(comment.comment);
