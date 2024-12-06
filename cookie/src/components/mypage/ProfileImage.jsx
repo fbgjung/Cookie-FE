@@ -40,7 +40,7 @@ const Title = styled.h3`
   font-size: 1.2rem;
   margin: 0 0 10px 0;
   text-align: center;
-  color: #ffffff;
+  color: #6a91b1;
   font-weight: bold;
 `;
 
