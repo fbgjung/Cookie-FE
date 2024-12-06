@@ -22,6 +22,7 @@ const Container = styled.div`
 `;
 
 const ContentWrapper = styled.div`
+  align-items: center;
   width: 100%;
   max-width: 600px;
   flex: 1;
@@ -79,10 +80,11 @@ const Search = () => {
   const fetchSearchResults = async () => {
     try {
       const response = await axios.get("http://localhost:8080/api/search", {
-        params: { type: activeTab, keyword: searchTerm, page },
+        params: { type: activeTab, keyword: searchTerm, page, size:10 },
       });
 
-      const newResults = response.data?.content || []; // 데이터가 없을 때 빈 배열로 초기화
+      const newResults = response.data || []; // 데이터가 없을 때 빈 배열로 초기화
+      console.log(newResults);
 
       setResults((prevResults) =>
         page === 0 ? newResults : [...prevResults, ...newResults]
