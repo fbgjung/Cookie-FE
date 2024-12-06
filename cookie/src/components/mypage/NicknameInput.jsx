@@ -85,7 +85,7 @@ const Input = styled.input`
 const CheckButton = styled.button`
   padding: 10px 15px;
   font-size: 1rem;
-  background-color: #04012d;
+  background-color: #6a91b1;
   color: white;
   border: none;
   border-radius: 8px;
