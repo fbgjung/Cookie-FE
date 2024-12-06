@@ -1,5 +1,10 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+
+const Title = styled.h2`
+  margin-top: 50px;
+`;
 
 const CastGrid = styled.div`
   margin-top: 20px;
@@ -12,6 +17,7 @@ const CastGrid = styled.div`
     flex-direction: column;
     align-items: center;
     text-align: center;
+    cursor: pointer;
 
     img {
       width: 70px;
@@ -28,16 +34,35 @@ const CastGrid = styled.div`
   }
 `;
 
-const CastSection = ({ cast }) => {
+const CastSection = ({ actors = [], director }) => {
+  const navigate = useNavigate();
+
+  const castList = [
+    { ...director, role: 'director' },
+    ...actors.map((actor) => ({ ...actor, role: 'actor' }))
+  ];
+
+  const handleCastClick = (id, role) => {
+    if (role === 'director') {
+      navigate(`/director/${id}`);
+    } else {
+      navigate(`/actor/${id}`);
+    }
+  };
+
   return (
     <div>
-      <h2>출연/제작</h2>
+      <Title>출연/제작</Title>
       <CastGrid>
-        {cast.map((person, index) => (
-          <div className="cast-item" key={index}>
-            <img src={person.img} alt={person.name} />
-            <span>{person.name}</span>
-            <span>{person.role}</span>
+        {castList.map((person, index) => (
+          <div 
+            key={index} 
+            className="cast-item" 
+            onClick={() => handleCastClick(person.id, person.role)}
+          >
+            <img src={person.profileImage || "/default-profile.jpg"} alt={person.name} />
+            <span>{person.name} </span>
+            <span>{person.role === 'director' ? '감독' : '출연'}</span>
           </div>
         ))}
       </CastGrid>
@@ -45,15 +70,19 @@ const CastSection = ({ cast }) => {
   );
 };
 
-// PropTypes 정의
 CastSection.propTypes = {
-  cast: PropTypes.arrayOf(
+  director: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    profileImage: PropTypes.string,
+  }).isRequired,
+  actors: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string.isRequired, // name은 string 타입의 필수 항목
-      role: PropTypes.string.isRequired, // role은 string 타입의 필수 항목
-      img: PropTypes.string.isRequired,  // img는 string 타입의 필수 항목
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired, 
+      profileImage: PropTypes.string, 
     })
-  ).isRequired, // cast는 배열 타입이며 필수 props
+  ).isRequired,
 };
 
 export default CastSection;

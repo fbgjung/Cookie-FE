@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import PropTypes from "prop-types"; // PropTypes를 추가로 import
+import PropTypes from "prop-types";
+
+const Title = styled.h2`
+  margin-top: 50px;
+`
 
 const VideoWrapper = styled.div`
   margin-top: 30px;
@@ -33,17 +37,22 @@ const VideoWrapper = styled.div`
   }
 `;
 
-const VideoSection = ({ videos }) => {
+const VideoSection = ({ videoUrl }) => {
+  if (!videoUrl) return null;
+
+  const videoId = videoUrl.includes("v=") ? videoUrl.split("v=")[1] : null;
+
   return (
     <VideoWrapper>
-      <h2>동영상(우측 슬라이드)</h2>
+      <Title>동영상</Title>
+
       <div className="video-grid">
-        {videos.map((video, index) => (
-          <div className="video-item" key={index}>
-            <img src={video.thumbnail} alt={video.title} />
-            <div className="video-title">{video.title}</div>
-          </div>
-        ))}
+        <div className="video-item" onClick={() => window.open(videoUrl, "_blank")}>
+          <img
+            src={`https://img.youtube.com/vi/${videoId}/0.jpg`}
+            alt="Video Thumbnail"
+          />
+        </div>
       </div>
     </VideoWrapper>
   );
@@ -51,12 +60,8 @@ const VideoSection = ({ videos }) => {
 
 // PropTypes로 유효성 검사 추가
 VideoSection.propTypes = {
-  videos: PropTypes.arrayOf(
-    PropTypes.shape({
-      thumbnail: PropTypes.string.isRequired, // 썸네일 URL
-      title: PropTypes.string.isRequired, // 비디오 제목
-    })
-  ).isRequired,
+  videoUrl: PropTypes.string.isRequired, // YouTube URL
 };
 
 export default VideoSection;
+
