@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import goBack from "../../assets/images/admin/goBack_br.svg";
 import axios from "axios";
+import serverBaseUrl from "../../config/apiConfig";
 
 const CastInfo = styled.div`
   padding: 1.25rem;
@@ -24,7 +25,7 @@ const DirecrtorInfoContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 0.625rem;
+  /* padding: 0 0.625rem; */
 
   .info__director {
     display: flex;
@@ -34,8 +35,9 @@ const DirecrtorInfoContainer = styled.div`
 
   .info__director--img {
     border-radius: 0.75rem;
-    width: 85px;
-    height: 85px;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
   }
 
   p {
@@ -184,29 +186,31 @@ function CastDetail() {
   const handleNavigate = (path) => {
     navigate(path);
   };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     let url = "";
+  useEffect(() => {
+    const fetchData = async () => {
+      let url = "";
+      const testId = "actor/1";
+      // const testId = "actor/2";
 
-  //     if (id.includes("actor")) {
-  //       url = `/api/actor/${id.split("/")[1]}`;
-  //     } else if (id.includes("director")) {
-  //       url = `/api/director/${id.split("/")[1]}`;
-  //     }
+      if (testId.includes("actor")) {
+        url = `${serverBaseUrl}/api/actor/${testId.split("/")[1]}`;
+      } else if (testId.includes("director")) {
+        url = `${serverBaseUrl}/api/director/${testId.split("/")[1]}`;
+      }
 
-  //     try {
-  //       const response = await axios.get(url);
-  //       console.log(response);
-  //       setData(response.data.response);
-  //     } catch (err) {
-  //       console.error("API 요청 실패:", err);
-  //     }
-  //   };
+      try {
+        const response = await axios.get(url);
+        console.log(response.data.response);
+        setData(response.data.response);
+      } catch (err) {
+        console.error("API 요청 실패:", err);
+      }
+    };
 
-  //   fetchData();
-  // }, [id]);
+    fetchData();
+  }, [id]);
 
-  // if (!data) return null;
+  if (!data) return null;
   return (
     <>
       <CastInfo>
@@ -214,20 +218,20 @@ function CastDetail() {
           <img src={goBack} alt="Go Back" />
         </BackBtn>
         <h2 className="info__title">
-          {/* 🎬 {id.includes("actor") ? "배우" : "감독"} */}
+          {/* 🎬 {url.includes("actor") ? "배우" : "감독"} */}
           🎬 감독
         </h2>
         <DirecrtorInfoContainer>
           <div className="info__director">
             <img
               className="info__director--img"
-              src={profileImage || "http://via.placeholder.com/70x70"}
+              src={data.profileImage || "http://via.placeholder.com/70x70"}
               alt="Director"
             />
             <div>
-              <h3>{name}</h3>
-              {/* <p>{id.includes("actor") ? "배우" : "감독"}</p> */}
-              <p> 감독</p>
+              <h3>{data.name}</h3>
+              {/* <p>{url.includes("actor") ? "배우" : "감독"}</p> */}
+              <p>감독</p>
             </div>
           </div>
         </DirecrtorInfoContainer>
@@ -240,7 +244,7 @@ function CastDetail() {
             <TitleItem>좋아요 수</TitleItem>
             <TitleItem>리뷰 수</TitleItem>
           </TitleGrid>
-          {directorMovieList.map((movie) => (
+          {data.actorMovieList.map((movie) => (
             <MovieContentGrid key={movie.id}>
               <button onClick={() => handleNavigate(`/movie/${movie.id}`)}>
                 <img
@@ -257,7 +261,6 @@ function CastDetail() {
                   {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
                 </p>
               </ContentItem>
-
               <ContentItem>{movie.score}점</ContentItem>
               <ContentItem>{movie.likes}개</ContentItem>
               <ContentItem>{movie.reviews}개</ContentItem>
