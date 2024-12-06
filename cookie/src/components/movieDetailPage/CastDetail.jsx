@@ -128,57 +128,6 @@ const ContentItem = styled.div`
   }
 `;
 
-const dummyData = {
-  response: {
-    name: "Christopher Nolan",
-    profileImage: "http://via.placeholder.com/85x85",
-    directorMovieList: [
-      {
-        id: 1,
-        title: "Inception",
-        poster: "http://via.placeholder.com/124x177",
-        releasedAt: "2010-07-16",
-        country: "USA",
-        score: 4.8,
-        likes: 42,
-        reviews: 231,
-      },
-      {
-        id: 2,
-        title: "The Dark Knight The Dark Knight",
-        poster: "http://via.placeholder.com/124x177",
-        releasedAt: "2008-07-18",
-        country: "USA",
-        score: 4.2,
-        likes: 30,
-        reviews: 243,
-      },
-      {
-        id: 3,
-        title: "Interstellar",
-        poster: "http://via.placeholder.com/124x177",
-        releasedAt: "2014-11-07",
-        country: "USA",
-        likes: 33,
-        score: 4.5,
-        reviews: 24,
-      },
-      {
-        id: 21,
-        title: "Romance in Paris",
-        poster: "http://via.placeholder.com/124x177",
-        releasedAt: "2023-05-10",
-        country: "USA",
-        score: 3.9,
-        likes: 4554,
-        reviews: 22,
-      },
-    ],
-  },
-};
-
-const { name, profileImage, directorMovieList } = dummyData.response;
-
 function CastDetail() {
   const [data, setData] = useState(null);
   const navigate = useNavigate();
@@ -186,11 +135,13 @@ function CastDetail() {
   const handleNavigate = (path) => {
     navigate(path);
   };
+
+  // const testId = "director/1";
+  const testId = "actor/1";
+
   useEffect(() => {
     const fetchData = async () => {
       let url = "";
-      const testId = "actor/1";
-      // const testId = "actor/2";
 
       if (testId.includes("actor")) {
         url = `${serverBaseUrl}/api/actor/${testId.split("/")[1]}`;
@@ -218,8 +169,7 @@ function CastDetail() {
           <img src={goBack} alt="Go Back" />
         </BackBtn>
         <h2 className="info__title">
-          {/* 🎬 {url.includes("actor") ? "배우" : "감독"} */}
-          🎬 감독
+          🎬 {testId.includes("actor") ? "배우" : "감독"}
         </h2>
         <DirecrtorInfoContainer>
           <div className="info__director">
@@ -230,8 +180,7 @@ function CastDetail() {
             />
             <div>
               <h3>{data.name}</h3>
-              {/* <p>{url.includes("actor") ? "배우" : "감독"}</p> */}
-              <p>감독</p>
+              <p>{testId.includes("actor") ? "배우" : "감독"}</p>
             </div>
           </div>
         </DirecrtorInfoContainer>
@@ -244,7 +193,10 @@ function CastDetail() {
             <TitleItem>좋아요 수</TitleItem>
             <TitleItem>리뷰 수</TitleItem>
           </TitleGrid>
-          {data.actorMovieList.map((movie) => (
+          {(testId.includes("actor")
+            ? data.actorMovieList
+            : data.directorMovieList
+          )?.map((movie) => (
             <MovieContentGrid key={movie.id}>
               <button onClick={() => handleNavigate(`/movie/${movie.id}`)}>
                 <img
