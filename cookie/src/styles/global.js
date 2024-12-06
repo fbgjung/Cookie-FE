@@ -4,14 +4,14 @@ import styled from "styled-components";
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Pretendard';
-    src: url('../assets/fonts/Pretendard-Regular.otf') format('truetype'); /* Regular */
+    src: url('/fonts/Pretendard-Regular.otf') format('truetype'); /* Regular */
     font-weight: 400;
     font-style: normal;
   }
 
   @font-face {
     font-family: 'Pretendard';
-    src: url('./font/Pretendard-Bold.otf') format('truetype'); /* Bold */
+    src: url('/font/Pretendard-Bold.otf') format('truetype'); /* Bold */
     font-weight: 700;
     font-style: normal;
   }
@@ -28,8 +28,8 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Pretendard'; 
     font-weight: 400;
   }
-
-  :root {
+// 변경전
+  /* :root {
     --main: #04012D;
     --sub: #1EE5B0;
     --ticket-bg: #F9F9F9;
@@ -37,7 +37,16 @@ const GlobalStyle = createGlobalStyle`
     --match-up: #C4FFEF;
     --cookie: #CC9D52;
     --notice: #FF7383;
-    /* color: var(--cookie) */
+  } */
+
+  //변경된 컬러
+  :root {
+    --main: #FFF4B9; 
+    --sub: #AAD6E7;
+    --ticket-bg: #F9F9F9;
+    --text: #724B2E;
+    --sub-text: #a7a7a7;
+    --notice: #235B97;
   }
 
 

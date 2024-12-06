@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import deleteBtn from "../assets/images/signUp/close_icon.svg";
+import deleteBtn from "../../assets/images/signUp/close_icon.svg";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../stores/useAuthStore";
+import useAuthStore from "../../stores/useAuthStore";
 
 const BottomModalContainer = styled.div`
   position: fixed;
