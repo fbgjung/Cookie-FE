@@ -3,6 +3,16 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => {
+      registration.unregister().then(() => {
+        console.log("기존 서비스 워커 제거 완료:", registration);
+      });
+    });
+  });
+}
+
 // if ("serviceWorker" in navigator) {
 //   const path = window.location.pathname;
 
