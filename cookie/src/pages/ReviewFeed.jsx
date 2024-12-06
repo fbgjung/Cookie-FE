@@ -9,7 +9,6 @@ const ReviewFeedWrapper = styled.div`
   max-width: 900px;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   height: 100vh;
 `;
@@ -90,20 +89,22 @@ const ReviewTicket = styled.div`
   cursor: pointer;
   width: 100%;
   margin: 0 auto;
+  margin-bottom: 0px;
 `;
 
 const ReviewLeft = styled.div`
   flex: 0 0 100px;
   img {
-    width: 80px;
+    width: 100px;
     height: 120px;
     object-fit: cover;
     border-radius: 8px;
   }
   .title {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
     margin-top: 10px;
+    text-align: center;
   }
 `;
 
