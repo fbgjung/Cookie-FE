@@ -19,7 +19,7 @@ const ResultItem = styled.div`
 `;
 
 const Poster = styled.img`
-  width: 100%;
+  width: 20%;
   aspect-ratio: 1 / 1.4;
   object-fit: cover;
   border-radius: 5px;
@@ -35,10 +35,15 @@ const Title = styled.h3`
   margin: 0;
 `;
 
-const Subtitle = styled.p`
-  font-size: 0.9rem;
-  color: gray;
-`;
+const Detail = styled.p`
+  font-size: 1.0rem;
+  margin: 0;
+`
+
+const Director = styled.p`
+  font-size: 1.0rem;
+  margin: 0;
+`
 
 const Message = styled.p`
   font-size: 16px;
@@ -63,11 +68,9 @@ const SearchResults = ({ results, onMovieClick, isLoading, activeTab }) => {
           <Poster src={result.poster || result.profileImage} alt={result.title || result.name} />
           <Content>
             <Title>{result.title || result.name}</Title>
-            {activeTab === "movie" && (
-              <Subtitle>
-                {result.plot} · {result.releasedAt} · {result.runtime}분
-              </Subtitle>
-            )}
+            <Detail>{result.releasedAt}</Detail>
+            <Director>감독: {result.director}</Director>
+            
           </Content>
         </ResultItem>
       ))}
