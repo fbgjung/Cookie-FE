@@ -6,8 +6,10 @@ const SearchBarContainer = styled.div`
   position: relative;
   margin: 10px 0px 30px 0px;
   height: 40px;
-  width: 100%;
+  width: 90%;
   max-width: 600px;
+  display: flex;
+  align-items: center;
 
   @media (max-width: 768px) {
     margin: 15px 0px 40px 0px;
@@ -21,9 +23,9 @@ const SearchBarContainer = styled.div`
 `;
 
 const SearchInput = styled.input`
-  width: 87%;
+  width: 100%; 
   height: 100%;
-  padding: 10px 50px 10px 20px; // 오른쪽 패딩을 늘려서 아이콘 공간 확보
+  padding: 10px 50px 10px 20px;
   font-size: 18px;
   border: 1px solid #ddd;
   border-radius: 24px;
@@ -52,17 +54,10 @@ const SearchInput = styled.input`
 
 const SearchIconButton = styled.button`
   position: absolute;
-  top: 75%;
-  right: 3%;
-  transform: translateY(-50%);
+  right: 5%;
   background: none;
   border: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
   border-radius: 50%;
   transition: all 0.2s ease-in-out;
 
@@ -80,7 +75,6 @@ const SearchIconButton = styled.button`
   @media (max-width: 768px) {
     width: 32px;
     height: 32px;
-    right: 8px;
 
     svg {
       width: 20px;
@@ -91,7 +85,6 @@ const SearchIconButton = styled.button`
   @media (max-width: 480px) {
     width: 28px;
     height: 28px;
-    right: 6px;
 
     svg {
       width: 18px;

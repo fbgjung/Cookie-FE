@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 
@@ -10,7 +9,6 @@ const ReviewFeedWrapper = styled.div`
   max-width: 900px;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   height: 100vh;
 `;
@@ -18,7 +16,6 @@ const ReviewFeedWrapper = styled.div`
 const ReviewTitle = styled.div`
   text-align: center; /* 텍스트를 중앙 정렬 */
   margin-bottom: 20px;
-  transform: translateX(-20px);
 
   h1 {
     font-size: 2.5rem;
@@ -48,7 +45,6 @@ const FilterButtons = styled.div`
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
-  transform: translateX(-20px);
 
   button {
     padding: 10px 20px;
@@ -78,7 +74,6 @@ const FilterButtons = styled.div`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
 `;
 
 const ReviewTicket = styled.div`
@@ -92,23 +87,24 @@ const ReviewTicket = styled.div`
   box-sizing: border-box;
   min-height: 180px;
   cursor: pointer;
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
-  transform: translateX(-20px);
+  margin-bottom: 0px;
 `;
 
 const ReviewLeft = styled.div`
   flex: 0 0 100px;
   img {
-    width: 80px;
+    width: 100px;
     height: 120px;
     object-fit: cover;
     border-radius: 8px;
   }
   .title {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
     margin-top: 10px;
+    text-align: center;
   }
 `;
 

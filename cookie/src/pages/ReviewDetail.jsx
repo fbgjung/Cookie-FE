@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import DetailHeader from "../components/mypage/DetailHeader";
-import ReviewContentSection from "../components/mypage/ReviewContentSection";
-import ReviewTextSection from "../components/mypage/ReviewTextSection";
-import FooterSection from "../components/mypage/FooterSection";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../api/auth/axiosInstance";
+import DetailHeader from "../components/mypage/DetailHeader";
+import ReviewContentSection from "../components/searchpage/ReviewContentSection";
+import ReviewTextSection from "../components/searchpage/ReviewTextSection";
+import { FaHeart, FaComment } from "react-icons/fa";
 
 const Container = styled.div`
   padding: 20px;
@@ -17,6 +16,35 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+`;
+
+const FooterSectionStyled = styled.div`
+  display: flex;
+  gap: 20px; 
+  margin-top: 20px;
+  align-items: center;
+
+  .icon-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      transition: fill 0.2s ease;
+    }
+
+    .liked {
+      fill: red;
+    }
+
+    span {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  }
 `;
 
 const CommentsSectionContainer = styled.div`
@@ -41,7 +69,7 @@ const CommentsSectionContainer = styled.div`
       font-size: 1rem;
       outline: none;
       margin-right: 10px;
-      height: 20px;
+      height: 40px;
     }
 
     button {
@@ -98,167 +126,157 @@ const CommentsSectionContainer = styled.div`
       }
     }
 
-    .comment-right {
-      position: relative;
+    .comment-actions {
+      display: flex;
+      gap: 10px;
 
       button {
         background: none;
         border: none;
-        font-size: 1.5rem;
+        color: #c99d66;
         cursor: pointer;
-        display: flex;
-        gap: 2px; /* 점 세 개 간격 */
-      }
 
-      .menu {
-        position: absolute;
-        top: 100%; /* 아래로 펼치기 */
-        left: 0; /* 왼쪽 정렬 */
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 5px 10px; /* 메뉴 패딩 조정 */
-        display: none;
-        flex-direction: row; /* 가로로 펼치기 */
-        align-items: center;
-
-        &.active {
-          display: flex; /* flex로 가로 표시 */
-        }
-
-        button {
-          all: unset;
-          color: #333;
-          font-size: 0.9rem;
-          cursor: pointer;
-          margin-right: 10px; /* 메뉴 항목 간 간격 */
-          &:hover {
-            color: #c99d66;
-          }
+        &:hover {
+          color: #9b7a4c;
         }
       }
     }
   }
 `;
 
-
 const ReviewDetail = () => {
-  const { reviewId } = useParams(); // URL에서 reviewId 가져오기
-  const [reviewData, setReviewData] = useState(null); // 리뷰 데이터 상태
-  const [newComment, setNewComment] = useState(""); // 댓글 입력 상태
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태
-  const userId = "currentUserId"; // 실제 사용자 ID를 여기에 연결
+  const { reviewId } = useParams();
+  const navigate = useNavigate();
+  const [reviewData, setReviewData] = useState(null);
+  const [newComment, setNewComment] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingCommentText, setEditingCommentText] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [likedByUser, setLikedByUser] = useState(false);
 
-  // 리뷰 데이터 가져오기
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  const toggleLike = () => {
+    setLikedByUser((prev) => !prev);
+    setReviewData((prevData) => ({
+      ...prevData,
+      reviewLike: likedByUser
+        ? prevData.reviewLike - 1
+        : prevData.reviewLike + 1,
+    }));
+  };
+
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/api/reviews/${reviewId}`
-        );
-        const review = response.data.response; // API 응답 데이터
-        setReviewData(review);
+        const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
+        setReviewData(response.data.response);
       } catch (error) {
         console.error("Failed to fetch review data:", error);
+        toast.error("리뷰 데이터를 가져오지 못했습니다.");
       } finally {
-        setIsLoading(false); // 로딩 완료
+        setIsLoading(false);
       }
     };
 
     fetchReviewData();
   }, [reviewId]);
 
-  const handleBack = () => {
-    alert("뒤로가기");
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("refreshToken");
+    if (!token) {
+      toast.error("로그인이 필요한 서비스입니다.");
+      navigate("/login");
+      return null;
+    }
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.id;
+    } catch (error) {
+      console.error("Invalid token:", error);
+      toast.error("로그인 정보가 유효하지 않습니다.");
+      return null;
+    }
   };
 
   const handleAddComment = async () => {
-    if (!newComment.trim()) return;
+    const userId = getUserIdFromToken();
+    if (!userId || !newComment.trim()) return;
 
     try {
       const response = await axiosInstance.post(
-        `http://localhost:5173/api/reviews/${reviewId}/comments`,
-        { comment: newComment } // POST 요청 본문
+        `/api/reviews/${reviewId}/comments`,
+        {
+          userId,
+          comment: newComment,
+        }
       );
 
-      // 응답 데이터로 댓글 업데이트
       const updatedComment = response.data.response;
 
-      // 리뷰 데이터의 댓글 목록 업데이트
       setReviewData((prevData) => ({
         ...prevData,
         comments: [...prevData.comments, updatedComment],
       }));
 
-      // 성공 메시지 출력
       toast.success("댓글이 작성되었습니다!");
-
-      // 입력 필드 초기화
-      setNewComment("");
+      window.location.reload();
     } catch (error) {
-      console.error("Failed to add comment:", error);
+      console.error("Error during comment submission:", error);
       toast.error("댓글 작성에 실패했습니다.");
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleAddComment();
-    }
-  };
-
   if (isLoading) {
-    return <Container>Loading...</Container>; // 로딩 중 메시지
+    return <Container>Loading...</Container>;
   }
 
   if (!reviewData) {
-    return <Container>No review found.</Container>; // 리뷰 데이터 없음 메시지
+    return <Container>No review found.</Container>;
   }
 
   return (
     <Container>
-      {/* Header */}
-      <DetailHeader onBack={handleBack} />
-
-      {/* Review Content Section */}
+      <DetailHeader onBack={() => navigate(-1)} />
       <ReviewContentSection
-        posterSrc={reviewData.movie.poster} // 영화 포스터
-        profileSrc={reviewData.user.profileImage} // 작성자 프로필 이미지
-        name={reviewData.user.nickname} // 작성자 닉네임
-        date={new Date(reviewData.createdAt).toLocaleDateString()} // 작성일
-        movieTitle={reviewData.movie.title} // 영화 제목
-        cookieScoreCount={reviewData.movieScore} // 영화 점수
+        posterSrc={reviewData.movie.poster}
+        profileSrc={reviewData.user.profileImage}
+        name={reviewData.user.nickname}
+        date={new Date(reviewData.createdAt).toLocaleDateString()}
+        movieTitle={reviewData.movie.title}
+        cookieScoreCount={reviewData.movieScore}
+        isMenuOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
       />
-
-      {/* Review Text Section */}
       <ReviewTextSection reviewText={reviewData.content} />
-
-      {/* Footer Section */}
-      <FooterSection
-        likes={reviewData.reviewLike} // 좋아요 수
-        comments={reviewData.comments.length} // 댓글 수
-      />
-
-      {/* Comments Section */}
+      <FooterSectionStyled>
+        <div className="icon-container">
+          <FaHeart
+            onClick={toggleLike}
+            className={likedByUser ? "liked" : ""}
+          />
+          <span>{reviewData.reviewLike}</span>
+        </div>
+        <div className="icon-container">
+          <FaComment />
+          <span>{reviewData.comments.length}</span>
+        </div>
+      </FooterSectionStyled>
       <CommentsSectionContainer>
         <h3>Comment</h3>
-
-        {/* 댓글 작성란 */}
         <div className="comment-input">
           <input
             type="text"
             placeholder="댓글을 입력하세요..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            onKeyDown={handleKeyDown} // 엔터 키 입력
+            onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
           />
           <button onClick={handleAddComment}>↑</button>
         </div>
-
-        {/* 댓글 목록 */}
-        {reviewData.comments.map((comment, index) => (
-          <div className="comment" key={index}>
+        {reviewData.comments.map((comment) => (
+          <div className="comment" key={comment.id}>
             <div className="comment-left">
               <img
                 src={comment.user.profileImage}
@@ -266,12 +284,43 @@ const ReviewDetail = () => {
               />
               <div className="comment-content">
                 <div className="nickname">{comment.user.nickname}</div>
-                <div className="text">{comment.comment}</div>
+                {editingCommentId === comment.id ? (
+                  <input
+                    type="text"
+                    value={editingCommentText}
+                    onChange={(e) => setEditingCommentText(e.target.value)}
+                  />
+                ) : (
+                  <div className="text">{comment.comment}</div>
+                )}
                 <div className="date">
                   {new Date(comment.createdAt).toLocaleString()}
                 </div>
               </div>
             </div>
+            {comment.user.id === getUserIdFromToken() && (
+              <div className="comment-actions">
+                {editingCommentId === comment.id ? (
+                  <button onClick={() => handleEditComment(comment.id)}>
+                    저장
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        setEditingCommentId(comment.id);
+                        setEditingCommentText(comment.comment);
+                      }}
+                    >
+                      수정
+                    </button>
+                    <button onClick={() => handleDeleteComment(comment.id)}>
+                      삭제
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </CommentsSectionContainer>
