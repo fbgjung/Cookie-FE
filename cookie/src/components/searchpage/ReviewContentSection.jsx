@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ReviewContentContainer = styled.div`
   display: flex;
@@ -122,11 +122,15 @@ const ReviewContentSection = ({
   cookieScoreCount,
   isMenuOpen,
   toggleMenu,
+  handleEdit,
+  handleDelete,
 }) => {
-  const navigate = useNavigate(); // useNavigate hook 추가
+  const location = useLocation();
+
+  const isFromReviewList = location.state?.from === "reviewList";
 
   const handleMyPageRedirect = () => {
-    navigate("/mypage"); // /mypage로 리다이렉트
+    console.log("내 리뷰 관리하기 클릭됨");
   };
 
   return (
@@ -161,7 +165,14 @@ const ReviewContentSection = ({
         <img src="/src/assets/images/mypage/More.svg" alt="More Options" />
         {isMenuOpen && (
           <DropdownMenu className="dropdown-menu">
-            <div onClick={handleMyPageRedirect}>내 리뷰 관리하기</div>
+            {isFromReviewList ? (
+              <>
+                <div onClick={handleEdit}>수정하기</div>
+                <div onClick={handleDelete}>삭제하기</div>
+              </>
+            ) : (
+              <div onClick={handleMyPageRedirect}>내 리뷰 관리하기</div>
+            )}
           </DropdownMenu>
         )}
       </div>
@@ -178,6 +189,8 @@ ReviewContentSection.propTypes = {
   cookieScoreCount: PropTypes.number.isRequired,
   isMenuOpen: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
+  handleEdit: PropTypes.func,
+  handleDelete: PropTypes.func,
 };
 
 export default ReviewContentSection;
