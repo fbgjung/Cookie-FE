@@ -79,7 +79,7 @@ const Search = () => {
 
   const fetchSearchResults = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/search", {
+      const response = await axios.get("https://www.cookiekie.com/api/search", {
         params: { type: activeTab, keyword: searchTerm, page, size:10 },
       });
 
