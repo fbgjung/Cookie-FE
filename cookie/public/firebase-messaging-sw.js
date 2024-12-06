@@ -36,7 +36,24 @@ messaging.onBackgroundMessage(function (payload) {
   self.registration.showNotification(title, {
     body: body,
     icon: icon,
-
     tag: `notification-${currentTime}`,
   });
+});
+
+self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+
+  if (
+    url.pathname.startsWith("/oauth2/authorization") ||
+    url.pathname.startsWith("/login/oauth2/code")
+  ) {
+    console.log("Google OAuth 요청 제외:", event.request.url);
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      return cachedResponse || fetch(event.request);
+    })
+  );
 });
