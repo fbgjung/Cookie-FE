@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
@@ -23,6 +22,11 @@ const MainTitle = styled.div`
   h2 {
     margin: 0.8rem;
     color: #724b2e;
+  }
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.4rem;
+    }
   }
 `;
 
@@ -66,7 +70,9 @@ const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 15rem;
-
+  @media (max-width: 768px) {
+    margin-top: 10rem;
+  }
   button {
     background-color: #aad6e7;
     color: #724b2e;
@@ -79,6 +85,12 @@ const SubmitBtn = styled.div`
     font-weight: 700;
     outline: none;
     cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    button {
+      width: 20rem;
+      height: 3.5rem;
+    }
   }
 `;
 
@@ -216,7 +228,6 @@ function SignUpGenre() {
 
   return (
     <>
-      <GlobalStyle />
       <MainContainer>
         <MainTitle>
           <h2>선호하는 장르를</h2>

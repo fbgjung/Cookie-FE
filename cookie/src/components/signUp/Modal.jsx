@@ -15,13 +15,17 @@ const ModalBackground = styled.div`
 
 const ModalContainer = styled.div`
   background: #fff4b9;
-  padding: 30px;
-  border-radius: 8px;
+  padding: 1.875rem;
+  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 470px;
-
+  box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  width: 29.375rem;
+  @media (max-width: 768px) {
+    width: 22rem;
+    height: 17rem;
+    padding: 1rem;
+  }
   h2 {
     margin: 0 0 2rem 0;
     color: #724b2e;
@@ -37,6 +41,17 @@ const ModalContainer = styled.div`
   p {
     color: #724b2e;
   }
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.3rem;
+    }
+    h3 {
+      font-size: 0.9rem;
+    }
+    p {
+      font-size: 0.85rem;
+    }
+  }
 `;
 
 const ModalButton = styled.button`
@@ -47,9 +62,17 @@ const ModalButton = styled.button`
   border: 1px solid #aad6e7;
   cursor: pointer;
   font-size: 1rem;
+  width: 8.5rem;
   &:hover {
     background-color: #aad6e7;
     color: "#724b2e";
+  }
+  @media (max-width: 768px) {
+    width: 7.5rem;
+    height: 3.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -65,8 +88,12 @@ const CloseBtn = styled.button`
   cursor: pointer;
   color: #a7a7a7;
   text-decoration: underline;
-  text-underline-offset: 6px;
-  font-size: 16px;
+  text-underline-offset: 0.375rem;
+  font-size: 1rem;
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    text-underline-offset: 0.25rem;
+  }
 `;
 const Modal = ({ onClose, onPushNotification, onEmailNotification }) => {
   return (
