@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import goBack from "../../assets/images/admin/goBack_br.svg";
 import axios from "axios";
+import serverBaseUrl from "../../config/apiConfig";
 
 const CastInfo = styled.div`
   padding: 1.25rem;
@@ -24,7 +25,7 @@ const DirecrtorInfoContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 0.625rem;
+  /* padding: 0 0.625rem; */
 
   .info__director {
     display: flex;
@@ -34,8 +35,9 @@ const DirecrtorInfoContainer = styled.div`
 
   .info__director--img {
     border-radius: 0.75rem;
-    width: 85px;
-    height: 85px;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
   }
 
   p {
@@ -126,57 +128,6 @@ const ContentItem = styled.div`
   }
 `;
 
-const dummyData = {
-  response: {
-    name: "Christopher Nolan",
-    profileImage: "http://via.placeholder.com/85x85",
-    directorMovieList: [
-      {
-        id: 1,
-        title: "Inception",
-        poster: "http://via.placeholder.com/124x177",
-        releasedAt: "2010-07-16",
-        country: "USA",
-        score: 4.8,
-        likes: 42,
-        reviews: 231,
-      },
-      {
-        id: 2,
-        title: "The Dark Knight The Dark Knight",
-        poster: "http://via.placeholder.com/124x177",
-        releasedAt: "2008-07-18",
-        country: "USA",
-        score: 4.2,
-        likes: 30,
-        reviews: 243,
-      },
-      {
-        id: 3,
-        title: "Interstellar",
-        poster: "http://via.placeholder.com/124x177",
-        releasedAt: "2014-11-07",
-        country: "USA",
-        likes: 33,
-        score: 4.5,
-        reviews: 24,
-      },
-      {
-        id: 21,
-        title: "Romance in Paris",
-        poster: "http://via.placeholder.com/124x177",
-        releasedAt: "2023-05-10",
-        country: "USA",
-        score: 3.9,
-        likes: 4554,
-        reviews: 22,
-      },
-    ],
-  },
-};
-
-const { name, profileImage, directorMovieList } = dummyData.response;
-
 function CastDetail() {
   const [data, setData] = useState(null);
   const navigate = useNavigate();
@@ -184,29 +135,33 @@ function CastDetail() {
   const handleNavigate = (path) => {
     navigate(path);
   };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     let url = "";
 
-  //     if (id.includes("actor")) {
-  //       url = `/api/actor/${id.split("/")[1]}`;
-  //     } else if (id.includes("director")) {
-  //       url = `/api/director/${id.split("/")[1]}`;
-  //     }
+  // const testId = "director/1";
+  const testId = "actor/1";
 
-  //     try {
-  //       const response = await axios.get(url);
-  //       console.log(response);
-  //       setData(response.data.response);
-  //     } catch (err) {
-  //       console.error("API 요청 실패:", err);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      let url = "";
 
-  //   fetchData();
-  // }, [id]);
+      if (testId.includes("actor")) {
+        url = `${serverBaseUrl}/api/actor/${testId.split("/")[1]}`;
+      } else if (testId.includes("director")) {
+        url = `${serverBaseUrl}/api/director/${testId.split("/")[1]}`;
+      }
 
-  // if (!data) return null;
+      try {
+        const response = await axios.get(url);
+        console.log(response.data.response);
+        setData(response.data.response);
+      } catch (err) {
+        console.error("API 요청 실패:", err);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (!data) return null;
   return (
     <>
       <CastInfo>
@@ -214,20 +169,18 @@ function CastDetail() {
           <img src={goBack} alt="Go Back" />
         </BackBtn>
         <h2 className="info__title">
-          {/* 🎬 {id.includes("actor") ? "배우" : "감독"} */}
-          🎬 감독
+          🎬 {testId.includes("actor") ? "배우" : "감독"}
         </h2>
         <DirecrtorInfoContainer>
           <div className="info__director">
             <img
               className="info__director--img"
-              src={profileImage || "http://via.placeholder.com/70x70"}
+              src={data.profileImage || "http://via.placeholder.com/70x70"}
               alt="Director"
             />
             <div>
-              <h3>{name}</h3>
-              {/* <p>{id.includes("actor") ? "배우" : "감독"}</p> */}
-              <p> 감독</p>
+              <h3>{data.name}</h3>
+              <p>{testId.includes("actor") ? "배우" : "감독"}</p>
             </div>
           </div>
         </DirecrtorInfoContainer>
@@ -240,7 +193,10 @@ function CastDetail() {
             <TitleItem>좋아요 수</TitleItem>
             <TitleItem>리뷰 수</TitleItem>
           </TitleGrid>
-          {directorMovieList.map((movie) => (
+          {(testId.includes("actor")
+            ? data.actorMovieList
+            : data.directorMovieList
+          )?.map((movie) => (
             <MovieContentGrid key={movie.id}>
               <button onClick={() => handleNavigate(`/movie/${movie.id}`)}>
                 <img
@@ -257,7 +213,6 @@ function CastDetail() {
                   {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
                 </p>
               </ContentItem>
-
               <ContentItem>{movie.score}점</ContentItem>
               <ContentItem>{movie.likes}개</ContentItem>
               <ContentItem>{movie.reviews}개</ContentItem>

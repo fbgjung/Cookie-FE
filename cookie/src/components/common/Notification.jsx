@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import NotificationIcon from "/src/assets/images/Notification.svg";
-import useNotificationStore from "../stores/notificationStore";
+import useNotificationStore from "../../stores/notificationStore";
 import { useEffect } from "react";
 
 const NotificationContainer = styled.div`
@@ -93,8 +93,8 @@ const Notification = () => {
           <ul>
             {notifications.map((notif, index) => (
               <li key={index}>
-                <strong>{notif.movieTitle}</strong>에 대한 새로운 리뷰가
-                작성되었습니다. (작성자: {notif.writerNickname})
+                {notif.body} <br />
+                <small>{notif.timestamp}</small>
               </li>
             ))}
           </ul>
