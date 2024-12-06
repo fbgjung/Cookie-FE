@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import videoIcon from "../../assets/images/main/video_icon.svg";
-import rank1 from "../../assets/images/main/rank_1.svg";
-import rank2 from "../../assets/images/main/rank_2.svg";
-import rank3 from "../../assets/images/main/rank_3.svg";
-import rank4 from "../../assets/images/main/rank_4.svg";
-import rank5 from "../../assets/images/main/rank_5.svg";
-import rank6 from "../../assets/images/main/rank_6.svg";
-import rank7 from "../../assets/images/main/rank_7.svg";
-import rank8 from "../../assets/images/main/rank_8.svg";
-import rank9 from "../../assets/images/main/rank_9.svg";
-import rank10 from "../../assets/images/main/rank_10.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
 import serverBaseUrl from "../../config/apiConfig";
@@ -70,9 +60,9 @@ function MovieRank() {
     const fetchMainPageMovies = async () => {
       try {
         const response = await axiosInstance.get(
-          `${serverBaseUrl}/api/movies/mainPage`
+          `${serverBaseUrl}/api/movies/mainAdminRecommend`
         );
-        const recommendMovies = response.data.response.adminRecommendMovies;
+        const recommendMovies = response.data.response;
         setRecommendMovies(recommendMovies);
       } catch (error) {
         console.error("API 호출 오류 발생:", error);

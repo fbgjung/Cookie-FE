@@ -122,12 +122,11 @@ function MatchUp({ matchDate }) {
     const fetchMainPageMovies = async () => {
       try {
         const response = await axiosInstance.get(
-          `${serverBaseUrl}/api/movies/mainPage`
+          `${serverBaseUrl}/api/movies/mainMatchUps`
         );
-        const matchUpData = response.data.response.matchUp;
+        const matchUpData = response.data.response.matchUps;
         if (matchUpData) {
-          console.log(matchUpData);
-          setMatchUps(matchUpData.matchUps);
+          setMatchUps(matchUpData);
 
           const today = new Date();
           const dayOfWeek = today.getDay();
@@ -135,7 +134,7 @@ function MatchUp({ matchDate }) {
           if (dayOfWeek === 0) {
             setAccess(false);
           } else {
-            setAccess(matchUpData.access);
+            setAccess(response.data.response.access);
           }
         }
       } catch (error) {

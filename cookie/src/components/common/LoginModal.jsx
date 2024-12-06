@@ -86,6 +86,12 @@ const ModalContent = styled.div`
       transform: translateY(0);
     }
   }
+  @media (max-width: 768px) {
+    .modal__infoContainer {
+      width: 3rem;
+      height: 1rem;
+    }
+  }
 `;
 
 const LoginModal = () => {
