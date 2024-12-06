@@ -7,8 +7,15 @@ export const requestNotificationPermission = async () => {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
       console.log("알림 권한 허용");
-      const token = await getToken(messaging, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+
+      const token = await new Promise((resolve) => {
+        setTimeout(async () => {
+          resolve(
+            await getToken(messaging, {
+              vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+            })
+          );
+        }, 1000);
       });
       if (token) {
         console.log("FCM 토큰:", token);

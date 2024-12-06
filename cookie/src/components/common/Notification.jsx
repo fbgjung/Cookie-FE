@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import NotificationIcon from "/src/assets/images/Notification.svg";
 import useNotificationStore from "../../stores/notificationStore";
-import { useEffect } from "react";
 
 const NotificationContainer = styled.div`
   position: relative;
@@ -28,7 +27,7 @@ const Badge = styled.div`
   position: absolute;
   top: -5px;
   right: -5px;
-  background-color: red;
+  background-color: #6a91b1;
   color: white;
   border-radius: 50%;
   width: 20px;
@@ -61,24 +60,68 @@ const NotificationDropdown = styled.div`
   li {
     padding: 10px;
     border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 
-  li:last-child {
-    border-bottom: none;
+  .empty-message {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    padding: 20px;
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+
+  &:hover {
+    color: black;
   }
 `;
 
 const Notification = () => {
   const notifications = useNotificationStore((state) => state.notifications);
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleNotificationClick = () => {
     setShowDropdown((prev) => !prev);
   };
 
+  const handleOutsideClick = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowDropdown(false);
+    }
+  };
+
+  const handleCloseClick = () => {
+    setShowDropdown(false);
+  };
+
   useEffect(() => {
     console.log("컴포넌트 상태 알림 변경:", notifications);
-  }, [notifications]);
+
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    } else {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [showDropdown]);
 
   return (
     <NotificationContainer>
@@ -89,15 +132,20 @@ const Notification = () => {
       />
       {notifications.length > 0 && <Badge>{notifications.length}</Badge>}
       {showDropdown && (
-        <NotificationDropdown>
-          <ul>
-            {notifications.map((notif, index) => (
-              <li key={index}>
-                {notif.body} <br />
-                <small>{notif.timestamp}</small>
-              </li>
-            ))}
-          </ul>
+        <NotificationDropdown ref={dropdownRef}>
+          <CloseButton onClick={handleCloseClick}>×</CloseButton>
+          {notifications.length > 0 ? (
+            <ul>
+              {notifications.map((notif, index) => (
+                <li key={index}>
+                  {notif.body} <br />
+                  <small>{notif.timestamp}</small>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="empty-message">알림이 없습니다!</div>
+          )}
         </NotificationDropdown>
       )}
     </NotificationContainer>
