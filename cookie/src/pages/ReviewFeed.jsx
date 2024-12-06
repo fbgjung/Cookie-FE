@@ -78,7 +78,7 @@ const ReviewContainer = styled.div`
 
 const ReviewTicket = styled.div`
   display: flex;
-  background-image: url("/src/assets/images/mypage/reviewticket.svg");
+  background-image: url("/images/reviewticket.svg");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -341,7 +341,7 @@ useEffect(() => {
                   (_, i) => (
                     <img
                       key={`${review.reviewId}-score-${i}`} // 고유 키 생성
-                      src="/src/assets/images/mypage/cookiescore.svg"
+                      src="/images/cookiescore.svg"
                       alt="score"
                     />
                   )
