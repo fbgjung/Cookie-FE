@@ -24,6 +24,11 @@ const MainTitle = styled.div`
     margin: 0.8rem;
     color: #724b2e;
   }
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
 `;
 
 const SubTitle = styled.div`
@@ -66,7 +71,9 @@ const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 15rem;
-
+  @media (max-width: 768px) {
+    margin-top: 10rem;
+  }
   button {
     background-color: #aad6e7;
     color: #724b2e;
@@ -79,6 +86,12 @@ const SubmitBtn = styled.div`
     font-weight: 700;
     outline: none;
     cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    button {
+      width: 20rem;
+      height: 3.5rem;
+    }
   }
 `;
 

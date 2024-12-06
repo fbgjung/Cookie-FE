@@ -20,6 +20,11 @@ const MainTitle = styled.div`
     margin: 0.8rem;
     color: #724b2e;
   }
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.4rem;
+    }
+  }
 `;
 const UserInfo = styled.div`
   display: flex;
@@ -119,6 +124,14 @@ const UserInfo = styled.div`
   input:focus {
     outline: 1px solid #724b2e;
   }
+  @media (max-width: 768px) {
+    input {
+      width: 14.5rem;
+    }
+    .nickName__valid--text {
+      font-size: 0.9rem;
+    }
+  }
 `;
 
 const SubmitBtn = styled.div`
@@ -137,6 +150,12 @@ const SubmitBtn = styled.div`
     font-weight: 700;
     outline: none;
     cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    button {
+      width: 20rem;
+      height: 3.5rem;
+    }
   }
 `;
 
