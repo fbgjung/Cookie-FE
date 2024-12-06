@@ -4,8 +4,8 @@ import AppScreen from "./routes/AppScreen";
 import GlobalStyle from "./styles/global";
 import AddMovie from "../src/pages/admin/AdminMovie";
 import AdminLogin from "../src/pages/admin/AdminLogin";
-import ScrollToTop from "./components/ScrollToTop";
-import LoginModal from "./components/LoginModal";
+import ScrollToTop from "./components/common/ScrollToTop";
+import LoginModal from "./components/common/LoginModal";
 
 function App() {
   return (

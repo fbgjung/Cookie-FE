@@ -4,14 +4,14 @@ import styled from "styled-components";
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Pretendard';
-    src: url('../assets/fonts/Pretendard-Regular.otf') format('truetype'); /* Regular */
+    src: url('/fonts/Pretendard-Regular.otf') format('truetype'); /* Regular */
     font-weight: 400;
     font-style: normal;
   }
 
   @font-face {
     font-family: 'Pretendard';
-    src: url('./font/Pretendard-Bold.otf') format('truetype'); /* Bold */
+    src: url('/font/Pretendard-Bold.otf') format('truetype'); /* Bold */
     font-weight: 700;
     font-style: normal;
   }
