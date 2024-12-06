@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import ScrollToTop from "../components/ScrollToTop";
+import ScrollToTop from "../components/common/ScrollToTop";
 import AppPages from "./AppPages";
 import CookieLogo from "/src/assets/images/Cookie.svg";
 
@@ -10,10 +10,10 @@ import ReviewIcon from "/src/assets/images/navbar_review.svg";
 import MatchupIcon from "/src/assets/images/navbar_matchup.svg";
 import ProfileIcon from "/src/assets/images/navbar_profile.svg";
 import { Link } from "react-router-dom";
-import Notification from "../components/Notification";
+import Notification from "../components/common/Notification";
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import ToggleSwitch from "../components/ToggleSwitch";
+import ToggleSwitch from "../components/common/ToggleSwitch";
 
 const Container = styled.div`
   position: relative;

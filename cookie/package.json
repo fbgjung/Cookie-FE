@@ -17,6 +17,7 @@
     "@stomp/stompjs": "^7.0.0",
     "axios": "^1.7.7",
     "chart.js": "^4.4.6",
+    "firebase": "^11.0.2",
     "immer": "^10.1.1",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
@@ -32,6 +33,7 @@
     "recharts": "^2.13.3",
     "sockjs-client": "^1.6.1",
     "styled-components": "^6.1.13",
+    "vite-plugin-pwa": "^0.21.1",
     "zustand": "^5.0.1"
   },
   "devDependencies": {

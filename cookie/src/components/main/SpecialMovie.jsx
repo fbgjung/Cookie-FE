@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import specialIcon from "../../assets/images/main/special_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const SpecialMovieList = styled.div`
   position: relative;
@@ -19,11 +20,13 @@ const SpecialMovieList = styled.div`
     display: flex;
     gap: 0.4rem;
     margin: 0.5rem 0 1rem 0;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 
   .specialMovie__list {
     display: flex;
-    align-items: center;
+    align-items: start;
     padding: 0.625rem;
     gap: 1rem;
     overflow-x: scroll;
@@ -33,13 +36,16 @@ const SpecialMovieList = styled.div`
     display: flex;
     gap: 0.5rem;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     cursor: pointer;
+    width: 124px;
   }
 
   .specialMovie__list--info img {
     border-radius: 0.75rem;
+    width: 124px;
+    height: 177px;
   }
 
   .specialMovie__list--info p {
@@ -56,125 +62,97 @@ const ThemeBtn = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  margin-right: 0.8rem;
+  margin: 0 0.8rem 0.8rem 0;
   font-size: 1rem;
-  color: ${(props) => (props.$isSelected ? "var(--main)" : "#afafaf")};
+  color: ${(props) => (props.$isSelected ? "var(--text)" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
 `;
 
 const CategoryBtn = styled.button`
-  background-color: ${(props) =>
-    props.$isSelected ? "var(--main)" : "var(--sub-btn)"};
-  color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
+  background-color: ${(props) => (props.$isSelected ? "var(--sub)" : "white")};
+  color: ${(props) => (props.$isSelected ? "var(--text)" : "var(--text)")};
   font-size: 13px;
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
   border-radius: 5rem;
+  border: 1px solid var(--sub);
   padding: 0.5rem 1rem;
-  border: none;
   cursor: pointer;
   &:hover {
-    background-color: var(--main);
-    color: white;
+    background-color: var(--sub);
+    color: var(--text);
   }
   white-space: nowrap;
 `;
 
-function SpecialMovie() {
-  const category = [
-    {
-      테마별: [
-        "실화를 소재로 한",
-        "가족과함께",
-        "연인과 함께",
-        "킬링타임",
-        "비오는날",
-        "디즈니",
-      ],
-      연령대별: ["10대", "20대", "30대", "40대", "50대"],
-      시즌별: [
-        "봄",
-        "여름",
-        "가을",
-        "겨울",
-        "어린이날",
-        "크리스마스",
-        "새해",
-        "명절",
-      ],
-    },
-  ];
-
-  //테마 랜덤으로 지정하기 (임의 데이터)
-  function getRandomItems(arr, maxCount) {
-    const count = Math.floor(Math.random() * maxCount) + 1; // 1개 또는 2개 선택
-    const shuffled = arr.sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count); // 섞은 배열에서 첫 번째 count 개 항목을 선택
-  }
-  const specialMovies = Array.from({ length: 20 }, (_, i) => ({
-    movieId: i + 1,
-    title: `영화 ${i + 1}`,
-    poster: `https://via.placeholder.com/124x177`,
-    plot: `이 영화는 영화 ${i + 1}에 대한 설명입니다.`,
-    nation: ["미국", "한국", "대만", "중국", "캐나다", "프랑스"][i % 6],
-    released: `20${10 + (i % 20)}`,
-    runtime: `${120 + i}분`,
-    score: Math.floor(Math.random() * 5) + 1,
-    rating: i + 1 <= 10 ? "teenager" : "adult",
-    genre: ["스릴러", "액션", "코미디", "드라마", "판타지"][i % 5],
-    reviews: Math.floor(Math.random() * 1901) + 100,
-    likes: Math.floor(Math.random() * 1701) + 300,
-
-    theme: getRandomItems(
-      [
-        "디즈니",
-        "킬링타임",
-        "실화를 소재로 한",
-        "가족과 함께",
-        "연인과 함께",
-        "비오는날",
-      ],
-      2
-    ),
-    ageGroup: getRandomItems(["10대", "20대", "30대", "40대", "50대"], 2),
-    season: getRandomItems(
-      ["봄", "여름", "가을", "겨울", "어린이날", "크리스마스", "새해", "명절"],
-      2
-    ),
-  }));
-
-  const [selectedCategory, setSelectedCategory] = useState("테마별"); //테마 카테고리
-  const [selectedValue, setSelectedValue] = useState(null); // 세부 카테고리
-  const [filteredMovies, setFilteredMovies] = useState(specialMovies); //영화정보
-  const [selectedTheme, setSelectedTheme] = useState("");
-  const categoryKeys = Object.keys(category[0]);
+function SpecialMovie({ categorydata }) {
+  const filteredCategoryData = categorydata.filter(
+    (item) => item.id >= 21 && item.id <= 40
+  );
+  const [selectedMainCategory, setSelectedMainCategory] = useState("시즌");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("설레는봄");
+  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    setSelectedValue(null);
+  const handleMainCategoryClick = (mainCategory) => {
+    setSelectedMainCategory(mainCategory);
+    setSelectedSubCategory(null);
+  };
+  const handleSubCategoryClick = (subCategory) => {
+    setSelectedSubCategory(subCategory);
   };
 
-  const handleValueClick = (value) => {
-    setSelectedTheme(value);
+  const fetchMoviesByCategory = async (mainCategory, subCategory) => {
+    if (!mainCategory || !subCategory) return;
 
-    const newFilteredMovies = specialMovies.filter((movie) =>
-      movie.theme.includes(value)
-    );
-    setFilteredMovies(newFilteredMovies);
-  };
-
-  // 렌더링 후 첫 기본값 설정
-  useEffect(() => {
-    if (selectedCategory) {
-      const firstValue = category[0][selectedCategory][0];
-      setSelectedTheme(firstValue);
+    try {
+      const response = await axiosInstance.get("/api/movies/categoryMovies", {
+        params: {
+          mainCategory: mainCategory,
+          subCategory: subCategory,
+        },
+      });
+      console.log(response.data);
+      setMovies(response.data.movies);
+    } catch (error) {
+      console.error("영화 불러오기 실패:", error);
     }
-  }, [selectedCategory]);
+  };
+
+  const mainCategories = Array.from(
+    new Set(filteredCategoryData.map((item) => item.mainCategory))
+  );
+
+  // 선택된 메인 카테고리의 세부카테고리
+  const getSubCategories = (mainCategory) => {
+    return filteredCategoryData
+      .filter((item) => item.mainCategory === mainCategory)
+      .map((item) => item.subCategory);
+  };
 
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
   };
+
+  useEffect(() => {
+    if (selectedMainCategory) {
+      let firstSubCategory = getSubCategories(selectedMainCategory)[0];
+      if (selectedSubCategory === "설레는봄" || !selectedSubCategory) {
+        setSelectedSubCategory(firstSubCategory);
+      }
+    }
+  }, [selectedMainCategory]);
+
+  useEffect(() => {
+    if (
+      selectedMainCategory &&
+      selectedSubCategory &&
+      selectedSubCategory !== "설레는봄"
+    ) {
+      fetchMoviesByCategory(selectedMainCategory, selectedSubCategory);
+    }
+  }, [selectedMainCategory, selectedSubCategory]);
+
   return (
     <>
       <SpecialMovieList>
@@ -184,38 +162,40 @@ function SpecialMovie() {
         </div>
         <div>
           <div>
-            {categoryKeys.map((categoryKey) => (
+            {mainCategories.map((mainCategory, index) => (
               <ThemeBtn
-                key={categoryKey}
-                onClick={() => handleCategoryClick(categoryKey)}
-                $isSelected={selectedCategory === categoryKey}
+                key={index}
+                onClick={() => handleMainCategoryClick(mainCategory)}
+                $isSelected={selectedMainCategory === mainCategory}
               >
-                {categoryKey}
+                {mainCategory}
               </ThemeBtn>
             ))}
           </div>
 
-          {selectedCategory && (
+          {selectedMainCategory && (
             <div className="movie__categoty">
-              {category[0][selectedCategory]?.map((value) => (
-                <CategoryBtn
-                  key={value}
-                  onClick={() => handleValueClick(value)}
-                  $isSelected={selectedTheme === value}
-                >
-                  {value}
-                </CategoryBtn>
-              ))}
+              {getSubCategories(selectedMainCategory).map(
+                (subCategory, index) => (
+                  <CategoryBtn
+                    key={index}
+                    onClick={() => handleSubCategoryClick(subCategory)}
+                    $isSelected={selectedSubCategory === subCategory}
+                  >
+                    {subCategory}
+                  </CategoryBtn>
+                )
+              )}
             </div>
           )}
 
           <div className="specialMovie__list">
-            {filteredMovies.length > 0 ? (
-              filteredMovies.map((movie) => (
+            {movies.length > 0 ? (
+              movies.map((movie, index) => (
                 <div
-                  key={movie.movieId}
+                  key={index}
                   className="specialMovie__list--info"
-                  onClick={handleMovieClick}
+                  onClick={() => handleMovieClick(movie.id)}
                 >
                   <img src={movie.poster} alt={movie.title} />
                   <div>
@@ -223,10 +203,11 @@ function SpecialMovie() {
                       <strong>{movie.title}</strong>
                     </p>
                     <p>
-                      {movie.released}﹒{movie.nation}
+                      {new Date(movie.releasedAt).getFullYear()}﹒
+                      {movie.country}
                     </p>
-                    <p className="movie__info--sub">리뷰 수: {movie.reviews}</p>
-                    <p className="movie__info--sub">좋아요 수: {movie.likes}</p>
+                    <p className="movie__info--sub">리뷰: {movie.reviews}개</p>
+                    <p className="movie__info--sub">좋아요: {movie.likes}개</p>
                   </div>
                 </div>
               ))

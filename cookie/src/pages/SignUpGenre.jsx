@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
-import useNotificationStore from "../stores/notificationStore";
-import serverBaseUrl from "../config/apiConfig";
+import { requestNotificationPermission } from "../firebase/firebaseMessaging";
+
 import axios from "axios";
-import useUserStore from "../stores/useUserStore";
 
 const MainContainer = styled.div`
   background-color: #fff4b9;
@@ -85,83 +84,27 @@ const SubmitBtn = styled.div`
 
 function SignUpGenre() {
   const MovieGenre = [
-    {
-      id: 1,
-      genre: "로맨스",
-    },
-    {
-      id: 2,
-      genre: "공포",
-    },
-    {
-      id: 3,
-      genre: "코미디",
-    },
-    {
-      id: 4,
-      genre: "액션",
-    },
-    {
-      id: 5,
-      genre: "판타지",
-    },
-    {
-      id: 6,
-      genre: "애니메이션",
-    },
-    {
-      id: 7,
-      genre: "범죄",
-    },
-    {
-      id: 8,
-      genre: "SF",
-    },
-    {
-      id: 9,
-      genre: "음악",
-    },
-    {
-      id: 10,
-      genre: "스릴러",
-    },
-    {
-      id: 11,
-      genre: "전쟁",
-    },
-    {
-      id: 12,
-      genre: "다큐멘터리",
-    },
-    {
-      id: 13,
-      genre: "드라마",
-    },
-    {
-      id: 14,
-      genre: "가족",
-    },
-    {
-      id: 15,
-      genre: "역사",
-    },
-    {
-      id: 16,
-      genre: "미스터리",
-    },
-    {
-      id: 17,
-      genre: "TV영화",
-    },
-    {
-      id: 18,
-      genre: "서부극",
-    },
-    {
-      id: 19,
-      genre: "모험",
-    },
+    { id: 1, genre: "로맨스" },
+    { id: 2, genre: "공포" },
+    { id: 3, genre: "코미디" },
+    { id: 4, genre: "액션" },
+    { id: 5, genre: "판타지" },
+    { id: 6, genre: "애니메이션" },
+    { id: 7, genre: "범죄" },
+    { id: 8, genre: "SF" },
+    { id: 9, genre: "음악" },
+    { id: 10, genre: "스릴러" },
+    { id: 11, genre: "전쟁" },
+    { id: 12, genre: "다큐멘터리" },
+    { id: 13, genre: "드라마" },
+    { id: 14, genre: "가족" },
+    { id: 15, genre: "역사" },
+    { id: 16, genre: "미스터리" },
+    { id: 17, genre: "TV영화" },
+    { id: 18, genre: "서부극" },
+    { id: 19, genre: "모험" },
   ];
+
   const [selectedGenreId, setSelectedGenreId] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -169,6 +112,7 @@ function SignUpGenre() {
   const [showModal, setShowModal] = useState(false);
   const [pushEnabled, setPushEnabled] = useState("false");
   const [emailEnabled, setEmailEnabled] = useState("false");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleButtonClick = (id) => {
     setSelectedGenreId(id);
@@ -176,52 +120,62 @@ function SignUpGenre() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!selectedGenreId) {
       alert("장르를 선택해주세요.");
       return;
     }
     setShowModal(true);
   };
-
-  useEffect(() => {
-    if (pushEnabled === "true" || emailEnabled === "true") {
-      handleFormDataSubmission();
-    }
-  }, [pushEnabled, emailEnabled]);
-
   const handlePushNotification = () => {
-    setPushEnabled("true");
-    setEmailEnabled("false");
+    handleCloseModal("true", "false");
   };
 
   const handleEmailNotification = () => {
-    setEmailEnabled("true");
-    setPushEnabled("false");
+    handleCloseModal("false", "true");
   };
 
-  const handleCloseModal = () => {
-    setEmailEnabled("false");
-    setPushEnabled("false");
-    setTimeout(() => {
-      handleFormDataSubmission();
-    }, 0);
+  const handleCloseModal = (pushValue, emailValue) => {
+    setPushEnabled(pushValue);
+    setEmailEnabled(emailValue);
+
+    setShowModal(false);
+
+    if (!isSubmitting) {
+      handleFormDataSubmission(pushValue, emailValue);
+    }
   };
 
-  const handleFormDataSubmission = async () => {
-    const formData = new FormData();
-    formData.append("socialProvider", userProfileData.socialProvider);
-    formData.append("socialId", userProfileData.socialId);
-    formData.append("email", userProfileData.email);
-    formData.append("nickname", userProfileData.nickname);
-    formData.append("pushEnabled", pushEnabled);
-    formData.append("emailEnabled", emailEnabled);
-    formData.append("genreId", selectedGenreId.toString());
-    formData.append("profileImage", userProfileData.profileImage);
+  const handleFormDataSubmission = async (pushValue, emailValue) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
+      const fcmToken = await requestNotificationPermission();
+      if (!fcmToken) {
+        toast.error("FCM 토큰을 가져올 수 없습니다.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log("FCM 토큰:", fcmToken);
+
+      const formData = new FormData();
+      formData.append("socialProvider", userProfileData.socialProvider);
+      formData.append("socialId", userProfileData.socialId);
+      formData.append("email", userProfileData.email);
+      formData.append("nickname", userProfileData.nickname);
+      formData.append("pushEnabled", pushValue);
+      formData.append("emailEnabled", emailValue);
+      formData.append("genreId", selectedGenreId.toString());
+      formData.append("profileImage", userProfileData.profileImage);
+      formData.append("fcmToken", fcmToken);
+
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
       const response = await axios.post(
-        `${serverBaseUrl}/api/auth/register`,
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         formData,
         {
           headers: {
@@ -229,58 +183,23 @@ function SignUpGenre() {
           },
         }
       );
+
       if (response.status === 200) {
         toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
+        sessionStorage.setItem(
+          "accessToken",
+          response.data.response.token.accessToken
+        );
+        setShowModal(false);
+        setIsSubmitting(false);
 
-        const { accessToken } = response.data.response.token;
-        if (accessToken) {
-          sessionStorage.setItem("accessToken", accessToken);
-          console.log("AccessToken: ", accessToken);
-
-          const userResponse = response.data.response.user;
-          const setUserInfo = useUserStore.getState().setUserInfo;
-          const userInfo = {
-            userId: userResponse.userId,
-            nickname: userResponse.nickname,
-            profileImage: userResponse.profileImage,
-            genreId: userResponse.genreId,
-          };
-          setUserInfo(userInfo);
-          console.log("저장된 유저 정보:", userInfo);
-
-          const eventSource = new EventSource(
-            `${serverBaseUrl}/api/reviews/subscribe/push-notification`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-
-          const addNotification =
-            useNotificationStore.getState().addNotification;
-
-          eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            addNotification(data);
-          };
-
-          eventSource.onerror = (error) => {
-            console.error("SSE 연결 에러:", error);
-            eventSource.close();
-          };
-
-          setShowModal(false);
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        } else {
-          throw new Error("토큰 발급에 실패했습니다.");
-        }
+        navigate("/");
       }
     } catch (error) {
       console.error("오류 발생:", error);
       toast.error(`가입 실패: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

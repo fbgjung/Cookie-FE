@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import videoIcon from "../../assets/images/main/video_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const GenreMovieList = styled.div`
   position: relative;
@@ -20,25 +21,28 @@ const GenreMovieList = styled.div`
   .genre__movie {
     display: flex;
     flex-direction: row;
-    align-items: center;
     gap: 0.9rem;
     flex-wrap: wrap;
+    align-items: start;
     padding: 0.625rem;
   }
 
   .genre__movie--list {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     gap: 0.5rem;
     cursor: pointer;
   }
 
   .genre__movie--list img {
     border-radius: 0.75rem;
+    width: 124px;
+    height: 177px;
   }
   .genre__movie--list p {
     text-align: start;
+    width: 124px;
   }
 
   .genre__info--sub {
@@ -53,130 +57,50 @@ const GenreBtn = styled.button`
   cursor: pointer;
   margin: 0 0.8rem 0.3rem 0;
   font-size: 1rem;
-  color: ${(props) => (props.$isSelected ? "var(--main)" : "#afafaf")};
+  color: ${(props) => (props.$isSelected ? "var(--text)" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
 `;
 
-function GenreMovie() {
-  const MovieGenre = [
-    {
-      id: 1,
-      genre: "로맨스",
-    },
-    {
-      id: 2,
-      genre: "공포",
-    },
-    {
-      id: 3,
-      genre: "코미디",
-    },
-    {
-      id: 4,
-      genre: "액션",
-    },
-    {
-      id: 5,
-      genre: "판타지",
-    },
-    {
-      id: 6,
-      genre: "애니메이션",
-    },
-    {
-      id: 7,
-      genre: "범죄",
-    },
-    {
-      id: 8,
-      genre: "SF",
-    },
-    {
-      id: 9,
-      genre: "음악",
-    },
-    {
-      id: 10,
-      genre: "스릴러",
-    },
-    {
-      id: 11,
-      genre: "전쟁",
-    },
-    {
-      id: 12,
-      genre: "다큐멘터리",
-    },
-    {
-      id: 13,
-      genre: "드라마",
-    },
-    {
-      id: 14,
-      genre: "가족",
-    },
-    {
-      id: 15,
-      genre: "역사",
-    },
-    {
-      id: 16,
-      genre: "미스터리",
-    },
-    {
-      id: 17,
-      genre: "TV영화",
-    },
-    {
-      id: 18,
-      genre: "서부극",
-    },
-    {
-      id: 19,
-      genre: "모험",
-    },
-  ];
-  // 더미데이터
-  const GenreMovies = Array.from({ length: 60 }, (_, i) => ({
-    movieId: i + 1,
-    title: `영화 ${i + 1}`,
-    poster: `https://via.placeholder.com/124x177`,
-    plot: `이 영화는 영화 ${i + 1}에 대한 설명입니다.`,
-    nation: ["미국", "한국", "대만", "중국", "캐나다", "프랑스"][i % 6],
-    released: `20${10 + (i % 20)}`,
-    runtime: `${120 + i}분`,
-    score: Math.floor(Math.random() * 5) + 1,
-    rating: i + 1 <= 10 ? "teenager" : "adult",
-    genre: [
-      "스릴러",
-      "액션",
-      "코미디",
-      "드라마",
-      "판타지",
-      "로맨스",
-      "미스터리",
-    ][i % 7],
-
-    //서비스내 자체 추가 부분
-    reviews: Math.floor(Math.random() * 1901) + 100,
-    likes: Math.floor(Math.random() * 1701) + 300,
-  }));
+function GenreMovie({ categorydata }) {
   const [selectedGenre, setSelectedGenre] = useState("로맨스");
+  const [genreMovies, setGenreMovies] = useState([]);
+  const [genres, setGenres] = useState([]);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const handleGenreClick = (genre) => {
-    if (genre !== selectedGenre) {
-      setSelectedGenre(genre);
+  const fetchMoviesByGenre = async (genre) => {
+    try {
+      const response = await axiosInstance.get("/api/movies/categoryMovies", {
+        params: {
+          mainCategory: "장르",
+          subCategory: genre,
+        },
+      });
+      console.log(response.data);
+      setGenreMovies(response.data.movies);
+    } catch (error) {
+      console.error("영화 불러오기 실패:", error);
     }
+  };
+  useEffect(() => {
+    const genreList = categorydata
+      .filter((category) => category.mainCategory === "장르")
+      .map((category) => category.subCategory);
+    setGenres(genreList);
+  }, [categorydata]);
+
+  useEffect(() => {
+    fetchMoviesByGenre(selectedGenre);
+  }, [selectedGenre]);
+
+  const handleGenreClick = (genre) => {
+    setSelectedGenre(genre);
+    fetchMoviesByGenre(genre);
   };
 
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
   };
-  const filteredMovies = selectedGenre
-    ? GenreMovies.filter((movie) => movie.genre === selectedGenre)
-    : GenreMovies;
 
   return (
     <>
@@ -186,23 +110,25 @@ function GenreMovie() {
           <h2>장르별 영화</h2>
         </div>
         <div className="genreBtn__contianer">
-          {MovieGenre.map((genre) => (
-            <GenreBtn
-              key={genre.id}
-              $isSelected={selectedGenre === genre.genre}
-              onClick={() => handleGenreClick(genre.genre)}
-            >
-              {genre.genre}
-            </GenreBtn>
-          ))}
+          {genres
+            .filter((genre) => genre !== "N/A")
+            .map((genre, index) => (
+              <GenreBtn
+                key={index}
+                $isSelected={selectedGenre === genre}
+                onClick={() => handleGenreClick(genre)}
+              >
+                {genre}
+              </GenreBtn>
+            ))}
         </div>
         <div className="genre__movie">
-          {filteredMovies.length > 0 ? (
-            filteredMovies.slice(0, 12).map((movie, index) => (
+          {genreMovies.length > 0 ? (
+            genreMovies.slice(0, 12).map((movie, index) => (
               <div
                 key={index}
                 className="genre__movie--list"
-                onClick={() => handleMovieClick(movie.id)}
+                onClick={() => handleMovieClick(movie.movieId)}
               >
                 <img src={movie.poster} alt={movie.title} />
                 <div>
@@ -210,7 +136,7 @@ function GenreMovie() {
                     <strong>{movie.title}</strong>
                   </p>
                   <p>
-                    {movie.released}﹒{movie.nation}
+                    {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
                   </p>
                   <p>{movie.genre}</p>
                   <p className="genre__info--sub">리뷰 : {movie.reviews}개</p>
