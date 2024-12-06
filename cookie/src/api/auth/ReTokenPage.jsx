@@ -4,11 +4,13 @@ import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
 import useNotificationStore from "../../stores/notificationStore";
 import useUserStore from "../../stores/useUserStore";
+import useAuthStore from "../../stores/useAuthStore";
 
 //로그인 완료 후 토근 발급
 const ReTokenPage = () => {
   const navigate = useNavigate();
   const setUserInfo = useUserStore.getState().setUserInfo;
+  const logIn = useAuthStore.getState().logIn;
   useEffect(() => {
     axios
       .get(`${serverBaseUrl}/api/auth/retrieve-token`, {
@@ -25,6 +27,8 @@ const ReTokenPage = () => {
           console.log(accessToken);
           console.log(refreshToken);
 
+          logIn();
+
           return axios.get(`${serverBaseUrl}/api/users/info`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -39,11 +43,11 @@ const ReTokenPage = () => {
         console.log("유저 정보:", userInfo);
         setUserInfo(userInfo);
 
-        const eventSource = new EventSource(
-          `http://localhost:8080/api/reviews/subscribe/push-notification`
-        );
+        // const eventSource = new EventSource(
+        //   `http://localhost:8080/api/reviews/subscribe/push-notification`
+        // );
 
-        const addNotification = useNotificationStore.getState().addNotification;
+        // const addNotification = useNotificationStore.getState().addNotification;
 
         // eventSource.onmessage = (event) => {
         //   const data = JSON.parse(event.data);
@@ -51,16 +55,16 @@ const ReTokenPage = () => {
         //   addNotification(data);
         // };
 
-        eventSource.addEventListener("push-notification", (event) => {
-          const data = JSON.parse(event.data);
-          console.log("푸시 알림 수신 데이터:", data);
-          addNotification(data);
-        });
+        // eventSource.addEventListener("push-notification", (event) => {
+        //   const data = JSON.parse(event.data);
+        //   console.log("푸시 알림 수신 데이터:", data);
+        //   addNotification(data);
+        // });
 
-        eventSource.onerror = (error) => {
-          console.error("SSE 연결 에러:", error);
-          eventSource.close();
-        };
+        // eventSource.onerror = (error) => {
+        //   console.error("SSE 연결 에러:", error);
+        //   eventSource.close();
+        // };
 
         navigate("/");
       })
@@ -68,7 +72,7 @@ const ReTokenPage = () => {
         console.error("Failed to retrieve token:", error);
         navigate("/login");
       });
-  }, [navigate]);
+  }, [navigate, logIn]);
 
   return <div>토큰을 가져오는 중입니다…</div>;
 };
