@@ -25,6 +25,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 
   @media (max-width: 768px) {
     max-width: 100%;
