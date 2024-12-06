@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
@@ -286,7 +285,6 @@ function SignUpGenre() {
 
   return (
     <>
-      <GlobalStyle />
       <MainContainer>
         <MainTitle>
           <h2>선호하는 장르를</h2>
