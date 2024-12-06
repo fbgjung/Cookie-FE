@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
 import { requestNotificationPermission } from "../firebase/firebaseMessaging";
-
+import useUserStore from "../stores/useUserStore";
 import axios from "axios";
 
 const MainContainer = styled.div`
@@ -190,6 +190,17 @@ function SignUpGenre() {
           "accessToken",
           response.data.response.token.accessToken
         );
+        // const userResponse = response.data.response.user;
+        // const setUserInfo = useUserStore.getState().setUserInfo;
+        // const userInfo = {
+        //   userId: userResponse.userId,
+        //   nickname: userResponse.nickname,
+        //   profileImage: userResponse.profileImage,
+        //   genreId: userResponse.genreId,
+        // };
+        // setUserInfo(userInfo);
+        // console.log("저장된 유저 정보:", userInfo);
+
         setShowModal(false);
         setIsSubmitting(false);
 
