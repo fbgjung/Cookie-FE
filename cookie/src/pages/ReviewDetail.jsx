@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const FooterSectionStyled = styled.div`
   display: flex;
-  gap: 20px; 
+  gap: 20px;
   margin-top: 20px;
   align-items: center;
 

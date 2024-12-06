@@ -8,7 +8,7 @@ const LogoutSection = styled.div`
 `;
 
 const LogoutButton = styled.button`
-  background-color: #04012d;
+  background-color: #6a91b1;
   color: #ffffff;
   font-size: 1rem;
   font-weight: bold;

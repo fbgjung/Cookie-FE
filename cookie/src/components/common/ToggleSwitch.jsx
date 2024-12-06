@@ -20,6 +20,7 @@ const ToggleContainer = styled.div`
   background-color: ${(props) => (props.checked ? "#4CAF50" : "#e5e7eb")};
   border-radius: 9999px;
   transition: background-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
 
   &:focus {
     outline: none;
@@ -45,7 +46,7 @@ const LabelText = styled.span`
   margin-left: 12px;
   font-size: 0.8rem;
   font-weight: bold;
-  color: #ffffff;
+  color: #aad6e7;
   display: inline-block;
   width: 60px;
   text-align: left;

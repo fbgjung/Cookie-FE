@@ -51,6 +51,7 @@ const ManageProfile = () => {
   const [selectedGenreId, setSelectedGenreId] = useState(null);
   const isErrorShown = useRef(false);
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const [initialNickname, setInitialNickname] = useState("");
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -64,6 +65,7 @@ const ManageProfile = () => {
         setNickname(nickname);
         setSelectedGenreId(genreId);
         setProfileImage({ file: null, preview: profileImage });
+        setInitialNickname(nickname);
 
         const mainBadge = badges.find((badge) => badge.main);
         if (mainBadge) {
@@ -83,6 +85,12 @@ const ManageProfile = () => {
 
   const handleSaveClick = async () => {
     try {
+      // 닉네임 변경 여부 및 중복 확인 체크
+      if (nickname !== initialNickname && !isNicknameChecked) {
+        toast.error("닉네임 중복 확인이 필요합니다.");
+        return; // 중단
+      }
+
       const formData = new FormData();
 
       if (profileImage.file) {

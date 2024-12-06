@@ -7,7 +7,7 @@ const SaveButtonWrapper = styled.div`
 `;
 
 const SaveButton = styled.button`
-  background-color: #04012d;
+  background-color: #6a91b1;
   color: white;
   font-size: 1rem;
   font-weight: bold;
