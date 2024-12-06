@@ -11,49 +11,29 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
 
-let lastNotificationId = null;
-let lastNotificationTimestamp = 0;
+const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
   console.log("백그라운드에서 푸시 알림 받음:", payload);
 
   const { title, body, icon } = payload.notification;
-  const currentTime = Date.now();
-
-  if (
-    lastNotificationId === `${title}-${body}` &&
-    currentTime - lastNotificationTimestamp < 5000
-  ) {
-    console.log("중복 알림 방지");
-    return;
-  }
-
-  lastNotificationId = `${title}-${body}`;
-  lastNotificationTimestamp = currentTime;
 
   self.registration.showNotification(title, {
     body: body,
     icon: icon,
-    tag: `notification-${currentTime}`,
   });
-});
 
-self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
-
-  if (
-    url.pathname.startsWith("/oauth2/authorization") ||
-    url.pathname.startsWith("/login/oauth2/code")
-  ) {
-    console.log("Google OAuth 요청 제외:", event.request.url);
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
-  );
+  self.clients.matchAll().then((clients) => {
+    clients.forEach((client) =>
+      client.postMessage({
+        type: "NEW_NOTIFICATION",
+        payload: {
+          title: title,
+          body: body,
+          timestamp: new Date().toLocaleString(),
+        },
+      })
+    );
+  });
 });
