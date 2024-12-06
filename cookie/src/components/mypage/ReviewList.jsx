@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const ReviewSection = styled.div`
   margin-top: 20px;
@@ -214,12 +215,20 @@ const ReviewRight = styled.div`
   }
 `;
 const ReviewList = ({ title, reviews }) => {
+  const navigate = useNavigate();
+
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`);
+  };
   return (
     <ReviewSection>
       <ReviewTitle>{title}</ReviewTitle>
       <ReviewContainer>
         {reviews.map((review, index) => (
-          <ReviewTicket key={index}>
+          <ReviewTicket
+            key={review.reviewId}
+            onClick={() => handleReviewClick(review.reviewId)}
+          >
             <ReviewLeft>
               <img
                 src={
