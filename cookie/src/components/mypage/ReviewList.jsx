@@ -218,7 +218,7 @@ const ReviewList = ({ title, reviews }) => {
   const navigate = useNavigate();
 
   const handleReviewClick = (reviewId) => {
-    navigate(`/reviews/${reviewId}`);
+    navigate(`/reviews/${reviewId}`, { state: { from: "reviewList" } });
   };
   return (
     <ReviewSection>
