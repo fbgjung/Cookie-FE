@@ -8,6 +8,7 @@ import FavoriteList from "../components/mypage/FavoriteList";
 import ReviewList from "../components/mypage/ReviewList";
 import LogoutAndWithdraw from "../components/mypage/LogoutAndWithdraw";
 import axiosInstance from "../api/auth/axiosInstance";
+import { toast } from "react-hot-toast";
 
 const MypageContainer = styled.div`
   display: flex;
@@ -107,11 +108,20 @@ const MyPage = () => {
     window.location.href = "/login";
   };
 
-  const handleWithdraw = () => {
-    console.log("Withdrawing account...");
-    // 탈퇴 처리 로직 추가
+  const handleWithdraw = async () => {
+    if (window.confirm("정말로 탈퇴하시겠습니까?")) {
+      try {
+        await axiosInstance.delete("/api/users");
+        toast.success("탈퇴가 완료되었습니다.");
+        sessionStorage.clear();
+        localStorage.clear();
+        window.location.href = "/login";
+      } catch (error) {
+        console.error("탈퇴 요청 실패:", error);
+        toast.error("탈퇴 중 문제가 발생했습니다. 다시 시도해주세요.");
+      }
+    }
   };
-
   return (
     <MypageContainer>
       <div
