@@ -112,7 +112,7 @@ function SpecialMovie({ categorydata }) {
           subCategory: subCategory,
         },
       });
-      console.log(response.data);
+
       setMovies(response.data.movies);
     } catch (error) {
       console.error("영화 불러오기 실패:", error);
