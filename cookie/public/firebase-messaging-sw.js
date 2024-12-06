@@ -23,17 +23,4 @@ messaging.onBackgroundMessage(function (payload) {
     body: body,
     icon: icon,
   });
-
-  self.clients.matchAll().then((clients) => {
-    clients.forEach((client) =>
-      client.postMessage({
-        type: "NEW_NOTIFICATION",
-        payload: {
-          title: title,
-          body: body,
-          timestamp: new Date().toLocaleString(),
-        },
-      })
-    );
-  });
 });
