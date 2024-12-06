@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+
 const useNotificationStore = create(
   immer((set) => ({
     notifications: [],
     addNotification: (notification) =>
       set((state) => {
-        console.log("기존 알림 상태:", state.notifications);
+        console.log("알림 추가:", notification);
         state.notifications.push(notification);
-        console.log("새로운 알림 상태:", state.notifications);
       }),
     clearNotifications: () =>
       set((state) => {

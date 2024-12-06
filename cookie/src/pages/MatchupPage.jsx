@@ -10,7 +10,7 @@ import ProgressBar from "../components/matchup/ProgressBar";
 import ChartSection from "../components/matchup/ChartSection";
 import ChatUI from "../components/matchup/ChatUI";
 import { useParams, useLocation } from "react-router-dom";
-import ScrollToTop from "../components/ScrollToTop";
+import ScrollToTop from "../components/common/ScrollToTop";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
