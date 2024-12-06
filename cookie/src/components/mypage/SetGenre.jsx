@@ -20,7 +20,8 @@ const SubTitle = styled.div`
   margin: 1rem 1rem 1.5rem;
 
   h3 {
-    color: var(--main);
+    color: #724b2e;
+
     margin: 0;
     font-size: 1.2rem;
     margin-left: 10px;
@@ -40,6 +41,7 @@ const SubTitle = styled.div`
 
   p {
     color: var(--main);
+    color: #235b97;
     margin: 0;
     font-size: 1rem;
     margin-left: 10px;
@@ -81,18 +83,17 @@ const ThemeContainer = styled.div`
 
 const ThemeBtn = styled.button`
   background-color: ${(props) =>
-    props.$isSelected ? "var(--main)" : "var(--sub-btn)"};
-  color: ${(props) => (props.$isSelected ? "white" : "var(--main)")};
-  border-radius: 5rem;
-  padding: 0.8rem 1rem;
-  border: none;
+    props.$isSelected ? "#aad6e7" : "white"}; /* 선택된 경우 배경색 */
+  color: ${(props) =>
+    props.$isSelected ? "#724b2e" : "#724b2e"}; /* 텍스트 색상 */
+  border-radius: 12px; /* 둥근 모서리 */
+  padding: 0.8rem 1rem; /* 내부 여백 */
+  border: 1px solid #aad6e7; /* 테두리 */
   cursor: pointer;
 
-  font-size: 1rem;
-
   &:hover {
-    background-color: var(--main);
-    color: white;
+    background-color: #aad6e7; /* 호버 시 배경색 */
+    color: #724b2e; /* 호버 시 텍스트 색상 */
   }
 
   @media (max-width: 768px) {
