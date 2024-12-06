@@ -21,6 +21,7 @@ import MovieReviewForm from "../pages/MovieReviewForm";
 import MovieReviewFeed from "../pages/MovieReviewFeed";
 import ReviewDetail from "../pages/ReviewDetail";
 import AdminMovie from "../pages/admin/AdminMovie";
+import CastDetail from "../components/movieDetailPage/CastDetail";
 
 export const AppRouteDef = {
   Main: {
@@ -210,6 +211,16 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <AdminMovie />
+      </PrivateRoute>
+    ),
+  },
+
+  castDetail: {
+    // path: ["/movie/actor/:id", "/movie/director/:id"],
+    path: "/movie/cast",
+    element: (
+      <PrivateRoute>
+        <CastDetail />
       </PrivateRoute>
     ),
   },
