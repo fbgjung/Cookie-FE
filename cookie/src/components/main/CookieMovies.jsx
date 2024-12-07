@@ -35,7 +35,7 @@ const CookieMovieList = styled.div`
   .cookie__movie--list {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     gap: 0.5rem;
   }
   .cookie__movie--list img {
@@ -50,6 +50,41 @@ const CookieMovieList = styled.div`
   .movie__info--sub {
     color: #afafaf;
     font-size: 13px;
+  }
+
+  @media (max-width: 768px) {
+    .cookieMovie__title {
+      font-size: 0.8rem;
+    }
+    .cookie__movie {
+      gap: 0.5rem;
+      padding: 0.625rem 0;
+    }
+    .cookie__movie--list img {
+      border-radius: 0.75rem;
+      width: 5.875rem;
+      height: 9.1875rem;
+    }
+
+    .cookie__movie--list p {
+      text-align: start;
+      font-size: 0.7rem;
+    }
+  }
+  @media (max-width: 390px) {
+    .cookie__movie {
+      gap: 0.3rem;
+      padding: 0.625rem 0;
+    }
+    .cookie__movie--list img {
+      border-radius: 0.75rem;
+      width: 5.375rem;
+      height: 8.6875rem;
+    }
+
+    .cookie__movie--list p {
+      font-size: 0.65rem;
+    }
   }
 `;
 

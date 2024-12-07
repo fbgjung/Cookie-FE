@@ -61,22 +61,34 @@ const NavbarWrapper = styled(CommonContainer)`
 
 const WriteReviewButton = styled.button`
   position: fixed;
-  bottom: 150px;
-  right: calc(50% - 334px);
+  bottom: 9.375rem;
+  right: calc(50% - 20.88rem);
   transform: translateX(-50%);
   background-color: var(--main);
   color: var(--text);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
-  padding: 10px 20px;
+  padding: 0.625rem 1.25rem;
   border-radius: 50px;
   border: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
   cursor: pointer;
   z-index: 1000;
 
   &:hover {
     background-color: var(--main);
+  }
+  @media (max-width: 600px) {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8125rem;
+    right: calc(50% - 15.5rem);
+    bottom: 8rem;
+  }
+  @media (max-width: 390px) {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.6875rem;
+    right: calc(50% - 14.1rem);
+    bottom: 6rem;
   }
 `;
 
