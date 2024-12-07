@@ -215,7 +215,6 @@ function SignUpGenre() {
         setUserInfo(userInfo);
         console.log("저장된 유저 정보:", userInfo);
 
-        setUserInfo(userInfo);
         logIn();
 
         setShowModal(false);

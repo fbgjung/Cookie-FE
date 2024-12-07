@@ -16,7 +16,6 @@ const GenreMovieList = styled.div`
   }
   .genreBtn__contianer {
     margin-bottom: 0.8rem;
-    padding: 0 1rem;
   }
   .genre__movie {
     display: flex;
