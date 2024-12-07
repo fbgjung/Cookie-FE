@@ -35,7 +35,7 @@ const sampleData = {
   movie1: {
     movieTitle: "테스트 영화 1",
     moviePoster: null,
-    movieLike: 12,
+    movieLike: 32,
     charmPoint: {
       ost: 20,
       direction: 18,
