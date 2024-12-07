@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import deleteBtn from "../../assets/images/signUp/close_icon.svg";
 import { useNavigate } from "react-router-dom";
@@ -177,7 +176,7 @@ const LoginModal = () => {
           </div>
           <div className="modal__infoContainer">
             <h2 className="modal__title">로그인이 필요해요 🍪</h2>
-            <p>로그인 후 쿠키를 이용해주세요!</p>
+            <p>로그인 한번 하카롱? 🍭</p>
           </div>
           <button className="modal__loginBtn bold" onClick={handleModalLogin}>
             로그인 하기

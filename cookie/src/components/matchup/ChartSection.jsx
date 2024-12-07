@@ -23,14 +23,24 @@ const ButtonContainer = styled.div`
   max-width: 540px;
   margin-bottom: 20px;
 
+  @media (max-width: 1024px) {
+    max-width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 86%;
+  }
+
   @media (max-width: 480px) {
-    max-width: 90%; /* 모바일에서 전체 컨테이너 너비 축소 */
+    max-width: 90%;
+    margin-bottom: 15px;
   }
 `;
 
 const SelectButton = styled.button`
   flex: 1;
-  background-color: ${(props) => (props.active ? "#1ee5b0" : "#d9d9d9")};
+  background-color: ${(props) =>
+    props.active ? props.activeColor : "#ffffff"};
   color: ${(props) => (props.active ? "#ffffff" : "#333333")};
   border: none;
   border-radius: 5px;
@@ -38,39 +48,35 @@ const SelectButton = styled.button`
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  margin: 0;
 
   &:hover {
-    background-color: ${(props) => (props.active ? "#17c397" : "#c4c4c4")};
+    background-color: ${(props) => props.hoverColor};
+    color: #ffffff;
   }
 
-  &:first-child {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  &:last-child {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+  @media (max-width: 1024px) {
+    font-size: 0.9rem;
+    padding: 8px 0;
   }
 
   @media (max-width: 768px) {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     padding: 8px 0;
   }
 
   @media (max-width: 480px) {
     font-size: 0.8rem;
     padding: 6px 0;
-    max-width: 200px;
   }
 `;
 
 const ChartContainer = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: center;
-
   width: 100%;
   overflow-x: auto;
   padding-bottom: 10px;
@@ -81,35 +87,42 @@ const ChartContainer = styled.div`
 `;
 
 const ChartWrapper = styled.div`
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
   border-radius: 10px;
   padding: 10px;
 
   @media (max-width: 768px) {
     padding: 5px;
   }
+
+  @media (min-width: 768px) and (max-width: 1024px) {
+    padding: 8px;
+  }
 `;
 
 const ChartLabel = styled.div`
-  color: #ffffff;
-  font-size: 1.2rem;
+  color: #724b2e;
+  font-size: 1rem;
   text-align: center;
-  margin-top: 10px;
+  margin-top: -20px;
 
   @media (max-width: 480px) {
     font-size: 1rem;
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) {
+    font-size: 1.1rem;
   }
 `;
 
 const ChartSection = ({ movie1, movie2 }) => {
   const [selectedMovie, setSelectedMovie] = useState(movie1.movieTitle);
 
-  const formatData = (data) => {
-    return Object.keys(data).map((key) => ({
+  const formatData = (data) =>
+    Object.keys(data).map((key) => ({
       subject: key,
       value: data[key],
     }));
-  };
 
   const charmData =
     selectedMovie === movie1.movieTitle
@@ -121,92 +134,105 @@ const ChartSection = ({ movie1, movie2 }) => {
       ? formatData(movie1.emotionPoint)
       : formatData(movie2.emotionPoint);
 
+  const chartSize =
+    window.innerWidth <= 480 ? 200 : window.innerWidth <= 1024 ? 250 : 300;
+
+  const isMovie1Selected = selectedMovie === movie1.movieTitle;
+  const chartColorLeft = isMovie1Selected ? "#A7D477" : "#8B5DFF";
+  const chartColorRight = isMovie1Selected ? "#A7D477" : "#8B5DFF";
+
   return (
     <SectionContainer>
       <ButtonContainer>
         <SelectButton
-          active={selectedMovie === movie1.movieTitle}
+          active={isMovie1Selected}
+          activeColor="#A7D477"
+          hoverColor="#91C267"
           onClick={() => setSelectedMovie(movie1.movieTitle)}
         >
           {movie1.movieTitle}
         </SelectButton>
         <SelectButton
-          active={selectedMovie === movie2.movieTitle}
+          active={!isMovie1Selected}
+          activeColor="#8B5DFF"
+          hoverColor="#7A4DEA"
           onClick={() => setSelectedMovie(movie2.movieTitle)}
         >
           {movie2.movieTitle}
         </SelectButton>
       </ButtonContainer>
+
       <ChartContainer>
         <div>
           <ChartWrapper>
             <RadarChart
-              width={window.innerWidth < 768 ? 200 : 300}
-              height={window.innerWidth < 768 ? 200 : 300}
-              data={charmData}
-              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-            >
-              <PolarGrid stroke="#ffffff" />
-              <PolarAngleAxis
-                dataKey="subject"
-                tick={{
-                  fill: "#ffffff",
-                  fontSize: window.innerWidth < 768 ? 8 : 10,
-                }}
-              />
-              <PolarRadiusAxis
-                angle={38}
-                domain={[0, 100]}
-                tick={{
-                  fill: "#ffffff",
-                  fontSize: window.innerWidth < 768 ? 8 : 10,
-                }}
-              />
-              <Radar
-                name="매력포인트"
-                dataKey="value"
-                stroke="rgba(138, 43, 226, 1)"
-                fill="rgba(138, 43, 226, 0.5)"
-                strokeWidth={2}
-              />
-            </RadarChart>
-          </ChartWrapper>
-          <ChartLabel>매력 포인트</ChartLabel>
-        </div>
-        <div>
-          <ChartWrapper>
-            <RadarChart
-              width={window.innerWidth < 768 ? 200 : 300}
-              height={window.innerWidth < 768 ? 200 : 300}
+              width={chartSize}
+              height={chartSize}
               data={emotionData}
               margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
             >
-              <PolarGrid stroke="#ffffff" />
+              <PolarGrid stroke="#724B2E" />
               <PolarAngleAxis
                 dataKey="subject"
                 tick={{
-                  fill: "#ffffff",
-                  fontSize: window.innerWidth < 768 ? 8 : 10,
+                  fill: "#724B2E",
+                  fontSize: chartSize <= 200 ? 8 : 10,
                 }}
               />
               <PolarRadiusAxis
                 angle={38}
                 domain={[0, 100]}
                 tick={{
-                  fill: "#ffffff",
-                  fontSize: window.innerWidth < 768 ? 8 : 10,
+                  fill: "#724B2E",
+                  fontSize: chartSize <= 200 ? 8 : 10,
                 }}
               />
               <Radar
                 name="감정포인트"
                 dataKey="value"
-                stroke="rgba(34, 193, 195, 1)"
-                fill="rgba(34, 193, 195, 0.5)"
+                stroke={chartColorLeft}
+                fill={`${chartColorLeft}80`}
                 strokeWidth={2}
               />
             </RadarChart>
           </ChartWrapper>
           <ChartLabel>감정 포인트</ChartLabel>
+        </div>
+
+        <div>
+          <ChartWrapper>
+            <RadarChart
+              width={chartSize}
+              height={chartSize}
+              data={charmData}
+              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+            >
+              <PolarGrid stroke="#724B2E" />
+              <PolarAngleAxis
+                dataKey="subject"
+                tick={{
+                  fill: "#724B2E",
+                  fontSize: chartSize <= 200 ? 8 : 10,
+                }}
+              />
+              <PolarRadiusAxis
+                angle={38}
+                domain={[0, 100]}
+                tick={{
+                  fill: "#724B2E",
+                  fontSize: chartSize <= 200 ? 8 : 10,
+                }}
+              />
+              <Radar
+                name="매력포인트"
+                dataKey="value"
+                stroke={chartColorRight}
+                fill={`${chartColorRight}80`}
+                strokeWidth={2}
+              />
+            </RadarChart>
+          </ChartWrapper>
+          <ChartLabel>매력 포인트</ChartLabel>
         </div>
       </ChartContainer>
     </SectionContainer>

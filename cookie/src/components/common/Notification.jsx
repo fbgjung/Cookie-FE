@@ -92,11 +92,17 @@ const CloseButton = styled.button`
 
 const Notification = () => {
   const notifications = useNotificationStore((state) => state.notifications);
+  const clearNotifications = useNotificationStore(
+    (state) => state.clearNotifications
+  );
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
   const handleNotificationClick = () => {
     setShowDropdown((prev) => !prev);
+    if (!showDropdown) {
+      clearNotifications();
+    }
   };
 
   const handleOutsideClick = (event) => {
@@ -110,8 +116,6 @@ const Notification = () => {
   };
 
   useEffect(() => {
-    console.log("컴포넌트 상태 알림 변경:", notifications);
-
     if (showDropdown) {
       document.addEventListener("mousedown", handleOutsideClick);
     } else {

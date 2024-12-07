@@ -13,8 +13,8 @@ const TimerContainer = styled.div`
 `;
 
 const TimerBox = styled.div`
-  background-color: #c4ffef;
-  color: #333;
+  background-color: #aad6e7;
+  color: #724b2e;
   font-size: 2.5rem;
   font-weight: bold;
   width: 73px;
@@ -42,7 +42,7 @@ const Colon = styled.span`
   font-size: 2.5rem;
   margin-top: 15px;
   font-weight: bold;
-  color: #ffffff;
+  color: #724b2e;
 
   @media (max-width: 768px) {
     font-size: 2rem;

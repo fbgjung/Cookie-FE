@@ -105,9 +105,11 @@ const MyPage = () => {
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
   const handleLogout = () => {
-    logOut();
-    toast.success("로그아웃 되었습니다.");
-    navigate("/login");
+    if (window.confirm("로그아웃 하시겠습니까?")) {
+      logOut();
+      toast.success("로그아웃 되었습니다.");
+      navigate("/login");
+    }
   };
 
   const handleWithdraw = async () => {
@@ -120,7 +122,7 @@ const MyPage = () => {
         window.location.href = "/login";
       } catch (error) {
         console.error("탈퇴 요청 실패:", error);
-        toast.error("탈퇴 중 문제가 발생했습니다. 다시 시도해주세요.");
+        toast.error("탈퇴 중 문제가 발생했습니다.\n다시 시도해주세요.");
       }
     }
   };
