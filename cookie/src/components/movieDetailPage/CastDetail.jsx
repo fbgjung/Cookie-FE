@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import goBack from "../../assets/images/admin/goBack_br.svg";
 import axios from "axios";
@@ -25,12 +25,11 @@ const DirecrtorInfoContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* padding: 0 0.625rem; */
 
   .info__director {
     display: flex;
     gap: 0.8rem;
-    margin-bottom: 8rem;
+    margin-bottom: 6rem;
   }
 
   .info__director--img {
@@ -132,21 +131,20 @@ function CastDetail() {
   const [data, setData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
+  const location = useLocation();
   const handleNavigate = (path) => {
     navigate(path);
   };
-
-  // const testId = "director/1";
-  const testId = "actor/1";
-
+  const isActor = location.pathname.includes("actor");
+  const isDirector = location.pathname.includes("director");
   useEffect(() => {
     const fetchData = async () => {
       let url = "";
 
-      if (testId.includes("actor")) {
-        url = `${serverBaseUrl}/api/actor/${testId.split("/")[1]}`;
-      } else if (testId.includes("director")) {
-        url = `${serverBaseUrl}/api/director/${testId.split("/")[1]}`;
+      if (isActor) {
+        url = `${serverBaseUrl}/api/actor/${id}`;
+      } else if (isDirector) {
+        url = `${serverBaseUrl}/api/director/${id}`;
       }
 
       try {
@@ -159,7 +157,7 @@ function CastDetail() {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, location.pathname]);
 
   if (!data) return null;
   return (
@@ -168,9 +166,7 @@ function CastDetail() {
         <BackBtn onClick={() => handleNavigate(-1)}>
           <img src={goBack} alt="Go Back" />
         </BackBtn>
-        <h2 className="info__title">
-          🎬 {testId.includes("actor") ? "배우" : "감독"}
-        </h2>
+        <h2 className="info__title">🎬 {isActor ? "배우" : "감독"}</h2>
         <DirecrtorInfoContainer>
           <div className="info__director">
             <img
@@ -180,7 +176,7 @@ function CastDetail() {
             />
             <div>
               <h3>{data.name}</h3>
-              <p>{testId.includes("actor") ? "배우" : "감독"}</p>
+              <p>{isActor ? "배우" : "감독"}</p>
             </div>
           </div>
         </DirecrtorInfoContainer>
@@ -193,31 +189,30 @@ function CastDetail() {
             <TitleItem>좋아요 수</TitleItem>
             <TitleItem>리뷰 수</TitleItem>
           </TitleGrid>
-          {(testId.includes("actor")
-            ? data.actorMovieList
-            : data.directorMovieList
-          )?.map((movie) => (
-            <MovieContentGrid key={movie.id}>
-              <button onClick={() => handleNavigate(`/movie/${movie.id}`)}>
-                <img
-                  className="movieContent__poster"
-                  src={movie.poster}
-                  alt={`${movie.title} 포스터`}
-                />
-              </button>
-              <ContentItem>
-                <h4 onClick={() => handleNavigate(`/movie/${movie.id}`)}>
-                  {movie.title}
-                </h4>
-                <p>
-                  {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
-                </p>
-              </ContentItem>
-              <ContentItem>{movie.score}점</ContentItem>
-              <ContentItem>{movie.likes}개</ContentItem>
-              <ContentItem>{movie.reviews}개</ContentItem>
-            </MovieContentGrid>
-          ))}
+          {(isActor ? data.actorMovieList : data.directorMovieList)?.map(
+            (movie) => (
+              <MovieContentGrid key={movie.id}>
+                <button onClick={() => handleNavigate(`/movie/${movie.id}`)}>
+                  <img
+                    className="movieContent__poster"
+                    src={movie.poster}
+                    alt={`${movie.title} 포스터`}
+                  />
+                </button>
+                <ContentItem>
+                  <h4 onClick={() => handleNavigate(`/movie/${movie.id}`)}>
+                    {movie.title}
+                  </h4>
+                  <p>
+                    {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
+                  </p>
+                </ContentItem>
+                <ContentItem>{movie.score}점</ContentItem>
+                <ContentItem>{movie.likes}개</ContentItem>
+                <ContentItem>{movie.reviews}개</ContentItem>
+              </MovieContentGrid>
+            )
+          )}
         </DirectorMovieInfo>
       </CastInfo>
     </>

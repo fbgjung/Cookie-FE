@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import MatchUp from "../components/main/MatchUp";
-import RankMovie from "../components/main/RankMovie";
+import AdminRecommend from "../components/main/AdminRecommend";
 import CookieMovies from "../components/main/CookieMovies";
 import SpecialMovie from "../components/main/SpecialMovie";
 import GenreMovie from "../components/main/GenreMovie";
@@ -8,7 +8,6 @@ import TopButton from "../components/searchpage/TopButton";
 import { useEffect, useState } from "react";
 import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
-import useUserStore from "../stores/useUserStore";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -32,7 +31,7 @@ const Content = styled.div`
   gap: 2rem;
 
   @media (max-width: 600px) {
-    padding: 15px;
+    padding: 1rem;
   }
 `;
 
@@ -62,22 +61,34 @@ const NavbarWrapper = styled(CommonContainer)`
 
 const WriteReviewButton = styled.button`
   position: fixed;
-  bottom: 150px;
-  right: calc(50% - 334px);
+  bottom: 9.375rem;
+  right: calc(50% - 20.88rem);
   transform: translateX(-50%);
   background-color: var(--main);
   color: var(--text);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
-  padding: 10px 20px;
+  padding: 0.625rem 1.25rem;
   border-radius: 50px;
   border: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
   cursor: pointer;
   z-index: 1000;
 
   &:hover {
     background-color: var(--main);
+  }
+  @media (max-width: 600px) {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8125rem;
+    right: calc(50% - 15.5rem);
+    bottom: 8rem;
+  }
+  @media (max-width: 390px) {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.6875rem;
+    right: calc(50% - 14.1rem);
+    bottom: 6rem;
   }
 `;
 
@@ -110,7 +121,7 @@ const categoryData = [
   { id: 26, mainCategory: "시즌", subCategory: "크리스마스" },
   { id: 27, mainCategory: "시즌", subCategory: "새해" },
   { id: 28, mainCategory: "시즌", subCategory: "명절" },
-  { id: 29, mainCategory: "테마", subCategory: "심화를 소재로 한" },
+  { id: 29, mainCategory: "테마", subCategory: "실화를 소재로 한" },
   { id: 30, mainCategory: "테마", subCategory: "가족과 함께" },
   { id: 31, mainCategory: "테마", subCategory: "연인과 함께" },
   { id: 32, mainCategory: "테마", subCategory: "열린결말" },
@@ -149,7 +160,7 @@ const Main = () => {
         <img src={"https://via.placeholder.com/600x250"} alt="배너" />
         <Content>
           <MatchUp />
-          <RankMovie />
+          <AdminRecommend />
           <CookieMovies />
           <SpecialMovie categorydata={categoryData} />
           <GenreMovie categorydata={categoryData} />

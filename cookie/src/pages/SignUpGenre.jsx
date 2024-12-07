@@ -193,6 +193,8 @@ function SignUpGenre() {
           genreId: userResponse.genreId,
         };
         setUserInfo(userInfo);
+        console.log("저장된 유저 정보:", userInfo);
+
         logIn();
         navigate("/");
       }
