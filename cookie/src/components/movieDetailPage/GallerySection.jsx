@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import PropTypes from "prop-types"; // PropTypes를 import
 
+const Title = styled.h2`
+  margin-top: 50px;
+`
+
 const GalleryWrapper = styled.div`
   margin-top: 30px;
 
@@ -15,16 +19,15 @@ const GalleryWrapper = styled.div`
 
     img {
       width: 100%;
-      border-radius: 8px;
       object-fit: cover;
     }
   }
 `;
 
-const GallerySection = ({ images }) => {
+const GallerySection = ({ images = [] }) => {
   return (
     <GalleryWrapper>
-      <h2>갤러리</h2>
+      <Title>갤러리</Title>
       <div className="gallery-grid">
         {images.map((image, index) => (
           <img key={index} src={image} alt={`갤러리 이미지 ${index + 1}`} />
