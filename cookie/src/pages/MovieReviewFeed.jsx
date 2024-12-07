@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 
@@ -13,28 +12,6 @@ const ReviewFeedWrapper = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   height: 100vh;
-`;
-
-const ReviewTitle = styled.div`
-  text-align: center;
-  margin-bottom: 20px;
-
-  h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-  }
-
-  h2 {
-    font-size: 1rem;
-    font-weight: normal;
-    color: #b29463;
-    margin-top: 10px;
-  }
 `;
 
 const FilterButtons = styled.div`
