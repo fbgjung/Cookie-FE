@@ -6,6 +6,7 @@ import Modal from "../components/signUp/Modal";
 import { requestNotificationPermission } from "../firebase/firebaseMessaging";
 import useUserStore from "../stores/useUserStore";
 import axios from "axios";
+import useAuthStore from "../stores/useAuthStore";
 
 const MainContainer = styled.div`
   background-color: #fff4b9;
@@ -125,6 +126,7 @@ function SignUpGenre() {
   const [pushEnabled, setPushEnabled] = useState("false");
   const [emailEnabled, setEmailEnabled] = useState("false");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const logIn = useAuthStore((state) => state.logIn);
 
   const handleButtonClick = (id) => {
     setSelectedGenreId(id);
@@ -212,6 +214,9 @@ function SignUpGenre() {
         };
         setUserInfo(userInfo);
         console.log("저장된 유저 정보:", userInfo);
+
+        setUserInfo(userInfo);
+        logIn();
 
         setShowModal(false);
         setIsSubmitting(false);
