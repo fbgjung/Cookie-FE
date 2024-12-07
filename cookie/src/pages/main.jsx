@@ -8,7 +8,6 @@ import TopButton from "../components/searchpage/TopButton";
 import { useEffect, useState } from "react";
 import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
-import useUserStore from "../stores/useUserStore";
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -32,7 +31,7 @@ const Content = styled.div`
   gap: 2rem;
 
   @media (max-width: 600px) {
-    padding: 15px;
+    padding: 1rem;
   }
 `;
 
@@ -110,7 +109,7 @@ const categoryData = [
   { id: 26, mainCategory: "시즌", subCategory: "크리스마스" },
   { id: 27, mainCategory: "시즌", subCategory: "새해" },
   { id: 28, mainCategory: "시즌", subCategory: "명절" },
-  { id: 29, mainCategory: "테마", subCategory: "심화를 소재로 한" },
+  { id: 29, mainCategory: "테마", subCategory: "실화를 소재로 한" },
   { id: 30, mainCategory: "테마", subCategory: "가족과 함께" },
   { id: 31, mainCategory: "테마", subCategory: "연인과 함께" },
   { id: 32, mainCategory: "테마", subCategory: "열린결말" },
