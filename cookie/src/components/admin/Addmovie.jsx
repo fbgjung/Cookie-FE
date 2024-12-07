@@ -71,8 +71,8 @@ export const SearchTitle = styled.div`
   width: 1175px;
   height: 32px;
   border: none;
-  background-color: #04012d;
-  color: white;
+  background-color: var(--sub);
+  color: var(--text);
   border-radius: 12px;
   margin: 3rem 1rem 0 1rem;
   padding: 0.8rem 2rem;

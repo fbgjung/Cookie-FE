@@ -34,8 +34,8 @@ const TabBtn = styled.button`
   align-items: center;
   cursor: pointer;
   background-color: ${({ $isActive }) =>
-    $isActive ? "var(--main)" : "var(--ticket-bg)"};
-  color: ${({ $isActive }) => ($isActive ? "white" : "var(--main)")};
+    $isActive ? "var(--sub)" : "var(--ticket-bg)"};
+  color: ${({ $isActive }) => ($isActive ? "var(--text)" : "var(--text)")};
 `;
 
 function AdminMovie() {
