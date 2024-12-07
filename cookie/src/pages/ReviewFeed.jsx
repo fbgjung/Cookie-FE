@@ -49,7 +49,7 @@ const FilterButtons = styled.div`
   button {
     padding: 10px 20px;
     font-size: 1rem;
-    border-radius: 20px;
+    border-radius: 8px;
     cursor: pointer;
     border: none;
     font-weight: bold;
@@ -140,6 +140,8 @@ const ReviewCenter = styled.div`
   .comment {
     font-size: 0.9rem;
     line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -333,7 +335,11 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              <div className="comment">{review.content}</div>
+              <div className="comment">
+                {review.content.length > 100
+                  ? `${review.content.slice(0, 130)}...`
+                  : review.content}
+              </div>
             </ReviewCenter>
             <ReviewRight>
               <div className="score">

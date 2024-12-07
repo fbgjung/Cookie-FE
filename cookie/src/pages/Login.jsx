@@ -3,6 +3,7 @@ import CookieImg from "../assets/images/login/cookie_img.svg";
 import CookieLogo from "../assets/images/login/cookie_lg.svg";
 import styled from "styled-components";
 import { OAuth_LOGIN_PROVIDER } from "../config/OAuthConfig";
+import { useNavigate } from "react-router-dom";
 
 export const LoginContainer = styled.div`
   background-color: #fff4b9;
@@ -11,6 +12,7 @@ export const LoginContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 
   h2 {
     color: #724b2e;
@@ -52,6 +54,7 @@ export const LoginBtn = styled.div`
     margin: 0.5rem 0;
     cursor: pointer;
   }
+
   @media (max-width: 768px) {
     button img {
       width: 20rem;
@@ -61,14 +64,41 @@ export const LoginBtn = styled.div`
   }
 `;
 
+const GuestLink = styled.div`
+  position: absolute;
+  top: 5rem;
+  right: 1rem;
+  font-size: 1rem;
+  color: #724b2e;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: #a8673a;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    top: 2rem;
+  }
+`;
+
 function Login() {
+  const navigate = useNavigate();
+
   const handleLoginClick = (url) => {
     window.location.href = url;
   };
+
+  const handleGuestAccess = () => {
+    navigate("/");
+  };
+
   return (
     <>
       <GlobalStyle />
       <LoginContainer>
+        <GuestLink onClick={handleGuestAccess}>비회원으로 이용하기</GuestLink>
         <h2 className="regular">“영화 리뷰와 투표, 영화 vs 영화 토론까지!</h2>
         <h2 className="regular">영화 팬들을 위한 종합 커뮤니티”</h2>
         <img className="login__img logo" src={CookieLogo} alt="logo" />
