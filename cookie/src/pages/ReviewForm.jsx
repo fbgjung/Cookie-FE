@@ -1,9 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import axiosInstance from "../api/auth/axiosInstance";
+import { toast } from "react-hot-toast";
 
+// styled-components 정의
 const FormWrapper = styled.div`
   width: 90%;
   margin: 50px auto;
@@ -14,11 +15,16 @@ const FormWrapper = styled.div`
   height: 100vh;
 `;
 
-const MovieTitle = styled.div`
-  font-size: 16px;
-  font-weight: bold;
-  color: #d67a00;
-  margin-bottom: 20px;
+const PosterWrapper = styled.div`
+  display: flex;
+  justify-content: left;
+  margin: 20px 0;
+
+  img {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+  }
 `;
 
 const RatingWrapper = styled.div`
@@ -123,51 +129,74 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const ReviewForm = ({ movieTitle }) => {
+// ReviewForm 컴포넌트
+const ReviewForm = () => {
   const [movieScore, setMovieScore] = useState(0);
   const [content, setContent] = useState("");
   const [isSpoiler, setIsSpoiler] = useState(false);
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log("넘어온 영화 정보: ", state);
-  const handleRatingClick = (index) => {
-    setMovieScore(index + 1);
-  };
 
-  const handleCancel = () => {
-    navigate(-1); // 이전 페이지로 돌아가기
+  const movieTitle = state?.movieTitle || "영화 제목 없음";
+  const movieId = state?.movieId;
+  const posterUrl = state?.posterUrl;
+
+  if (!movieId) {
+    toast.error("유효하지 않은 영화 정보입니다.");
+    navigate(-1);
+    return null;
+  }
+
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("refreshToken");
+    if (!token) {
+      toast.error("로그인이 필요한 서비스입니다.");
+      navigate("/login");
+      return null;
+    }
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.id;
+    } catch (error) {
+      console.error("Invalid token:", error);
+      toast.error("로그인 정보가 유효하지 않습니다.");
+      return null;
+    }
   };
 
   const handleSubmit = async () => {
-    const userId = 1; // 사용자 ID를 여기에 설정 (로그인된 사용자 ID 필요)
-  
+    const userId = getUserIdFromToken();
+    if (!userId) return;
+
     const payload = {
-      movieId: 1,
+      movieId,
       movieScore,
       content,
       isSpoiler,
     };
-  
+
     try {
-      const response = await axiosInstance.post(
-        "/api/reviews",
-        payload
-      );
+      const response = await axiosInstance.post(`/api/reviews`, payload);
       if (response.status === 200) {
-        alert("리뷰가 성공적으로 등록되었습니다.");
-        navigate("/reviews"); // 리뷰 페이지로 이동
+        toast.success("리뷰가 성공적으로 등록되었습니다.");
+        navigate("/reviews");
       } else {
-        alert("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
+        toast.error("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
-      alert("리뷰 등록 중 오류가 발생했습니다.");
+      toast.error("리뷰 등록 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <FormWrapper>
-      <MovieTitle>{movieTitle} 리뷰 남기기</MovieTitle>
+      <h1>{movieTitle} 리뷰 남기기</h1>
+      {posterUrl && (
+        <PosterWrapper>
+          <img src={posterUrl} alt={`${movieTitle} 포스터`} />
+        </PosterWrapper>
+      )}
       <RatingWrapper>
         <span>평점</span>
         <div className="rating-icons">
@@ -178,12 +207,12 @@ const ReviewForm = ({ movieTitle }) => {
                 key={index}
                 src={
                   index < movieScore
-                    ? "/assets/images/mypage/cookiescore.svg"
-                    : "/assets/images/mypage/cookieinactive.svg"
+                    ? "images/cookiescore.svg"
+                    : "images/cookieinactive.svg"
                 }
                 alt="Cookie"
                 className={index >= movieScore ? "inactive" : ""}
-                onClick={() => handleRatingClick(index)}
+                onClick={() => setMovieScore(index + 1)}
               />
             ))}
         </div>
@@ -206,7 +235,7 @@ const ReviewForm = ({ movieTitle }) => {
         </span>
       </SpoilerWrapper>
       <ButtonWrapper>
-        <button className="cancel" onClick={handleCancel}>
+        <button className="cancel" onClick={() => navigate(-1)}>
           취소
         </button>
         <button className="submit" onClick={handleSubmit}>

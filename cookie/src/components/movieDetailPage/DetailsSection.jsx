@@ -106,7 +106,11 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
 
   const handleWriteReviewClick = () => {
     navigate("/reviews/write", {
-      state: { movie },
+      state: { 
+        movieId: movie.id,
+        movieTitle: movie.title,
+        posterUrl: posterUrl,
+       },
     });
   };
 
