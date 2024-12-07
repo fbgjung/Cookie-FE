@@ -61,7 +61,7 @@ const MovieRecommendList = styled.div`
 
     .recommend__movie--info p {
       text-align: start;
-      font-size: 0.4375rem;
+      font-size: 0.7rem;
     }
   }
   @media (max-width: 390px) {
