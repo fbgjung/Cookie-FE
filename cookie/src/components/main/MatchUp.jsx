@@ -161,15 +161,11 @@ const MatchUpContainer = styled.div`
   }
 `;
 
-function MatchUp({ matchDate }) {
-  const today = new Date();
-  matchDate = new Date(matchUp.startAt);
-  const leftTime = matchDate - today;
-  const leftDay = Math.ceil(leftTime / (1000 * 3600 * 24));
-  const navigate = useNavigate();
-
+function MatchUp() {
   const [matchUps, setMatchUps] = useState([]);
   const [access, setAccess] = useState(true);
+  const [leftDays, setLeftDays] = useState(null);
+
   useEffect(() => {
     const fetchMainPageMovies = async () => {
       try {
@@ -177,6 +173,7 @@ function MatchUp({ matchDate }) {
           `${serverBaseUrl}/api/movies/mainMatchUps`
         );
         const matchUpData = response.data.response.matchUps;
+        console.log(matchUpData);
         if (matchUpData) {
           setMatchUps(matchUpData);
 
@@ -188,6 +185,10 @@ function MatchUp({ matchDate }) {
           } else {
             setAccess(response.data.response.access);
           }
+          const matchDate = new Date(matchUpData[0].startAt);
+          const leftTime = matchDate - today;
+          const leftDay = Math.ceil(leftTime / (1000 * 3600 * 24));
+          setLeftDays(leftDay);
         }
       } catch (error) {
         console.error("API 호출 오류 발생:", error);
@@ -197,11 +198,20 @@ function MatchUp({ matchDate }) {
     fetchMainPageMovies();
   }, []);
 
+  const getDisplayText = () => {
+    if (leftDays === 0) {
+      return "D-DAY";
+    } else if (leftDays < 0) {
+      return "..🤔";
+    } else {
+      return `D-${leftDays}`;
+    }
+  };
   return (
     <MatchUpContainer>
       <div className="matchUp__title">
         <img src={matchUp} alt="matchUp_icon" />
-        <h2> 이번주 영화 매치업! D-{leftDay}</h2>
+        <h2> 이번주 영화 매치업! {getDisplayText()}</h2>
       </div>
       <div className="matchUp__content">
         {matchUps.map((matchUp) => (
