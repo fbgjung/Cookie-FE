@@ -16,6 +16,7 @@ const SaveButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   width: 460px;
+  margin-top: -30px;
 
   &:disabled {
     background-color: #ccc;
@@ -30,9 +31,9 @@ const SaveButton = styled.button`
   }
 
   @media (max-width: 480px) {
-    width: 100%;
+    width: 80%;
     padding: 10px 20px;
-    margin-top: 40px;
+    margin-top: -30px;
     font-size: 0.8rem;
   }
 `;
@@ -41,7 +42,7 @@ const SaveProfileButton = ({ onClick, disabled }) => {
   return (
     <SaveButtonWrapper>
       <SaveButton onClick={onClick} disabled={disabled}>
-        저장하기
+        수정하기
       </SaveButton>
     </SaveButtonWrapper>
   );
