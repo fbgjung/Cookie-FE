@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
@@ -201,10 +202,10 @@ const MovieReviewFeed = () => {
       setIsLoading(true);
 
       const endpoint = showSpoilerOnly
-        ? `http://localhost:8080/api/movies/${movieId}/reviews/spoiler`
-        : `http://localhost:8080/api/movies/${movieId}/reviews`;
+        ? `/api/movies/${movieId}/reviews/spoiler`
+        : `/api/movies/${movieId}/reviews`;
 
-      const response = await axios.get(endpoint, {
+      const response = await axiosInstance.get(endpoint, {
         params: { page, size: 10 },
       });
 
