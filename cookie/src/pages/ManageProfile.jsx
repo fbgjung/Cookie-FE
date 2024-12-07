@@ -7,6 +7,7 @@ import BadgeSelector from "../components/mypage/BadgeSelector";
 import NicknameInput from "../components/mypage/NicknameInput";
 import SetGenre from "../components/mypage/SetGenre";
 import SaveProfileButton from "../components/mypage/SaveProfileButton";
+import Spinner from "../components/common/Spinner";
 
 const ManageProfileContainer = styled.div`
   display: flex;
@@ -52,6 +53,7 @@ const ManageProfile = () => {
   const isErrorShown = useRef(false);
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const [initialNickname, setInitialNickname] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -84,11 +86,16 @@ const ManageProfile = () => {
   }, []);
 
   const handleSaveClick = async () => {
+    setIsSaving(true);
+
+    const MINIMUM_SPINNER_TIME = 200;
+    const startTime = Date.now();
+
     try {
-      // 닉네임 변경 여부 및 중복 확인 체크
       if (nickname !== initialNickname && !isNicknameChecked) {
         toast.error("닉네임 중복 확인이 필요합니다.");
-        return; // 중단
+        setIsSaving(false);
+        return;
       }
 
       const formData = new FormData();
@@ -111,20 +118,32 @@ const ManageProfile = () => {
         },
       });
 
-      if (response.data.response === "SUCCESS") {
-        if (response.data.profileImageUrl) {
-          setProfileImage({
-            file: null,
-            preview: response.data.profileImageUrl,
-          });
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MINIMUM_SPINNER_TIME - elapsedTime);
+
+      setTimeout(() => {
+        if (response.data.response === "SUCCESS") {
+          if (response.data.profileImageUrl) {
+            setProfileImage({
+              file: null,
+              preview: response.data.profileImageUrl,
+            });
+          }
+          toast.success("프로필 저장이 완료되었습니다!");
+        } else {
+          throw new Error("오류 발생");
         }
-        toast.success("프로필 저장이 완료되었습니다!");
-      } else {
-        throw new Error("오류 발생");
-      }
+        setIsSaving(false);
+      }, remainingTime);
     } catch (error) {
-      toast.error("프로필 저장에 실패했습니다.");
-      console.error("프로필 저장 실패:", error);
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MINIMUM_SPINNER_TIME - elapsedTime);
+
+      setTimeout(() => {
+        toast.error("프로필 저장에 실패했습니다.\n다시 시도해주세요.");
+        console.error("프로필 저장 실패:", error);
+        setIsSaving(false);
+      }, remainingTime);
     }
   };
 
@@ -134,6 +153,7 @@ const ManageProfile = () => {
 
   return (
     <ManageProfileContainer>
+      {isSaving && <Spinner />}
       <ManageProfileContent>
         <SetProfileImage
           profileImage={profileImage}
@@ -153,7 +173,6 @@ const ManageProfile = () => {
           onResetCheck={handleResetCheck}
           isChecked={isNicknameChecked}
         />
-        ;
         <SetGenre
           selectedGenreId={selectedGenreId}
           onSelectGenre={(id) => setSelectedGenreId(id)}

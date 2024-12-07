@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import ScrollToTop from "../components/common/ScrollToTop";
 import AppPages from "./AppPages";
 import CookieLogo from "/src/assets/images/Cookie.svg";
@@ -9,10 +9,15 @@ import SearchIcon from "/src/assets/images/navbar_search.svg";
 import ReviewIcon from "/src/assets/images/navbar_review.svg";
 import MatchupIcon from "/src/assets/images/navbar_matchup.svg";
 import ProfileIcon from "/src/assets/images/navbar_profile.svg";
-import { Link } from "react-router-dom";
+
+import SelectedHomeIcon from "/src/assets/images/selected_home.svg";
+import SelectedSearchIcon from "/src/assets/images/selected_search.svg";
+import SelectedReviewIcon from "/src/assets/images/selected_review.svg";
+import SelectedMatchupIcon from "/src/assets/images/selected_matchup.svg";
+import SelectedProfileIcon from "/src/assets/images/selected_profile.svg";
+
 import Notification from "../components/common/Notification";
 import { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import ToggleSwitch from "../components/common/ToggleSwitch";
 
 const Container = styled.div`
@@ -54,6 +59,7 @@ const ViewArea = styled.div`
     margin: 0;
   }
 `;
+
 const HeaderContainer = styled.header`
   width: 100vw;
   display: flex;
@@ -90,10 +96,24 @@ const NavContainer = styled.nav`
   position: fixed;
   bottom: 0;
   z-index: 100;
+`;
 
-  img {
-    width: 50px;
-    height: 50px;
+const NavIcon = styled.img`
+  width: 50px;
+  height: 50px;
+  transition:
+    transform 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
+
+  ${({ selected }) =>
+    selected &&
+    `
+    transform: scale(1.2);
+    opacity: 1;
+  `}
+
+  &:hover {
+    transform: scale(1.15);
   }
 `;
 
@@ -132,6 +152,7 @@ const Logo = styled.div`
     }
   }
 `;
+
 const MainContent = styled.main`
   flex: 1;
   width: 100vw;
@@ -156,6 +177,7 @@ const MainContent = styled.main`
     margin-right: auto;
   }
 `;
+
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -174,6 +196,7 @@ const AppScreen = () => {
   const handleLogoClick = () => {
     navigate("/");
   };
+
   const hideHeaderFooterPages = [
     "/login",
     "/sign-up-profile",
@@ -181,6 +204,8 @@ const AppScreen = () => {
     "/admin",
   ];
   const isAuthPage = hideHeaderFooterPages.includes(location.pathname);
+  const currentPath = location.pathname;
+
   return (
     <Container>
       <ViewArea>
@@ -196,7 +221,6 @@ const AppScreen = () => {
               },
             }}
           />
-          {/* 헤더 */}
           {!isAuthPage && (
             <HeaderContainer>
               <Logo onClick={handleLogoClick}>
@@ -208,7 +232,6 @@ const AppScreen = () => {
               </div>
             </HeaderContainer>
           )}
-          {/* 메인 콘텐츠 */}
           <MainContent
             style={{
               marginTop: isAuthPage ? 0 : "70px",
@@ -218,23 +241,54 @@ const AppScreen = () => {
             <ScrollToTop />
             <AppPages />
           </MainContent>
-          {/* 네비게이션 */}
           {!isAuthPage && (
             <NavContainer>
               <Link to="/">
-                <img src={HomeIcon} alt="홈" />
+                <NavIcon
+                  src={currentPath === "/" ? SelectedHomeIcon : HomeIcon}
+                  alt="홈"
+                  selected={currentPath === "/"}
+                />
               </Link>
               <Link to="/search">
-                <img src={SearchIcon} alt="검색" />
+                <NavIcon
+                  src={
+                    currentPath === "/search" ? SelectedSearchIcon : SearchIcon
+                  }
+                  alt="검색"
+                  selected={currentPath === "/search"}
+                />
               </Link>
               <Link to="/review">
-                <img src={ReviewIcon} alt="리뷰" />
+                <NavIcon
+                  src={
+                    currentPath === "/review" ? SelectedReviewIcon : ReviewIcon
+                  }
+                  alt="리뷰"
+                  selected={currentPath === "/review"}
+                />
               </Link>
               <Link to="/matchup/1">
-                <img src={MatchupIcon} alt="매치업" />
+                <NavIcon
+                  src={
+                    currentPath.startsWith("/matchup")
+                      ? SelectedMatchupIcon
+                      : MatchupIcon
+                  }
+                  alt="매치업"
+                  selected={currentPath.startsWith("/matchup")}
+                />
               </Link>
               <Link to="/mypage">
-                <img src={ProfileIcon} alt="내정보" />
+                <NavIcon
+                  src={
+                    currentPath === "/mypage"
+                      ? SelectedProfileIcon
+                      : ProfileIcon
+                  }
+                  alt="내정보"
+                  selected={currentPath === "/mypage"}
+                />
               </Link>
             </NavContainer>
           )}
