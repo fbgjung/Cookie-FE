@@ -2,8 +2,13 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
+
+const Title = styled.h2`
+  margin-top: 50px;
+`
+
 const ReviewWrapper = styled.div`
-  margin-top: 30px;
+  margin-top: 3%;
 
   h2 {
     font-size: 18px;
@@ -17,7 +22,7 @@ const ReviewWrapper = styled.div`
       margin-left: 10px;
     }
 
-    .write-review-button {
+    .more-review-button {
       margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
       font-size: 14px;
       color: #fff;
@@ -36,22 +41,29 @@ const ReviewWrapper = styled.div`
 
   .review-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+    margin-top: 20px;
+
+    @media (max-width: 600px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
 
     .review-item {
       position: relative;
-      background-image: url("/assets/images/mypage/reviewticket.svg"); // 리뷰 티켓 이미지 경로
-      background-size: cover;
+      background-image: url("/images/reviewticket.svg"); // 리뷰 티켓 이미지 경로
+      background-size: contain;
+      background-repeat: no-repeat;
       background-position: center;
       width: 100%;
-      height: 120px;
-      padding: 10px;
+      padding: 20px;
       border-radius: 8px;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
+      flex-direction: row;
       cursor: pointer;
+      gap: 20px;
 
       .review-user {
         font-size: 14px;
@@ -103,39 +115,61 @@ const ReviewWrapper = styled.div`
   }
 `;
 
-const ReviewSection = ({ reviews, reviewCount, onViewAllReviews, movie }) => {
-  const navigate = useNavigate();
 
-  const handleWriteReviewClick = () => {
-    navigate("/reviews/write", {
-      state: { movie },
-    });
-    
-  };
+
+const ReviewUserProfile = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
+
+const ReviewDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
+
+const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) => {
+  const navigate = useNavigate();
+  console.log(reviews);
 
   return (
     <ReviewWrapper>
-      <h2>
+      <Title>
         리뷰
         <span className="review-count">{reviewCount}</span>
-        <button className="write-review-button" onClick={handleWriteReviewClick}>
-          리뷰 작성하기
-        </button>
-      </h2>
+        <button className="more-review-button" onClick={onViewAllReviews}>더보기</button>
+      </Title>
       <div className="review-grid">
-        {reviews.slice(0, 4).map((review, index) => (
+        {reviews.map((review, index) => (
           <div className="review-item" key={index}>
-            <div className="review-user">{review.userName}</div>
-            <div className="review-comment">{review.comment}</div>
-            <div className="review-footer">
-              <div className="likes">❤️ {review.likes}</div>
-            </div>
+            
+            <ReviewUserProfile>
+              <img
+                  src={review.user.profileImage}
+                  alt={review.user.nickname}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    marginBottom: "5px",
+                  }}
+                />
+              <div className="review-user">{review.user.nickname}</div>
+            </ReviewUserProfile>
+            
+            <ReviewDetail>
+              <div className="review-comment">{review.content}</div>
+              <div className="review-footer">
+                <div className="likes">❤️ {review.reviewLike}</div>
+              </div>
+            </ReviewDetail>
+            
           </div>
         ))}
       </div>
-      <div className="more-button">
-        <button onClick={onViewAllReviews}>더보기</button>
-      </div>
+      
     </ReviewWrapper>
   );
 };
