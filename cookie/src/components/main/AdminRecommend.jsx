@@ -5,17 +5,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
 import serverBaseUrl from "../../config/apiConfig";
 
-const MovieRankList = styled.div`
+const MovieRecommendList = styled.div`
   position: relative;
 
-  .rank__title {
+  .recommend__title {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.375rem;
   }
-  .rank__movie {
+  .recommend__movie {
     display: flex;
     flex-direction: row;
     align-items: start;
@@ -24,35 +24,64 @@ const MovieRankList = styled.div`
     gap: 1rem;
     padding: 0.625rem;
   }
-  .rank__movie--list {
+  .recommend__movie--info {
     display: flex;
     position: relative;
     flex-direction: start;
     align-items: center;
     gap: 0.5rem;
   }
-  .rank__movie--list img {
-    border-radius: 12px;
-    width: 124px;
-    height: 177px;
+  .recommend__movie--info img {
+    border-radius: 0.75rem;
+    width: 7.75rem;
+    height: 11.07rem;
   }
 
-  .rank__number--image {
-    position: absolute;
-    left: -6px;
-    top: -9px;
-  }
-  .rank__movie--list p {
+  .recommend__movie--info p {
     text-align: start;
   }
 
   .movie__info--sub {
     color: #afafaf;
-    font-size: 13px;
+    font-size: 0.82rem;
+  }
+  @media (max-width: 768px) {
+    .recommend__title {
+      font-size: 0.8rem;
+    }
+    .recommend__movie {
+      gap: 0.5rem;
+      padding: 0.625rem 0;
+    }
+    .recommend__movie--info img {
+      border-radius: 0.75rem;
+      width: 5.875rem;
+      height: 9.1875rem;
+    }
+
+    .recommend__movie--info p {
+      text-align: start;
+      font-size: 0.4375rem;
+    }
+  }
+  @media (max-width: 390px) {
+    .recommend__movie {
+      gap: 0.3rem;
+      padding: 0.625rem 0;
+    }
+    .recommend__movie--info img {
+      border-radius: 0.75rem;
+      width: 5.375rem;
+      height: 8.6875rem;
+    }
+
+    .recommend__movie--info p {
+      font-size: 0.65rem;
+    }
   }
 `;
 
-function MovieRank() {
+function AdminRecommend() {
   const navigate = useNavigate();
   const [recommendMovies, setRecommendMovies] = useState([]);
 
@@ -78,14 +107,14 @@ function MovieRank() {
 
   return (
     <>
-      <MovieRankList>
-        <div className="rank__title">
+      <MovieRecommendList>
+        <div className="recommend__title">
           <img src={videoIcon} alt="video_icon" />
           <h2> 이거봤어? 관리자 추천영화</h2>
         </div>
-        <div className="rank__movie">
+        <div className="recommend__movie">
           {recommendMovies.map((movie, index) => (
-            <div key={index} className="rank__movie--list">
+            <div key={index} className="recommend__movie--info">
               <div onClick={handleMovieClick} style={{ cursor: "pointer" }}>
                 <img src={movie.poster} alt={movie.title} />
                 <div>
@@ -102,9 +131,9 @@ function MovieRank() {
             </div>
           ))}
         </div>
-      </MovieRankList>
+      </MovieRecommendList>
     </>
   );
 }
 
-export default MovieRank;
+export default AdminRecommend;
