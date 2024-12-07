@@ -147,7 +147,7 @@ const MyAllReviewList = () => {
       />
       <Title>내가 쓴 리뷰</Title>
       {reviews.length === 0 ? (
-        <EmptyMessage>좋아하는 리뷰를 추가해보세요!</EmptyMessage>
+        <EmptyMessage>내가 쓴 리뷰가 없습니다!</EmptyMessage>
       ) : (
         <>
           <ReviewList title="" reviews={reviews} />
