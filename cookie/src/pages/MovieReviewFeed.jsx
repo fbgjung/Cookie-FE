@@ -45,7 +45,7 @@ const FilterButtons = styled.div`
   button {
     padding: 10px 20px;
     font-size: 1rem;
-    border-radius: 20px;
+    border-radius: 8px;
     cursor: pointer;
     border: none;
     font-weight: bold;
@@ -75,7 +75,8 @@ const MovieInfoWrapper = styled.div`
 const MoviePoster = styled.div`
   width: 200px;
   height: 300px;
-  margin-right: 20px;
+  margin-left: 30px;
+  margin-right: 30px;
   img {
     width: 100%;
     height: 100%;
@@ -87,7 +88,7 @@ const MoviePoster = styled.div`
 const MovieDetails = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
 
   .movie-title {
     font-size: 2rem;
@@ -132,7 +133,7 @@ const ReviewLeft = styled.div`
 
 const ReviewCenter = styled.div`
   flex: 1;
-  margin-left: 20px;
+  margin-left: 0px;
   display: flex;
   flex-direction: column;
 
@@ -240,16 +241,12 @@ const MovieReviewFeed = () => {
   const handleReviewClick = (reviewId) => {
     navigate(`/reviews/${reviewId}`);
   };
-  
+
   return (
     <ReviewFeedWrapper>
       {/* 영화 정보 한 번만 표시 */}
       {movieInfo && (
         <>
-          <ReviewTitle>
-            <h1>Cookie Review</h1>
-            <h2>{movieInfo.title} 의 작품 리뷰</h2>
-          </ReviewTitle>
           <MovieInfoWrapper>
             <MoviePoster>
               <img src={movieInfo.poster} alt={movieInfo.title} />
@@ -258,8 +255,15 @@ const MovieReviewFeed = () => {
               <div className="movie-title">{movieInfo.title}</div>
               <div className="movie-info">
                 <div className="info-item">등급: {movieInfo.certification}</div>
-                <div className="info-item">상영 시간: {movieInfo.runtime}분</div>
-                <div className="info-item">개봉일: {new Date(movieInfo.releasedAt).toLocaleDateString()}</div>
+                <div className="info-item">
+                  상영 시간: {movieInfo.runtime}분
+                </div>
+                <div className="info-item">
+                  개봉일:{" "}
+                  {new Date(movieInfo.releasedAt)
+                    .toLocaleDateString()
+                    .replace(/\.$/, "")}
+                </div>
               </div>
             </MovieDetails>
           </MovieInfoWrapper>
@@ -287,8 +291,7 @@ const MovieReviewFeed = () => {
             key={review.reviewId}
             onClick={() => handleReviewClick(review.reviewId)}
           >
-            <ReviewLeft>
-            </ReviewLeft>
+            <ReviewLeft></ReviewLeft>
             <ReviewCenter>
               <div className="profile">
                 <img

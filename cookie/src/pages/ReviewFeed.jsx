@@ -49,7 +49,7 @@ const FilterButtons = styled.div`
   button {
     padding: 10px 20px;
     font-size: 1rem;
-    border-radius: 20px;
+    border-radius: 8px;
     cursor: pointer;
     border: none;
     font-weight: bold;
