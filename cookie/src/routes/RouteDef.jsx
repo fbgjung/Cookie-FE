@@ -22,6 +22,7 @@ import MovieReviewFeed from "../pages/MovieReviewFeed";
 import ReviewDetail from "../pages/ReviewDetail";
 import AdminMovie from "../pages/admin/AdminMovie";
 import CastDetail from "../components/movieDetailPage/CastDetail";
+import ErrorPage from "../pages/ErrorPage";
 
 export const AppRouteDef = {
   Main: {
@@ -56,6 +57,16 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
+
+  ErrorPage: {
+    path: "/*",
+    element: (
+      <PrivateRoute>
+        <ErrorPage />
+      </PrivateRoute>
+    ),
+  },
+
   Login: {
     path: "/login",
     element: (
