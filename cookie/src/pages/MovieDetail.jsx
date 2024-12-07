@@ -60,6 +60,7 @@ const MovieDetail = () => {
         likes={movieData.likes}
         score={movieData.score}
         movie={movieData}
+        liked={movieData.liked}
       />
       <CastSection 
         director={movieData.director}
