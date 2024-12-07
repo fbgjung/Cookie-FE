@@ -16,7 +16,7 @@ const BarContainer = styled.div`
 const FilledBarLeft = styled.div`
   height: 100%;
   width: ${(props) => props.percentage}%;
-  background-color: #1ee5b0;
+  background-color: #a7d477;
   border-radius: 15px 0 0 15px;
   transition: width 0.5s ease;
 `;
@@ -24,7 +24,7 @@ const FilledBarLeft = styled.div`
 const FilledBarRight = styled.div`
   height: 100%;
   width: ${(props) => 100 - props.percentage}%;
-  background-color: #ff6b6b;
+  background-color: #8b5dff;
   border-radius: 0 15px 15px 0;
   transition: width 0.5s ease;
 `;
@@ -35,7 +35,7 @@ const PercentageBubble = styled.div`
   left: ${(props) =>
     props.isLeftWinning ? props.percentage : 100 - props.percentage}%;
   transform: translateX(-50%);
-  background-color: ${(props) => (props.isLeftWinning ? "#1ee5b0" : "#ff6b6b")};
+  background-color: ${(props) => (props.isLeftWinning ? "#a7d477" : "#8b5dff")};
   color: #ffffff;
   font-size: 0.9rem;
   font-weight: bold;
@@ -57,7 +57,7 @@ const PercentageBubble = styled.div`
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 10px solid
-      ${(props) => (props.isLeftWinning ? "#1ee5b0" : "#ff6b6b")};
+      ${(props) => (props.isLeftWinning ? "#a7d477" : "#8b5dff")};
   }
 `;
 
