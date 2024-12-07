@@ -106,7 +106,7 @@ const MatchUpContainer = styled.div`
     -webkit-line-clamp: 2;
     text-overflow: ellipsis;
     line-height: 1.1rem;
-    height: 2.39rem;
+    height: 2.3rem;
     font-size: 0.9rem;
   }
 
