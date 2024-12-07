@@ -67,6 +67,20 @@ const FilterButtons = styled.div`
   }
 `;
 
+
+const MoviePosterWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+`;
+
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -89,20 +103,7 @@ const ReviewTicket = styled.div`
 `;
 
 const ReviewLeft = styled.div`
-  flex: 0 0 100px;
-
-  img {
-    width: 80px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-
-  .title {
-    font-size: 1rem;
-    font-weight: bold;
-    margin-top: 10px;
-  }
+  flex: 0 0 0px;
 `;
 
 const ReviewCenter = styled.div`
@@ -162,6 +163,7 @@ const MovieReviewFeed = () => {
   const navigate = useNavigate();
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
+  const [movieInfo, setMovieInfo] = useState(null);
   const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -214,10 +216,19 @@ const MovieReviewFeed = () => {
 
   return (
     <ReviewFeedWrapper>
-      <ReviewTitle>
-        <h1>Cookie Review</h1>
-        <h2>{movieId} 의 작품 리뷰</h2>
-      </ReviewTitle>
+      {/* 영화 정보 한 번만 표시 */}
+      {movieInfo && (
+        <>
+          <ReviewTitle>
+            <h1>Cookie Review</h1>
+            <h2>{movieInfo.title} 의 작품 리뷰</h2>
+          </ReviewTitle>
+          <MoviePosterWrapper>
+            <img src={movieInfo.poster} alt={movieInfo.title} />
+          </MoviePosterWrapper>
+        </>
+      )}
+
       <FilterButtons>
         <button
           className={!showSpoilerOnly ? "active" : "inactive"}
@@ -232,15 +243,14 @@ const MovieReviewFeed = () => {
           스포일러 리뷰
         </button>
       </FilterButtons>
+
       <ReviewContainer>
-        {reviews.map((review, index) => (
+        {reviews.map((review) => (
           <ReviewTicket
-            key={`${review.reviewId}-${index}`}
+            key={review.reviewId}
             onClick={() => handleReviewClick(review.reviewId)}
           >
             <ReviewLeft>
-              <img src={review.movie.poster} alt={review.movie.title} />
-              <div className="title">{review.movie.title}</div>
             </ReviewLeft>
             <ReviewCenter>
               <div className="profile">
@@ -273,6 +283,7 @@ const MovieReviewFeed = () => {
           </ReviewTicket>
         ))}
       </ReviewContainer>
+
       {isLoading && <p>Loading more reviews...</p>}
       {!hasMore && <p>No more reviews available.</p>}
     </ReviewFeedWrapper>
