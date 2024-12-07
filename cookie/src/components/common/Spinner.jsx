@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import SpinnerImage from "/Users/ejkim/Desktop/Cookie-dev/Cookie-FE/cookie/src/assets/images/cookiespinner.svg";
+import SpinnerImage from "/images/cookiespinner.svg";
 
 const spinAnimation = keyframes`
   0% {
