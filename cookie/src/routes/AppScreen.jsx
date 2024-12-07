@@ -25,6 +25,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 
   @media (max-width: 768px) {
     max-width: 100%;
@@ -179,7 +180,7 @@ const AppScreen = () => {
     "/sign-up-genre",
     "/admin",
   ];
-
+  const isAuthPage = hideHeaderFooterPages.includes(location.pathname);
   return (
     <Container>
       <ViewArea>
@@ -196,7 +197,7 @@ const AppScreen = () => {
             }}
           />
           {/* 헤더 */}
-          {!hideHeaderFooterPages.includes(location.pathname) && (
+          {!isAuthPage && (
             <HeaderContainer>
               <Logo onClick={handleLogoClick}>
                 <img src={CookieLogo} alt="Cookie Logo" />
@@ -208,12 +209,17 @@ const AppScreen = () => {
             </HeaderContainer>
           )}
           {/* 메인 콘텐츠 */}
-          <MainContent>
+          <MainContent
+            style={{
+              marginTop: isAuthPage ? 0 : "70px",
+              marginBottom: isAuthPage ? 0 : "60px",
+            }}
+          >
             <ScrollToTop />
             <AppPages />
           </MainContent>
           {/* 네비게이션 */}
-          {!hideHeaderFooterPages.includes(location.pathname) && (
+          {!isAuthPage && (
             <NavContainer>
               <Link to="/">
                 <img src={HomeIcon} alt="홈" />

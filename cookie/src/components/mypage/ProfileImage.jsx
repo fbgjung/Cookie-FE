@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import useAuthStore from "../../stores/useAuthStore";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -40,7 +41,7 @@ const Title = styled.h3`
   font-size: 1.2rem;
   margin: 0 0 10px 0;
   text-align: center;
-  color: #ffffff;
+  color: #6a91b1;
   font-weight: bold;
 `;
 
@@ -74,9 +75,14 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
   const navigate = useNavigate();
   const [isBadgeVisible, setIsBadgeVisible] = useState(true);
 
-  console.log("이미지 프롭", image);
+  const isLogined = useAuthStore((state) => state.isLogined);
+  const openLoginModal = useAuthStore((state) => state.openLoginModal);
 
   const handleManageClick = () => {
+    if (!isLogined()) {
+      openLoginModal();
+      return;
+    }
     navigate("/manageprofile");
   };
 
@@ -85,7 +91,6 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
       {title && <Title>{title}</Title>}
       <ImageContainer>
         <Image image={image} />
-
         {badgeIcon && isBadgeVisible && (
           <BadgeIcon
             src={badgeIcon}

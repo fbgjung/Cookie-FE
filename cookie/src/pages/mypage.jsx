@@ -7,8 +7,11 @@ import GenreChart from "../components/mypage/GenreChart";
 import FavoriteList from "../components/mypage/FavoriteList";
 import ReviewList from "../components/mypage/ReviewList";
 import LogoutAndWithdraw from "../components/mypage/LogoutAndWithdraw";
+import LoginModal from "../components/common/LoginModal";
 import axiosInstance from "../api/auth/axiosInstance";
 import { toast } from "react-hot-toast";
+import useAuthStore from "../stores/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 const MypageContainer = styled.div`
   display: flex;
@@ -37,26 +40,30 @@ const MyPage = () => {
   const [badgeData, setBadgeData] = useState([]);
   const [genreScores, setGenreScores] = useState([]);
   const [reviewData, setReviewData] = useState([]);
+  const logOut = useAuthStore((state) => state.logOut);
+  const isLogined = useAuthStore((state) => state.isLogined);
+  const openLoginModal = useAuthStore((state) => state.openLoginModal);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const checkLoginStatus = () => {
+      if (!isLogined()) {
+        openLoginModal();
+        return false;
+      }
+      return true;
+    };
+
+    if (!checkLoginStatus()) return;
+
     const fetchUserData = async () => {
       try {
-        console.log("fetch");
         const response = await axiosInstance.get("/api/users");
-
-        console.log("api response", response.data.response);
 
         const { nickname, profileImage, badge, genreScores, reviews } =
           response.data.response;
 
-        console.log("닉네임 프로필이미지", {
-          nickname,
-          profileImage,
-        });
-
         setUserData({ nickname, profileImage });
-
-        console.log("뱃지데이터", badge);
         setBadgeData(
           badge.map((b) => ({
             name: b.name,
@@ -65,14 +72,11 @@ const MyPage = () => {
           }))
         );
 
-        console.log("장르데이터", genreScores);
         const genreData = Object.entries(genreScores[0])
           .filter(([key]) => key !== "id" && key !== "userId")
           .map(([name, points]) => ({ name, points }));
-        console.log("Transformed genre scores:", genreData);
         setGenreScores(genreData);
 
-        console.log("리뷰데이터", reviews);
         const transformedReviews = reviews.map((review) => ({
           reviewId: review.reviewId,
           content: review.content,
@@ -88,24 +92,22 @@ const MyPage = () => {
             profileImage: review.user.profileImage,
           },
         }));
-        console.log("ㅎㅎ", transformedReviews);
         setReviewData(transformedReviews);
       } catch (error) {
-        console.error("fail111", error);
+        console.error("데이터 로드 실패:", error);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [isLogined, openLoginModal]);
 
   const mainBadge = badgeData.find((badge) => badge.main) || {};
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
   const handleLogout = () => {
-    console.log("Logging out...");
-    sessionStorage.clear();
-    localStorage.clear();
-    window.location.href = "/login";
+    logOut();
+    toast.success("로그아웃 되었습니다.");
+    navigate("/login");
   };
 
   const handleWithdraw = async () => {
@@ -122,40 +124,46 @@ const MyPage = () => {
       }
     }
   };
+
   return (
-    <MypageContainer>
-      <div
-        style={{
-          position: "absolute",
-          top: "100px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 2,
-        }}
-      >
-        <ProfileImage
-          title={mainBadge.name || "배지 없음"}
-          name={userData.nickname}
-          image={userData.profileImage}
-          badgeIcon={
-            mainBadge.badgeImage || "/src/assets/images/defaultBadge.png"
-          }
-        />
-      </div>
-      <MypageContent>
-        <BadgeList title={`${userData.nickname}의 배지`} badges={badgeData} />
-        <GenreChart data={genreScores} />
-        <FavoriteList title="좋아요" items={favoriteItems} />
-        <ReviewList
-          title={`${userData.nickname}의 리뷰`}
-          reviews={reviewData}
-        />
-        <LogoutAndWithdraw
-          onLogout={handleLogout}
-          onWithdraw={handleWithdraw}
-        />
-      </MypageContent>
-    </MypageContainer>
+    <>
+      <LoginModal />
+      <MypageContainer>
+        <div
+          style={{
+            position: "absolute",
+            top: "100px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 2,
+          }}
+        >
+          <ProfileImage
+            title={mainBadge.name || "배지 없음"}
+            name={userData.nickname}
+            image={userData.profileImage}
+            badgeIcon={
+              mainBadge.badgeImage || "/src/assets/images/defaultBadge.png"
+            }
+          />
+        </div>
+        <MypageContent>
+          <BadgeList title={`${userData.nickname}의 배지`} badges={badgeData} />
+          <GenreChart data={genreScores} />
+          <FavoriteList title="좋아요" items={favoriteItems} />
+          <ReviewList
+            title={`${userData.nickname}의 리뷰`}
+            reviews={reviewData}
+          />
+          {isLogined() && (
+            <LogoutAndWithdraw
+              onLogout={handleLogout}
+              onWithdraw={handleWithdraw}
+            />
+          )}
+        </MypageContent>
+      </MypageContainer>
+    </>
   );
 };
 

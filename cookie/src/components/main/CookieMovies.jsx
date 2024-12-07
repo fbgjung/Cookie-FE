@@ -57,6 +57,10 @@ function CookieMovies() {
   const userInfo = useUserStore((state) => state.getUserInfo());
   const [recommendedMovies, setRecommendedMovies] = useState([]);
 
+  if (!userInfo.userId) {
+    return null;
+  }
+
   useEffect(() => {
     const fetchRecommendedMovies = async () => {
       if (userInfo?.userId) {

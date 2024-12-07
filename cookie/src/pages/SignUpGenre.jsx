@@ -1,12 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components";
-import GlobalStyle from "../styles/global";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../components/signUp/Modal";
 import { requestNotificationPermission } from "../firebase/firebaseMessaging";
-
+import useUserStore from "../stores/useUserStore";
 import axios from "axios";
+import useAuthStore from "../stores/useAuthStore";
 
 const MainContainer = styled.div`
   background-color: #fff4b9;
@@ -23,6 +23,11 @@ const MainTitle = styled.div`
   h2 {
     margin: 0.8rem;
     color: #724b2e;
+  }
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.4rem;
+    }
   }
 `;
 
@@ -66,7 +71,9 @@ const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 15rem;
-
+  @media (max-width: 768px) {
+    margin-top: 10rem;
+  }
   button {
     background-color: #aad6e7;
     color: #724b2e;
@@ -79,6 +86,12 @@ const SubmitBtn = styled.div`
     font-weight: 700;
     outline: none;
     cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    button {
+      width: 20rem;
+      height: 3.5rem;
+    }
   }
 `;
 
@@ -113,6 +126,7 @@ function SignUpGenre() {
   const [pushEnabled, setPushEnabled] = useState("false");
   const [emailEnabled, setEmailEnabled] = useState("false");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const logIn = useAuthStore((state) => state.logIn);
 
   const handleButtonClick = (id) => {
     setSelectedGenreId(id);
@@ -190,6 +204,20 @@ function SignUpGenre() {
           "accessToken",
           response.data.response.token.accessToken
         );
+        const userResponse = response.data.response.user;
+        const setUserInfo = useUserStore.getState().setUserInfo;
+        const userInfo = {
+          userId: userResponse.userId,
+          nickname: userResponse.nickname,
+          profileImage: userResponse.profileImage,
+          genreId: userResponse.genreId,
+        };
+        setUserInfo(userInfo);
+        console.log("저장된 유저 정보:", userInfo);
+
+        setUserInfo(userInfo);
+        logIn();
+
         setShowModal(false);
         setIsSubmitting(false);
 
@@ -205,7 +233,6 @@ function SignUpGenre() {
 
   return (
     <>
-      <GlobalStyle />
       <MainContainer>
         <MainTitle>
           <h2>선호하는 장르를</h2>

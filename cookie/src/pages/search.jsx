@@ -97,7 +97,6 @@ const Search = () => {
         setDefaultResults(defaultResults);
         setHasMore(false); 
       }
-
     } catch (error) {
       console.error("Error fetching search results:", error);
       setResults([]);
