@@ -52,13 +52,30 @@ const Message = styled.p`
   margin-top: 20px;
 `;
 
-const SearchResults = ({ results, onMovieClick, isLoading, activeTab }) => {
+const SearchResults = ({ results, onMovieClick, isLoading, activeTab, defaultResults }) => {
   if (isLoading) {
     return <Message>로딩 중...</Message>;
   }
 
-  if (!isLoading && (!results || results.length === 0)) {
-    return <Message>검색 결과가 없습니다.</Message>;
+  // if (!isLoading && (!results || results.length === 0)) {
+  //   return <Message>검색 결과가 없습니다.</Message>;
+  // }
+
+  if (!isLoading && results.length === 0 && defaultResults.length > 0) {
+    return (
+      <ResultsContainer $isGrid={false}>
+        {defaultResults.map((result) => (
+          <ResultItem key={result.movieId} onClick={() => onMovieClick(result.movieId)}>
+            <Poster src={result.poster || result.profileImage} alt={result.title || result.name} />
+            <Content>
+              <Title>{result.movieTitle || result.name}</Title>
+              <Detail>{result.releaseAt}</Detail>
+              <Director>감독: {result.director}</Director>
+            </Content>
+          </ResultItem>
+        ))}
+      </ResultsContainer>
+    );
   }
 
   return (
@@ -80,6 +97,7 @@ const SearchResults = ({ results, onMovieClick, isLoading, activeTab }) => {
 
 SearchResults.propTypes = {
   results: PropTypes.array.isRequired, // 검색 결과 배열
+  defaultResults: PropTypes.array.isRequired, // 검색 결과 배열
   onMovieClick: PropTypes.func.isRequired, // 영화 클릭 핸들러
   isLoading: PropTypes.bool.isRequired, // 로딩 상태
   activeTab: PropTypes.string.isRequired, // 현재 활성화된 탭

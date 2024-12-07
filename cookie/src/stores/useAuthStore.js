@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 const useAuthStore = create((set) => ({
   isLoginModalOpen: false,
+  isLoggedIn: false,
 
   openLoginModal: () => set({ isLoginModalOpen: true }),
   closeLoginModal: () => set({ isLoginModalOpen: false }),
@@ -18,8 +19,20 @@ const useAuthStore = create((set) => ({
       if (successPath && successPath !== "chkSuccess") {
         window.location.href = successPath;
       }
+      set({ isLoggedIn: true });
       return true;
     }
+  },
+
+  logIn: () => {
+    set({ isLoggedIn: true });
+    console.log("로그인 상태가 설정되었습니다.");
+  },
+  logOut: () => {
+    sessionStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    set({ isLoggedIn: false });
+    console.log("로그아웃 되었습니다.");
   },
 }));
 
