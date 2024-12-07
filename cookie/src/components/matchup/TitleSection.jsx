@@ -25,7 +25,7 @@ const TitleImage = styled.img`
 const Title = styled.h1`
   font-size: 1.2rem;
   font-weight: bold;
-  color: #ffffff;
+  color: #724b2e;
 `;
 
 const DDayContainer = styled.div`
@@ -37,7 +37,7 @@ const DDayContainer = styled.div`
 const DDay = styled.div`
   font-size: 1rem;
   font-weight: bold;
-  color: #1ee5b0;
+  color: #724b2e;
 `;
 
 const HistoryButton = styled.button`
@@ -46,7 +46,7 @@ const HistoryButton = styled.button`
   gap: 5px;
   background-color: transparent;
   border: none;
-  color: #1ee5b0;
+  color: #724b2e;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
