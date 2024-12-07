@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import GlobalStyle from "../styles/global";
 import styled from "styled-components";
 import userDefaultImg from "../assets/images/signUp/user_img.svg";
 import deleteBtn from "../assets/images/signUp/close_icon.svg";
@@ -20,6 +19,11 @@ const MainTitle = styled.div`
   h2 {
     margin: 0.8rem;
     color: #724b2e;
+  }
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.4rem;
+    }
   }
 `;
 const UserInfo = styled.div`
@@ -115,10 +119,18 @@ const UserInfo = styled.div`
     padding: 0.5rem;
     margin-top: 0.5rem;
     background-color: white;
-    color: var(--main);
+    color: var(--text);
   }
   input:focus {
     outline: 1px solid #724b2e;
+  }
+  @media (max-width: 768px) {
+    input {
+      width: 14.5rem;
+    }
+    .nickName__valid--text {
+      font-size: 0.9rem;
+    }
   }
 `;
 
@@ -139,6 +151,12 @@ const SubmitBtn = styled.div`
     outline: none;
     cursor: pointer;
   }
+  @media (max-width: 768px) {
+    button {
+      width: 20rem;
+      height: 3.5rem;
+    }
+  }
 `;
 
 function SignUpProfile() {
@@ -146,6 +164,7 @@ function SignUpProfile() {
   const [userNickname, setUserNickname] = useState("");
   const [nicknameValid, setNicknameValid] = useState(false);
   const [isDuplicateNickname, setIsDuplicateNickname] = useState(null);
+  const [isCheckedNickname, setIsCheckedNickname] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -155,6 +174,8 @@ function SignUpProfile() {
   const email = searchParams.get("email");
   const socialId = searchParams.get("socialId");
   const regex = /^[A-Za-z0-9ㄱ-ㅎㅏ-ㅣ가-힣]{2,10}$/;
+  const isNicknameInvalid = userNickname.length <= 1 || !nicknameValid;
+  const isNicknameNotChecked = userNickname.length >= 2 && !isCheckedNickname;
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -180,6 +201,7 @@ function SignUpProfile() {
 
     if (isValid) {
       setIsDuplicateNickname(null);
+      setIsCheckedNickname(false);
     }
   };
 
@@ -203,9 +225,11 @@ function SignUpProfile() {
       } else if (response.data.response === "DUPLICATED_NICKNAME") {
         setIsDuplicateNickname(false);
       }
+      setIsCheckedNickname(true);
     } catch (error) {
       console.error("중복 확인 실패:", error);
       setIsDuplicateNickname(false);
+      setIsCheckedNickname(true);
     }
   };
 
@@ -225,7 +249,6 @@ function SignUpProfile() {
 
   return (
     <>
-      <GlobalStyle />
       <MainContainer>
         <MainTitle>
           <h2>회원 정보를</h2>
@@ -262,6 +285,7 @@ function SignUpProfile() {
               )}
             </div>
             <p>프로필사진을 등록해주세요 😎</p>
+
             <div className="user__nickName">
               <label>
                 닉네임
@@ -284,7 +308,7 @@ function SignUpProfile() {
                   </button>
                 </div>
               </label>
-              {!nicknameValid && userNickname && (
+              {isNicknameInvalid && (
                 <p className="nickName__valid--text">
                   닉네임은 2~10자 사이의 숫자, 영어, 한글만 가능해요!
                 </p>
@@ -301,12 +325,21 @@ function SignUpProfile() {
                   사용 가능한 닉네임입니다.
                 </p>
               )}
+              {isNicknameNotChecked && (
+                <p className="nickName__valid--text">
+                  중복확인 버튼을 눌러주세요!
+                </p>
+              )}
             </div>
           </UserInfo>
           <SubmitBtn>
             <button
               type="submit"
-              disabled={!nicknameValid || isDuplicateNickname === false}
+              disabled={
+                isNicknameInvalid ||
+                isDuplicateNickname === false ||
+                !isCheckedNickname
+              }
             >
               다음
             </button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import deleteBtn from "../../assets/images/signUp/close_icon.svg";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +26,7 @@ const ModalContent = styled.div`
   background-color: var(--ticket-bg);
   width: 37.5rem;
   height: 16rem;
+  position: relative;
 
   .modal__infoContainer {
     display: flex;
@@ -41,32 +42,34 @@ const ModalContent = styled.div`
   }
 
   .modal__title {
-    color: var(--main);
+    color: var(--text);
+    font-size: 1.5rem;
+    text-align: center;
   }
 
   .modal__loginBtn {
-    background-color: var(--main);
+    background-color: var(--sub);
     width: 100%;
     height: 4rem;
     font-size: 1rem;
     border: none;
     border-radius: 16px;
     color: white;
-    font-size: 22px;
+    font-size: 1.2rem;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    margin-bottom: 0 0 1rem 0;
+    margin-bottom: 1rem;
 
     &:hover {
-      background-color: #0b0849;
+      color: var(--text);
     }
   }
 
   .modalBtn__container {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
   }
 
   .modal__closeBtn {
@@ -74,6 +77,11 @@ const ModalContent = styled.div`
     border: none;
     border-radius: 50%;
     cursor: pointer;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   @keyframes modal-show {
@@ -84,6 +92,57 @@ const ModalContent = styled.div`
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 90%;
+    height: 14rem;
+    padding: 1rem;
+
+    .modal__infoContainer {
+      font-size: 0.9rem;
+      height: auto;
+      gap: 0.6rem;
+    }
+
+    .modal__title {
+      font-size: 1.3rem;
+    }
+
+    .modal__loginBtn {
+      height: 3.5rem;
+      font-size: 1rem;
+    }
+
+    .modal__closeBtn img {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 95%;
+    height: 12rem;
+    padding: 0.8rem;
+
+    .modal__infoContainer {
+      font-size: 0.8rem;
+      gap: 0.5rem;
+    }
+
+    .modal__title {
+      font-size: 1.1rem;
+    }
+
+    .modal__loginBtn {
+      height: 3rem;
+      font-size: 0.9rem;
+    }
+
+    .modal__closeBtn img {
+      width: 16px;
+      height: 16px;
     }
   }
 `;
@@ -98,27 +157,34 @@ const LoginModal = () => {
     navigate("/login");
   };
 
+  const handleContainerClick = (e) => {
+    if (e.target === e.currentTarget) {
+      closeLoginModal();
+    }
+  };
+
   return (
-    <div>
-      <BottomModalContainer $isOpen={isLoginModalOpen}>
-        <ModalContent>
-          <div className="modal">
-            <div className="modalBtn__container">
-              <button className="modal__closeBtn" onClick={closeLoginModal}>
-                <img src={deleteBtn} />
-              </button>
-            </div>
-            <div className="modal__infoContainer">
-              <h2 className="modal__title">로그인이 필요해요 🍪</h2>
-              <p>로그인 후 쿠키를 이용해주세요!</p>
-            </div>
-            <button className="modal__loginBtn bold" onClick={handleModalLogin}>
-              로그인 하기
+    <BottomModalContainer
+      $isOpen={isLoginModalOpen}
+      onClick={handleContainerClick}
+    >
+      <ModalContent>
+        <div className="modal">
+          <div className="modalBtn__container">
+            <button className="modal__closeBtn" onClick={closeLoginModal}>
+              <img src={deleteBtn} alt="닫기" />
             </button>
           </div>
-        </ModalContent>
-      </BottomModalContainer>
-    </div>
+          <div className="modal__infoContainer">
+            <h2 className="modal__title">로그인이 필요해요 🍪</h2>
+            <p>로그인 후 쿠키를 이용해주세요!</p>
+          </div>
+          <button className="modal__loginBtn bold" onClick={handleModalLogin}>
+            로그인 하기
+          </button>
+        </div>
+      </ModalContent>
+    </BottomModalContainer>
   );
 };
 
