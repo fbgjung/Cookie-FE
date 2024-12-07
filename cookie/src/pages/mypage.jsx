@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import ProfileImage from "../components/mypage/ProfileImage";
 import BadgeList from "../components/mypage/BadgeList";
 import GenreChart from "../components/mypage/GenreChart";
@@ -11,7 +11,6 @@ import LoginModal from "../components/common/LoginModal";
 import axiosInstance from "../api/auth/axiosInstance";
 import { toast } from "react-hot-toast";
 import useAuthStore from "../stores/useAuthStore";
-import { useNavigate } from "react-router-dom";
 
 const MypageContainer = styled.div`
   display: flex;
@@ -33,6 +32,35 @@ const MypageContent = styled.div`
   box-sizing: border-box;
   padding: 20px;
   padding-bottom: 80px;
+`;
+
+const ReviewHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+`;
+
+const ReviewTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-left: 1rem;
+  color: #04012d;
+`;
+
+const MoreLink = styled.span`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-right: 1rem;
+  color: #724b2e;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #0056b3;
+  }
 `;
 
 const MyPage = () => {
@@ -127,6 +155,10 @@ const MyPage = () => {
     }
   };
 
+  const handleMoreClick = () => {
+    navigate("/myAllReviewList");
+  };
+
   return (
     <>
       <LoginModal />
@@ -153,10 +185,11 @@ const MyPage = () => {
           <BadgeList title={`${userData.nickname}의 배지`} badges={badgeData} />
           <GenreChart data={genreScores} />
           <FavoriteList title="좋아요" items={favoriteItems} />
-          <ReviewList
-            title={`${userData.nickname}의 리뷰`}
-            reviews={reviewData}
-          />
+          <ReviewHeader>
+            <ReviewTitle>{`${userData.nickname}의 리뷰`}</ReviewTitle>
+            <MoreLink onClick={handleMoreClick}>{"> 더보기"}</MoreLink>
+          </ReviewHeader>
+          <ReviewList reviews={reviewData} />
           {isLogined() && (
             <LogoutAndWithdraw
               onLogout={handleLogout}
