@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const FooterSectionStyled = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 20px; 
   margin-top: 20px;
   align-items: center;
 
@@ -157,21 +157,13 @@ const ReviewDetail = () => {
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
-  const toggleLike = () => {
-    setLikedByUser((prev) => !prev);
-    setReviewData((prevData) => ({
-      ...prevData,
-      reviewLike: likedByUser
-        ? prevData.reviewLike - 1
-        : prevData.reviewLike + 1,
-    }));
-  };
-
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
         const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
-        setReviewData(response.data.response);
+        const review = response.data.response;
+        setReviewData(review);
+        setLikedByUser(review.likedByUser);
       } catch (error) {
         console.error("Failed to fetch review data:", error);
         toast.error("리뷰 데이터를 가져오지 못했습니다.");
@@ -182,6 +174,28 @@ const ReviewDetail = () => {
 
     fetchReviewData();
   }, [reviewId]);
+
+  const toggleLike = async () => {
+    const userId = getUserIdFromToken();
+    if (!userId) return;
+
+    try {
+      await axiosInstance.post(`/api/users/review-like/${reviewId}`, {
+        userId,
+      });
+
+      setReviewData((prevData) => ({
+        ...prevData,
+        likedByUser: !prevData.likedByUser,
+        reviewLike: prevData.likedByUser
+          ? prevData.reviewLike - 1
+          : prevData.reviewLike + 1,
+      }));
+    } catch (error) {
+      console.error("Failed to toggle like:", error);
+      toast.error("좋아요 처리에 실패했습니다.");
+    }
+  };
 
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("refreshToken");

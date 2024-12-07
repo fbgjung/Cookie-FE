@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
@@ -14,28 +14,6 @@ const ReviewFeedWrapper = styled.div`
   height: 100vh;
 `;
 
-const ReviewTitle = styled.div`
-  text-align: center;
-  margin-bottom: 20px;
-
-  h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-  }
-
-  h2 {
-    font-size: 1rem;
-    font-weight: normal;
-    color: #b29463;
-    margin-top: 10px;
-  }
-`;
-
 const FilterButtons = styled.div`
   display: flex;
   justify-content: center;
@@ -45,7 +23,7 @@ const FilterButtons = styled.div`
   button {
     padding: 10px 20px;
     font-size: 1rem;
-    border-radius: 20px;
+    border-radius: 8px;
     cursor: pointer;
     border: none;
     font-weight: bold;
@@ -67,15 +45,54 @@ const FilterButtons = styled.div`
   }
 `;
 
+const MovieInfoWrapper = styled.div`
+  display: flex;
+  margin-bottom: 20px;
+`;
+
+const MoviePoster = styled.div`
+  width: 200px;
+  height: 300px;
+  margin-left: 30px;
+  margin-right: 30px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+`;
+
+const MovieDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+
+  .movie-title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .movie-info {
+    font-size: 1rem;
+    color: #888;
+    margin-top: 10px;
+
+    .info-item {
+      margin-bottom: 5px;
+    }
+  }
+`;
+
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0px;
 `;
 
 const ReviewTicket = styled.div`
   display: flex;
-  background-image: url("/src/assets/images/mypage/reviewticket.svg");
+  background-image: url("/images/reviewticket.svg");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -89,25 +106,12 @@ const ReviewTicket = styled.div`
 `;
 
 const ReviewLeft = styled.div`
-  flex: 0 0 100px;
-
-  img {
-    width: 80px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-
-  .title {
-    font-size: 1rem;
-    font-weight: bold;
-    margin-top: 10px;
-  }
+  flex: 0 0 0px;
 `;
 
 const ReviewCenter = styled.div`
   flex: 1;
-  margin-left: 20px;
+  margin-left: 0px;
   display: flex;
   flex-direction: column;
 
@@ -160,7 +164,9 @@ const ReviewRight = styled.div`
 
 const MovieReviewFeed = () => {
   const navigate = useNavigate();
+  const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
+  const [movieInfo, setMovieInfo] = useState(null);
   const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -173,10 +179,10 @@ const MovieReviewFeed = () => {
       setIsLoading(true);
 
       const endpoint = showSpoilerOnly
-        ? "http://localhost:8080/api/reviews/spoiler"
-        : "http://localhost:8080/api/reviews";
+        ? `/api/movies/${movieId}/reviews/spoiler`
+        : `/api/movies/${movieId}/reviews`;
 
-      const response = await axios.get(endpoint, {
+      const response = await axiosInstance.get(endpoint, {
         params: { page, size: 10 },
       });
 
@@ -189,12 +195,15 @@ const MovieReviewFeed = () => {
       if (newReviews.length < 10 || response.data.response.lastPage) {
         setHasMore(false);
       }
+
+      // 영화 정보 설정
+      setMovieInfo(response.data.response);
     } catch (error) {
       console.error("리뷰 불러오기 실패:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, hasMore, page, showSpoilerOnly]);
+  }, [isLoading, hasMore, page, showSpoilerOnly, movieId]);
 
   useEffect(() => {
     fetchReviews();
@@ -213,10 +222,32 @@ const MovieReviewFeed = () => {
 
   return (
     <ReviewFeedWrapper>
-      <ReviewTitle>
-        <h1>Cookie Review</h1>
-        <h2>"소년시절의 나" 의 작품 리뷰</h2>
-      </ReviewTitle>
+      {/* 영화 정보 한 번만 표시 */}
+      {movieInfo && (
+        <>
+          <MovieInfoWrapper>
+            <MoviePoster>
+              <img src={movieInfo.poster} alt={movieInfo.title} />
+            </MoviePoster>
+            <MovieDetails>
+              <div className="movie-title">{movieInfo.title}</div>
+              <div className="movie-info">
+                <div className="info-item">등급: {movieInfo.certification}</div>
+                <div className="info-item">
+                  상영 시간: {movieInfo.runtime}분
+                </div>
+                <div className="info-item">
+                  개봉일:{" "}
+                  {new Date(movieInfo.releasedAt)
+                    .toLocaleDateString()
+                    .replace(/\.$/, "")}
+                </div>
+              </div>
+            </MovieDetails>
+          </MovieInfoWrapper>
+        </>
+      )}
+
       <FilterButtons>
         <button
           className={!showSpoilerOnly ? "active" : "inactive"}
@@ -231,16 +262,14 @@ const MovieReviewFeed = () => {
           스포일러 리뷰
         </button>
       </FilterButtons>
+
       <ReviewContainer>
-        {reviews.map((review, index) => (
+        {reviews.map((review) => (
           <ReviewTicket
-            key={`${review.reviewId}-${index}`}
+            key={review.reviewId}
             onClick={() => handleReviewClick(review.reviewId)}
           >
-            <ReviewLeft>
-              <img src={review.movie.poster} alt={review.movie.title} />
-              <div className="title">{review.movie.title}</div>
-            </ReviewLeft>
+            <ReviewLeft></ReviewLeft>
             <ReviewCenter>
               <div className="profile">
                 <img
@@ -262,7 +291,7 @@ const MovieReviewFeed = () => {
                   (_, i) => (
                     <img
                       key={`${review.reviewId}-score-${i}`}
-                      src="/src/assets/images/mypage/cookiescore.svg"
+                      src="/images/cookiescore.svg"
                       alt="score"
                     />
                   )
@@ -272,6 +301,7 @@ const MovieReviewFeed = () => {
           </ReviewTicket>
         ))}
       </ReviewContainer>
+
       {isLoading && <p>Loading more reviews...</p>}
       {!hasMore && <p>No more reviews available.</p>}
     </ReviewFeedWrapper>

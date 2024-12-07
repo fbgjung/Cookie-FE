@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
 import axiosInstance from "../../api/auth/axiosInstance";
+import Spinner from "../common/Spinner"; // 스피너 컴포넌트 추가
 
 const ModalBackground = styled.div`
   position: fixed;
@@ -39,6 +39,21 @@ const ModalContainer = styled.div`
   }
 `;
 
+const Title = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.1rem;
+  }
+`;
+
 const ImageContainer = styled.div`
   width: 150px;
   height: 230px;
@@ -64,35 +79,6 @@ const ImageContainer = styled.div`
   }
 `;
 
-const Title = styled.h2`
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 10px;
-
-  @media (max-width: 768px) {
-    font-size: 1.3rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1.1rem;
-  }
-`;
-
-const Description = styled.p`
-  font-size: 1rem;
-  color: #666666;
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.8rem;
-  }
-`;
-
 const TagsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -110,9 +96,10 @@ const TagsContainer = styled.div`
 `;
 
 const Tag = styled.div`
-  background-color: ${(props) => (props.selected ? "#04012D" : "#f0f0f0")};
-  color: ${(props) => (props.selected ? "#ffffff" : "#333333")};
-  border: 1px solid ${(props) => (props.selected ? "#04012D" : "#ddd")};
+  background-color: ${(props) => (props.selected ? "#AAD6E7" : "#ffffff")};
+  color: ${(props) =>
+    props.selected ? "#ffffff" : "#724B2E"}; /* 평소 글씨 색상 변경 */
+  border: 1px solid ${(props) => (props.selected ? "#AAD6E7" : "#ddd")};
   border-radius: 20px;
   padding: 10px 20px;
   font-size: 0.9rem;
@@ -122,7 +109,7 @@ const Tag = styled.div`
     color 0.3s ease;
 
   &:hover {
-    background-color: ${(props) => (props.selected ? "#04012D" : "#04012D")};
+    background-color: ${(props) => (props.selected ? "#04012D" : "#AAD6E7")};
     color: #ffffff;
   }
 
@@ -138,8 +125,8 @@ const Tag = styled.div`
 `;
 
 const VoteButton = styled.button`
-  background-color: #04012d;
-  color: #ffffff;
+  background-color: #aad6e7;
+  color: #724b2e;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -149,7 +136,7 @@ const VoteButton = styled.button`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    background-color: #04012d;
+    background-color: #71b3d7;
   }
 
   @media (max-width: 768px) {
@@ -183,6 +170,7 @@ const CloseButton = styled.button`
 const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
   const [selectedAttractiveTags, setSelectedAttractiveTags] = useState([]);
   const [selectedEmotionTags, setSelectedEmotionTags] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const matchUpId = 1;
   const matchUpMovieId = 2;
@@ -220,6 +208,8 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
+
     const charmPoint = Object.keys(attractiveTagsMap).reduce((acc, tag) => {
       acc[attractiveTagsMap[tag]] = selectedAttractiveTags.includes(tag)
         ? 1
@@ -237,18 +227,34 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
       emotionPoint,
     };
 
+    const MINIMUM_SPINNER_TIME = 1000;
+    const startTime = Date.now();
+
     try {
       const response = await axiosInstance.post(
         `/api/matchups/${matchUpId}/movies/${matchUpMovieId}/vote`,
         payload
       );
-      if (response.data.response === "SUCCESS") {
-        toast.success("투표가 성공적으로 완료되었습니다!");
-        onClose();
-      }
+
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MINIMUM_SPINNER_TIME - elapsedTime);
+
+      setTimeout(() => {
+        if (response.data.response === "SUCCESS") {
+          toast.success("투표가 성공적으로 완료되었습니다!");
+          onClose();
+        }
+        setIsSubmitting(false);
+      }, remainingTime);
     } catch (error) {
-      console.error("투표 요청 실패:", error);
-      toast.error("투표 중 문제가 발생했습니다. 다시 시도해주세요.");
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MINIMUM_SPINNER_TIME - elapsedTime);
+
+      setTimeout(() => {
+        console.error("투표 요청 실패:", error);
+        toast.error("프로필 저장에 실패했습니다.\n다시 시도해주세요.");
+        setIsSubmitting(false);
+      }, remainingTime);
     }
   };
 
@@ -256,6 +262,7 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
 
   return (
     <ModalBackground>
+      {isSubmitting && <Spinner />}
       <ModalContainer>
         <CloseButton onClick={onClose}>×</CloseButton>
 
@@ -263,7 +270,6 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
           <img src={imageUrl} alt={`${movieTitle} 이미지`} />
         </ImageContainer>
         <Title>{movieTitle}의 매력 포인트를 알려주세요</Title>
-        <Description>복수 선택이 가능합니다</Description>
         <TagsContainer>
           {Object.keys(attractiveTagsMap).map((tag) => (
             <Tag
@@ -275,8 +281,6 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
             </Tag>
           ))}
         </TagsContainer>
-        <Title>{movieTitle}의 감정 포인트를 알려주세요</Title>
-        <Description>복수 선택이 가능합니다</Description>
         <TagsContainer>
           {Object.keys(emotionTagsMap).map((tag) => (
             <Tag

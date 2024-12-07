@@ -10,6 +10,12 @@ const PosterWrapper = styled.div`
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
   &:hover .overlay {
     opacity: 1;
   }
@@ -36,8 +42,8 @@ const Overlay = styled.div`
 `;
 
 const VoteButton = styled.button`
-  background-color: #1ee5b0;
-  color: #fff;
+  background-color: #aad6e7;
+  color: #724b2e;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -89,7 +95,7 @@ Poster.propTypes = {
   src: PropTypes.string.isRequired,
   movieTitle: PropTypes.string.isRequired,
   movieId: PropTypes.number.isRequired,
-  isVoteEnded: PropTypes.bool.isRequired, // 투표 종료 상태 전달
+  isVoteEnded: PropTypes.bool.isRequired,
 };
 
 export default Poster;

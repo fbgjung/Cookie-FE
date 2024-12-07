@@ -7,6 +7,7 @@ import { requestNotificationPermission } from "../firebase/firebaseMessaging";
 import useUserStore from "../stores/useUserStore";
 import axios from "axios";
 import useAuthStore from "../stores/useAuthStore";
+import Spinner from "../components/common/Spinner";
 
 const MainContainer = styled.div`
   background-color: #fff4b9;
@@ -14,6 +15,7 @@ const MainContainer = styled.div`
   padding: 4.375rem 0 0 0;
   margin: 0 auto;
 `;
+
 const MainTitle = styled.div`
   display: flex;
   flex-direction: column;
@@ -119,13 +121,14 @@ function SignUpGenre() {
   ];
 
   const [selectedGenreId, setSelectedGenreId] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const userProfileData = location.state;
+  const [showSpinner, setShowSpinner] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [pushEnabled, setPushEnabled] = useState("false");
   const [emailEnabled, setEmailEnabled] = useState("false");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userProfileData = location.state;
   const logIn = useAuthStore((state) => state.logIn);
 
   const handleButtonClick = (id) => {
@@ -140,38 +143,19 @@ function SignUpGenre() {
     }
     setShowModal(true);
   };
-  const handlePushNotification = () => {
-    handleCloseModal("true", "false");
-  };
-
-  const handleEmailNotification = () => {
-    handleCloseModal("false", "true");
-  };
-
-  const handleCloseModal = (pushValue, emailValue) => {
-    setPushEnabled(pushValue);
-    setEmailEnabled(emailValue);
-
-    setShowModal(false);
-
-    if (!isSubmitting) {
-      handleFormDataSubmission(pushValue, emailValue);
-    }
-  };
 
   const handleFormDataSubmission = async (pushValue, emailValue) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
+    setShowSpinner(true);
 
     try {
       const fcmToken = await requestNotificationPermission();
       if (!fcmToken) {
         toast.error("FCM 토큰을 가져올 수 없습니다.");
-        setIsSubmitting(false);
+        setShowSpinner(false);
         return;
       }
-
-      console.log("FCM 토큰:", fcmToken);
 
       const formData = new FormData();
       formData.append("socialProvider", userProfileData.socialProvider);
@@ -183,10 +167,6 @@ function SignUpGenre() {
       formData.append("genreId", selectedGenreId.toString());
       formData.append("profileImage", userProfileData.profileImage);
       formData.append("fcmToken", fcmToken);
-
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/register`,
@@ -216,22 +196,19 @@ function SignUpGenre() {
         console.log("저장된 유저 정보:", userInfo);
 
         logIn();
-
-        setShowModal(false);
-        setIsSubmitting(false);
-
         navigate("/");
       }
     } catch (error) {
-      console.error("오류 발생:", error);
       toast.error(`가입 실패: ${error.message}`);
     } finally {
       setIsSubmitting(false);
+      setShowSpinner(false);
     }
   };
 
   return (
     <>
+      {showSpinner && <Spinner />}
       <MainContainer>
         <MainTitle>
           <h2>선호하는 장르를</h2>
@@ -259,9 +236,11 @@ function SignUpGenre() {
         </SubmitBtn>
         {showModal && (
           <Modal
-            onClose={handleCloseModal}
-            onPushNotification={handlePushNotification}
-            onEmailNotification={handleEmailNotification}
+            onClose={() => setShowModal(false)}
+            onPushNotification={() => handleFormDataSubmission("true", "false")}
+            onEmailNotification={() =>
+              handleFormDataSubmission("false", "true")
+            }
           />
         )}
       </MainContainer>
