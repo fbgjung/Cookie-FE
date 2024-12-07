@@ -31,11 +31,11 @@ const Container = styled.div`
 const sampleData = {
   matchUpTitle: "테스트 빅매치",
   startAt: "2024-11-21T17:21:03",
-  entAt: "2024-12-05T02:48:05",
+  entAt: "2024-12-08T02:48:05",
   movie1: {
     movieTitle: "테스트 영화 1",
     moviePoster: null,
-    movieLike: 14,
+    movieLike: 12,
     charmPoint: {
       ost: 20,
       direction: 18,
