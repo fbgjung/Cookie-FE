@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 const ReviewSection = styled.div`
-  margin-top: 20px;
+  margin-top: 0.3rem;
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
@@ -18,8 +18,6 @@ const ReviewTitle = styled.h3`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-
-  gap: 15px;
 `;
 
 const ReviewTicket = styled.div`
@@ -31,8 +29,8 @@ const ReviewTicket = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   width: 100%;
-  min-height: 180px;
-  padding: 15px;
+  min-height: 150px;
+  padding: 10px;
   box-sizing: border-box;
   cursor: pointer;
 

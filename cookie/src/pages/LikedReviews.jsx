@@ -15,7 +15,7 @@ const Container = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   position: relative;
-  min-height: 100vh;
+  min-height: 80vh;
 
   @media (max-width: 768px) {
     padding-top: 15px;
@@ -158,12 +158,12 @@ const LikedReviews = () => {
   return (
     <Container>
       <BackButton
-        src="/src/assets/images/mypage/ic_back.svg"
-        alt="뒤로가기"
+        src="/assets/images/mypage/ic_back.svg"
+        alt="Back"
         onClick={handleBackClick}
       />
       <Title>좋아하는 리뷰</Title>
-      <HeartIcon src="/src/assets/images/mypage/red-heart.svg" alt="하트" />
+      <HeartIcon src="/assets/images/mypage/red-heart.svg" alt="하트" />
       {reviews.length > 0 ? (
         <ReviewList title="" reviews={reviews} lastReviewRef={lastReviewRef} />
       ) : (
