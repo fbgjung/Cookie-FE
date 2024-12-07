@@ -23,6 +23,7 @@ import ReviewDetail from "../pages/ReviewDetail";
 import AdminMovie from "../pages/admin/AdminMovie";
 import CastDetail from "../components/movieDetailPage/CastDetail";
 import ErrorPage from "../pages/ErrorPage";
+import MyAllReviewList from "../pages/MyAllReviewList";
 
 export const AppRouteDef = {
   Main: {
@@ -63,6 +64,15 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <ErrorPage />
+      </PrivateRoute>
+    ),
+  },
+
+  myAllReviewList: {
+    path: "/myAllReviewList",
+    element: (
+      <PrivateRoute>
+        <MyAllReviewList />
       </PrivateRoute>
     ),
   },
