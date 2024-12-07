@@ -109,6 +109,7 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
       state: { 
         movieId: movie.id,
         movieTitle: movie.title,
+        posterUrl: posterUrl,
        },
     });
   };

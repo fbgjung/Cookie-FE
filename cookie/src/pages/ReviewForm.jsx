@@ -15,6 +15,18 @@ const FormWrapper = styled.div`
   height: 100vh;
 `;
 
+const PosterWrapper = styled.div`
+  display: flex;
+  justify-content: left;
+  margin: 20px 0;
+
+  img {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+  }
+`;
+
 const RatingWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -127,6 +139,7 @@ const ReviewForm = () => {
 
   const movieTitle = state?.movieTitle || "영화 제목 없음";
   const movieId = state?.movieId;
+  const posterUrl = state?.posterUrl;
 
   if (!movieId) {
     toast.error("유효하지 않은 영화 정보입니다.");
@@ -179,6 +192,11 @@ const ReviewForm = () => {
   return (
     <FormWrapper>
       <h1>{movieTitle} 리뷰 남기기</h1>
+      {posterUrl && (
+        <PosterWrapper>
+          <img src={posterUrl} alt={`${movieTitle} 포스터`} />
+        </PosterWrapper>
+      )}
       <RatingWrapper>
         <span>평점</span>
         <div className="rating-icons">
