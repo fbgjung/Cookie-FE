@@ -140,6 +140,8 @@ const ReviewCenter = styled.div`
   .comment {
     font-size: 0.9rem;
     line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -333,7 +335,11 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              <div className="comment">{review.content}</div>
+              <div className="comment">
+                {review.content.length > 100
+                  ? `${review.content.slice(0, 130)}...`
+                  : review.content}
+              </div>
             </ReviewCenter>
             <ReviewRight>
               <div className="score">

@@ -35,7 +35,7 @@ const FormContanier = styled.div`
 
   label {
     font-size: 1rem;
-    color: var(--main);
+    color: var(--text);
   }
 
   input {
@@ -47,14 +47,15 @@ const FormContanier = styled.div`
     margin-top: 0.5rem;
     padding: 0.2rem 0.5rem;
     font-size: 1.25rem;
+    color: var(--text);
   }
 
   button {
     font-weight: bold;
     font-size: 1.25rem;
     background-color: white;
-    border: 1px solid var(--main);
-    color: var(--main);
+    border: 1px solid var(--sub);
+    color: var(--text);
     border-radius: 0.5rem;
     width: 11.7rem;
     height: 3rem;
