@@ -67,17 +67,41 @@ const FilterButtons = styled.div`
   }
 `;
 
-
-const MoviePosterWrapper = styled.div`
+const MovieInfoWrapper = styled.div`
   display: flex;
-  justify-content: center;
   margin-bottom: 20px;
+`;
 
+const MoviePoster = styled.div`
+  width: 200px;
+  height: 300px;
+  margin-right: 20px;
   img {
-    width: 200px;
-    height: 300px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 8px;
+  }
+`;
+
+const MovieDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .movie-title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .movie-info {
+    font-size: 1rem;
+    color: #888;
+    margin-top: 10px;
+
+    .info-item {
+      margin-bottom: 5px;
+    }
   }
 `;
 
@@ -177,7 +201,7 @@ const MovieReviewFeed = () => {
 
       const endpoint = showSpoilerOnly
         ? `http://localhost:8080/api/movies/${movieId}/reviews/spoiler`
-        : `http://localhost:8080/api/movies/${movieId}/reviews`
+        : `http://localhost:8080/api/movies/${movieId}/reviews`;
 
       const response = await axios.get(endpoint, {
         params: { page, size: 10 },
@@ -192,6 +216,9 @@ const MovieReviewFeed = () => {
       if (newReviews.length < 10 || response.data.response.lastPage) {
         setHasMore(false);
       }
+
+      // 영화 정보 설정
+      setMovieInfo(response.data.response);
     } catch (error) {
       console.error("리뷰 불러오기 실패:", error);
     } finally {
@@ -213,7 +240,7 @@ const MovieReviewFeed = () => {
   const handleReviewClick = (reviewId) => {
     navigate(`/reviews/${reviewId}`);
   };
-
+  
   return (
     <ReviewFeedWrapper>
       {/* 영화 정보 한 번만 표시 */}
@@ -223,9 +250,19 @@ const MovieReviewFeed = () => {
             <h1>Cookie Review</h1>
             <h2>{movieInfo.title} 의 작품 리뷰</h2>
           </ReviewTitle>
-          <MoviePosterWrapper>
-            <img src={movieInfo.poster} alt={movieInfo.title} />
-          </MoviePosterWrapper>
+          <MovieInfoWrapper>
+            <MoviePoster>
+              <img src={movieInfo.poster} alt={movieInfo.title} />
+            </MoviePoster>
+            <MovieDetails>
+              <div className="movie-title">{movieInfo.title}</div>
+              <div className="movie-info">
+                <div className="info-item">등급: {movieInfo.certification}</div>
+                <div className="info-item">상영 시간: {movieInfo.runtime}분</div>
+                <div className="info-item">개봉일: {new Date(movieInfo.releasedAt).toLocaleDateString()}</div>
+              </div>
+            </MovieDetails>
+          </MovieInfoWrapper>
         </>
       )}
 
