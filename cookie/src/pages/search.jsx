@@ -73,38 +73,48 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
   const [activeTab, setActiveTab] = useState("movie"); // 활성 탭 상태
   const [results, setResults] = useState([]); // 검색 결과
+  const [defaultResults, setDefaultResults] = useState([]);
   const [page, setPage] = useState(0); // 페이지 번호
   const [hasMore, setHasMore] = useState(true); // 추가 데이터 여부
   const [showTopButton, setShowTopButton] = useState(false); // 상단 이동 버튼 상태
 
   const fetchSearchResults = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/search", {
-        params: { type: activeTab, keyword: searchTerm, page, size:10 },
-      });
-
-      const newResults = response.data || []; // 데이터가 없을 때 빈 배열로 초기화
-      console.log(newResults);
-
-      setResults((prevResults) =>
-        page === 0 ? newResults : [...prevResults, ...newResults]
-      );
-
-      setHasMore(!response.data?.last); // 마지막 페이지 여부
+      if (searchTerm.trim()) {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/search`, {
+          params: { type: activeTab, keyword: searchTerm, page, size: 10 },
+        });
+        const newResults = response.data || [];
+        console.log(newResults);
+        setResults((prevResults) =>
+          page === 0 ? newResults : [...prevResults, ...newResults]
+        );
+        setHasMore(!response.data?.last);
+      } else {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/search/default`);
+        const defaultResults = response.data.response || [];
+        console.log("디폴트",defaultResults);
+        setDefaultResults(defaultResults);
+        setHasMore(false); 
+      }
     } catch (error) {
       console.error("Error fetching search results:", error);
+      setResults([]);
       setHasMore(false);
     }
   };
-
+  
   useEffect(() => {
     if (searchTerm.trim()) {
       setPage(0);
       fetchSearchResults();
     } else {
-      setResults([]); // 검색어가 없으면 결과 초기화
+      if (defaultResults.length === 0) {
+        fetchSearchResults();
+      }
     }
   }, [searchTerm, activeTab]);
+  
 
   useEffect(() => {
     if (page > 0) {
@@ -177,6 +187,7 @@ const Search = () => {
           onMovieClick={handleMovieClick}
           isLoading={results.length === 0 && searchTerm.trim()} // 로딩 상태 처리
           activeTab={activeTab}
+          defaultResults={defaultResults || []}
         />
       </ContentWrapper>
       {showTopButton && <TopButton onClick={scrollToTop} />}
