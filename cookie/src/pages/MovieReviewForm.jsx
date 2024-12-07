@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const PageWrapper = styled.div`
