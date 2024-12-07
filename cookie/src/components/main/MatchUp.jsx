@@ -20,7 +20,8 @@ const MatchUpContainer = styled.div`
   .matchUp__movie {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    height: 100%;
     align-items: center;
     background-color: var(--ticket-bg);
     transition: background-color 0.3s ease;
@@ -35,6 +36,8 @@ const MatchUpContainer = styled.div`
     transition: background-color 0.3s ease;
     width: 100%;
     height: 100%;
+    top: 0;
+    left: 0;
     border-radius: 0.75rem;
     &:hover {
       background-color: rgba(0, 0, 0, 0.5);
@@ -74,8 +77,10 @@ const MatchUpContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: start;
     gap: 2rem;
   }
+
   .matchUp__movie--container {
     display: flex;
     flex-direction: row;
@@ -89,10 +94,20 @@ const MatchUpContainer = styled.div`
     flex-direction: column;
     align-items: center;
     width: 90px;
+    flex-grow: 1;
   }
 
   .matchUp__movie--list p {
     text-align: center;
+    padding: 0 0.1rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    line-height: 1.1rem;
+    height: 2.3rem;
+    font-size: 0.9rem;
   }
 
   .matchUp__movie--poster {
@@ -101,23 +116,92 @@ const MatchUpContainer = styled.div`
     width: 83px;
     height: 118px;
   }
-
   .matchUp__movie--icon {
     position: absolute;
     top: 5.2rem;
     left: 5.8rem;
   }
+
+  @media (max-width: 768px) {
+    .matchUp__title {
+      font-size: 0.8rem;
+    }
+    .matchUp__movie {
+      width: 15rem;
+      height: 11.25rem;
+      padding: 0.625rem;
+    }
+    .matchUp__overlay button {
+      width: 8rem;
+      height: 3.125rem;
+      padding: 0.8rem;
+    }
+    .matchUp__overlay button {
+      font-size: 0.8rem;
+    }
+    .matchUp__movie--title {
+      font-size: 0.8rem;
+      border-radius: 0.75rem;
+      padding: 0.19rem 0.5rem;
+      margin-top: 0.3rem;
+    }
+    .matchUp__content {
+      gap: 1rem;
+    }
+    .matchUp__movie--container {
+      margin-top: 0.4rem;
+    }
+    .matchUp__movie--list {
+      width: 3rem;
+    }
+    .matchUp__movie--list p {
+      font-size: 0.62rem;
+      line-height: 0.78rem;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      text-overflow: ellipsis;
+      height: 1.6rem;
+      text-align: start;
+    }
+    .matchUp__movie--poster {
+      width: 4.3rem;
+      height: 6rem;
+    }
+    .matchUp__movie--icon {
+      position: absolute;
+      top: 7vh;
+      left: 17vw;
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+
+  @media (max-width: 390px) {
+    .matchUp__movie--icon {
+      top: 4.4rem;
+      left: 4.1rem;
+      width: 44px;
+      height: 44px;
+    }
+    .matchUp__movie--list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 42px;
+    }
+    .matchUp__movie--list p {
+      font-size: 0.7rem;
+    }
+  }
 `;
 
-function MatchUp({ matchDate }) {
-  const today = new Date();
-  matchDate = new Date(matchUp.startAt);
-  const leftTime = matchDate - today;
-  const leftDay = Math.ceil(leftTime / (1000 * 3600 * 24));
-  const navigate = useNavigate();
-
+function MatchUp() {
   const [matchUps, setMatchUps] = useState([]);
   const [access, setAccess] = useState(true);
+  const [leftDays, setLeftDays] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchMainPageMovies = async () => {
       try {
@@ -125,6 +209,7 @@ function MatchUp({ matchDate }) {
           `${serverBaseUrl}/api/movies/mainMatchUps`
         );
         const matchUpData = response.data.response.matchUps;
+        console.log(matchUpData);
         if (matchUpData) {
           setMatchUps(matchUpData);
 
@@ -136,6 +221,10 @@ function MatchUp({ matchDate }) {
           } else {
             setAccess(response.data.response.access);
           }
+          const matchDate = new Date(matchUpData[0].startAt);
+          const leftTime = matchDate - today;
+          const leftDay = Math.ceil(leftTime / (1000 * 3600 * 24));
+          setLeftDays(leftDay);
         }
       } catch (error) {
         console.error("API 호출 오류 발생:", error);
@@ -145,11 +234,20 @@ function MatchUp({ matchDate }) {
     fetchMainPageMovies();
   }, []);
 
+  const getDisplayText = () => {
+    if (leftDays === 0) {
+      return "D-DAY";
+    } else if (leftDays < 0) {
+      return "..🤔";
+    } else {
+      return `D-${leftDays}`;
+    }
+  };
   return (
     <MatchUpContainer>
       <div className="matchUp__title">
         <img src={matchUp} alt="matchUp_icon" />
-        <h2> 이번주 영화 매치업! D-{leftDay}</h2>
+        <h2> 이번주 영화 매치업! {getDisplayText()}</h2>
       </div>
       <div className="matchUp__content">
         {matchUps.map((matchUp) => (

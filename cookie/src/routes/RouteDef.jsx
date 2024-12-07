@@ -225,10 +225,16 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
-
-  castDetail: {
-    // path: ["/movie/actor/:id", "/movie/director/:id"],
-    path: "/movie/cast",
+  actorDetail: {
+    path: "/movie/actor/:id",
+    element: (
+      <PrivateRoute>
+        <CastDetail />
+      </PrivateRoute>
+    ),
+  },
+  directorDetail: {
+    path: "/movie/director/:id",
     element: (
       <PrivateRoute>
         <CastDetail />
