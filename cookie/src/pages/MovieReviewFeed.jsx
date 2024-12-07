@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
@@ -70,12 +70,12 @@ const FilterButtons = styled.div`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0px;
 `;
 
 const ReviewTicket = styled.div`
   display: flex;
-  background-image: url("/src/assets/images/mypage/reviewticket.svg");
+  background-image: url("/images/reviewticket.svg");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -160,6 +160,7 @@ const ReviewRight = styled.div`
 
 const MovieReviewFeed = () => {
   const navigate = useNavigate();
+  const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
   const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
   const [page, setPage] = useState(0);
@@ -173,8 +174,8 @@ const MovieReviewFeed = () => {
       setIsLoading(true);
 
       const endpoint = showSpoilerOnly
-        ? "http://localhost:8080/api/reviews/spoiler"
-        : "http://localhost:8080/api/reviews";
+        ? `http://localhost:8080/api/movies/${movieId}/reviews/spoiler`
+        : `http://localhost:8080/api/movies/${movieId}/reviews`
 
       const response = await axios.get(endpoint, {
         params: { page, size: 10 },
@@ -194,7 +195,7 @@ const MovieReviewFeed = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, hasMore, page, showSpoilerOnly]);
+  }, [isLoading, hasMore, page, showSpoilerOnly, movieId]);
 
   useEffect(() => {
     fetchReviews();
@@ -215,7 +216,7 @@ const MovieReviewFeed = () => {
     <ReviewFeedWrapper>
       <ReviewTitle>
         <h1>Cookie Review</h1>
-        <h2>"소년시절의 나" 의 작품 리뷰</h2>
+        <h2>{movieId} 의 작품 리뷰</h2>
       </ReviewTitle>
       <FilterButtons>
         <button
@@ -262,7 +263,7 @@ const MovieReviewFeed = () => {
                   (_, i) => (
                     <img
                       key={`${review.reviewId}-score-${i}`}
-                      src="/src/assets/images/mypage/cookiescore.svg"
+                      src="/images/cookiescore.svg"
                       alt="score"
                     />
                   )

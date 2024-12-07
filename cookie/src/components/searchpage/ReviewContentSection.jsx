@@ -154,7 +154,7 @@ const ReviewContentSection = ({
           {Array.from({ length: cookieScoreCount }).map((_, i) => (
             <img
               key={i}
-              src="/src/assets/images/mypage/cookiescore.svg"
+              src="/images/cookiescore.svg"
               alt="Cookie Score"
             />
           ))}
@@ -162,7 +162,7 @@ const ReviewContentSection = ({
       </div>
 
       <div className="options" onClick={toggleMenu}>
-        <img src="/src/assets/images/mypage/More.svg" alt="More Options" />
+        <img src="images/more.svg" alt="More Options" />
         {isMenuOpen && (
           <DropdownMenu className="dropdown-menu">
             {isFromReviewList ? (
