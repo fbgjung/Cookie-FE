@@ -76,6 +76,7 @@ const MatchUpContainer = styled.div`
     justify-content: center;
     gap: 2rem;
   }
+
   .matchUp__movie--container {
     display: flex;
     flex-direction: row;
@@ -106,6 +107,57 @@ const MatchUpContainer = styled.div`
     position: absolute;
     top: 5.2rem;
     left: 5.8rem;
+  }
+  @media (max-width: 768px) {
+    .matchUp__title {
+      font-size: 0.8rem;
+    }
+    .matchUp__movie {
+      width: 15rem;
+      height: 11.25rem;
+      padding: 0.625rem;
+    }
+    .matchUp__overlay button {
+      width: 6.25rem;
+      height: 3.125rem;
+    }
+    .matchUp__movie--title {
+      font-size: 0.8rem;
+      border-radius: 0.75rem;
+      padding: 0.19rem 0.5rem;
+      margin-top: 0.3rem;
+    }
+    .matchUp__content {
+      gap: 1rem;
+    }
+    .matchUp__movie--container {
+      margin-top: 0.4rem;
+    }
+    .matchUp__movie--list {
+      width: 3rem;
+    }
+    .matchUp__movie--list p {
+      font-size: 0.8rem;
+    }
+    .matchUp__movie--poster {
+      width: 4.3rem;
+      height: 6rem;
+    }
+    .matchUp__movie--icon {
+      position: absolute;
+      top: 11vh;
+      left: 16vw;
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+  @media (max-width: 390px) {
+    .matchUp__movie--icon {
+      top: 4.4rem;
+      left: 3.6rem;
+      width: 44px;
+      height: 44px;
+    }
   }
 `;
 
