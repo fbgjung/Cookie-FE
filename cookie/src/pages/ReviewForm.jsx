@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 // styled-components 정의
 const FormWrapper = styled.div`
   width: 90%;
-  margin: 50px auto;
+  margin: 30px auto;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 16px;
@@ -56,7 +56,7 @@ const RatingWrapper = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 500px;
+  height: 450px;
   min-height: 100px;
   border: 1px solid #ddd;
   border-radius: 8px;
