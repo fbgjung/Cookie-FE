@@ -12,17 +12,17 @@ const PosterContainer = styled.div`
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  width: 80%;
+  width: 90%;
   max-width: 1000px;
 
   @media (max-width: 768px) {
     padding: 20px;
-    width: 85%;
+    width: 90%;
   }
 
   @media (max-width: 480px) {
     padding: 15px;
-    width: 95%;
+    width: 85%;
   }
 `;
 
