@@ -102,16 +102,15 @@ const SetProfileImage = ({ profileImage, onChange }) => {
   return (
     <ProfileContainer>
       <BackButton
-        src="/src/assets/images/mypage/ic_back.svg"
+        src="/assets/images/mypage/ic_back.svg"
         alt="Back"
         onClick={handleBackClick}
       />
       <ImageWrapper htmlFor="file-input">
         <ProfileImage
           src={
-            profileImage.preview ||
-            "/src/assets/images/mypage/setdefaultImage.svg"
-          } // 미리보기 URL 사용
+            profileImage?.preview || "/assets/images/mypage/setdefaultImage.svg"
+          }
           alt="Profile"
         />
         <HiddenInput

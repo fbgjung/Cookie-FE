@@ -61,7 +61,7 @@ const SubTitle = styled.div`
 `;
 
 const ThemeContainer = styled.div`
-  margin: 1rem auto;
+  margin: 1rem auto 0; /* 하단 여백 제거 */
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -77,23 +77,21 @@ const ThemeContainer = styled.div`
   @media (max-width: 480px) {
     gap: 0.6rem;
     width: 65%;
-    margin: 1rem auto;
+    margin: 1rem auto 0;
   }
 `;
 
 const ThemeBtn = styled.button`
-  background-color: ${(props) =>
-    props.$isSelected ? "#aad6e7" : "white"}; /* 선택된 경우 배경색 */
-  color: ${(props) =>
-    props.$isSelected ? "#724b2e" : "#724b2e"}; /* 텍스트 색상 */
-  border-radius: 12px; /* 둥근 모서리 */
-  padding: 0.8rem 1rem; /* 내부 여백 */
-  border: 1px solid #aad6e7; /* 테두리 */
+  background-color: ${(props) => (props.$isSelected ? "#aad6e7" : "white")};
+  color: ${(props) => (props.$isSelected ? "#724b2e" : "#724b2e")};
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  border: 1px solid #aad6e7;
   cursor: pointer;
 
   &:hover {
-    background-color: #aad6e7; /* 호버 시 배경색 */
-    color: #724b2e; /* 호버 시 텍스트 색상 */
+    background-color: #aad6e7;
+    color: #724b2e;
   }
 
   @media (max-width: 768px) {
