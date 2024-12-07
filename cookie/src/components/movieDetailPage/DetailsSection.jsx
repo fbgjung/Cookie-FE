@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
+import axiosInstance from "../../api/auth/axiosInstance";
+import { useState, useEffect } from "react";
 
 const DetailsWrapper = styled.div`
   display: flex;
@@ -65,12 +67,42 @@ const MovieScore = styled.div`
 `;
 
 const HeartIcon = styled(FaHeart)`
-  color: #ff4d4d;
+  color: ${(props) => (props.liked ? "#ff4d4d" : "#ccc")};
   font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    color: #ff4d4d;
+  }
 `;
 
-const DetailsSection = ({ posterUrl, categories = [], description, likes, score, movie }) => {
+const DetailsSection = ({ posterUrl, categories = [], description, likes, score, movie, liked }) => {
   const navigate = useNavigate();
+
+  const [likeCount, setLikeCount] = useState(likes);
+  const [likeValid, setLikeValid] = useState(false);
+
+  useEffect(() => {
+    setLikeValid(liked);
+    setLikeCount(likes);
+  }, [liked, likes]);
+
+  const handleLikeClick = async () => {
+    const previousLiked = likeValid;
+    const previousLikeCount = likeCount;
+
+    setLikeValid(!previousLiked);
+    setLikeCount(previousLiked ? previousLikeCount - 1 : previousLikeCount + 1);
+
+    try {
+      await axiosInstance.post(`/api/users/movie-like/${movie.id}`);
+    } catch (error) {
+      console.error("좋아요 처리 중 오류:", error);
+
+      setLikeValid(previousLiked);
+      setLikeCount(previousLikeCount);
+    }
+  };
 
   const handleWriteReviewClick = () => {
     navigate("/reviews/write", {
@@ -97,7 +129,7 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
             리뷰 작성하기
           </button>
           <MovieScore>
-            <HeartIcon /> {likes} | 평점: {score}
+            <HeartIcon liked={likeValid} onClick={handleLikeClick} /> {likeCount} | 평점: {score}
           </MovieScore>
         </MovieEvaluationFunction>
       </MovieDetailRight>

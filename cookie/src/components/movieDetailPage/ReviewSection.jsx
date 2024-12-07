@@ -46,6 +46,10 @@ const ReviewWrapper = styled.div`
     gap: 15px;
     margin-top: 20px;
 
+    @media (max-width: 600px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
     .review-item {
       position: relative;
       background-image: url("/images/reviewticket.svg"); // 리뷰 티켓 이미지 경로
@@ -129,13 +133,6 @@ const ReviewDetail = styled.div`
 const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) => {
   const navigate = useNavigate();
   console.log(reviews);
-
-  const handleWriteReviewClick = () => {
-    navigate("/reviews/write", {
-      state: { movie },
-    });
-    
-  };
 
   return (
     <ReviewWrapper>

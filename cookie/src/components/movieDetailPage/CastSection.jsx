@@ -44,9 +44,9 @@ const CastSection = ({ actors = [], director }) => {
 
   const handleCastClick = (id, role) => {
     if (role === 'director') {
-      navigate(`/director/${id}`);
+      navigate(`/movie/director/${id}`);
     } else {
-      navigate(`/actor/${id}`);
+      navigate(`/movie/actor/${id}`);
     }
   };
 
