@@ -92,6 +92,7 @@ const CloseButton = styled.button`
 
 const Notification = () => {
   const notifications = useNotificationStore((state) => state.notifications);
+
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -110,7 +111,7 @@ const Notification = () => {
   };
 
   useEffect(() => {
-    console.log("컴포넌트 상태 알림 변경:", notifications);
+    console.log("알림 업데이트:", notifications);
 
     if (showDropdown) {
       document.addEventListener("mousedown", handleOutsideClick);
@@ -131,6 +132,7 @@ const Notification = () => {
         onClick={handleNotificationClick}
       />
       {notifications.length > 0 && <Badge>{notifications.length}</Badge>}
+
       {showDropdown && (
         <NotificationDropdown ref={dropdownRef}>
           <CloseButton onClick={handleCloseClick}>×</CloseButton>
@@ -138,7 +140,8 @@ const Notification = () => {
             <ul>
               {notifications.map((notif, index) => (
                 <li key={index}>
-                  {notif.body} <br />
+                  <strong>{notif.title}</strong>
+                  <p>{notif.body}</p>
                   <small>{notif.timestamp}</small>
                 </li>
               ))}
