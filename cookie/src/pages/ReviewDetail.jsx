@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../api/auth/axiosInstance";
-import DetailHeader from "../components/mypage/DetailHeader";
+import DetailHeader from "../components/searchpage/ReviewDetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
