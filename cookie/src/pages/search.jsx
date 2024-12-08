@@ -40,7 +40,7 @@ const Tabs = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 
   button {
     padding: 10px 20px;
