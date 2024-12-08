@@ -20,8 +20,8 @@ const ChartTitle = styled.h3`
   font-size: 1.2rem;
   color: #333;
   margin-bottom: 20px;
+  text-align: left;
 `;
-
 const GenreChart = ({ data }) => {
   return (
     <ChartContainer>

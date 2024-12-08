@@ -14,7 +14,7 @@ const FavoriteTitle = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 10px;
   margin-left: 5px;
-  color: #04012d;
+  color: #333;
   font-weight: bold;
 `;
 
@@ -44,12 +44,12 @@ const FavoriteItem = styled.div`
 
 const FavoriteText = styled.span`
   font-size: 1rem;
-  color: #cc5283;
+  color: #724b2e;
   font-weight: bold;
 `;
 
 const FavoriteIcon = styled.div`
-  color: #cc5283;
+  color: #724b2e;
   font-size: 1rem;
 `;
 

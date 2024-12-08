@@ -39,13 +39,13 @@ const SpecialMovieList = styled.div`
     align-items: start;
     justify-content: center;
     cursor: pointer;
-    width: 124px;
+    width: 7.75rem;
   }
 
   .specialMovie__list--info img {
     border-radius: 0.75rem;
-    width: 124px;
-    height: 177px;
+    width: 7.75rem;
+    height: 11.07rem;
   }
 
   .specialMovie__list--info p {
@@ -54,7 +54,53 @@ const SpecialMovieList = styled.div`
 
   .movie__info--sub {
     color: #afafaf;
-    font-size: 13px;
+    font-size: 0.82rem;
+  }
+  @media (max-width: 768px) {
+    .specialMovie__title {
+      font-size: 0.8rem;
+    }
+    .movie__categoty {
+      gap: 0.3rem;
+      margin: 0.3rem 0 0.3rem 0;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .specialMovie__list {
+      gap: 0.5rem;
+      padding: 0.625rem 0;
+      width: 5.875rem;
+    }
+    .specialMovie__list p {
+      font-size: 0.62rem;
+    }
+    .specialMovie__list--info img {
+      border-radius: 0.75rem;
+      width: 5.875rem;
+      height: 9.1875rem;
+    }
+    .specialMovie__list--info p {
+      text-align: start;
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 390px) {
+    .specialMovie__list--info {
+      gap: 0.3rem;
+      padding: 0.625rem 0;
+    }
+    .specialMovie__list {
+      width: 5.35rem;
+    }
+    .specialMovie__list--info img {
+      border-radius: 0.75rem;
+      width: 5.375rem;
+      height: 8.6875rem;
+    }
+    .specialMovie__list--info p {
+      font-size: 0.65rem;
+    }
   }
 `;
 
@@ -66,6 +112,11 @@ const ThemeBtn = styled.button`
   font-size: 1rem;
   color: ${(props) => (props.$isSelected ? "var(--text)" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
+
+  @media (max-width: 768px) {
+    margin: 0 0.7rem 0.5rem 0;
+    font-size: 0.9rem;
+  }
 `;
 
 const CategoryBtn = styled.button`
@@ -82,6 +133,11 @@ const CategoryBtn = styled.button`
     color: var(--text);
   }
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 0.4rem 0.8rem;
+  }
 `;
 
 function SpecialMovie({ categorydata }) {
@@ -158,7 +214,7 @@ function SpecialMovie({ categorydata }) {
       <SpecialMovieList>
         <div className="specialMovie__title">
           <img src={specialIcon} alt="special_icon" />
-          <h2>뭘 좋아할지 몰라서 다준비했어(이름추천받아요)</h2>
+          <h2>뭘 좋아할지 몰라서 다준비했어</h2>
         </div>
         <div>
           <div>

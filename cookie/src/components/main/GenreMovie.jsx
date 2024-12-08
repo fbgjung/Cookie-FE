@@ -15,8 +15,7 @@ const GenreMovieList = styled.div`
     margin-bottom: 1rem;
   }
   .genreBtn__contianer {
-    margin-bottom: 1rem;
-    padding: 0 0.5rem;
+    margin-bottom: 0.8rem;
   }
   .genre__movie {
     display: flex;
@@ -37,17 +36,63 @@ const GenreMovieList = styled.div`
 
   .genre__movie--list img {
     border-radius: 0.75rem;
-    width: 124px;
-    height: 177px;
+    width: 7.75rem;
+    height: 11.07rem;
   }
   .genre__movie--list p {
     text-align: start;
-    width: 124px;
+    width: 7.75rem;
   }
 
   .genre__info--sub {
     color: #afafaf;
-    font-size: 13px;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 768px) {
+    .genre__title {
+      font-size: 0.8rem;
+    }
+    .genre__movie {
+      gap: 0.625rem;
+      padding: 0.625rem 0;
+    }
+    .genre__movie p {
+      font-size: 0.7rem;
+    }
+    .genre__movie--list {
+      width: 5.7rem;
+      gap: 0.5rem;
+    }
+    .genre__movie--list img {
+      border-radius: 0.75rem;
+      width: 5.875rem;
+      height: 9.1875rem;
+    }
+    .genre__movie--list p {
+      text-align: start;
+      font-size: 0.7rem;
+      width: auto;
+    }
+    .genre__info--sub {
+      font-size: 0.7rem;
+    }
+  }
+  @media (max-width: 390px) {
+    .genre__movie {
+      gap: 0.3rem;
+    }
+    .genre__movie--list {
+      width: 5.35rem;
+    }
+    .genre__movie--list img {
+      border-radius: 0.75rem;
+      width: 5.375rem;
+      height: 8.6875rem;
+    }
+    .genre__movie--list p {
+      font-size: 0.65rem;
+    }
   }
 `;
 
@@ -59,6 +104,10 @@ const GenreBtn = styled.button`
   font-size: 1rem;
   color: ${(props) => (props.$isSelected ? "var(--text)" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
+  @media (max-width: 768px) {
+    margin: 0 0.7rem 0.5rem 0;
+    font-size: 0.9rem;
+  }
 `;
 
 function GenreMovie({ categorydata }) {

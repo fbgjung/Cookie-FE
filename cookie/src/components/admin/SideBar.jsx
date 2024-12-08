@@ -11,7 +11,7 @@ import GlobalStyle from "../../styles/global";
 
 const PageNav = styled.div`
   width: 409px;
-  background-color: var(--main);
+  background-color: var(--sub);
   height: 100vh;
   margin-right: 2rem;
   padding: 1.5rem;
@@ -31,6 +31,7 @@ const SideBarTitle = styled.div`
   span {
     margin-right: 0.8rem;
     font-weight: bold;
+    color: var(--text);
   }
   button {
     background: none;
@@ -62,7 +63,7 @@ const SideBarContainer = styled.div`
     cursor: pointer;
   }
   .sidebar__menu:hover {
-    color: var(--main);
+    color: var(--text);
   }
   img {
     margin-right: 0.5rem;

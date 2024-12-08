@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 const ReviewSection = styled.div`
-  margin-top: 20px;
+  margin-top: 0.3rem;
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
@@ -18,21 +18,19 @@ const ReviewTitle = styled.h3`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-
-  gap: 15px;
 `;
 
 const ReviewTicket = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  background-image: url("/src/assets/images/mypage/reviewticket.svg");
+  background-image: url("/assets/images/mypage/reviewticket.svg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   width: 100%;
-  min-height: 180px;
-  padding: 15px;
+  min-height: 150px;
+  padding: 10px;
   box-sizing: border-box;
   cursor: pointer;
 
@@ -273,7 +271,7 @@ const ReviewList = ({ title, reviews }) => {
                   (_, i) => (
                     <img
                       key={i}
-                      src="/src/assets/images/mypage/cookiescore.svg"
+                      src="/assets/images/mypage/cookiescore.svg"
                       alt="Cookie"
                     />
                   )
@@ -282,7 +280,7 @@ const ReviewList = ({ title, reviews }) => {
               </div>
               <div className="likes">
                 <img
-                  src="/src/assets/images/mypage/hearticon.svg"
+                  src="/assets/images/mypage/hearticon.svg"
                   alt="Heart Icon"
                 />
                 {review.reviewLike || 0}
