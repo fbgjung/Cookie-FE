@@ -5,6 +5,7 @@ import fight from "../../assets/images/main/fight_icon.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
+import mixpanel from "mixpanel-browser";
 
 const MatchUpContainer = styled.div`
   position: relative;
@@ -264,6 +265,17 @@ function MatchUp() {
   //   }
   // };
   // {getDisplayText()}
+
+  const handleVoteClick = (matchUpId, matchUpTitle) => {
+    mixpanel.track("MatchUp Vote Click", {
+      matchUpId,
+      matchUpTitle,
+      timestamp: new Date().toISOString(),
+    });
+
+    navigate(`/matchup/${matchUpId}`);
+  };
+
   return (
     <MatchUpContainer>
       <div className="matchUp__title">
@@ -275,6 +287,7 @@ function MatchUp() {
           ? Array.from({ length: 2 }).map((_, index) => (
               <div key={index}>
                 <SkeletonContainer />
+
               </div>
             ))
           : matchUps.map((matchUp) => (
