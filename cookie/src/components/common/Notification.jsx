@@ -98,19 +98,19 @@ const Notification = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
+  // 알림 드롭다운 열기/닫기
   const handleNotificationClick = () => {
     setShowDropdown((prev) => !prev);
-    if (!showDropdown) {
-      clearNotifications();
-    }
   };
 
+  // 드롭다운 외부 클릭 감지
   const handleOutsideClick = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowDropdown(false);
     }
   };
 
+  // 드롭다운 닫기 버튼 클릭
   const handleCloseClick = () => {
     setShowDropdown(false);
   };
@@ -126,6 +126,13 @@ const Notification = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [showDropdown]);
+
+  // 알림 확인 후 초기화
+  useEffect(() => {
+    if (!showDropdown && notifications.length > 0) {
+      clearNotifications(); // 알림 확인 후 초기화
+    }
+  }, [showDropdown, notifications, clearNotifications]);
 
   return (
     <NotificationContainer>
