@@ -221,6 +221,39 @@ const ReviewDetail = () => {
     }
   };
 
+  const handleEditComment = async (commentId) => {
+    if (!editingCommentText.trim()) {
+      toast.error("수정할 댓글 내용을 입력해주세요.");
+      return;
+    }
+  
+    try {
+      // 서버에 수정 요청 전송
+      await axiosInstance.post(`/api/reviews/comments/${commentId}`, {
+        reviewId,
+        comment: editingCommentText,
+      });
+  
+      // 댓글 수정 완료 후 상태 업데이트
+      setReviewData((prevData) => ({
+        ...prevData,
+        comments: prevData.comments.map((comment) =>
+          comment.commentId === commentId
+            ? { ...comment, comment: editingCommentText }
+            : comment
+        ),
+      }));
+  
+      // 상태 초기화 및 알림
+      setEditingCommentId(null);
+      setEditingCommentText("");
+      toast.success("댓글이 수정되었습니다!");
+    } catch (error) {
+      console.error("Failed to edit comment:", error);
+      toast.error("댓글 수정에 실패했습니다.");
+    }
+  };
+
   const handleDeleteComment = async (commentId) => {
     console.log("삭제 요청 - commentId:", commentId); // 전달된 commentId 확인
 
@@ -355,7 +388,7 @@ const ReviewDetail = () => {
                         {editingCommentId === comment.user.userId ? (
                           <button
                             onClick={() =>
-                              handleEditComment(comment.user.userId)
+                              handleEditComment(comment.commentId)
                             }
                           >
                             저장
@@ -364,7 +397,7 @@ const ReviewDetail = () => {
                           <>
                             <button
                               onClick={() => {
-                                setEditingCommentId(comment.user.userId);
+                                setEditingCommentId(comment.commentId);
                                 setEditingCommentText(comment.comment);
                               }}
                             >
