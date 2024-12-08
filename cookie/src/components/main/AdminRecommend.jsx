@@ -115,7 +115,7 @@ function AdminRecommend() {
         <div className="recommend__movie">
           {recommendMovies.map((movie, index) => (
             <div key={index} className="recommend__movie--info">
-              <div onClick={handleMovieClick} style={{ cursor: "pointer" }}>
+              <div onClick={() => handleMovieClick(movie.id)} style={{ cursor: "pointer" }}>
                 <img src={movie.poster} alt={movie.title} />
                 <div>
                   <p>
