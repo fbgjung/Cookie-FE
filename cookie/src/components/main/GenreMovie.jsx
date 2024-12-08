@@ -177,7 +177,7 @@ function GenreMovie({ categorydata }) {
               <div
                 key={index}
                 className="genre__movie--list"
-                onClick={() => handleMovieClick(movie.movieId)}
+                onClick={() => handleMovieClick(movie.id)}
               >
                 <img src={movie.poster} alt={movie.title} />
                 <div>
