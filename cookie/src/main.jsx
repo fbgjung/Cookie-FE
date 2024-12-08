@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import mixpanel from "mixpanel-browser";
+const mixpaneltoken = import.meta.env.REACT_APP_MIXPANEL_TOKEN;
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
@@ -14,8 +15,8 @@ if ("serviceWorker" in navigator) {
     });
 }
 
-mixpanel.init("YOUR_PROJECT_TOKEN", {
-  debug: true, // 디버그 활성화
+mixpanel.init(mixpaneltoken, {
+  debug: true, // 디버그 옵션 활성화
 });
 
 createRoot(document.getElementById("root")).render(
