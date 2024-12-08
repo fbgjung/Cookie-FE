@@ -89,7 +89,7 @@ const MyAllReviewList = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get("/api/reviews", {
+      const response = await axiosInstance.get("/api/users/myReviews", {
         params: {
           page,
           size: 5,
