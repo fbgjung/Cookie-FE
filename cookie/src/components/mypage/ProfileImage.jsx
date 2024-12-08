@@ -23,7 +23,7 @@ const Image = styled.div`
   background-image: ${(props) =>
     props.image
       ? `url("${props.image}")`
-      : `url("/src/assets/images/defaultImage.png")`};
+      : `url("/assets/images/defaultImage.png")`};
   background-size: cover;
   background-position: center;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
@@ -102,7 +102,7 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
       <NameContainer>
         {name && <Name>{name}</Name>}
         <ManageProfileIcon
-          src="/src/assets/images/mypage/manageprofile.svg"
+          src="/assets/images/mypage/manageprofile.svg"
           alt="Manage Profile"
           onClick={handleManageClick}
         />
