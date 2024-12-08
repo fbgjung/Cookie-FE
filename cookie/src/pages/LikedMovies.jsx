@@ -46,6 +46,24 @@ const Title = styled.h1`
   text-align: center;
 `;
 
+const HeartIcon = styled.img`
+  width: 60px;
+  height: 60px;
+  margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 15px;
+  }
+`;
+
 const MoviesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -130,6 +148,7 @@ const LikedMovies = () => {
         onClick={handleBackClick}
       />
       <Title>좋아하는 영화</Title>
+      <HeartIcon src="/assets/images/mypage/red-heart.svg" alt="하트" />
       {movies.length > 0 ? (
         <MoviesGrid>
           {movies.map((movie) => (
