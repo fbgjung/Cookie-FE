@@ -179,21 +179,27 @@ const ReviewFeed = () => {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const [initialLoad, setInitialLoad] = useState(true); // 초기 로딩 여부
 
-  // SSE 연결
+/* SSE 연결
 useEffect(() => {
   const eventSource = new EventSource(
-    "/api/reviews/subscribe/feed"
+    `http://localhost:8080/api/reviews/subscribe/feed`
   );
 
   eventSource.addEventListener("message", (event) => {
     const newReview = JSON.parse(event.data);
 
-    // 리뷰 리스트에 추가 (중복 제거)
     setReviews((prevReviews) => {
-      if (prevReviews.find((review) => review.reviewId === newReview.reviewId)) {
+      // 새 리뷰가 이미 존재하는지 확인
+      const isAlreadyExists = prevReviews.some(
+        (review) => review.reviewId === newReview.reviewId
+      );
+
+      if (isAlreadyExists) {
         return prevReviews; // 중복된 리뷰는 추가하지 않음
       }
-      return [newReview, ...prevReviews]; // 새 리뷰를 리스트의 맨 위에 추가
+
+      // 최상단에 새 리뷰 추가
+      return [newReview, ...prevReviews];
     });
 
     console.log("새 리뷰 수신:", newReview);
@@ -209,6 +215,7 @@ useEffect(() => {
     eventSource.close();
   };
 }, []);
+*/
 
   // 초기 데이터 로드 및 페이지네이션
   const fetchReviews = useCallback(async () => {
@@ -337,7 +344,7 @@ useEffect(() => {
               </div>
               <div className="comment">
                 {review.content.length > 100
-                  ? `${review.content.slice(0, 130)}...`
+                  ? `${review.content.slice(0, 105)}...`
                   : review.content}
               </div>
             </ReviewCenter>
