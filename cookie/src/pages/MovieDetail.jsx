@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const ContentWrapper = styled.div`
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
 `;
