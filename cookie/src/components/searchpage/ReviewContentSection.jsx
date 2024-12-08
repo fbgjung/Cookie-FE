@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
@@ -139,7 +139,13 @@ const EditForm = styled.div`
     border: 1px solid #ddd;
     border-radius: 8px;
     width: 100%;
-    height: 120px;
+    height: 180px;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+      padding: 8px;
+      height: 180px;
+    }
   }
 
   .action-buttons {
@@ -167,7 +173,16 @@ const EditForm = styled.div`
           background-color: #888;
         }
       }
+
+      @media (max-width: 768px) {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+      }
     }
+  }
+
+  @media (max-width: 768px) {
+    width: 90%;
   }
 `;
 
