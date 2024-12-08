@@ -4,9 +4,9 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const SearchBarContainer = styled.div`
   position: relative;
-  margin: 10px 0px 30px 0px;
-  height: 40px;
-  width: 90%;
+  margin: 10px 0px 0px 0px;
+  height: 50px;
+  width: 100%;
   max-width: 600px;
   display: flex;
   align-items: center;
@@ -26,7 +26,7 @@ const SearchInput = styled.input`
   width: 100%; 
   height: 100%;
   padding: 10px 50px 10px 20px;
-  font-size: 18px;
+  font-size: 20px;
   border: 1px solid #ddd;
   border-radius: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

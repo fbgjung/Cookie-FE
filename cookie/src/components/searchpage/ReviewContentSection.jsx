@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const ReviewContentContainer = styled.div`
   display: flex;
@@ -162,7 +162,7 @@ const ReviewContentSection = ({
       </div>
 
       <div className="options" onClick={toggleMenu}>
-        <img src="images/more.svg" alt="More Options" />
+        <img src="/images/more.svg" alt="More Options" />
         {isMenuOpen && (
           <DropdownMenu className="dropdown-menu">
             {isFromReviewList ? (
