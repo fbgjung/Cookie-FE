@@ -74,7 +74,7 @@ const CommentsSectionContainer = styled.div`
     }
 
     button {
-      background-color: #c99d66;
+      background-color: #66BEFF;
       color: white;
       border: none;
       border-radius: 50%;
@@ -87,7 +87,7 @@ const CommentsSectionContainer = styled.div`
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: #b07f52;
+        background-color: #005faa;
       }
 
       svg {
