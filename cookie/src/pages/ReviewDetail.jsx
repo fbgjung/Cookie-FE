@@ -385,6 +385,7 @@ const ReviewDetail = () => {
         comments: [...prevData.comments, updatedComment],
       }));
 
+      setNewComment("");
       toast.success("댓글이 작성되었습니다!");
       window.location.reload();
     } catch (error) {
