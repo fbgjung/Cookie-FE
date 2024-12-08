@@ -24,7 +24,7 @@ const ReviewTicket = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  background-image: url("/src/assets/images/mypage/reviewticket.svg");
+  background-image: url("/assets/images/mypage/reviewticket.svg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -271,7 +271,7 @@ const ReviewList = ({ title, reviews }) => {
                   (_, i) => (
                     <img
                       key={i}
-                      src="/src/assets/images/mypage/cookiescore.svg"
+                      src="/assets/images/mypage/cookiescore.svg"
                       alt="Cookie"
                     />
                   )
@@ -280,7 +280,7 @@ const ReviewList = ({ title, reviews }) => {
               </div>
               <div className="likes">
                 <img
-                  src="/src/assets/images/mypage/hearticon.svg"
+                  src="/assets/images/mypage/hearticon.svg"
                   alt="Heart Icon"
                 />
                 {review.reviewLike || 0}
