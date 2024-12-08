@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../api/auth/axiosInstance";
-import DetailHeader from "../components/mypage/DetailHeader";
+import DetailHeader from "../components/searchpage/ReviewDetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
-import { FaHeart, FaComment } from "react-icons/fa";
+import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
 
 const Container = styled.div`
   padding: 20px;
@@ -20,8 +20,9 @@ const Container = styled.div`
 
 const FooterSectionStyled = styled.div`
   display: flex;
-  gap: 20px; 
-  margin-top: 20px;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-top: 0px;
   align-items: center;
 
   .icon-container {
@@ -73,7 +74,7 @@ const CommentsSectionContainer = styled.div`
     }
 
     button {
-      background-color: #c99d66;
+      background-color: #66BEFF;
       color: white;
       border: none;
       border-radius: 50%;
@@ -83,6 +84,17 @@ const CommentsSectionContainer = styled.div`
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #005faa;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        margin-left: -2px;
+      }
     }
   }
 
@@ -108,6 +120,9 @@ const CommentsSectionContainer = styled.div`
         border-radius: 8px;
         padding: 10px;
         font-size: 0.9rem;
+        width: 100%; /* 부모 요소의 전체 너비를 채움 */
+        box-sizing: border-box; /* 패딩 포함 */
+        position: relative;
 
         .nickname {
           font-weight: bold;
@@ -127,6 +142,9 @@ const CommentsSectionContainer = styled.div`
     }
 
     .comment-actions {
+      position: absolute; /* 우측 상단에 고정 */
+      top: 10px; /* 위에서 간격 */
+      right: 10px;
       display: flex;
       gap: 10px;
 
@@ -161,6 +179,7 @@ const ReviewDetail = () => {
     const fetchReviewData = async () => {
       try {
         const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
+        console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
         setLikedByUser(review.likedByUser);
@@ -211,6 +230,66 @@ const ReviewDetail = () => {
       console.error("Invalid token:", error);
       toast.error("로그인 정보가 유효하지 않습니다.");
       return null;
+    }
+  };
+
+  const handleEditComment = async (commentId) => {
+    if (!editingCommentText.trim()) {
+      toast.error("수정할 댓글 내용을 입력해주세요.");
+      return;
+    }
+
+    try {
+      // 서버에 수정 요청 전송
+      await axiosInstance.post(`/api/reviews/comments/${commentId}`, {
+        reviewId,
+        comment: editingCommentText,
+      });
+
+      // 댓글 수정 완료 후 상태 업데이트
+      setReviewData((prevData) => ({
+        ...prevData,
+        comments: prevData.comments.map((comment) =>
+          comment.commentId === commentId
+            ? { ...comment, comment: editingCommentText }
+            : comment
+        ),
+      }));
+
+      // 상태 초기화 및 알림
+      setEditingCommentId(null);
+      setEditingCommentText("");
+      toast.success("댓글이 수정되었습니다!");
+    } catch (error) {
+      console.error("Failed to edit comment:", error);
+      toast.error("댓글 수정에 실패했습니다.");
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    console.log("삭제 요청 - commentId:", commentId); // 전달된 commentId 확인
+
+    if (!commentId) {
+      toast.error("삭제할 댓글 ID가 존재하지 않습니다.");
+      return;
+    }
+
+    try {
+      await axiosInstance.delete(`/api/reviews/comments/${commentId}`, {
+        data: { reviewId, commentId },
+      });
+
+      setReviewData((prevData) => ({
+        ...prevData,
+        comments: prevData.comments.filter(
+          (comment) => comment.commentId !== commentId
+        ),
+      }));
+
+      toast.success("댓글이 삭제되었습니다!");
+    } catch (error) {
+      console.error("Failed to delete comment:", error);
+      toast.error("댓글 삭제에 실패했습니다.");
     }
   };
 
@@ -268,7 +347,7 @@ const ReviewDetail = () => {
         <div className="icon-container">
           <FaHeart
             onClick={toggleLike}
-            className={likedByUser ? "liked" : ""}
+            style={{ fill: likedByUser ? "red" : "black", cursor: "pointer" }}
           />
           <span>{reviewData.reviewLike}</span>
         </div>
@@ -285,9 +364,16 @@ const ReviewDetail = () => {
             placeholder="댓글을 입력하세요..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); // 기본 동작 방지
+                handleAddComment(); // 댓글 추가 함수 호출
+              }
+            }}
           />
-          <button onClick={handleAddComment}>↑</button>
+          <button onClick={handleAddComment}>
+            <FaPaperPlane />
+          </button>
         </div>
         {reviewData.comments.map((comment) => (
           <div className="comment" key={comment.id}>
@@ -298,7 +384,7 @@ const ReviewDetail = () => {
               />
               <div className="comment-content">
                 <div className="nickname">{comment.user.nickname}</div>
-                {editingCommentId === comment.id ? (
+                {editingCommentId === comment.commentId ? (
                   <input
                     type="text"
                     value={editingCommentText}
@@ -310,31 +396,42 @@ const ReviewDetail = () => {
                 <div className="date">
                   {new Date(comment.createdAt).toLocaleString()}
                 </div>
+                {(() => {
+                  const userId = getUserIdFromToken();
+                  return (
+                    comment.user.userId === userId && (
+                      <div className="comment-actions">
+                        {editingCommentId === comment.user.userId ? (
+                          <button
+                            onClick={() => handleEditComment(comment.commentId)}
+                          >
+                            저장
+                          </button>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => {
+                                setEditingCommentId(comment.commentId);
+                                setEditingCommentText(comment.comment);
+                              }}
+                            >
+                              수정
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleDeleteComment(comment.commentId)
+                              }
+                            >
+                              삭제
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )
+                  );
+                })()}
               </div>
             </div>
-            {comment.user.id === getUserIdFromToken() && (
-              <div className="comment-actions">
-                {editingCommentId === comment.id ? (
-                  <button onClick={() => handleEditComment(comment.id)}>
-                    저장
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => {
-                        setEditingCommentId(comment.id);
-                        setEditingCommentText(comment.comment);
-                      }}
-                    >
-                      수정
-                    </button>
-                    <button onClick={() => handleDeleteComment(comment.id)}>
-                      삭제
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
           </div>
         ))}
       </CommentsSectionContainer>

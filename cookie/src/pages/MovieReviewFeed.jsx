@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
+import DetailHeader from "../components/searchpage/MovieReviewDetailHeader";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
@@ -222,6 +223,7 @@ const MovieReviewFeed = () => {
 
   return (
     <ReviewFeedWrapper>
+      <DetailHeader onBack={() => navigate(-1)} />
       {/* 영화 정보 한 번만 표시 */}
       {movieInfo && (
         <>
