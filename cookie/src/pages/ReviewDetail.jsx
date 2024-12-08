@@ -167,7 +167,7 @@ const ReviewDetail = () => {
     const fetchReviewData = async () => {
       try {
         const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
-        console.log("API 응답 데이터:", response.data);
+        console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
         setLikedByUser(review.likedByUser);
@@ -218,6 +218,31 @@ const ReviewDetail = () => {
       console.error("Invalid token:", error);
       toast.error("로그인 정보가 유효하지 않습니다.");
       return null;
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    console.log("삭제 요청 - commentId:", commentId); // 전달된 commentId 확인
+
+    if (!commentId) {
+      toast.error("삭제할 댓글 ID가 존재하지 않습니다.");
+      return;
+    }
+
+    try {
+      await axiosInstance.delete(`/api/reviews/comments/${commentId}`, {
+        data: { reviewId, commentId },
+      });
+
+      setReviewData((prevData) => ({
+        ...prevData,
+        comments: prevData.comments.filter((comment) => comment.commentId !== commentId),
+      }));
+
+      toast.success("댓글이 삭제되었습니다!");
+    } catch (error) {
+      console.error("Failed to delete comment:", error);
+      toast.error("댓글 삭제에 실패했습니다.");
     }
   };
 
@@ -310,7 +335,7 @@ const ReviewDetail = () => {
               />
               <div className="comment-content">
                 <div className="nickname">{comment.user.nickname}</div>
-                {editingCommentId === comment.id ? (
+                {editingCommentId === comment.commentId ? (
                   <input
                     type="text"
                     value={editingCommentText}
@@ -347,7 +372,7 @@ const ReviewDetail = () => {
                             </button>
                             <button
                               onClick={() =>
-                                handleDeleteComment(comment.user.userId)
+                                handleDeleteComment(comment.commentId)
                               }
                             >
                               삭제
