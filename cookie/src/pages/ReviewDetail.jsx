@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const FooterSectionStyled = styled.div`
   display: flex;
-  gap: 20px; 
+  gap: 20px;
   margin-top: 20px;
   align-items: center;
 
@@ -285,7 +285,12 @@ const ReviewDetail = () => {
             placeholder="댓글을 입력하세요..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); // 기본 동작 방지
+                handleAddComment(); // 댓글 추가 함수 호출
+              }
+            }}
           />
           <button onClick={handleAddComment}>↑</button>
         </div>
