@@ -103,8 +103,10 @@ const ReviewLeft = styled.div`
   .title {
     font-size: 0.9rem;
     font-weight: bold;
-    margin-top: 10px;
     text-align: center;
+    margin-top: ${({ isLongTitle }) => (isLongTitle ? "1px" : "10px")};
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 말줄임표 추가 */
   }
 `;
 
@@ -179,7 +181,7 @@ const ReviewFeed = () => {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const [initialLoad, setInitialLoad] = useState(true); // 초기 로딩 여부
 
-/* SSE 연결
+  /* SSE 연결
 useEffect(() => {
   const eventSource = new EventSource(
     `http://localhost:8080/api/reviews/subscribe/feed`
@@ -240,7 +242,10 @@ useEffect(() => {
       ); // 초기 페이지일 경우 덮어쓰기, 아닐 경우 추가
 
       // 더 이상 데이터가 없는지 확인
-      if (newReviews.length < 10 || page + 1 === response.data.response.totalReviewPages) {
+      if (
+        newReviews.length < 10 ||
+        page + 1 === response.data.response.totalReviewPages
+      ) {
         setHasMore(false); // 더 이상 로딩하지 않음
       }
     } catch (error) {
@@ -325,9 +330,16 @@ useEffect(() => {
             key={`${review.reviewId}-${index}`} // 고유 키 생성
             onClick={() => handleReviewClick(review.reviewId)}
           >
-            <ReviewLeft>
+            <ReviewLeft
+              isLongTitle={review.movie.title.length > 9}
+              title={review.movie.title} // 전체 제목을 tooltip으로 제공
+            >
               <img src={review.movie.poster} alt={review.movie.title} />
-              <div className="title">{review.movie.title}</div>
+              <div className="title">
+                {review.movie.title.length > 18
+                  ? `${review.movie.title.slice(0, 18)}...`
+                  : review.movie.title}
+              </div>
             </ReviewLeft>
             <ReviewCenter>
               <div className="profile">
