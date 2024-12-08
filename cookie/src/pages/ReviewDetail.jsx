@@ -6,7 +6,7 @@ import axiosInstance from "../api/auth/axiosInstance";
 import DetailHeader from "../components/mypage/DetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
-import { FaHeart, FaComment } from "react-icons/fa";
+import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
 
 const Container = styled.div`
   padding: 20px;
@@ -84,6 +84,17 @@ const CommentsSectionContainer = styled.div`
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #b07f52;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        margin-left: -2px;
+      }
     }
   }
 
@@ -360,7 +371,9 @@ const ReviewDetail = () => {
               }
             }}
           />
-          <button onClick={handleAddComment}>↑</button>
+          <button onClick={handleAddComment}>
+            <FaPaperPlane />
+          </button>
         </div>
         {reviewData.comments.map((comment) => (
           <div className="comment" key={comment.id}>
