@@ -161,6 +161,7 @@ const ReviewDetail = () => {
     const fetchReviewData = async () => {
       try {
         const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
+        console.log("API 응답 데이터:", response.data);
         const review = response.data.response;
         setReviewData(review);
         setLikedByUser(review.likedByUser);
@@ -317,31 +318,34 @@ const ReviewDetail = () => {
                 </div>
               </div>
             </div>
-            {comment.user.id === getUserIdFromToken() && (
-              <div className="comment-actions">
-                {editingCommentId === comment.id ? (
-                  <button onClick={() => handleEditComment(comment.id)}>
-                    저장
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => {
-                        setEditingCommentId(comment.id);
-                        setEditingCommentText(comment.comment);
-                      }}
-                    >
-                      수정
-                    </button>
-                    <button onClick={() => handleDeleteComment(comment.id)}>
-                      삭제
-                    </button>
-                  </>
-                )}
-              </div>
+            {(() => {
+      const userId = getUserIdFromToken();
+      return (
+        comment.user.userId === userId && (
+          <div className="comment-actions">
+            {editingCommentId === comment.user.userId ? (
+              <button onClick={() => handleEditComment(comment.user.userId)}>저장</button>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    setEditingCommentId(comment.user.userId);
+                    setEditingCommentText(comment.comment);
+                  }}
+                >
+                  수정
+                </button>
+                <button onClick={() => handleDeleteComment(comment.user.userId)}>
+                  삭제
+                </button>
+              </>
             )}
           </div>
-        ))}
+        )
+      );
+    })()}
+  </div>
+))}
       </CommentsSectionContainer>
     </Container>
   );
