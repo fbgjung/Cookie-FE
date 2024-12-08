@@ -33,34 +33,25 @@ export const requestNotificationPermission = async () => {
 
 export const setupOnMessageHandler = () => {
   const addNotification = useNotificationStore.getState().addNotification;
-  onMessage(messaging, (payload) => {
-    console.log("알림 내용: ", payload);
 
-    const notificationTitle = payload.notification.title;
-    const notificationBody = payload.notification.body;
+  onMessage(messaging, (payload) => {
+    console.log("알림 수신:", payload);
 
     const notificationData = {
-      title: notificationTitle,
-      body: notificationBody,
+      title: payload.notification?.title || "제목 없음",
+      body: payload.notification?.body || "내용 없음",
       timestamp: new Date().toLocaleString(),
     };
 
     addNotification(notificationData);
 
-    const notificationOptions = {
-      body: payload.notification.body,
-      image: payload.notification.image,
-      icon: payload.notification.icon,
-    };
+    const notification = new Notification(notificationData.title, {
+      body: notificationData.body,
+      icon: payload.notification?.icon || "/favicon.ico",
+    });
 
-    const notification = new Notification(
-      notificationTitle,
-      notificationOptions
-    );
-
-    notification.onclick = function (event) {
-      event.preventDefault();
-      console.log("notification clicked!");
+    notification.onclick = () => {
+      console.log("알림 클릭됨");
       notification.close();
     };
   });
