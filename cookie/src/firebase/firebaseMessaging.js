@@ -1,3 +1,4 @@
+import useNotificationStore from "../stores/notificationStore";
 import { messaging } from "./firebase";
 import { getToken, onMessage } from "firebase/messaging";
 
@@ -7,10 +8,15 @@ export const requestNotificationPermission = async () => {
     if (permission === "granted") {
       console.log("알림 권한 허용");
 
-      const token = await getToken(messaging, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+      const token = await new Promise((resolve) => {
+        setTimeout(async () => {
+          resolve(
+            await getToken(messaging, {
+              vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+            })
+          );
+        }, 1000);
       });
-
       if (token) {
         console.log("FCM 토큰:", token);
         return token;
@@ -25,12 +31,13 @@ export const requestNotificationPermission = async () => {
   }
 };
 
-export const setupOnMessageHandler = (addNotification) => {
+export const setupOnMessageHandler = () => {
+  const addNotification = useNotificationStore.getState().addNotification;
   onMessage(messaging, (payload) => {
-    console.log("알림 수신:", payload);
+    console.log("알림 내용: ", payload);
 
-    const notificationTitle = payload.notification?.title || "알림";
-    const notificationBody = payload.notification?.body || "새로운 메시지";
+    const notificationTitle = payload.notification.title;
+    const notificationBody = payload.notification.body;
 
     const notificationData = {
       title: notificationTitle,
@@ -38,14 +45,12 @@ export const setupOnMessageHandler = (addNotification) => {
       timestamp: new Date().toLocaleString(),
     };
 
-    // 알림 상태 업데이트
     addNotification(notificationData);
 
-    // 브라우저 알림 생성
     const notificationOptions = {
-      body: notificationBody,
-      icon: payload.notification?.icon || "/default-icon.png",
-      image: payload.notification?.image,
+      body: payload.notification.body,
+      image: payload.notification.image,
+      icon: payload.notification.icon,
     };
 
     const notification = new Notification(
@@ -53,10 +58,12 @@ export const setupOnMessageHandler = (addNotification) => {
       notificationOptions
     );
 
-    notification.onclick = (event) => {
+    notification.onclick = function (event) {
       event.preventDefault();
-      console.log("알림 클릭!");
+      console.log("notification clicked!");
       notification.close();
     };
   });
 };
+
+setupOnMessageHandler();
