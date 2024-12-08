@@ -20,8 +20,9 @@ const Container = styled.div`
 
 const FooterSectionStyled = styled.div`
   display: flex;
+  justify-content: flex-end;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 0px;
   align-items: center;
 
   .icon-container {
@@ -226,14 +227,14 @@ const ReviewDetail = () => {
       toast.error("수정할 댓글 내용을 입력해주세요.");
       return;
     }
-  
+
     try {
       // 서버에 수정 요청 전송
       await axiosInstance.post(`/api/reviews/comments/${commentId}`, {
         reviewId,
         comment: editingCommentText,
       });
-  
+
       // 댓글 수정 완료 후 상태 업데이트
       setReviewData((prevData) => ({
         ...prevData,
@@ -243,7 +244,7 @@ const ReviewDetail = () => {
             : comment
         ),
       }));
-  
+
       // 상태 초기화 및 알림
       setEditingCommentId(null);
       setEditingCommentText("");
@@ -269,7 +270,9 @@ const ReviewDetail = () => {
 
       setReviewData((prevData) => ({
         ...prevData,
-        comments: prevData.comments.filter((comment) => comment.commentId !== commentId),
+        comments: prevData.comments.filter(
+          (comment) => comment.commentId !== commentId
+        ),
       }));
 
       toast.success("댓글이 삭제되었습니다!");
@@ -333,7 +336,7 @@ const ReviewDetail = () => {
         <div className="icon-container">
           <FaHeart
             onClick={toggleLike}
-            className={likedByUser ? "liked" : ""}
+            style={{ fill: likedByUser ? "red" : "black", cursor: "pointer" }}
           />
           <span>{reviewData.reviewLike}</span>
         </div>
@@ -387,9 +390,7 @@ const ReviewDetail = () => {
                       <div className="comment-actions">
                         {editingCommentId === comment.user.userId ? (
                           <button
-                            onClick={() =>
-                              handleEditComment(comment.commentId)
-                            }
+                            onClick={() => handleEditComment(comment.commentId)}
                           >
                             저장
                           </button>
