@@ -25,10 +25,6 @@ function CookieMovies() {
     return null;
   }
 
-  if (!userInfo.userId) {
-    return null;
-  }
-
   useEffect(() => {
     const fetchRecommendedMovies = async () => {
       try {
@@ -64,6 +60,7 @@ function CookieMovies() {
       setCurrentIndex(currentIndex - 1);
     }
   };
+
   return (
     <>
       <CookieMovieList>

@@ -5,6 +5,7 @@ import fight from "../../assets/images/main/fight_icon.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
+import axiosInstance from "../../api/auth/axiosInstance";
 import mixpanel from "mixpanel-browser";
 
 const MatchUpContainer = styled.div`
@@ -196,6 +197,7 @@ const MatchUpContainer = styled.div`
     }
   }
 `;
+
 const SkeletonContainer = styled.div`
   border-radius: 0.75rem;
   width: 260px;
@@ -287,7 +289,6 @@ function MatchUp() {
           ? Array.from({ length: 2 }).map((_, index) => (
               <div key={index}>
                 <SkeletonContainer />
-
               </div>
             ))
           : matchUps.map((matchUp) => (

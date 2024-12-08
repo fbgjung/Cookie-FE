@@ -106,6 +106,7 @@ function SpecialMovie({ categorydata }) {
       setCurrentIndex(currentIndex - 1);
     }
   };
+  
   return (
     <>
       <SpecialMovieList>

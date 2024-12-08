@@ -38,9 +38,11 @@ function AdminRecommend() {
 
     navigate(`/movie/${movieId}`);
   };
+
   const handleNext = () => {
     setCurrentIndex(currentIndex + 1);
   };
+  
   const handlePrev = () => {
     console.log("Current Index:", currentIndex);
     if (currentIndex > 0) {
