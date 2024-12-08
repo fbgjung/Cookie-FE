@@ -8,6 +8,7 @@ import GallerySection from "../components/movieDetailPage/GallerySection";
 import ReviewSection from "../components/movieDetailPage/ReviewSection";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
+import DetailHeader from "../components/searchpage/MovieDetailHeader";
 
 const ContentWrapper = styled.div`
   max-width: 600px;
@@ -45,6 +46,7 @@ const MovieDetail = () => {
 
   return (
     <ContentWrapper>
+      <DetailHeader onBack={() => navigate(-1)} />
       <HeaderSection
         title={movieData.title}
         releasedAt={movieData.releasedAt}
