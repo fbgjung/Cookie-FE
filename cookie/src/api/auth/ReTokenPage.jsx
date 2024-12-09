@@ -62,6 +62,7 @@ const ReTokenPage = () => {
         navigate("/");
       } catch (error) {
         console.error("토큰 발급 실패:", error);
+        console.log("FCM 실패로그때 토큰값:", fcmToken);
         navigate("/login");
       } finally {
         setIsLoading(false);
