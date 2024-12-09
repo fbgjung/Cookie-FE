@@ -49,12 +49,12 @@ const ReTokenPage = () => {
         setUserInfo(userInfo);
 
         const fcmToken = await requestNotificationPermission();
+        console.log("token값", fcmToken);
 
         if (fcmToken) {
           await axiosInstance.post("/api/notification/fcm-token", {
-            fcmToken,
+            token: fcmToken,
           });
-          console.log("FCM 토큰 전송 성공:", fcmToken);
         } else {
           console.warn("FCM 토큰 전송 실패");
         }
@@ -62,7 +62,7 @@ const ReTokenPage = () => {
         navigate("/");
       } catch (error) {
         console.error("토큰 발급 실패:", error);
-        console.log("FCM 실패로그때 토큰값:", fcmToken);
+
         navigate("/login");
       } finally {
         setIsLoading(false);
