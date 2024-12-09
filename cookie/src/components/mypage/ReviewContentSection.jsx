@@ -153,7 +153,7 @@ const ReviewContentSection = ({
       </div>
 
       <div className="options" onClick={toggleMenu}>
-        <img src="/src/assets/images/mypage/More.svg" alt="More Options" />
+        <img src="/assets/images/mypage/More.svg" alt="More Options" />
         {isMenuOpen && (
           <DropdownMenu className="dropdown-menu">
             <div onClick={handleEdit}>수정하기</div>
