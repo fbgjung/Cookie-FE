@@ -1,80 +1,77 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
-import useNotificationStore from "../../stores/notificationStore";
 import useUserStore from "../../stores/useUserStore";
 import useAuthStore from "../../stores/useAuthStore";
+import axiosInstance from "../../api/auth/axiosInstance";
+import { requestNotificationPermission } from "../../firebase/firebaseMessaging";
+import Spinner from "../../components/common/Spinner";
 
-//로그인 완료 후 토근 발급
 const ReTokenPage = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const setUserInfo = useUserStore.getState().setUserInfo;
   const logIn = useAuthStore.getState().logIn;
+
   useEffect(() => {
-    axios
-      .get(`${serverBaseUrl}/api/auth/retrieve-token`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        const accessToken = response.data.response.accessToken;
-        const refreshToken = response.data.response.refreshToken;
+    const retrieveToken = async () => {
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/auth/retrieve-token`,
+          { withCredentials: true }
+        );
 
-        console.log(response);
-        if (accessToken && refreshToken) {
-          sessionStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
-          console.log(accessToken);
-          console.log(refreshToken);
+        const { accessToken, refreshToken } = response.data.response;
 
-          logIn();
+        if (!accessToken || !refreshToken) {
+          throw new Error("토큰이 없습니다.");
+        }
 
-          return axios.get(`${serverBaseUrl}/api/users/info`, {
+        sessionStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        console.log("Access Token:", accessToken);
+        console.log("Refresh Token:", refreshToken);
+
+        logIn();
+
+        const userInfoResponse = await axios.get(
+          `${serverBaseUrl}/api/users/info`,
+          {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-          });
-        } else {
-          throw new Error("토큰이 없습니다.");
-        }
-      })
-      .then((response) => {
-        const userInfo = response.data.response;
+          }
+        );
+        const userInfo = userInfoResponse.data.response;
         console.log("유저 정보:", userInfo);
         setUserInfo(userInfo);
 
-        // const eventSource = new EventSource(
-        //   `http://localhost:8080/api/reviews/subscribe/push-notification`
-        // );
+        const fcmToken = await requestNotificationPermission();
 
-        // const addNotification = useNotificationStore.getState().addNotification;
-
-        // eventSource.onmessage = (event) => {
-        //   const data = JSON.parse(event.data);
-        //   console.log(data); // 이게 안찍혀!!!!!!  push-notification 여기 네트워크에서는 찍혀
-        //   addNotification(data);
-        // };
-
-        // eventSource.addEventListener("push-notification", (event) => {
-        //   const data = JSON.parse(event.data);
-        //   console.log("푸시 알림 수신 데이터:", data);
-        //   addNotification(data);
-        // });
-
-        // eventSource.onerror = (error) => {
-        //   console.error("SSE 연결 에러:", error);
-        //   eventSource.close();
-        // };
+        if (fcmToken) {
+          await axiosInstance.post("/api/notification/fcm-token", {
+            fcmToken,
+          });
+          console.log("FCM 토큰 전송 성공:", fcmToken);
+        } else {
+          console.warn("FCM 토큰 전송 실패");
+        }
 
         navigate("/");
-      })
-      .catch((error) => {
-        console.error("Failed to retrieve token:", error);
+      } catch (error) {
+        console.error("토큰 발급 실패:", error);
         navigate("/login");
-      });
-  }, [navigate, logIn]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  return <div>토큰을 가져오는 중입니다…</div>;
+    retrieveToken();
+  }, [navigate, logIn, setUserInfo]);
+
+  return isLoading ? <Spinner /> : <div>토큰을 가져오는 중입니다…</div>;
 };
 
 export default ReTokenPage;

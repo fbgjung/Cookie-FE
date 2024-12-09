@@ -11,6 +11,7 @@ import LoginModal from "../components/common/LoginModal";
 import axiosInstance from "../api/auth/axiosInstance";
 import { toast } from "react-hot-toast";
 import useAuthStore from "../stores/useAuthStore";
+import Spinner from "../components/common/Spinner";
 
 const MypageContainer = styled.div`
   display: flex;
@@ -72,6 +73,7 @@ const MyPage = () => {
   const isLogined = useAuthStore((state) => state.isLogined);
   const openLoginModal = useAuthStore((state) => state.openLoginModal);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -132,11 +134,22 @@ const MyPage = () => {
   const mainBadge = badgeData.find((badge) => badge.main) || {};
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
-      logOut();
-      toast.success("로그아웃 되었습니다.");
-      navigate("/login");
+      setIsLoading(true);
+      try {
+        await axiosInstance.delete("/api/notification/fcm-token");
+        console.log("FCM 토큰 삭제 성공");
+
+        logOut();
+        toast.success("로그아웃 되었습니다.");
+        navigate("/login");
+      } catch (error) {
+        console.error("FCM 토큰 삭제 실패:", error);
+        toast.error("로그아웃 중 문제가 발생했습니다. 다시 시도해주세요.");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -162,6 +175,7 @@ const MyPage = () => {
   return (
     <>
       <LoginModal />
+      {isLoading && <Spinner />}
       <MypageContainer>
         <div
           style={{
@@ -187,7 +201,7 @@ const MyPage = () => {
           <FavoriteList title="좋아요" items={favoriteItems} />
           <ReviewHeader>
             <ReviewTitle>{`${userData.nickname}의 리뷰`}</ReviewTitle>
-            <MoreLink onClick={handleMoreClick}>{"> 더보기"}</MoreLink>
+            <MoreLink onClick={handleMoreClick}>{" 더보기"}</MoreLink>
           </ReviewHeader>
           <ReviewList reviews={reviewData} />
           {isLogined() && (
