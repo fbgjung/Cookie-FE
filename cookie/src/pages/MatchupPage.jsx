@@ -19,7 +19,14 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  background-color: #fff4b9;
+  background: linear-gradient(
+    to bottom,
+    #000000,
+    #0a0a0a,
+    #141414,
+    #1f1f1f,
+    #292929
+  );
   color: #ffffff;
   padding-top: 10px;
   font-family: "Arial", sans-serif;
@@ -28,14 +35,47 @@ const Container = styled.div`
   overflow-x: hidden;
 `;
 
+const HistoryButton = styled.button`
+  position: absolute; /* 부모 컨테이너 기준 */
+  top: 20px; /* 상단에서 20px */
+  right: 0; /* 오른쪽 끝에 붙음 */
+  background-color: #fff4e0;
+  border: 1px solid #e50914;
+  border-radius: 20px 0 0 20px; /* 왼쪽 둥글고 오른쪽 네모 */
+  padding: 10px 15px;
+  color: #e50914;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: #e50914;
+    color: #ffffff;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+    padding: 6px 10px;
+  }
+`;
+
 const sampleData = {
-  matchUpTitle: "테스트 빅매치",
+  matchUpTitle: "크리스마스 빅매치",
   startAt: "2024-11-21T17:21:03",
-  entAt: "2024-12-08T02:48:05",
+  entAt: "2024-12-12T02:48:05",
   movie1: {
-    movieTitle: "테스트 영화 1",
+    movieTitle: "나 홀로 집에",
     moviePoster: null,
-    movieLike: 32,
+    movieLike: 12,
     charmPoint: {
       ost: 20,
       direction: 18,
@@ -56,7 +96,7 @@ const sampleData = {
     },
   },
   movie2: {
-    movieTitle: "테스트 영화 2",
+    movieTitle: "뭐 있더라",
     moviePoster: null,
     movieLike: 22,
     charmPoint: {
@@ -160,13 +200,13 @@ const MatchupPage = () => {
           {
             src:
               matchUpData.movie1.moviePoster ||
-              "/src/assets/images/matchup/sampleimage1.svg",
+              "/src/assets/images/matchup/testposter.png",
             title: matchUpData.movie1.movieTitle,
           },
           {
             src:
               matchUpData.movie2.moviePoster ||
-              "/src/assets/images/matchup/sampleimage2.svg",
+              "/src/assets/images/matchup/testposter1.png",
             title: matchUpData.movie2.movieTitle,
           },
         ]}

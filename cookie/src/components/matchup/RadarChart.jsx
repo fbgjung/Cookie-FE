@@ -1,16 +1,3 @@
-import PropTypes from "prop-types";
-import { Radar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-} from "chart.js";
-
-ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
-
 const RadarChart = ({ labels, data, backgroundColor, borderColor }) => {
   const chartData = {
     labels,
@@ -32,14 +19,13 @@ const RadarChart = ({ labels, data, backgroundColor, borderColor }) => {
   const options = {
     scales: {
       r: {
-        angleLines: { color: "#ffffff" },
-        grid: { color: "#ffffff" },
+        angleLines: { color: "transparent" },
+        grid: { color: "#8b4513" },
         ticks: {
-          backdropColor: "transparent",
-          color: "#ffffff",
+          color: "#8b4513", // 숫자 색상 유지
         },
         pointLabels: {
-          color: "#ffffff",
+          color: "#8b4513", // 레이블 색상 유지
           font: { size: 12 },
         },
         suggestedMin: 0,
