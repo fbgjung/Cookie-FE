@@ -185,7 +185,11 @@ const ReviewForm = () => {
       }
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
-      toast.error("리뷰 등록 중 오류가 발생했습니다.");
+      if (error.response?.data.message === "해당 영화에 이미 리뷰를 등록했습니다.") {
+        toast.error("해당 영화에 이미 리뷰를 등록했습니다.");
+      } else {
+        toast.error("리뷰 등록 중 오류가 발생했습니다.");
+      }
     }
   };
 

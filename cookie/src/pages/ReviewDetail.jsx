@@ -325,7 +325,11 @@ const ReviewDetail = () => {
       window.location.reload();
     } catch (error) {
       console.error("Error during comment submission:", error);
-      toast.error("댓글 작성에 실패했습니다.");
+      if (error.response?.data.message === '자신의 리뷰에는 댓글을 작성할 수 없습니다.') {
+        toast.error("본인이 작성한 리뷰에는 댓글을 작성할 수 없습니다!");
+      } else {
+        toast.error("예기치 못한 오류가 발생했습니다.");
+      }
     }
   };
 
