@@ -369,8 +369,9 @@ const ReviewDetail = () => {
         movieTitle={reviewData.movie?.title || "Untitled Movie"}
         cookieScoreCount={reviewData.movieScore || 0}
         handleDelete={handleDeleteReview}
-        isMenuOpen={isMenuOpen && !fromLikedReviews} // 좋아한 리뷰에서 들어오면 메뉴 비활성화
-        toggleMenu={fromLikedReviews ? undefined : toggleMenu} // 좋아한 리뷰에서는 토글 버튼 제거
+        handleUpdateReview={handleUpdateReview}
+        isMenuOpen={isMenuOpen && !fromLikedReviews}
+        toggleMenu={fromLikedReviews ? undefined : toggleMenu}
       />
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSectionStyled>
