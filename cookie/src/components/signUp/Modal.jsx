@@ -95,7 +95,12 @@ const CloseBtn = styled.button`
     text-underline-offset: 0.25rem;
   }
 `;
-const Modal = ({ onClose, onPushNotification, onEmailNotification }) => {
+const Modal = ({
+  onClose,
+  onPushNotification,
+  onEmailNotification,
+  onNoNotification,
+}) => {
   return (
     <>
       <ModalBackground onClick={onClose}>
@@ -120,7 +125,7 @@ const Modal = ({ onClose, onPushNotification, onEmailNotification }) => {
               💌 이메일
             </ModalButton>
           </ButtonContainer>
-          <CloseBtn onClick={onClose}>알림을 원하지 않습니다</CloseBtn>
+          <CloseBtn onClick={onNoNotification}>알림을 원하지 않습니다</CloseBtn>
         </ModalContainer>
       </ModalBackground>
     </>

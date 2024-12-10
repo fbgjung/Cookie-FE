@@ -6,6 +6,8 @@ import Modal from "react-modal";
 const TimerContainer = styled.div`
   display: flex;
   gap: 10px;
+  width: 100%;
+  justify-content: center;
 
   @media (max-width: 480px) {
     gap: 5px;
@@ -13,17 +15,19 @@ const TimerContainer = styled.div`
 `;
 
 const TimerBox = styled.div`
-  background-color: #aad6e7;
-  color: #724b2e;
+  background-color: rgb(229, 9, 20);
+  color: #006400;
   font-size: 2.5rem;
   font-weight: bold;
-  width: 73px;
+  width: 75px;
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -36,13 +40,38 @@ const TimerBox = styled.div`
     width: 50px;
     height: 55px;
   }
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 15px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 10px;
+    background: #ffffff;
+    border-radius: 50%;
+  }
 `;
 
 const Colon = styled.span`
   font-size: 2.5rem;
   margin-top: 15px;
   font-weight: bold;
-  color: #724b2e;
+  color: #ffffff;
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -134,12 +163,12 @@ const Timer = ({ endAt, onVoteEnd }) => {
   const [s1, s2] = splitDigits(timeLeft.seconds);
 
   const openModal = () => {
-    document.body.style.overflow = "hidden"; // 배경 스크롤 방지
+    document.body.style.overflow = "hidden";
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    document.body.style.overflow = ""; // 배경 스크롤 복원
+    document.body.style.overflow = "";
     setIsModalOpen(false);
   };
 
@@ -169,6 +198,7 @@ const Timer = ({ endAt, onVoteEnd }) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            zIndex: 9999,
           },
           content: {
             position: "absolute",
@@ -181,6 +211,7 @@ const Timer = ({ endAt, onVoteEnd }) => {
             textAlign: "center",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
             overflow: "hidden",
+            zIndex: 10000,
           },
         }}
       >

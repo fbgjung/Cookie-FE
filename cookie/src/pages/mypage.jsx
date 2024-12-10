@@ -131,6 +131,10 @@ const MyPage = () => {
     fetchUserData();
   }, [isLogined, openLoginModal]);
 
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`, { state: { fromMyPage: true } });
+  };
+
   const mainBadge = badgeData.find((badge) => badge.main) || {};
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
@@ -155,15 +159,21 @@ const MyPage = () => {
 
   const handleWithdraw = async () => {
     if (window.confirm("정말로 탈퇴하시겠습니까?")) {
+      setIsLoading(true);
       try {
         await axiosInstance.delete("/api/users");
-        toast.success("탈퇴가 완료되었습니다.");
+
+        logOut();
         sessionStorage.clear();
         localStorage.clear();
+
+        toast.success("탈퇴가 완료되었습니다.");
         window.location.href = "/login";
       } catch (error) {
         console.error("탈퇴 요청 실패:", error);
         toast.error("탈퇴 중 문제가 발생했습니다.\n다시 시도해주세요.");
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -203,7 +213,7 @@ const MyPage = () => {
             <ReviewTitle>{`${userData.nickname}의 리뷰`}</ReviewTitle>
             <MoreLink onClick={handleMoreClick}>{" 더보기"}</MoreLink>
           </ReviewHeader>
-          <ReviewList reviews={reviewData} />
+          <ReviewList reviews={reviewData} onReviewClick={handleReviewClick} />
           {isLogined() && (
             <LogoutAndWithdraw
               onLogout={handleLogout}

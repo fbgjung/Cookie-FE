@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
 const ReviewContentContainer = styled.div`
   display: flex;
@@ -124,6 +125,9 @@ const ReviewContentSection = ({
   handleEdit,
   handleDelete,
 }) => {
+  const location = useLocation();
+  const fromLikedReviews = location.state?.fromLikedReviews || false;
+
   return (
     <ReviewContentContainer>
       <img className="poster" src={posterSrc} alt="Movie Poster" />
@@ -152,15 +156,18 @@ const ReviewContentSection = ({
         </div>
       </div>
 
-      <div className="options" onClick={toggleMenu}>
-        <img src="/assets/images/mypage/More.svg" alt="More Options" />
-        {isMenuOpen && (
-          <DropdownMenu className="dropdown-menu">
-            <div onClick={handleEdit}>수정하기</div>
-            <div onClick={handleDelete}>삭제하기</div>
-          </DropdownMenu>
-        )}
-      </div>
+      {/* 옵션 메뉴 렌더링 조건 */}
+      {!fromLikedReviews && (
+        <div className="options" onClick={toggleMenu}>
+          <img src="/assets/images/mypage/More.svg" alt="More Options" />
+          {isMenuOpen && (
+            <DropdownMenu className="dropdown-menu">
+              <div onClick={handleEdit}>수정하기</div>
+              <div onClick={handleDelete}>삭제하기</div>
+            </DropdownMenu>
+          )}
+        </div>
+      )}
     </ReviewContentContainer>
   );
 };

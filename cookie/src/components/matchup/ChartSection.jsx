@@ -101,7 +101,36 @@ const ChartWrapper = styled.div`
 `;
 
 const ChartLabel = styled.div`
-  color: #724b2e;
+  color: #<RadarChart
+  width={chartSize}
+  height={chartSize}
+  data={emotionData}
+  margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+>
+  <PolarGrid stroke="#ffffff" />
+  <PolarAngleAxis
+    dataKey="subject"
+    tick={{
+      fill: "#ffffff", // 축 텍스트 색상
+      fontSize: chartSize <= 200 ? 8 : 10,
+    }}
+  />
+  <PolarRadiusAxis
+    angle={38}
+    domain={[0, 100]}
+    tick={{
+      fill: "#ffffff", // 반경 텍스트 색상
+      fontSize: chartSize <= 200 ? 8 : 10,
+    }}
+  />
+  <Radar
+    name="감정포인트"
+    dataKey="value"
+    stroke="#ffffff" // 선 색상
+    fill="#ffffff80" // 채우기 색상
+    strokeWidth={2}
+  />
+</RadarChart>;
   font-size: 1rem;
   text-align: center;
   margin-top: -20px;
@@ -138,24 +167,24 @@ const ChartSection = ({ movie1, movie2 }) => {
     window.innerWidth <= 480 ? 200 : window.innerWidth <= 1024 ? 250 : 300;
 
   const isMovie1Selected = selectedMovie === movie1.movieTitle;
-  const chartColorLeft = isMovie1Selected ? "#A7D477" : "#8B5DFF";
-  const chartColorRight = isMovie1Selected ? "#A7D477" : "#8B5DFF";
+  const chartColorLeft = isMovie1Selected ? "#E50914" : "#006400";
+  const chartColorRight = isMovie1Selected ? "#E50914" : "#006400";
 
   return (
     <SectionContainer>
       <ButtonContainer>
         <SelectButton
           active={isMovie1Selected}
-          activeColor="#A7D477"
-          hoverColor="#91C267"
+          activeColor="#E50914"
+          hoverColor="#E50914"
           onClick={() => setSelectedMovie(movie1.movieTitle)}
         >
           {movie1.movieTitle}
         </SelectButton>
         <SelectButton
           active={!isMovie1Selected}
-          activeColor="#8B5DFF"
-          hoverColor="#7A4DEA"
+          activeColor="#006400"
+          hoverColor="#006400"
           onClick={() => setSelectedMovie(movie2.movieTitle)}
         >
           {movie2.movieTitle}
@@ -171,11 +200,11 @@ const ChartSection = ({ movie1, movie2 }) => {
               data={emotionData}
               margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
             >
-              <PolarGrid stroke="#724B2E" />
+              <PolarGrid stroke="#ffffff" />
               <PolarAngleAxis
                 dataKey="subject"
                 tick={{
-                  fill: "#724B2E",
+                  fill: "#ffffff",
                   fontSize: chartSize <= 200 ? 8 : 10,
                 }}
               />
@@ -183,7 +212,7 @@ const ChartSection = ({ movie1, movie2 }) => {
                 angle={38}
                 domain={[0, 100]}
                 tick={{
-                  fill: "#724B2E",
+                  fill: "#ffffff",
                   fontSize: chartSize <= 200 ? 8 : 10,
                 }}
               />
@@ -207,11 +236,11 @@ const ChartSection = ({ movie1, movie2 }) => {
               data={charmData}
               margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
             >
-              <PolarGrid stroke="#724B2E" />
+              <PolarGrid stroke="#ffffff" />
               <PolarAngleAxis
                 dataKey="subject"
                 tick={{
-                  fill: "#724B2E",
+                  fill: "#ffffff",
                   fontSize: chartSize <= 200 ? 8 : 10,
                 }}
               />
@@ -219,7 +248,7 @@ const ChartSection = ({ movie1, movie2 }) => {
                 angle={38}
                 domain={[0, 100]}
                 tick={{
-                  fill: "#724B2E",
+                  fill: "#ffffff",
                   fontSize: chartSize <= 200 ? 8 : 10,
                 }}
               />

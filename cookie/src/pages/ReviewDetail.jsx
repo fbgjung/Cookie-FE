@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../api/auth/axiosInstance";
 import DetailHeader from "../components/searchpage/ReviewDetailHeader";
@@ -177,6 +177,9 @@ const ReviewDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [likedByUser, setLikedByUser] = useState(false);
+  const location = useLocation();
+  const fromLikedReviews = location.state?.fromLikedReviews || false;
+  const fromMyPage = location.state?.fromMyPage || false;
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -356,7 +359,10 @@ const ReviewDetail = () => {
       window.location.reload();
     } catch (error) {
       console.error("Error during comment submission:", error);
-      if (error.response?.data.message === '자신의 리뷰에는 댓글을 작성할 수 없습니다.') {
+      if (
+        error.response?.data.message ===
+        "자신의 리뷰에는 댓글을 작성할 수 없습니다."
+      ) {
         toast.error("본인이 작성한 리뷰에는 댓글을 작성할 수 없습니다!");
       } else {
         toast.error("예기치 못한 오류가 발생했습니다.");
@@ -393,10 +399,9 @@ const ReviewDetail = () => {
         date={new Date(reviewData.createdAt).toLocaleDateString()}
         movieTitle={reviewData.movie?.title || "Untitled Movie"}
         cookieScoreCount={reviewData.movieScore || 0}
-        handleUpdateReview={handleUpdateReview}
-        isMenuOpen={isMenuOpen}
-        toggleMenu={toggleMenu}
         handleDelete={handleDeleteReview}
+        isMenuOpen={isMenuOpen && !fromLikedReviews} // 좋아한 리뷰에서 들어오면 메뉴 비활성화
+        toggleMenu={fromLikedReviews ? undefined : toggleMenu} // 좋아한 리뷰에서는 토글 버튼 제거
       />
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSectionStyled>

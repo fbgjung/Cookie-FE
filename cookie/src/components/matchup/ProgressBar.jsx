@@ -1,22 +1,48 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
+
+const slideAnimation = keyframes`
+  0% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.2);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+`;
 
 const BarContainer = styled.div`
   width: 90%;
   max-width: 1000px;
-  height: 30px;
+  height: 20px;
   background-color: #d9d9d9;
   border-radius: 15px;
   margin-top: 50px;
   position: relative;
   display: flex;
   align-items: center;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    max-width: 700px;
+    height: 18px;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 480px) {
+    width: 80%;
+    max-width: none;
+    height: 15px;
+    margin-top: 30px;
+  }
 `;
 
 const FilledBarLeft = styled.div`
   height: 100%;
   width: ${(props) => props.percentage}%;
-  background-color: #a7d477;
+  background-color: rgb(229, 9, 20);
   border-radius: 15px 0 0 15px;
   transition: width 0.5s ease;
 `;
@@ -24,46 +50,61 @@ const FilledBarLeft = styled.div`
 const FilledBarRight = styled.div`
   height: 100%;
   width: ${(props) => 100 - props.percentage}%;
-  background-color: #8b5dff;
+  background-color: #006400;
   border-radius: 0 15px 15px 0;
   transition: width 0.5s ease;
 `;
 
-const PercentageBubble = styled.div`
+const SlidingIconContainer = styled.div`
   position: absolute;
   top: -40px;
-  left: ${(props) =>
-    props.isLeftWinning ? props.percentage : 100 - props.percentage}%;
+  left: ${(props) => props.percentage}%;
   transform: translateX(-50%);
-  background-color: ${(props) => (props.isLeftWinning ? "#a7d477" : "#8b5dff")};
-  color: #ffffff;
-  font-size: 0.9rem;
-  font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  white-space: nowrap;
+  z-index: 10;
 
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid
-      ${(props) => (props.isLeftWinning ? "#a7d477" : "#8b5dff")};
+  &:hover .tooltip {
+    opacity: 1;
+    transform: translate(-50%, -40px);
   }
 `;
 
-const Icon = styled.img`
-  width: 20px;
-  height: 20px;
+const SlidingIcon = styled.img`
+  width: 40px;
+  height: 40px;
+  animation: ${slideAnimation} 1.5s infinite ease-in-out;
+  cursor: pointer;
+`;
+
+const Tooltip = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%, -20px);
+  background-color: ${(props) =>
+    props.isLeftWinning ? "rgb(229, 9, 20)" : "#006400"};
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: ${(props) =>
+      props.isLeftWinning
+        ? "rgb(229, 9, 20) transparent transparent transparent"
+        : "#006400 transparent transparent transparent"};
+  }
 `;
 
 const ProgressBar = ({ movie1Likes, movie2Likes }) => {
@@ -72,14 +113,20 @@ const ProgressBar = ({ movie1Likes, movie2Likes }) => {
     totalVotes > 0 ? Math.round((movie1Likes / totalVotes) * 100) : 50;
   const isLeftWinning = percentage >= 50;
 
+  const iconSrc = isLeftWinning
+    ? "/assets/images/matchup/matchupleftwin.png"
+    : "/assets/images/matchup/matchuprightwin.png";
+
   return (
     <BarContainer>
       <FilledBarLeft percentage={percentage} />
       <FilledBarRight percentage={percentage} />
-      <PercentageBubble isLeftWinning={isLeftWinning} percentage={percentage}>
-        <Icon src="/src/assets/images/matchup/ic_fight.svg" alt="Fight Icon" />
-        {isLeftWinning ? percentage : 100 - percentage}%
-      </PercentageBubble>
+      <SlidingIconContainer percentage={percentage}>
+        <SlidingIcon src={iconSrc} alt="Winning Icon" />
+        <Tooltip className="tooltip" isLeftWinning={isLeftWinning}>
+          {isLeftWinning ? percentage : 100 - percentage}%
+        </Tooltip>
+      </SlidingIconContainer>
     </BarContainer>
   );
 };
