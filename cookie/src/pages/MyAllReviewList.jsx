@@ -85,7 +85,9 @@ const MyAllReviewList = () => {
   }, []);
 
   const handleReviewClick = (reviewId) => {
-    navigate(`/reviews/${reviewId}`, { state: { fromMyAllReviewList: true } });
+    navigate(`/reviews/${reviewId}`, {
+      state: { fromMyAllReviewList: true },
+    });
   };
 
   const fetchReviews = async () => {
