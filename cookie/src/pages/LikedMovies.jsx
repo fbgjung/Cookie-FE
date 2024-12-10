@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
   padding-top: 40px;
@@ -136,8 +137,18 @@ const LikedMovies = () => {
     navigate(-1);
   };
 
+  const fetchLikedMovies = async () => {
+    try {
+      const response = await axiosInstance.get("/api/users/likedMovieList/");
+      const fetchedMovies = response.data.response.movies || [];
+      setMovies(fetchedMovies);
+    } catch (error) {
+      console.error("좋아하는 영화 목록 불러오기 실패:", error);
+    }
+  };
+
   useEffect(() => {
-    setMovies([]);
+    fetchLikedMovies();
   }, []);
 
   return (
@@ -149,10 +160,11 @@ const LikedMovies = () => {
       />
       <Title>좋아하는 영화</Title>
       <HeartIcon src="/assets/images/mypage/red-heart.svg" alt="하트" />
+
       {movies.length > 0 ? (
         <MoviesGrid>
-          {movies.map((movie) => (
-            <MovieCard key={movie.id}>
+          {movies.map((movie, index) => (
+            <MovieCard key={index}>
               <Poster src={movie.poster} alt={movie.title} />
               <MovieInfo>
                 <h2>{movie.title}</h2>
