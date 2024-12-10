@@ -16,24 +16,24 @@ const Container = styled.div`
 `;
 
 const BackButton = styled.img`
-  position: absolute;
-  top: 2rem;
-  left: -11rem;
+  position: fixed;
+  top: 7rem;
+  left: 28rem;
   width: 24px;
   height: 24px;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1000;
 
   @media (max-width: 768px) {
-    top: 1.5rem;
-    left: -8rem;
+    top: 7rem;
+    left: 1rem;
     width: 20px;
     height: 20px;
   }
 
   @media (max-width: 480px) {
-    top: 1.5rem;
-    left: -6rem;
+    top: 7rem;
+    left: 2rem;
     width: 18px;
     height: 18px;
   }
@@ -139,7 +139,7 @@ const LikedMovies = () => {
 
   const fetchLikedMovies = async () => {
     try {
-      const response = await axiosInstance.get("/api/users/likedMovieList/");
+      const response = await axiosInstance.get("/api/users/likedMovieList");
       const fetchedMovies = response.data.response.movies || [];
       setMovies(fetchedMovies);
     } catch (error) {
