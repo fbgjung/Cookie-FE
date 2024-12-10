@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
+// 스타일 정의
 const ReviewContentContainer = styled.div`
   display: flex;
   margin-bottom: 20px;
@@ -176,8 +177,11 @@ const ReviewContentSection = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const fromReviewFeed = location.state?.fromReviewFeed || false;
   const fromLikedReviews = location.state?.fromLikedReviews || false;
   const fromMyPage = location.state?.fromMyPage || false;
+  const fromMyAllReviewList = location.state?.fromMyAllReviewList || false;
 
   const [isEditing, setIsEditing] = useState(false);
   const [newContent, setNewContent] = useState("");
@@ -216,6 +220,27 @@ const ReviewContentSection = ({
 
   const handleCookieClick = (index) => {
     setNewMovieScore(index + 1);
+  };
+
+  const renderMenuOptions = () => {
+    if (fromReviewFeed) {
+      return (
+        <DropdownMenu>
+          <div onClick={() => navigate("/mypage")}>내 정보 관리하기</div>
+        </DropdownMenu>
+      );
+    }
+
+    if ((fromMyPage || fromMyAllReviewList) && !fromLikedReviews) {
+      return (
+        <DropdownMenu>
+          <div onClick={handleEditClick}>수정하기</div>
+          <div onClick={handleDeleteWithConfirmation}>삭제하기</div>
+        </DropdownMenu>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -277,21 +302,15 @@ const ReviewContentSection = ({
         )}
       </div>
 
-      {fromMyPage && !fromLikedReviews && (
-        <div className="options" onClick={toggleMenu}>
-          <img src="/images/more.svg" alt="More Options" />
-          {isMenuOpen && (
-            <DropdownMenu>
-              <div onClick={handleEditClick}>수정하기</div>
-              <div onClick={handleDeleteWithConfirmation}>삭제하기</div>
-            </DropdownMenu>
-          )}
-        </div>
-      )}
+      <div className="options" onClick={toggleMenu}>
+        <img src="/images/more.svg" alt="More Options" />
+        {isMenuOpen && renderMenuOptions()}
+      </div>
     </ReviewContentContainer>
   );
 };
 
+// PropTypes 지정
 ReviewContentSection.propTypes = {
   posterSrc: PropTypes.string.isRequired,
   profileSrc: PropTypes.string.isRequired,
