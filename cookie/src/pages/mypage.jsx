@@ -159,15 +159,21 @@ const MyPage = () => {
 
   const handleWithdraw = async () => {
     if (window.confirm("정말로 탈퇴하시겠습니까?")) {
+      setIsLoading(true);
       try {
         await axiosInstance.delete("/api/users");
-        toast.success("탈퇴가 완료되었습니다.");
+
+        logOut();
         sessionStorage.clear();
         localStorage.clear();
+
+        toast.success("탈퇴가 완료되었습니다.");
         window.location.href = "/login";
       } catch (error) {
         console.error("탈퇴 요청 실패:", error);
         toast.error("탈퇴 중 문제가 발생했습니다.\n다시 시도해주세요.");
+      } finally {
+        setIsLoading(false);
       }
     }
   };
