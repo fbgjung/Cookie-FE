@@ -38,7 +38,11 @@ const FooterSectionStyled = styled.div`
     }
 
     .liked {
-      fill: red;
+      fill: #ff4d4d;
+    }
+
+    .hovered {
+      fill: #ff9999; /* 마우스 오버 시 색상 */
     }
 
     span {
@@ -171,6 +175,7 @@ const ReviewDetail = () => {
   const [editingCommentText, setEditingCommentText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
   const [likedByUser, setLikedByUser] = useState(false);
   const location = useLocation();
   const fromLikedReviews = location.state?.fromLikedReviews || false;
@@ -197,6 +202,31 @@ const ReviewDetail = () => {
     fetchReviewData();
   }, [reviewId]);
 
+  const handleLikeClick = async () => {
+    const previousLiked = likedByUser;
+    const previousLikeCount = reviewData.reviewLike;
+
+    // 상태를 임시로 업데이트
+    setLikedByUser(!previousLiked);
+    setReviewData((prevData) => ({
+      ...prevData,
+      reviewLike: previousLiked ? previousLikeCount - 1 : previousLikeCount + 1,
+    }));
+
+    try {
+      await axiosInstance.post(`/api/users/review-like/${reviewId}`);
+    } catch (error) {
+      console.error("Failed to toggle like:", error);
+      toast.error("좋아요 처리에 실패했습니다.");
+      // 오류 발생 시 이전 상태로 복구
+      setLikedByUser(previousLiked);
+      setReviewData((prevData) => ({
+        ...prevData,
+        reviewLike: previousLikeCount,
+      }));
+    }
+  };
+/*
   const toggleLike = async () => {
     const userId = getUserIdFromToken();
     if (!userId) return;
@@ -218,6 +248,7 @@ const ReviewDetail = () => {
       toast.error("좋아요 처리에 실패했습니다.");
     }
   };
+*/
 
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("refreshToken");
@@ -376,9 +407,11 @@ const ReviewDetail = () => {
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSectionStyled>
         <div className="icon-container">
-          <FaHeart
-            onClick={toggleLike}
-            style={{ fill: likedByUser ? "red" : "black", cursor: "pointer" }}
+        <FaHeart
+            className={likedByUser ? "liked" : isHovered ? "hovered" : ""}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={handleLikeClick}
           />
           <span>{reviewData.reviewLike}</span>
         </div>

@@ -70,14 +70,10 @@ const ReviewContentContainer = styled.div`
         width: 25px;
         height: 25px;
         margin-right: 5px;
-        cursor: pointer;
-
-        &:hover {
-          transform: scale(1.2);
-        }
+        transition: transform 0.2s ease;
 
         &.selected {
-          filter: brightness(1.2);
+          filter: brightness(1.3);
         }
       }
     }
@@ -269,7 +265,6 @@ const ReviewContentSection = ({
                   className={`cookie ${i < newMovieScore ? "selected" : ""}`}
                   src="/images/cookiescore.svg"
                   alt="Cookie Score"
-                  onClick={() => handleCookieClick(i)}
                 />
               ))}
             </div>
