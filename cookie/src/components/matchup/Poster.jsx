@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
+import useAuthStore from "../../stores/useAuthStore";
 
 const fadeInUp = keyframes`
   from {
@@ -17,13 +18,10 @@ const fadeInUp = keyframes`
 const PosterWrapper = styled.div`
   position: relative;
   width: 100%;
-
   height: 350px;
   border-radius: 5px;
   overflow: hidden;
-
   transition: transform 0.3s ease;
-
   animation: ${fadeInUp} 0.8s ease-out;
 
   &:hover {
@@ -71,7 +69,7 @@ const Overlay = styled.div`
 `;
 
 const VoteButton = styled.button`
-  background-color: ffffff;
+  background-color: #ffffff;
   color: #006400;
   border: none;
   border-radius: 5px;
@@ -89,11 +87,17 @@ const VoteButton = styled.button`
 
 const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const { isLoggedIn, openLoginModal, isLogined } = useAuthStore();
 
   const handleVoteClick = () => {
-    if (!isVoteEnded) {
-      setModalOpen(true);
+    if (isVoteEnded) return;
+
+    if (!isLogined()) {
+      openLoginModal();
+      return;
     }
+
+    setModalOpen(true);
   };
 
   const handleCloseModal = () => {
@@ -114,6 +118,7 @@ const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         movieTitle={movieTitle}
+        imageUrl={src}
         movieId={movieId}
       />
     </>
