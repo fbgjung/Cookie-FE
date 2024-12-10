@@ -78,7 +78,7 @@ const CommentsSectionContainer = styled.div`
     }
 
     button {
-      background-color: #66BEFF;
+      background-color: #66beff;
       color: white;
       border: none;
       border-radius: 50%;
@@ -207,7 +207,7 @@ const ModalContent = styled.div`
       cursor: pointer;
       transition: background-color 0.3s;
       &.save {
-        background-color: #66BEFF;
+        background-color: #66beff;
         color: white;
         &:hover {
           background-color: #005faa;
@@ -284,7 +284,7 @@ const ReviewDetail = () => {
       }));
     }
   };
-/*
+  /*
 
   const toggleLike = async () => {
     const userId = getUserIdFromToken();
@@ -467,7 +467,7 @@ const ReviewDetail = () => {
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSectionStyled>
         <div className="icon-container">
-        <FaHeart
+          <FaHeart
             className={likedByUser ? "liked" : isHovered ? "hovered" : ""}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -491,11 +491,19 @@ const ReviewDetail = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault(); // 기본 동작 방지
-                handleAddComment(); // 댓글 추가 함수 호출
+                if (newComment.trim()) {
+                  handleAddComment(); // 댓글 추가 함수 호출
+                }
               }
             }}
           />
-          <button onClick={handleAddComment}>
+          <button
+            onClick={() => {
+              if (newComment.trim()) {
+                handleAddComment(); // 댓글 추가 함수 호출
+              }
+            }}
+          >
             <FaPaperPlane />
           </button>
         </div>
@@ -525,14 +533,14 @@ const ReviewDetail = () => {
                   return (
                     comment.user.userId === userId && (
                       <div className="comment-actions">
-                          <button onClick={() => handleOpenEditModal(comment)}>수정</button>
-                            <button
-                              onClick={() =>
-                                handleDeleteComment(comment.commentId)
-                              }
-                            >
-                              삭제
-                            </button>
+                        <button onClick={() => handleOpenEditModal(comment)}>
+                          수정
+                        </button>
+                        <button
+                          onClick={() => handleDeleteComment(comment.commentId)}
+                        >
+                          삭제
+                        </button>
                       </div>
                     )
                   );
@@ -542,26 +550,29 @@ const ReviewDetail = () => {
           </div>
         ))}
         {editingComment && (
-  <ModalWrapper>
-    <ModalContent>
-      <h2>댓글 수정</h2>
-      <textarea
-        value={editingComment.text}
-        onChange={(e) =>
-          setEditingComment((prev) => ({ ...prev, text: e.target.value }))
-        }
-      />
-      <div className="modal-actions">
-        <button className="cancel" onClick={handleCloseEditModal}>
-          취소
-        </button>
-        <button className="save" onClick={handleEditComment}>
-          저장
-        </button>
-      </div>
-    </ModalContent>
-  </ModalWrapper>
-)}
+          <ModalWrapper>
+            <ModalContent>
+              <h2>댓글 수정</h2>
+              <textarea
+                value={editingComment.text}
+                onChange={(e) =>
+                  setEditingComment((prev) => ({
+                    ...prev,
+                    text: e.target.value,
+                  }))
+                }
+              />
+              <div className="modal-actions">
+                <button className="cancel" onClick={handleCloseEditModal}>
+                  취소
+                </button>
+                <button className="save" onClick={handleEditComment}>
+                  저장
+                </button>
+              </div>
+            </ModalContent>
+          </ModalWrapper>
+        )}
       </CommentsSectionContainer>
     </Container>
   );
