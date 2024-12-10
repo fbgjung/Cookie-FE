@@ -89,6 +89,9 @@ const Poster = ({ src, movieTitle, movieId, isVoteEnded, matchUpId }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const { isLogined, openLoginModal } = useAuthStore();
 
+  console.log("무비아이디", movieId);
+  console.log("매치업아이디", matchUpId);
+
   const handleVoteClick = () => {
     if (isVoteEnded) return;
 
