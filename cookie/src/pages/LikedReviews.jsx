@@ -107,7 +107,7 @@ const LikedReviews = () => {
       const { reviews = [], totalPages = 1 } = response.data.response || {};
 
       const newReviews = reviews.map((review) => ({
-        id: review.reviewId,
+        reviewId: review.reviewId,
         content: review.content,
         score: review.movieScore,
         likes: review.reviewLike,
