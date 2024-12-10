@@ -85,9 +85,9 @@ const VoteButton = styled.button`
   }
 `;
 
-const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
+const Poster = ({ src, movieTitle, movieId, isVoteEnded, matchUpId }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const { isLoggedIn, openLoginModal, isLogined } = useAuthStore();
+  const { isLogined, openLoginModal } = useAuthStore();
 
   const handleVoteClick = () => {
     if (isVoteEnded) return;
@@ -120,6 +120,7 @@ const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
         movieTitle={movieTitle}
         imageUrl={src}
         movieId={movieId}
+        matchUpId={matchUpId}
       />
     </>
   );
@@ -130,6 +131,7 @@ Poster.propTypes = {
   movieTitle: PropTypes.string.isRequired,
   movieId: PropTypes.number.isRequired,
   isVoteEnded: PropTypes.bool.isRequired,
+  matchUpId: PropTypes.number.isRequired,
 };
 
 export default Poster;

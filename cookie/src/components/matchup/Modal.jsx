@@ -168,13 +168,17 @@ const CloseButton = styled.button`
   }
 `;
 
-const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
+const Modal = ({
+  isOpen,
+  onClose,
+  movieTitle,
+  imageUrl,
+  movieId,
+  matchUpId,
+}) => {
   const [selectedAttractiveTags, setSelectedAttractiveTags] = useState([]);
   const [selectedEmotionTags, setSelectedEmotionTags] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const matchUpId = 1;
-  const matchUpMovieId = 2;
 
   const attractiveTagsMap = {
     "🎶 OST": "ost",
@@ -197,65 +201,53 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
   };
 
   const handleTagClick = (tag, type) => {
-    if (type === "attractive") {
-      setSelectedAttractiveTags((prev) =>
-        prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-      );
-    } else if (type === "emotion") {
-      setSelectedEmotionTags((prev) =>
-        prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-      );
-    }
+    const setTags =
+      type === "attractive"
+        ? setSelectedAttractiveTags
+        : setSelectedEmotionTags;
+
+    setTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
   };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
-    const charmPoint = Object.keys(attractiveTagsMap).reduce((acc, tag) => {
-      acc[attractiveTagsMap[tag]] = selectedAttractiveTags.includes(tag)
-        ? 1
-        : 0;
-      return acc;
-    }, {});
+    const charmPoint = Object.fromEntries(
+      Object.entries(attractiveTagsMap).map(([tag, key]) => [
+        key,
+        selectedAttractiveTags.includes(tag) ? 1 : 0,
+      ])
+    );
 
-    const emotionPoint = Object.keys(emotionTagsMap).reduce((acc, tag) => {
-      acc[emotionTagsMap[tag]] = selectedEmotionTags.includes(tag) ? 1 : 0;
-      return acc;
-    }, {});
+    const emotionPoint = Object.fromEntries(
+      Object.entries(emotionTagsMap).map(([tag, key]) => [
+        key,
+        selectedEmotionTags.includes(tag) ? 1 : 0,
+      ])
+    );
 
     const payload = {
       charmPoint,
       emotionPoint,
     };
 
-    const MINIMUM_SPINNER_TIME = 1000;
-    const startTime = Date.now();
-
     try {
       const response = await axiosInstance.post(
-        `/api/matchups/${matchUpId}/movies/${matchUpMovieId}/vote`,
+        `/api/matchups/${matchUpId}/movies/${movieId}/vote`,
         payload
       );
 
-      const elapsedTime = Date.now() - startTime;
-      const remainingTime = Math.max(0, MINIMUM_SPINNER_TIME - elapsedTime);
-
-      setTimeout(() => {
-        if (response.data.response === "SUCCESS") {
-          toast.success("투표가 성공적으로 완료되었습니다!");
-          onClose();
-        }
-        setIsSubmitting(false);
-      }, remainingTime);
+      if (response.data.response === "SUCCESS") {
+        toast.success("투표가 성공적으로 완료되었습니다!");
+        onClose();
+      }
     } catch (error) {
-      const elapsedTime = Date.now() - startTime;
-      const remainingTime = Math.max(0, MINIMUM_SPINNER_TIME - elapsedTime);
-
-      setTimeout(() => {
-        console.error("투표 요청 실패:", error);
-        toast.error("이미 투표하셨습니다.\n다시 시도해주세요.");
-        setIsSubmitting(false);
-      }, remainingTime);
+      console.error("투표 요청 실패:", error);
+      toast.error("이미 투표하셨습니다.\n다시 시도해주세요.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -270,6 +262,7 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
         <ImageContainer>
           <img src={imageUrl} alt={`${movieTitle} 이미지`} />
         </ImageContainer>
+
         <Title>{movieTitle}의 매력 포인트를 알려주세요</Title>
         <TagsContainer>
           {Object.keys(attractiveTagsMap).map((tag) => (
@@ -282,6 +275,7 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
             </Tag>
           ))}
         </TagsContainer>
+
         <Title>{movieTitle}의 감정 포인트를 알려주세요</Title>
         <TagsContainer>
           {Object.keys(emotionTagsMap).map((tag) => (
@@ -294,6 +288,7 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
             </Tag>
           ))}
         </TagsContainer>
+
         <VoteButton onClick={handleSubmit}>투표하기</VoteButton>
       </ModalContainer>
     </ModalBackground>
@@ -305,6 +300,8 @@ Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   movieTitle: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
+  movieId: PropTypes.number.isRequired,
+  matchUpId: PropTypes.number.isRequired,
 };
 
 export default Modal;
