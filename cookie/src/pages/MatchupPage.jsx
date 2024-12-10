@@ -14,6 +14,7 @@ import ScrollToTop from "../components/common/ScrollToTop";
 
 import SnowEffect from "../components/common/SnowEffect";
 import axios from "axios";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
   display: flex;
@@ -100,8 +101,9 @@ const MatchupPage = () => {
   const fetchMatchUpData = async () => {
     try {
       const endpoint = `/api/matchups/${matchUpId || 1}`;
-      const response = await axios.get(endpoint);
+      const response = await axiosInstance.get(endpoint);
       setMatchUpData(response.data.response || sampleData);
+      console.log(response.data.response);
     } catch (error) {
       console.error("API 요청 실패:", error);
       setMatchUpData(sampleData);
@@ -168,18 +170,21 @@ const MatchupPage = () => {
       <PosterList
         posters={[
           {
+            movieId: matchUpData.movie1.movieId,
             src:
               matchUpData.movie1.moviePoster ||
               "/src/assets/images/matchup/testposter.png",
             title: matchUpData.movie1.movieTitle,
           },
           {
+            movieId: matchUpData.movie2.movieId,
             src:
               matchUpData.movie2.moviePoster ||
               "/src/assets/images/matchup/testposter1.png",
             title: matchUpData.movie2.movieTitle,
           },
         ]}
+        matchUpId={matchUpData.matchUpId}
         isVoteEnded={isVoteEnded}
       />
       <ProgressBar
