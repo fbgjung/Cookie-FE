@@ -1,16 +1,28 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
+import useAuthStore from "../../stores/useAuthStore";
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const PosterWrapper = styled.div`
   position: relative;
-  width: 160px;
-  height: 230px;
-  border-radius: 10px;
+  width: 100%;
+  height: 350px;
+  border-radius: 5px;
   overflow: hidden;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease;
+  animation: ${fadeInUp} 0.8s ease-out;
 
   &:hover {
     transform: scale(1.05);
@@ -18,6 +30,21 @@ const PosterWrapper = styled.div`
 
   &:hover .overlay {
     opacity: 1;
+  }
+
+  @media (max-width: 1024px) {
+    width: 250px;
+    height: 360px;
+  }
+
+  @media (max-width: 768px) {
+    width: 218px;
+    height: 320px;
+  }
+
+  @media (max-width: 480px) {
+    width: 170px;
+    height: 250px;
   }
 `;
 
@@ -42,8 +69,8 @@ const Overlay = styled.div`
 `;
 
 const VoteButton = styled.button`
-  background-color: #aad6e7;
-  color: #724b2e;
+  background-color: #ffffff;
+  color: #006400;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -60,11 +87,17 @@ const VoteButton = styled.button`
 
 const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const { isLoggedIn, openLoginModal, isLogined } = useAuthStore();
 
   const handleVoteClick = () => {
-    if (!isVoteEnded) {
-      setModalOpen(true);
+    if (isVoteEnded) return;
+
+    if (!isLogined()) {
+      openLoginModal();
+      return;
     }
+
+    setModalOpen(true);
   };
 
   const handleCloseModal = () => {
@@ -85,6 +118,7 @@ const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         movieTitle={movieTitle}
+        imageUrl={src}
         movieId={movieId}
       />
     </>

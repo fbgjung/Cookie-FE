@@ -212,20 +212,15 @@ const ReviewRight = styled.div`
     }
   }
 `;
-const ReviewList = ({ title, reviews }) => {
-  const navigate = useNavigate();
-
-  const handleReviewClick = (reviewId) => {
-    navigate(`/reviews/${reviewId}`, { state: { from: "reviewList" } });
-  };
+const ReviewList = ({ title, reviews, onReviewClick }) => {
   return (
     <ReviewSection>
       <ReviewTitle>{title}</ReviewTitle>
       <ReviewContainer>
-        {reviews.map((review, index) => (
+        {reviews.map((review) => (
           <ReviewTicket
             key={review.reviewId}
-            onClick={() => handleReviewClick(review.reviewId)}
+            onClick={() => onReviewClick(review.reviewId)}
           >
             <ReviewLeft>
               <img

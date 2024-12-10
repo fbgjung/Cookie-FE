@@ -84,6 +84,10 @@ const MyAllReviewList = () => {
     fetchReviews();
   }, []);
 
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`, { state: { fromMyAllReviewList: true } });
+  };
+
   const fetchReviews = async () => {
     if (loading || page >= totalPages) return;
     setLoading(true);
@@ -150,7 +154,11 @@ const MyAllReviewList = () => {
         <EmptyMessage>내가 쓴 리뷰가 없습니다!</EmptyMessage>
       ) : (
         <>
-          <ReviewList title="" reviews={reviews} />
+          <ReviewList
+            title=""
+            reviews={reviews}
+            onReviewClick={handleReviewClick}
+          />
           <div ref={observer} style={{ height: "1px" }}></div>
         </>
       )}

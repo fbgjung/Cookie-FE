@@ -8,31 +8,26 @@ const useUserStore = create((set, get) => ({
     genreId: null,
   },
 
-  // 유저 정보 전체 설정
   setUserInfo: (info) =>
     set((state) => ({
       userInfo: { ...state.userInfo, ...info },
     })),
 
-  // 닉네임 수정
   updateNickname: (nickname) =>
     set((state) => ({
       userInfo: { ...state.userInfo, nickname },
     })),
 
-  // 프로필 이미지 수정
   updateProfileImage: (profileImage) =>
     set((state) => ({
       userInfo: { ...state.userInfo, profileImage },
     })),
 
-  // 장르 ID 수정
   updateGenreId: (genreId) =>
     set((state) => ({
       userInfo: { ...state.userInfo, genreId },
     })),
 
-  //로그아웃
   logout: () =>
     set(() => ({
       userInfo: {

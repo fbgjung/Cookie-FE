@@ -241,6 +241,7 @@ function SignUpGenre() {
             onEmailNotification={() =>
               handleFormDataSubmission("false", "true")
             }
+            onNoNotification={() => handleFormDataSubmission("false", "false")}
           />
         )}
       </MainContainer>

@@ -131,6 +131,10 @@ const MyPage = () => {
     fetchUserData();
   }, [isLogined, openLoginModal]);
 
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`, { state: { fromMyPage: true } });
+  };
+
   const mainBadge = badgeData.find((badge) => badge.main) || {};
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
@@ -203,7 +207,7 @@ const MyPage = () => {
             <ReviewTitle>{`${userData.nickname}의 리뷰`}</ReviewTitle>
             <MoreLink onClick={handleMoreClick}>{" 더보기"}</MoreLink>
           </ReviewHeader>
-          <ReviewList reviews={reviewData} />
+          <ReviewList reviews={reviewData} onReviewClick={handleReviewClick} />
           {isLogined() && (
             <LogoutAndWithdraw
               onLogout={handleLogout}

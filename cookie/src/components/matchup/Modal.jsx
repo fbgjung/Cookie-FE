@@ -3,7 +3,7 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
 import axiosInstance from "../../api/auth/axiosInstance";
-import Spinner from "../common/Spinner"; // 스피너 컴포넌트 추가
+import Spinner from "../common/Spinner";
 
 const ModalBackground = styled.div`
   position: fixed;
@@ -21,7 +21,7 @@ const ModalBackground = styled.div`
 const ModalContainer = styled.div`
   width: 80%;
   max-width: 480px;
-  background: #ffffff;
+  background: black;
   border-radius: 15px;
   padding: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
@@ -42,7 +42,7 @@ const ModalContainer = styled.div`
 const Title = styled.h2`
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333333;
+  color: #ffffff;
   margin-bottom: 10px;
 
   @media (max-width: 768px) {
@@ -96,21 +96,22 @@ const TagsContainer = styled.div`
 `;
 
 const Tag = styled.div`
-  background-color: ${(props) => (props.selected ? "#AAD6E7" : "#ffffff")};
-  color: ${(props) =>
-    props.selected ? "#ffffff" : "#724B2E"}; /* 평소 글씨 색상 변경 */
-  border: 1px solid ${(props) => (props.selected ? "#AAD6E7" : "#ddd")};
+  background-color: ${(props) => (props.selected ? "#006400" : "#ffffff")};
+  color: ${(props) => (props.selected ? "#ffffff" : "#724B2E")};
+  border: 1px solid #006400;
   border-radius: 20px;
   padding: 10px 20px;
   font-size: 0.9rem;
   cursor: pointer;
   transition:
     background-color 0.3s ease,
-    color 0.3s ease;
+    color 0.3s ease,
+    transform 0.2s ease;
 
   &:hover {
-    background-color: ${(props) => (props.selected ? "#04012D" : "#AAD6E7")};
-    color: #ffffff;
+    background-color: ${(props) => (props.selected ? "#006400" : "#f0f0f0")};
+    color: ${(props) => (props.selected ? "#ffffff" : "#006400")};
+    transform: scale(1.05);
   }
 
   @media (max-width: 768px) {
@@ -125,8 +126,8 @@ const Tag = styled.div`
 `;
 
 const VoteButton = styled.button`
-  background-color: #aad6e7;
-  color: #724b2e;
+  background-color: #ffffff;
+  color: #006400;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -136,7 +137,7 @@ const VoteButton = styled.button`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    background-color: #71b3d7;
+    background-color: #f0f0f0;
   }
 
   @media (max-width: 768px) {
@@ -163,7 +164,7 @@ const CloseButton = styled.button`
   transition: color 0.2s ease;
 
   &:hover {
-    color: #999999;
+    color: red;
   }
 `;
 
@@ -252,7 +253,7 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
 
       setTimeout(() => {
         console.error("투표 요청 실패:", error);
-        toast.error("프로필 저장에 실패했습니다.\n다시 시도해주세요.");
+        toast.error("이미 투표하셨습니다.\n다시 시도해주세요.");
         setIsSubmitting(false);
       }, remainingTime);
     }
@@ -281,6 +282,7 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
             </Tag>
           ))}
         </TagsContainer>
+        <Title>{movieTitle}의 감정 포인트를 알려주세요</Title>
         <TagsContainer>
           {Object.keys(emotionTagsMap).map((tag) => (
             <Tag

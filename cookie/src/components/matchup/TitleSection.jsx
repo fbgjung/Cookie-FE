@@ -11,33 +11,65 @@ Modal.setAppElement("#root");
 
 const TitleContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
 `;
 
 const TitleImage = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
+
+  @media (max-width: 480px) {
+    width: 45px;
+    height: 45px;
+  }
 `;
 
 const Title = styled.h1`
-  font-size: 1.2rem;
+  font-size: 2rem;
   font-weight: bold;
-  color: #724b2e;
+  color: #006400;
+  text-align: center;
+  margin: 5px 0;
+
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
 
-const DDayContainer = styled.div`
+const InfoContainer = styled.div`
   display: flex;
+  gap: 15px;
   align-items: center;
-  gap: 10px;
+  margin-top: 10px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 8px;
+  }
 `;
 
 const DDay = styled.div`
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  color: #724b2e;
+  color: #006400;
+  margin-left: 6.5rem;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.1rem;
+    margin-left: 0.1rem;
+  }
 `;
 
 const HistoryButton = styled.button`
@@ -46,13 +78,22 @@ const HistoryButton = styled.button`
   gap: 5px;
   background-color: transparent;
   border: none;
-  color: #724b2e;
-  font-size: 1rem;
+  color: #006400;
+
+  font-size: 0.9rem;
   font-weight: bold;
   cursor: pointer;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
   }
 `;
 
@@ -65,7 +106,7 @@ const modalCustomStyles = {
     alignItems: "center",
   },
   content: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "black",
     borderRadius: "15px",
     padding: "20px",
     width: "90%",
@@ -76,7 +117,7 @@ const modalCustomStyles = {
     flexDirection: "column",
     justifyContent: "space-between",
     height: "auto",
-    minHeight: "500px",
+    minHeight: "400px",
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -86,9 +127,9 @@ const modalCustomStyles = {
 };
 
 const ModalHeader = styled.h2`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  color: #333333;
+  color: #ffffff;
   margin-bottom: 10px;
 `;
 
@@ -101,20 +142,28 @@ const ModalList = styled.ul`
 
 const ModalListItem = styled.li`
   font-size: 1rem;
-  color: #555555;
+  color: #ffffff;
   margin-bottom: 10px;
   cursor: pointer;
 
   &:hover {
-    color: #1ee5b0;
+    color: #ffffff;
     text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
   }
 `;
 
 const CloseButton = styled.button`
   margin-top: 20px;
-  background-color: #1ee5b0;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #006400;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -123,7 +172,17 @@ const CloseButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #17c397;
+    background-color: #f0f0f0;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
 `;
 
@@ -131,7 +190,6 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [historyData, setHistoryData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isVoteEnded, setIsVoteEnded] = useState(false);
   const navigate = useNavigate();
 
   const handleModalToggle = () => {
@@ -145,21 +203,6 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
       setHistoryData(response.data.response);
     } catch (error) {
       console.error("히스토리 데이터 요청 실패:", error);
-
-      setHistoryData([
-        {
-          matchUpId: 1,
-          matchUpTitle: "로맨스 영화 빅매치입니다.",
-          startAt: "2024-11-20T00:00:00",
-          endAt: "2024-11-30T23:59:59",
-        },
-        {
-          matchUpId: 2,
-          matchUpTitle: "스릴러 영화 빅매치입니다.",
-          startAt: "2024-11-15T00:00:00",
-          endAt: "2024-11-18T23:59:59",
-        },
-      ]);
     } finally {
       setIsLoading(false);
     }
@@ -174,24 +217,11 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
   const calculateDDay = () => {
     const now = new Date();
     const endDate = new Date(endAt);
-
-    // 남은 시간 계산 (밀리초 -> 일 단위로 변환)
     const difference = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24)) - 1;
 
-    if (difference < 0) {
-      // 투표 종료
-      return "투표 종료";
-    } else if (difference === 0) {
-      // D-Day
-      return "D-Day";
-    } else {
-      // D-1, D-2 ...
-      return `D-${difference}`;
-    }
-  };
-
-  const handleTimerEnd = () => {
-    setIsVoteEnded(true);
+    if (difference < 0) return "투표 종료";
+    if (difference === 0) return "D-Day";
+    return `D-${difference}`;
   };
 
   const handleNavigate = (matchUpId) => {
@@ -204,16 +234,13 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
       <TitleContainer>
         <TitleImage src={TopicImage} alt="Topic Icon" />
         <Title>{matchUpTitle}</Title>
-        <DDayContainer>
-          {isVoteEnded ? (
-            <DDay>투표 종료</DDay>
-          ) : (
-            <DDay>{calculateDDay()}</DDay>
-          )}
+
+        <InfoContainer>
+          <DDay>{calculateDDay()}</DDay>
           <HistoryButton onClick={handleModalToggle}>
             히스토리 보기 <FiChevronDown size={16} />
           </HistoryButton>
-        </DDayContainer>
+        </InfoContainer>
       </TitleContainer>
 
       <Modal
@@ -225,7 +252,7 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
         <ModalList>
           {isLoading ? (
             <ModalListItem>로딩 중...</ModalListItem>
-          ) : historyData && historyData.length > 0 ? (
+          ) : historyData.length > 0 ? (
             historyData.map((item) => (
               <ModalListItem
                 key={item.matchUpId}
