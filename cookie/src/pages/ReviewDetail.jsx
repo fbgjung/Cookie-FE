@@ -235,6 +235,7 @@ const ReviewDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [likedByUser, setLikedByUser] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
   const fromLikedReviews = location.state?.fromLikedReviews || false;
   const fromMyPage = location.state?.fromMyPage || false;
@@ -402,10 +403,13 @@ const ReviewDetail = () => {
   };
 
   const handleAddComment = async () => {
+    if (isSubmitting) return;
+
     const userId = getUserIdFromToken();
     if (!userId || !newComment.trim()) return;
 
     try {
+      setIsSubmitting(true);
       const response = await axiosInstance.post(
         `/api/reviews/${reviewId}/comments`,
         {
@@ -427,6 +431,8 @@ const ReviewDetail = () => {
     } catch (error) {
       console.error("Error during comment submission:", error);
       toast.error("댓글 작성에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false); // 플래그 해제
     }
   };
 
@@ -490,18 +496,15 @@ const ReviewDetail = () => {
             onChange={(e) => setNewComment(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                e.preventDefault(); // 기본 동작 방지
-                if (newComment.trim()) {
-                  handleAddComment(); // 댓글 추가 함수 호출
+                e.preventDefault();
+                handleAddComment(); // 댓글 추가 함수 호출
                 }
               }
-            }}
+            }
           />
           <button
             onClick={() => {
-              if (newComment.trim()) {
-                handleAddComment(); // 댓글 추가 함수 호출
-              }
+              handleAddComment(); // 댓글 추가 함수 호출
             }}
           >
             <FaPaperPlane />
