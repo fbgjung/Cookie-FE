@@ -11,7 +11,9 @@ import ChartSection from "../components/matchup/ChartSection";
 import ChatUI from "../components/matchup/ChatUI";
 import { useParams, useLocation } from "react-router-dom";
 import ScrollToTop from "../components/common/ScrollToTop";
-import axiosInstance from "../api/auth/axiosInstance";
+
+import SnowEffect from "../components/common/SnowEffect";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -35,43 +37,10 @@ const Container = styled.div`
   overflow-x: hidden;
 `;
 
-const HistoryButton = styled.button`
-  position: absolute; /* 부모 컨테이너 기준 */
-  top: 20px; /* 상단에서 20px */
-  right: 0; /* 오른쪽 끝에 붙음 */
-  background-color: #fff4e0;
-  border: 1px solid #e50914;
-  border-radius: 20px 0 0 20px; /* 왼쪽 둥글고 오른쪽 네모 */
-  padding: 10px 15px;
-  color: #e50914;
-  font-size: 0.9rem;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-  &:hover {
-    background-color: #e50914;
-    color: #ffffff;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.8rem;
-    padding: 8px 12px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.7rem;
-    padding: 6px 10px;
-  }
-`;
-
 const sampleData = {
   matchUpTitle: "크리스마스 빅매치",
   startAt: "2024-11-21T17:21:03",
-  entAt: "2024-12-12T02:48:05",
+  entAt: "2024-12-11T02:48:05",
   movie1: {
     movieTitle: "나 홀로 집에",
     moviePoster: null,
@@ -131,7 +100,7 @@ const MatchupPage = () => {
   const fetchMatchUpData = async () => {
     try {
       const endpoint = `/api/matchups/${matchUpId || 1}`;
-      const response = await axiosInstance.get(endpoint);
+      const response = await axios.get(endpoint);
       setMatchUpData(response.data.response || sampleData);
     } catch (error) {
       console.error("API 요청 실패:", error);
@@ -189,6 +158,7 @@ const MatchupPage = () => {
 
   return (
     <Container>
+      <SnowEffect />
       <ScrollToTop />
       <TitleSection
         matchUpTitle={matchUpData.matchUpTitle}
