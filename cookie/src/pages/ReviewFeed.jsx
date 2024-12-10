@@ -307,7 +307,9 @@ useEffect(() => {
   };
 
   const handleReviewClick = (reviewId) => {
-    navigate(`/reviews/${reviewId}`);
+    navigate(`/reviews/${reviewId}`, {
+      state: { fromReviewFeed: true },
+    });
   };
 
   return (
