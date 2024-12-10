@@ -162,21 +162,28 @@ function SpecialMovie({ categorydata }) {
 
   const fetchMoviesByCategory = async (mainCategory, subCategory) => {
     if (!mainCategory || !subCategory) return;
+    const cacheKey = `${mainCategory}_${subCategory}`;
+    const cachedMovies = localStorage.getItem(cacheKey);
 
-    try {
-      const response = await axios.get(
-        `${serverBaseUrl}/api/movies/categoryMovies`,
-        {
-          params: {
-            mainCategory: mainCategory,
-            subCategory: subCategory,
-          },
-        }
-      );
+    if (cachedMovies) {
+      setMovies(JSON.parse(cachedMovies));
+    } else {
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/categoryMovies`,
+          {
+            params: {
+              mainCategory: mainCategory,
+              subCategory: subCategory,
+            },
+          }
+        );
 
-      setMovies(response.data.movies);
-    } catch (error) {
-      console.error("영화 불러오기 실패:", error);
+        setMovies(response.data.movies);
+        localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
+      } catch (error) {
+        console.error("영화 불러오기 실패:", error);
+      }
     }
   };
 

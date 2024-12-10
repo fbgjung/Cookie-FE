@@ -87,14 +87,25 @@ function AdminRecommend() {
 
   useEffect(() => {
     const fetchMainPageMovies = async () => {
-      try {
-        const response = await axios.get(
-          `${serverBaseUrl}/api/movies/mainAdminRecommend`
-        );
-        const recommendMovies = response.data.response;
-        setRecommendMovies(recommendMovies);
-      } catch (error) {
-        console.error("API 호출 오류 발생:", error);
+      const cachedData = localStorage.getItem("adminRecommendMovies");
+
+      if (cachedData) {
+        setRecommendMovies(JSON.parse(cachedData));
+      } else {
+        try {
+          const response = await axios.get(
+            `${serverBaseUrl}/api/movies/mainAdminRecommend`
+          );
+          const recommendMovies = response.data.response;
+          setRecommendMovies(recommendMovies);
+
+          localStorage.setItem(
+            "adminRecommendMovies",
+            JSON.stringify(recommendMovies)
+          );
+        } catch (error) {
+          console.error("API 호출 오류 발생:", error);
+        }
       }
     };
 

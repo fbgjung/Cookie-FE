@@ -120,20 +120,29 @@ function GenreMovie({ categorydata }) {
   const { id } = useParams();
 
   const fetchMoviesByGenre = async (genre) => {
-    try {
-      const response = await axios.get(
-        `${serverBaseUrl}/api/movies/categoryMovies`,
-        {
-          params: {
-            mainCategory: "장르",
-            subCategory: genre,
-          },
-        }
-      );
-      console.log(response.data);
-      setGenreMovies(response.data.movies);
-    } catch (error) {
-      console.error("영화 불러오기 실패:", error);
+    const cacheKey = `genreMovies_${genre}`;
+    const cachedMovies = localStorage.getItem(cacheKey);
+
+    if (cachedMovies) {
+      setGenreMovies(JSON.parse(cachedMovies));
+    } else {
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/categoryMovies`,
+          {
+            params: {
+              mainCategory: "장르",
+              subCategory: genre,
+            },
+          }
+        );
+        console.log(response.data);
+        setGenreMovies(response.data.movies);
+
+        localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
+      } catch (error) {
+        console.error("영화 불러오기 실패:", error);
+      }
     }
   };
   useEffect(() => {
