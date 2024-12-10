@@ -1,85 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import videoIcon from "../../assets/images/main/video_icon.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
-import serverBaseUrl from "../../config/apiConfig";
-
-const MovieRecommendList = styled.div`
-  position: relative;
-
-  .recommend__title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.375rem;
-  }
-  .recommend__movie {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    justify-content: start;
-    overflow-x: auto;
-    gap: 1rem;
-    padding: 0.625rem;
-  }
-  .recommend__movie--info {
-    display: flex;
-    position: relative;
-    flex-direction: start;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .recommend__movie--info img {
-    border-radius: 0.75rem;
-    width: 7.75rem;
-    height: 11.07rem;
-  }
-
-  .recommend__movie--info p {
-    text-align: start;
-  }
-
-  .movie__info--sub {
-    color: #afafaf;
-    font-size: 0.82rem;
-  }
-  @media (max-width: 768px) {
-    .recommend__title {
-      font-size: 0.8rem;
-    }
-    .recommend__movie {
-      gap: 0.5rem;
-      padding: 0.625rem 0;
-    }
-    .recommend__movie--info img {
-      border-radius: 0.75rem;
-      width: 5.875rem;
-      height: 9.1875rem;
-    }
-
-    .recommend__movie--info p {
-      text-align: start;
-      font-size: 0.7rem;
-    }
-  }
-  @media (max-width: 390px) {
-    .recommend__movie {
-      gap: 0.3rem;
-      padding: 0.625rem 0;
-    }
-    .recommend__movie--info img {
-      border-radius: 0.75rem;
-      width: 5.375rem;
-      height: 8.6875rem;
-    }
-
-    .recommend__movie--info p {
-      font-size: 0.65rem;
-    }
-  }
-`;
 
 function AdminRecommend() {
   const navigate = useNavigate();
@@ -89,7 +11,7 @@ function AdminRecommend() {
     const fetchMainPageMovies = async () => {
       try {
         const response = await axiosInstance.get(
-          `${serverBaseUrl}/api/movies/mainAdminRecommend`
+          `/api/movies/mainAdminRecommend`
         );
         const recommendMovies = response.data.response;
         setRecommendMovies(recommendMovies);
@@ -108,25 +30,22 @@ function AdminRecommend() {
   return (
     <>
       <MovieRecommendList>
-        <div className="recommend__title">
-          <img src={videoIcon} alt="video_icon" />
-          <h2> 이거봤어? 관리자 추천영화</h2>
-        </div>
+        <Title>쿠키 추천 영화</Title>
         <div className="recommend__movie">
           {recommendMovies.map((movie, index) => (
             <div key={index} className="recommend__movie--info">
               <div onClick={() => handleMovieClick(movie.id)} style={{ cursor: "pointer" }}>
-                <img src={movie.poster} alt={movie.title} />
-                <div>
-                  <p>
-                    <strong>{movie.title}</strong>
-                  </p>
-                  <p>
-                    {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
-                  </p>
-                </div>
-                <p className="movie__info--sub">리뷰 : {movie.reviews}개</p>
-                <p className="movie__info--sub">좋아요 : {movie.likes}개</p>
+                <Poster src={movie.poster} alt={movie.title} />
+                <MovieInfo>
+                  <Review>
+                    <ReviewIcon alt="Review Icon"/>
+                    <Count>{movie.reviews}</Count>
+                  </Review>
+                  <Like>
+                    <LikeIcon alt="Review Icon"/>
+                    <Count>{movie.likes}</Count>
+                  </Like>
+                </MovieInfo>
               </div>
             </div>
           ))}
@@ -137,3 +56,85 @@ function AdminRecommend() {
 }
 
 export default AdminRecommend;
+
+const MovieRecommendList = styled.div`
+  .recommend__movie {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    overflow-x: auto;
+  }
+`;
+
+const Title  = styled.h2`
+  color: var(--text-wh);
+  padding: 2rem 0 0 0.375rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`
+
+const Review = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.375rem;
+`
+
+const ReviewIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url('/assets/images/main/review.svg');
+`
+
+const Count = styled.p`
+  font-size: 0.8rem;
+  color: #ffffff;
+`
+
+const Like = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.375rem;
+`
+
+const LikeIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  background: no-repeat center/cover url('/assets/images/main/like.svg');
+`
+
+const MovieInfo = styled.div`
+  display: flex;
+`
+
+const Poster = styled.img`
+  transition: transform 0.3s ease;
+  border-radius: 0.65rem;
+  width: 7.75rem;
+  height: 11.07rem;
+  padding: 0.4rem 0.375rem;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.3rem;
+    width: 7rem;
+    height: 10rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.4rem 0.3rem;
+    width: 6.4rem;
+    height: 9.5rem;
+  }
+`;
+
