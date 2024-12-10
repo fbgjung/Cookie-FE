@@ -10,7 +10,6 @@ const ReviewFeedWrapper = styled.div`
   background-color: #ffffff;
   border-radius: 8px;
   padding: 20px;
-  height: 100vh;
 `;
 
 const ReviewTitle = styled.div`
@@ -389,7 +388,6 @@ useEffect(() => {
         ))}
       </ReviewContainer>
       {isLoading && <p>Loading more reviews...</p>}
-      {!hasMore && <p>No more reviews available.</p>}
     </ReviewFeedWrapper>
   );
 };

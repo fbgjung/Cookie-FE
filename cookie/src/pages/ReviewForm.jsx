@@ -58,7 +58,7 @@ const RatingWrapper = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 250px;
+  height: 200px;
   min-height: 100px;
   border: 1px solid #ddd;
   border-radius: 8px;
