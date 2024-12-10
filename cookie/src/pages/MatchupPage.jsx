@@ -186,6 +186,7 @@ const MatchupPage = () => {
         ]}
         matchUpId={matchUpData.matchUpId}
         isVoteEnded={isVoteEnded}
+        userVote={matchUpData.userVote}
       />
       <ProgressBar
         movie1Likes={matchUpData.movie1.movieLike}
