@@ -16,11 +16,6 @@ const Container = styled.div`
   margin: 0 auto;
   position: relative;
   min-height: 80vh;
-
-  @media (max-width: 768px) {
-    padding-top: 15px;
-    max-width: 95%;
-  }
 `;
 
 const BackButton = styled.img`
@@ -30,11 +25,6 @@ const BackButton = styled.img`
   width: 24px;
   height: 24px;
   cursor: pointer;
-
-  @media (max-width: 768px) {
-    width: 20px;
-    height: 20px;
-  }
 `;
 
 const Title = styled.h1`
@@ -43,34 +33,12 @@ const Title = styled.h1`
   margin: 50px 0 10px;
   color: #04012d;
   text-align: center;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-    margin: 40px 0 8px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1.2rem;
-    margin: 30px 0 5px;
-  }
 `;
 
 const HeartIcon = styled.img`
   width: 60px;
   height: 60px;
   margin-bottom: 30px;
-
-  @media (max-width: 768px) {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 20px;
-  }
-
-  @media (max-width: 480px) {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 15px;
-  }
 `;
 
 const EmptyMessage = styled.div`
@@ -155,6 +123,12 @@ const LikedReviews = () => {
     fetchLikedReviews();
   }, [page]);
 
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`, {
+      state: { fromLikedReviews: true },
+    });
+  };
+
   return (
     <Container>
       <BackButton
@@ -165,7 +139,12 @@ const LikedReviews = () => {
       <Title>좋아하는 리뷰</Title>
       <HeartIcon src="/assets/images/mypage/red-heart.svg" alt="하트" />
       {reviews.length > 0 ? (
-        <ReviewList title="" reviews={reviews} lastReviewRef={lastReviewRef} />
+        <ReviewList
+          title=""
+          reviews={reviews}
+          lastReviewRef={lastReviewRef}
+          onReviewClick={handleReviewClick}
+        />
       ) : (
         <EmptyMessage>좋아하는 리뷰를 선택해보세요!</EmptyMessage>
       )}
