@@ -253,7 +253,7 @@ const Modal = ({ isOpen, onClose, movieTitle, imageUrl }) => {
 
       setTimeout(() => {
         console.error("투표 요청 실패:", error);
-        toast.error("프로필 저장에 실패했습니다.\n다시 시도해주세요.");
+        toast.error("이미 투표하셨습니다.\n다시 시도해주세요.");
         setIsSubmitting(false);
       }, remainingTime);
     }
