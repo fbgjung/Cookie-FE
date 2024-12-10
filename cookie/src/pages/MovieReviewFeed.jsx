@@ -91,6 +91,14 @@ const ReviewContainer = styled.div`
   gap: 0px;
 `;
 
+
+const NoReviewsMessage = styled.div`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+  margin-top: 20px;
+`;
+
 const ReviewTicket = styled.div`
   display: flex;
   background-image: url("/images/reviewticket.svg");
@@ -224,7 +232,6 @@ const MovieReviewFeed = () => {
   return (
     <ReviewFeedWrapper>
       <DetailHeader onBack={() => navigate(-1)} />
-      {/* 영화 정보 한 번만 표시 */}
       {movieInfo && (
         <>
           <MovieInfoWrapper>
@@ -265,6 +272,9 @@ const MovieReviewFeed = () => {
         </button>
       </FilterButtons>
 
+      {reviews.length === 0 && !isLoading ? (
+        <NoReviewsMessage>이 영화에 등록된 리뷰가 없습니다!</NoReviewsMessage>
+      ) : (
       <ReviewContainer>
         {reviews.map((review) => (
           <ReviewTicket
@@ -303,9 +313,9 @@ const MovieReviewFeed = () => {
           </ReviewTicket>
         ))}
       </ReviewContainer>
+      )}
 
       {isLoading && <p>Loading more reviews...</p>}
-      {!hasMore && <p>No more reviews available.</p>}
     </ReviewFeedWrapper>
   );
 };
