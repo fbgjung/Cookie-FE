@@ -3,6 +3,8 @@ import styled from "styled-components";
 import specialIcon from "../../assets/images/main/special_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
+import serverBaseUrl from "../../config/apiConfig";
+import axios from "axios";
 
 const SpecialMovieList = styled.div`
   position: relative;
@@ -162,12 +164,15 @@ function SpecialMovie({ categorydata }) {
     if (!mainCategory || !subCategory) return;
 
     try {
-      const response = await axiosInstance.get("/api/movies/categoryMovies", {
-        params: {
-          mainCategory: mainCategory,
-          subCategory: subCategory,
-        },
-      });
+      const response = await axios.get(
+        `${serverBaseUrl}/api/movies/categoryMovies`,
+        {
+          params: {
+            mainCategory: mainCategory,
+            subCategory: subCategory,
+          },
+        }
+      );
 
       setMovies(response.data.movies);
     } catch (error) {
@@ -179,7 +184,6 @@ function SpecialMovie({ categorydata }) {
     new Set(filteredCategoryData.map((item) => item.mainCategory))
   );
 
-  // 선택된 메인 카테고리의 세부카테고리
   const getSubCategories = (mainCategory) => {
     return filteredCategoryData
       .filter((item) => item.mainCategory === mainCategory)

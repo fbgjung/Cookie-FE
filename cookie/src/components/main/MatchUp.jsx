@@ -3,8 +3,8 @@ import styled from "styled-components";
 import matchUp from "../../assets/images/main/matchup_icon.svg";
 import fight from "../../assets/images/main/fight_icon.svg";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
-import axiosInstance from "../../api/auth/axiosInstance";
 
 const MatchUpContainer = styled.div`
   position: relative;
@@ -205,7 +205,7 @@ function MatchUp() {
   useEffect(() => {
     const fetchMainPageMovies = async () => {
       try {
-        const response = await axiosInstance.get(
+        const response = await axios.get(
           `${serverBaseUrl}/api/movies/mainMatchUps`
         );
         const matchUpData = response.data.response.matchUps;
@@ -221,7 +221,7 @@ function MatchUp() {
           } else {
             setAccess(response.data.response.access);
           }
-          const matchDate = new Date(matchUpData[0].startAt);
+          const matchDate = new Date(matchUpData[0].endAt);
           const leftTime = matchDate - today;
           const leftDay = Math.ceil(leftTime / (1000 * 3600 * 24));
           setLeftDays(leftDay);
@@ -272,10 +272,10 @@ function MatchUp() {
               <div className="matchUp__movie--list">
                 <img
                   className="matchUp__movie--poster"
-                  // src={matchUp.movie1.moviePoster}
-                  src={
-                    "https://image.tmdb.org/t/p/w500/4Zb4Z2HjX1t5zr1qYOTdVoisJKp.jpg"
-                  }
+                  src={matchUp.movie1.moviePoster}
+                  // src={
+                  //   "https://image.tmdb.org/t/p/w500/4Zb4Z2HjX1t5zr1qYOTdVoisJKp.jpg"
+                  // }
                   alt={matchUp.movie1.movieTitle}
                 />
                 <p>{matchUp.movie1.movieTitle}</p>
@@ -283,10 +283,10 @@ function MatchUp() {
               <div className="matchUp__movie--list">
                 <img
                   className="matchUp__movie--poster"
-                  // src={matchUp.movie2.moviePoster}
-                  src={
-                    "https://image.tmdb.org/t/p/w500//1ZNOOMmILNUzVYbzG1j7GYb5bEV.jpg"
-                  }
+                  src={matchUp.movie2.moviePoster}
+                  // src={
+                  //   "https://image.tmdb.org/t/p/w500//1ZNOOMmILNUzVYbzG1j7GYb5bEV.jpg"
+                  // }
                   alt={matchUp.movie2.movieTitle}
                 />
                 <p>{matchUp.movie2.movieTitle}</p>

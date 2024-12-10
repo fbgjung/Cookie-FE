@@ -3,6 +3,8 @@ import styled from "styled-components";
 import videoIcon from "../../assets/images/main/video_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
+import axios from "axios";
+import serverBaseUrl from "../../config/apiConfig";
 
 const GenreMovieList = styled.div`
   position: relative;
@@ -119,12 +121,15 @@ function GenreMovie({ categorydata }) {
 
   const fetchMoviesByGenre = async (genre) => {
     try {
-      const response = await axiosInstance.get("/api/movies/categoryMovies", {
-        params: {
-          mainCategory: "장르",
-          subCategory: genre,
-        },
-      });
+      const response = await axios.get(
+        `${serverBaseUrl}/api/movies/categoryMovies`,
+        {
+          params: {
+            mainCategory: "장르",
+            subCategory: genre,
+          },
+        }
+      );
       console.log(response.data);
       setGenreMovies(response.data.movies);
     } catch (error) {
