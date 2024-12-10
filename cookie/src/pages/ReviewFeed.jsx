@@ -144,6 +144,12 @@ const ReviewCenter = styled.div`
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    &.blurred {
+      filter: blur(5px); /* 블러 효과 */
+      pointer-events: none; /* 마우스 이벤트 비활성화 */
+      user-select: none; /* 텍스트 선택 비활성화 */
+    }
   }
 `;
 
@@ -354,7 +360,11 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              <div className="comment">
+              <div
+                className={`comment ${
+                  !showSpoilerOnly && review.spoiler ? "blurred" : ""
+                }`}
+              >
                 {review.content.length > 100
                   ? `${review.content.slice(0, 105)}...`
                   : review.content}
