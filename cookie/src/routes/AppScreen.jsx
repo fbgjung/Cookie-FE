@@ -2,7 +2,8 @@ import styled from "styled-components";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import ScrollToTop from "../components/common/ScrollToTop";
 import AppPages from "./AppPages";
-import CookieLogo from "/src/assets/images/Cookie.svg";
+// import CookieLogo from "/src/assets/images/Cookie.svg";
+import useUserStore from "../stores/useUserStore";
 
 import HomeIcon from "/src/assets/images/navbar_home.svg";
 import SearchIcon from "/src/assets/images/navbar_search.svg";
@@ -66,11 +67,11 @@ const HeaderContainer = styled.header`
   max-width: 600px;
   align-items: center;
   justify-content: space-between;
-  background-color: #fff4b9;
+  background-color: #000000;
   padding: 15px 20px;
   height: 70px;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.1); */
   position: fixed;
   top: 0;
   z-index: 100;
@@ -79,6 +80,13 @@ const HeaderContainer = styled.header`
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  .header-right button {
+    cursor: pointer;
+    border-radius: 0.7rem;
+    padding: 0.4rem 1rem;
+    border: none;
   }
 `;
 
@@ -192,6 +200,7 @@ const AppContainer = styled.div`
 const AppScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const userInfo = useUserStore((state) => state.getUserInfo());
 
   const handleLogoClick = () => {
     navigate("/");
@@ -224,11 +233,10 @@ const AppScreen = () => {
           {!isAuthPage && (
             <HeaderContainer>
               <Logo onClick={handleLogoClick}>
-                <img src={CookieLogo} alt="Cookie Logo" />
+                {/* <img src={CookieLogo} alt="Cookie Logo" /> */}
               </Logo>
-              <div className="header-right">
-                <ToggleSwitch />
-                <Notification />
+              <div className="header-right">                
+                {userInfo.userId ? (<Notification />) : (<button>로그인</button>)}
               </div>
             </HeaderContainer>
           )}
