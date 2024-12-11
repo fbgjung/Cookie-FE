@@ -85,8 +85,8 @@ const Input = styled.input`
 const CheckButton = styled.button`
   padding: 10px 15px;
   font-size: 1rem;
-  background-color: #6a91b1;
-  color: white;
+  background-color: #00d6e8;
+  color: #02172a;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -115,7 +115,10 @@ const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
   const handleCheckNickname = async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/users/setting/check-nickname`
+        `/api/users/setting/check-nickname`,
+        {
+          params: { nickname },
+        }
       );
 
       if (response.data.response === "SUCCESS") {
