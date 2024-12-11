@@ -96,7 +96,7 @@ function CookieMovies() {
   const navigate = useNavigate();
   const userInfo = getUserInfo();
 
-  if (!userInfo?.userId) {
+  if (!userInfo?.nickname) {
     return null;
   }
 

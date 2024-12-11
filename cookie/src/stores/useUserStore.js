@@ -7,8 +7,6 @@ const useUserStore = create(
       userInfo: {
         userId: null,
         nickname: "",
-        profileImage: "",
-        genreId: null,
       },
       setUserInfo: (info) =>
         set((state) => ({
@@ -19,8 +17,6 @@ const useUserStore = create(
           userInfo: {
             userId: null,
             nickname: "",
-            profileImage: "",
-            genreId: null,
           },
         })),
       getUserInfo: () => get().userInfo,
@@ -28,7 +24,23 @@ const useUserStore = create(
     {
       name: "userInfo",
       getStorage: () => localStorage,
+      serialize: (state) => {
+        return JSON.stringify({
+          userInfo: {
+            nickname: state.userInfo.nickname,
+          },
+        });
+      },
+      deserialize: (str) => {
+        const parsed = JSON.parse(str);
+        return {
+          userInfo: {
+            nickname: parsed.userInfo.nickname,
+          },
+        };
+      },
     }
   )
 );
+
 export default useUserStore;

@@ -234,20 +234,21 @@ function MatchUp() {
     fetchMainPageMovies();
   }, []);
 
-  const getDisplayText = () => {
-    if (leftDays === 0) {
-      return "D-DAY";
-    } else if (leftDays < 0) {
-      return "..🤔";
-    } else {
-      return `D-${leftDays}`;
-    }
-  };
+  // const getDisplayText = () => {
+  //   if (leftDays === 0) {
+  //     return "D-DAY";
+  //   } else if (leftDays < 0) {
+  //     return "..🤔";
+  //   } else {
+  //     return `D-${leftDays}`;
+  //   }
+  // };
+  // {getDisplayText()}
   return (
     <MatchUpContainer>
       <div className="matchUp__title">
         <img src={matchUp} alt="matchUp_icon" />
-        <h2> 이번주 영화 매치업! {getDisplayText()}</h2>
+        <h2> 이번주 영화 매치업! </h2>
       </div>
       <div className="matchUp__content">
         {matchUps.map((matchUp) => (
