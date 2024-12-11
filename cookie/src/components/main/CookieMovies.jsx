@@ -3,7 +3,8 @@ import styled from "styled-components";
 import cookieMovie from "../../assets/images/main/cookie_icon.svg";
 import useUserStore from "../../stores/useUserStore";
 import axiosInstance from "../../api/auth/axiosInstance";
-import serverBaseUrl from "../../config/apiConfig";
+import useAuthStore from "../../stores/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 const CookieMovieList = styled.div`
   position: relative;
@@ -89,30 +90,46 @@ const CookieMovieList = styled.div`
 `;
 
 function CookieMovies() {
-  const userInfo = useUserStore((state) => state.getUserInfo());
+  const { isLoggedIn } = useAuthStore();
+  const { getUserInfo } = useUserStore();
   const [recommendedMovies, setRecommendedMovies] = useState([]);
+  const navigate = useNavigate();
+  const userInfo = getUserInfo();
 
-  if (!userInfo.userId) {
+  if (!userInfo?.userId) {
     return null;
   }
 
   useEffect(() => {
     const fetchRecommendedMovies = async () => {
-      if (userInfo?.userId) {
+      const cachedData = localStorage.getItem("recommendedMovies");
+
+      if (cachedData) {
+        setRecommendedMovies(JSON.parse(cachedData));
+        console.log("로컬스토리지에서 추천 영화 데이터 사용");
+      } else {
         try {
           const response = await axiosInstance.get(
-            `${serverBaseUrl}/api/movies/recommendations`
+            `/api/movies/recommendations`
           );
           const movies = response.data.response || [];
+
           setRecommendedMovies(movies);
+
+          localStorage.setItem("recommendedMovies", JSON.stringify(movies));
+          console.log("API에서 추천 영화 데이터 가져옴");
         } catch (error) {
           console.error("영화 추천 목록을 가져오는 데 실패했습니다.", error);
         }
       }
     };
-    fetchRecommendedMovies();
-  }, []);
 
+    fetchRecommendedMovies();
+  }, [isLoggedIn]);
+
+  const handleMovieClick = (id) => {
+    navigate(`/movie/${id}`);
+  };
   return (
     <>
       <CookieMovieList>
@@ -124,7 +141,11 @@ function CookieMovies() {
         </div>
         <div className="cookie__movie">
           {recommendedMovies.map((movie, index) => (
-            <div key={index} className="cookie__movie--list">
+            <div
+              key={index}
+              className="cookie__movie--list"
+              onClick={() => handleMovieClick(movie.id)}
+            >
               <img src={movie.poster} alt={movie.title} />
               <div>
                 <p>

@@ -28,11 +28,7 @@ import MyAllReviewList from "../pages/MyAllReviewList";
 export const AppRouteDef = {
   Main: {
     path: "/",
-    element: (
-      <PrivateRoute>
-        <Main />
-      </PrivateRoute>
-    ),
+    element: <Main />,
   },
   Search: {
     path: "/search",

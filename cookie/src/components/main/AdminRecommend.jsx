@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import videoIcon from "../../assets/images/main/video_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../../api/auth/axiosInstance";
 import serverBaseUrl from "../../config/apiConfig";
+import axios from "axios";
 
 const MovieRecommendList = styled.div`
   position: relative;
@@ -87,14 +87,25 @@ function AdminRecommend() {
 
   useEffect(() => {
     const fetchMainPageMovies = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `${serverBaseUrl}/api/movies/mainAdminRecommend`
-        );
-        const recommendMovies = response.data.response;
-        setRecommendMovies(recommendMovies);
-      } catch (error) {
-        console.error("API 호출 오류 발생:", error);
+      const cachedData = localStorage.getItem("adminRecommendMovies");
+
+      if (cachedData) {
+        setRecommendMovies(JSON.parse(cachedData));
+      } else {
+        try {
+          const response = await axios.get(
+            `${serverBaseUrl}/api/movies/mainAdminRecommend`
+          );
+          const recommendMovies = response.data.response;
+          setRecommendMovies(recommendMovies);
+
+          localStorage.setItem(
+            "adminRecommendMovies",
+            JSON.stringify(recommendMovies)
+          );
+        } catch (error) {
+          console.error("API 호출 오류 발생:", error);
+        }
       }
     };
 
@@ -115,7 +126,10 @@ function AdminRecommend() {
         <div className="recommend__movie">
           {recommendMovies.map((movie, index) => (
             <div key={index} className="recommend__movie--info">
-              <div onClick={() => handleMovieClick(movie.id)} style={{ cursor: "pointer" }}>
+              <div
+                onClick={() => handleMovieClick(movie.id)}
+                style={{ cursor: "pointer" }}
+              >
                 <img src={movie.poster} alt={movie.title} />
                 <div>
                   <p>

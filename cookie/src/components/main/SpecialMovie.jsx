@@ -3,6 +3,8 @@ import styled from "styled-components";
 import specialIcon from "../../assets/images/main/special_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
+import serverBaseUrl from "../../config/apiConfig";
+import axios from "axios";
 
 const SpecialMovieList = styled.div`
   position: relative;
@@ -160,18 +162,28 @@ function SpecialMovie({ categorydata }) {
 
   const fetchMoviesByCategory = async (mainCategory, subCategory) => {
     if (!mainCategory || !subCategory) return;
+    const cacheKey = `${mainCategory}_${subCategory}`;
+    const cachedMovies = localStorage.getItem(cacheKey);
 
-    try {
-      const response = await axiosInstance.get("/api/movies/categoryMovies", {
-        params: {
-          mainCategory: mainCategory,
-          subCategory: subCategory,
-        },
-      });
+    if (cachedMovies) {
+      setMovies(JSON.parse(cachedMovies));
+    } else {
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/categoryMovies`,
+          {
+            params: {
+              mainCategory: mainCategory,
+              subCategory: subCategory,
+            },
+          }
+        );
 
-      setMovies(response.data.movies);
-    } catch (error) {
-      console.error("영화 불러오기 실패:", error);
+        setMovies(response.data.movies);
+        localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
+      } catch (error) {
+        console.error("영화 불러오기 실패:", error);
+      }
     }
   };
 
@@ -179,7 +191,6 @@ function SpecialMovie({ categorydata }) {
     new Set(filteredCategoryData.map((item) => item.mainCategory))
   );
 
-  // 선택된 메인 카테고리의 세부카테고리
   const getSubCategories = (mainCategory) => {
     return filteredCategoryData
       .filter((item) => item.mainCategory === mainCategory)

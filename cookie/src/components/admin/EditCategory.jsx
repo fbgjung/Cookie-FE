@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useMovieCategoryStore from "../../stores/useMovieGategoryStore";
 import Edit from "../../assets/images/admin/Edit.svg";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const CategoryTitle = styled.div`
   margin-bottom: 30px;
@@ -58,7 +59,7 @@ const CategoryItem = styled.div`
 
   input[type="checkbox"] {
     margin-right: 10px;
-    border: 1px solid var(--cookie);
+    border: 1px solid var(--sub);
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -68,8 +69,7 @@ const CategoryItem = styled.div`
     border-radius: 3px;
   }
   input[type="checkbox"]:checked {
-    background-color: var(--cookie);
-    border-color: var(--cookie);
+    background-color: var(--sub);
   }
   input[type="checkbox"]:checked::after {
     content: "";
@@ -125,16 +125,16 @@ const MovieCategoryContainer = styled.div`
     bottom: 15px;
     right: 35px;
     padding: 10px 20px;
-    background-color: var(--main);
-    color: white;
-    border: none;
+    background-color: white;
+    color: var(--text);
+    border: 1px solid var(--sub);
     border-radius: 5px;
     cursor: pointer;
     border-radius: 18px;
 
     &:hover {
-      background-color: var(--sub-btn);
-      color: var(--main);
+      background-color: var(--sub);
+      color: var(--text);
     }
   }
 `;
@@ -183,59 +183,123 @@ const categoryData = [
 ];
 
 const EditCategory = ({ movie }) => {
-  const { movieId, title } = movie;
+  const { movieId, title, movieCategories } = movie;
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const { updateMovieCategory, getMovieCategories } = useMovieCategoryStore();
+  const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    if (movie) {
-      const { categories } = movie;
-      console.log(categories);
-      if (Array.isArray(categories)) {
-        setSelectedCategories(
-          categories.map((category) => category.categoryId)
-        );
-      }
+  const fetchMovieCategories = async (movieId) => {
+    try {
+      const response = await axiosInstance.get(`/api/admin/movie/${movieId}`);
+      console.log(response);
+      const movieCategories = response.data.response.movieCategories;
+
+      const connectedCategories = movieCategories
+        .filter((category) => category.connect)
+        .map((category) => category.categoryId);
+
+      return connectedCategories;
+    } catch (error) {
+      console.error("Error fetching movie categories", error);
+      return [];
     }
-  }, [movie, getMovieCategories, movieId]);
+  };
 
-  const handleCategoryChange = (e, categoryId) => {
-    const { checked } = e.target;
+  const handleEditClick = async (movie) => {
+    console.log("movie", movie);
+    const movieId = movie.movieId;
+    console.log("movieId", movieId);
+    setIsEditOpen(true);
+    setSelectedMovie(movie);
 
-    setSelectedCategories((prevSelected) => {
-      if (checked) {
-        return [...prevSelected, categoryId];
-      } else {
-        return prevSelected.filter((id) => id !== categoryId);
+    const movieCategories = await fetchMovieCategories(movieId);
+
+    setSelectedMovie((prevMovie) => {
+      if (prevMovie) {
+        return {
+          ...prevMovie,
+          movieCategories: movieCategories,
+        };
       }
+      return prevMovie;
     });
   };
+  const updateMovieCategories = (updatedCategories) => {
+    setSelectedMovie((prevMovie) => {
+      if (prevMovie) {
+        const allCategories = [...prevMovie.categories, ...updatedCategories];
 
-  const handleUpdate = () => {
-    const updatedCategories = selectedCategories
-      .map((categoryId) => {
-        const category = categoryData.find(
-          (cat) => cat.categoryId === categoryId
+        const uniqueCategories = Array.from(
+          new Map(allCategories.map((item) => [item.categoryId, item])).values()
         );
-        if (category) {
-          const mainCategory = Object.keys(category)[0];
-          const subCategory = category[mainCategory];
 
-          return {
-            mainCategory: mainCategory,
-            subCategory: subCategory,
-            movieId: movieId,
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
+        return {
+          ...prevMovie,
+          categories: uniqueCategories,
+        };
+      }
+      return prevMovie;
+    });
+  };
+  useEffect(() => {
+    if (movieCategories && movieCategories.length > 0) {
+      const updatedCategories = movieCategories.map((category) => ({
+        ...category,
+        isChecked: category.isConnect, // isConnect 값에 따라 체크 여부 설정
+      }));
+      setCategories(updatedCategories);
 
-    console.log("Updated Categories:", updatedCategories);
-    updateMovieCategory(movieId, updatedCategories);
+      // selectedCategories 배열을 초기화
+      const selected = movieCategories
+        .filter((category) => category.isConnect)
+        .map((category) => category.categoryId);
+      setSelectedCategories(selected);
+    }
+  }, [movieCategories]);
+
+  // 카테고리 체크박스를 클릭했을 때 호출되는 함수
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategories((prevSelected) => {
+      if (prevSelected.includes(categoryId)) {
+        return prevSelected.filter((id) => id !== categoryId); // 선택 해제
+      } else {
+        return [...prevSelected, categoryId]; // 선택
+      }
+    });
+
+    setCategories((prevCategories) =>
+      prevCategories.map((category) =>
+        category.categoryId === categoryId
+          ? {
+              ...category,
+              isChecked: !category.isChecked,
+              isConnect: !category.isChecked, // isConnect 값 반전
+            }
+          : category
+      )
+    );
   };
 
-  // 카테고리 그룹화
+  // 수정 버튼 클릭 시, 변경된 카테고리 정보를 서버에 전송
+  const handleUpdate = async () => {
+    const updatedCategories = categories.map((category) => ({
+      categoryId: category.categoryId,
+      mainCategory: category.mainCategory,
+      subCategory: category.subCategory,
+      isConnect: category.isChecked, // isChecked 값을 isConnect로 전송
+    }));
+
+    // 수정된 카테고리들을 서버에 전송
+    try {
+      await axiosInstance.put(`/api/admin/movie/${movieId}`, {
+        updatedCategories,
+      });
+      alert("카테고리가 성공적으로 수정되었습니다.");
+    } catch (error) {
+      console.error("카테고리 수정 실패", error);
+      alert("카테고리 수정 중 오류가 발생했습니다.");
+    }
+  };
+
   const groupedCategories = categoryData.reduce((acc, category) => {
     const mainCategory = category.mainCategory;
     if (!acc[mainCategory]) acc[mainCategory] = [];
@@ -276,8 +340,8 @@ const EditCategory = ({ movie }) => {
                           checked={selectedCategories.includes(
                             category.categoryId
                           )}
-                          onChange={(e) =>
-                            handleCategoryChange(e, category.categoryId)
+                          onChange={() =>
+                            handleCategoryChange(category.categoryId)
                           }
                         />
                         {category.subCategory}
