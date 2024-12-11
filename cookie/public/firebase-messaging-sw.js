@@ -18,14 +18,14 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log("백그라운드에서 푸시 알림 수신:", payload);
 
-  if (payload.notification) {
-    const { title, body } = payload.notification;
+  if (payload.data) {
+    const { title, body, icon, url, tag } = payload.data;
 
-    // 알림 표시
     self.registration.showNotification(title || "제목 없음", {
       body: body || "내용 없음",
-      icon: "/favicon.ico", // 기본 아이콘 설정
-      tag: payload.notification?.tag || "default-tag", // 중복 방지 태그
+      icon: icon || "/favicon.ico", // 커스텀 아이콘 경로
+      tag: tag || "default-tag", // 중복 방지 태그
+      data: { url }, // 클릭 이벤트에서 사용할 URL
     });
   }
 });
