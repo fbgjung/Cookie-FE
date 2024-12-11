@@ -124,6 +124,7 @@ const Title = styled.h2`
   }
 `;
 
+
 const Poster = styled.img`
   transition: transform 0.3s ease;
   border-radius: 0.65rem;
@@ -132,16 +133,20 @@ const Poster = styled.img`
   padding: 0.4rem 0.375rem;
   cursor: pointer;
 
+  &:hover {
+    transform: scale(1.1);
+  }
+
   @media (max-width: 768px) {
-    border-radius: 0.75rem;
-    width: 5.875rem;
-    height: 9.1875rem;
+    padding: 0.4rem 0.3rem;
+    width: 7rem;
+    height: 10rem;
   }
 
   @media (max-width: 480px) {
-    border-radius: 0.75rem;
-    width: 5.375rem;
-    height: 8.6875rem;
+    padding: 0.4rem 0.3rem;
+    width: 6.4rem;
+    height: 9.5rem;
   }
 `;
 
