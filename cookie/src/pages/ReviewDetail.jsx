@@ -7,6 +7,8 @@ import DetailHeader from "../components/searchpage/ReviewDetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
+import axios from "axios";
+import serverBaseUrl from "../config/apiConfig";
 
 const Container = styled.div`
   padding: 20px;
@@ -245,7 +247,7 @@ const ReviewDetail = () => {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
+        const response = await axios.get(`${serverBaseUrl}/api/reviews/${reviewId}`);
         console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
@@ -273,7 +275,7 @@ const ReviewDetail = () => {
     }));
 
     try {
-      await axiosInstance.post(`/api/users/review-like/${reviewId}`);
+      await axios.post(`${serverBaseUrl}/api/users/review-like/${reviewId}`);
     } catch (error) {
       console.error("Failed to toggle like:", error);
       toast.error("좋아요 처리에 실패했습니다.");
@@ -313,7 +315,6 @@ const ReviewDetail = () => {
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("refreshToken");
     if (!token) {
-      toast.error("로그인이 필요한 서비스입니다.");
       navigate("/login");
       return null;
     }
@@ -334,7 +335,7 @@ const ReviewDetail = () => {
     }
 
     try {
-      await axiosInstance.put(`/api/reviews/comments/${editingComment.id}`, {
+      await axios.put(`${serverBaseUrl}/api/reviews/comments/${editingComment.id}`, {
         reviewId,
         comment: editingComment.text,
       });
@@ -373,7 +374,7 @@ const ReviewDetail = () => {
     }
 
     try {
-      await axiosInstance.delete(`/api/reviews/comments/${commentId}`, {
+      await axios.delete(`${serverBaseUrl}/api/reviews/comments/${commentId}`, {
         data: { reviewId, commentId },
       });
 
@@ -393,7 +394,7 @@ const ReviewDetail = () => {
 
   const handleDeleteReview = async () => {
     try {
-      await axiosInstance.delete(`/api/reviews/${reviewId}`);
+      await axios.delete(`${serverBaseUrl}/api/reviews/${reviewId}`);
       toast.success("리뷰가 성공적으로 삭제되었습니다.");
       navigate("/");
     } catch (error) {
@@ -410,8 +411,8 @@ const ReviewDetail = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await axiosInstance.post(
-        `/api/reviews/${reviewId}/comments`,
+      const response = await axios.post(
+        `${serverBaseUrl}/api/reviews/${reviewId}/comments`,
         {
           userId,
           comment: newComment,
