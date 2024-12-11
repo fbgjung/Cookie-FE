@@ -171,7 +171,7 @@ function CastDetail() {
           <div className="info__director">
             <img
               className="info__director--img"
-              src={data.profileImage || "http://via.placeholder.com/70x70"}
+              src={data.profileImage || "images/default.png"}
               alt="Director"
             />
             <div>
