@@ -53,6 +53,7 @@ const MatchUpSection = () => {
           <MatchUpContainer>
             <Overlay>
               <MatchUpInfo>
+                <VsImage></VsImage>
                 <VoteButton onClick={() => handleMatchUpVotePage(matchUps[currentIndex].matchUpId)}>
                   {matchUps[currentIndex].matchUpTitle}
                 </VoteButton>
@@ -195,4 +196,10 @@ const MatchUpDescription = styled.p`
   color: #fff;
   font-weight: bold;
   font-size: 1.5rem;
+`
+
+const VsImage = styled.div`
+  background: no-repeat center/cover url('/assets/images/main/christmas-vs.png');
+  width: 100px;
+  height: 100px;
 `
