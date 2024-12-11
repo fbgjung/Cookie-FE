@@ -1,19 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import videoIcon from "../../assets/images/main/video_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
 
 const GenreMovieList = styled.div`
-  position: relative;
-
-  .genre__title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
   .genreBtn__contianer {
     margin-bottom: 0.8rem;
   }
@@ -50,9 +40,6 @@ const GenreMovieList = styled.div`
   }
 
   @media (max-width: 768px) {
-    .genre__title {
-      font-size: 0.8rem;
-    }
     .genre__movie {
       gap: 0.625rem;
       padding: 0.625rem 0;
@@ -96,21 +83,9 @@ const GenreMovieList = styled.div`
   }
 `;
 
-const GenreBtn = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin: 0 0.8rem 0.3rem 0;
-  font-size: 1rem;
-  color: ${(props) => (props.$isSelected ? "var(--text)" : "#afafaf")};
-  font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
-  @media (max-width: 768px) {
-    margin: 0 0.7rem 0.5rem 0;
-    font-size: 0.9rem;
-  }
-`;
 
 function GenreMovie({ categorydata }) {
+  const [selectedMainCategory] = useState("장르");
   const [selectedGenre, setSelectedGenre] = useState("로맨스");
   const [genreMovies, setGenreMovies] = useState([]);
   const [genres, setGenres] = useState([]);
@@ -151,13 +126,14 @@ function GenreMovie({ categorydata }) {
     navigate(`/movie/${id}`);
   };
 
+  const handleMoreView = (mainCategory, subCategory) => {
+    navigate("/special/category/movies", { state: { mainCategory, subCategory } });
+  };
+
   return (
     <>
       <GenreMovieList>
-        <div className="genre__title">
-          <img src={videoIcon} alt="video_icon" />
-          <h2>장르별 영화</h2>
-        </div>
+        <Title>장르로 영화 찾기</Title>
         <div className="genreBtn__contianer">
           {genres
             .filter((genre) => genre !== "N/A")
@@ -171,6 +147,9 @@ function GenreMovie({ categorydata }) {
               </GenreBtn>
             ))}
         </div>
+
+        <MoreViewText onClick = {() => handleMoreView(selectedMainCategory, selectedGenre)}>{selectedGenre} 더보기 {'>'}</MoreViewText>
+
         <div className="genre__movie">
           {genreMovies.length > 0 ? (
             genreMovies.slice(0, 12).map((movie, index) => (
@@ -203,3 +182,43 @@ function GenreMovie({ categorydata }) {
 }
 
 export default GenreMovie;
+
+
+
+const Title  = styled.h2`
+  color: var(--text-wh);
+  padding: 2rem 0 0.7rem 0.375rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`
+
+const GenreBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0 0.4rem 0.3rem 0;
+  padding: 0 0 0 0.375rem;
+  font-size: 1rem;
+  color: ${(props) => (props.$isSelected ? "#82DCFF" : "#afafaf")};
+  font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
+  
+  @media (max-width: 768px) {
+    margin: 0 0.7rem 0.5rem 0;
+    font-size: 0.9rem;
+  }
+`;
+
+const MoreViewText = styled.p`
+  color: #ffffff;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+  font-size: 0.8rem;
+`
