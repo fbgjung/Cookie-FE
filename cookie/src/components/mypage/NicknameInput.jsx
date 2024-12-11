@@ -6,7 +6,7 @@ import axiosInstance from "../../api/auth/axiosInstance";
 const NicknameContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 30px;
   width: 100%;
   max-width: 600px;
 
@@ -22,7 +22,7 @@ const Label = styled.label`
   font-weight: bold;
   margin-bottom: 8px;
   margin-left: 40px;
-  color: #333;
+  color: #ffffff;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -115,7 +115,7 @@ const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
   const handleCheckNickname = async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/auth/check-nickname?nickname=${nickname}`
+        `/api/users/setting/check-nickname`
       );
 
       if (response.data.response === "SUCCESS") {
