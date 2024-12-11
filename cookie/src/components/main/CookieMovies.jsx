@@ -1,97 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import cookieMovie from "../../assets/images/main/cookie_icon.svg";
 import useUserStore from "../../stores/useUserStore";
-import axiosInstance from "../../api/auth/axiosInstance";
-import useAuthStore from "../../stores/useAuthStore";
 import { useNavigate } from "react-router-dom";
-
-const CookieMovieList = styled.div`
-  position: relative;
-
-  .cookieMovie__title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  .cookieMovie__title span {
-    color: var(--text);
-  }
-
-  .cookie__movie {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    overflow-x: auto;
-    padding: 0.625rem;
-    cursor: pointer;
-    gap: 1rem;
-    &:hover {
-      overflow-x: scroll;
-    }
-  }
-
-  .cookie__movie--list {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 0.5rem;
-  }
-  .cookie__movie--list img {
-    border-radius: 0.75rem;
-    width: 124px;
-    height: 177px;
-  }
-  .cookie__movie--list p {
-    text-align: start;
-  }
-
-  .movie__info--sub {
-    color: #afafaf;
-    font-size: 13px;
-  }
-
-  @media (max-width: 768px) {
-    .cookieMovie__title {
-      font-size: 0.8rem;
-    }
-    .cookie__movie {
-      gap: 0.5rem;
-      padding: 0.625rem 0;
-    }
-    .cookie__movie--list img {
-      border-radius: 0.75rem;
-      width: 5.875rem;
-      height: 9.1875rem;
-    }
-
-    .cookie__movie--list p {
-      text-align: start;
-      font-size: 0.7rem;
-    }
-  }
-  @media (max-width: 390px) {
-    .cookie__movie {
-      gap: 0.3rem;
-      padding: 0.625rem 0;
-    }
-    .cookie__movie--list img {
-      border-radius: 0.75rem;
-      width: 5.375rem;
-      height: 8.6875rem;
-    }
-
-    .cookie__movie--list p {
-      font-size: 0.65rem;
-    }
-  }
-`;
+import axiosInstance from "../../api/auth/axiosInstance";
 
 function CookieMovies() {
-  const { isLoggedIn } = useAuthStore();
-  const { getUserInfo } = useUserStore();
+  const navigate = useNavigate();
+  const userInfo = useUserStore((state) => state.getUserInfo());
+
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const navigate = useNavigate();
   const userInfo = getUserInfo();
@@ -109,42 +25,36 @@ function CookieMovies() {
         setRecommendedMovies(movies);
       } catch (error) {
         console.error("영화 추천 목록을 가져오는 데 실패했습니다.", error);
+
       }
     };
 
     fetchRecommendedMovies();
   }, [isLoggedIn]);
 
-  const handleMovieClick = (id) => {
-    navigate(`/movie/${id}`);
+  const handleMovieClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
   };
+
   return (
     <>
       <CookieMovieList>
-        <div className="cookieMovie__title">
-          <img src={cookieMovie} alt="cookie_icon" />
-          <h2>
-            <span>{userInfo.nickname}</span>님의 <span>쿠키</span>리즘
-          </h2>
-        </div>
+        <Title>{userInfo.nickname}님의 쿠키리즘</Title>
         <div className="cookie__movie">
           {recommendedMovies.map((movie, index) => (
-            <div
-              key={index}
-              className="cookie__movie--list"
-              onClick={() => handleMovieClick(movie.id)}
-            >
-              <img src={movie.poster} alt={movie.title} />
-              <div>
-                <p>
-                  <strong>{movie.title}</strong>
-                </p>
-                <p>
-                  {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
-                </p>
-
-                <p className="movie__info--sub">리뷰 : {movie.reviews}개</p>
-                <p className="movie__info--sub">좋아요 : {movie.likes}개</p>
+            <div key={index} className="cookie__movie--list">
+             <div onClick={() => handleMovieClick(movie.id)} style={{ cursor: "pointer" }}>
+                <Poster src={movie.poster} alt={movie.title} />
+                <MovieInfo>
+                  <Review>
+                    <ReviewIcon alt="Review Icon"/>
+                    <Count>{movie.reviews}</Count>
+                  </Review>
+                  <Like>
+                    <LikeIcon alt="Review Icon"/>
+                    <Count>{movie.likes}</Count>
+                  </Like>
+                </MovieInfo>
               </div>
             </div>
           ))}
@@ -155,3 +65,84 @@ function CookieMovies() {
 }
 
 export default CookieMovies;
+
+const CookieMovieList = styled.div`
+  .cookie__movie {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    overflow-x: auto;
+  }
+`;
+
+const Title = styled.h2`
+  color: var(--text-wh);
+  padding: 2rem 0 0 0.375rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`
+
+const Review = styled.div`
+ display: flex;
+ align-items: center;
+ padding: 0 0.375rem;
+`
+
+const ReviewIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url('/assets/images/main/review.svg');
+`
+
+const Count = styled.p`
+  font-size: 0.8rem;
+  color: #ffffff;
+`
+
+const Like = styled.div`
+ display: flex;
+ align-items: center;
+ padding: 0 0.375rem;
+`
+
+const LikeIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  background: no-repeat center/cover url('/assets/images/main/like.svg');
+`
+
+const MovieInfo = styled.div`
+  display: flex;
+`
+
+const Poster = styled.img`
+  transition: transform 0.3s ease;
+  border-radius: 0.65rem;
+  width: 7.75rem;
+  height: 11.07rem;
+  padding: 0.4rem 0.375rem;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.3rem;
+    width: 7rem;
+    height: 10rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.4rem 0.3rem;
+    width: 6.4rem;
+    height: 9.5rem;
+  }
+`;

@@ -5,6 +5,7 @@ import axios from "axios";
 import SearchBar from "../components/searchpage/SearchBar";
 import SearchResults from "../components/searchpage/SearchResults";
 import TopButton from "../components/searchpage/TopButton";
+import serverBaseUrl from "../config/apiConfig";
 
 const Container = styled.div`
   flex: 1;
@@ -83,7 +84,7 @@ const Search = () => {
     setIsLoading(true);
     try {
       if (searchTerm.trim()) {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/search`, {
+        const response = await axios.get(`${serverBaseUrl}/api/search`, {
           params: { type: activeTab, keyword: searchTerm, page, size: 10 },
         });
         const newResults = response.data || [];
@@ -93,7 +94,7 @@ const Search = () => {
         );
         setHasMore(!response.data?.last);
       } else {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/search/default`);
+        const response = await axios.get(`${serverBaseUrl}/api/search/default`);
         const defaultResults = response.data.response || [];
         console.log("디폴트",defaultResults);
         setDefaultResults(defaultResults);
