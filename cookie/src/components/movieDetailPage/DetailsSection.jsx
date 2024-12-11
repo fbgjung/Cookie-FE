@@ -101,6 +101,8 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
   };
 
   const handleLikeClick = async () => {
+    if (!checkLogin()) return;
+
     const previousLiked = likeValid;
     const previousLikeCount = likeCount;
 
