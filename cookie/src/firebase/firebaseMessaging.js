@@ -8,15 +8,10 @@ export const requestNotificationPermission = async () => {
     if (permission === "granted") {
       console.log("알림 권한 허용");
 
-      const token = await new Promise((resolve) => {
-        setTimeout(async () => {
-          resolve(
-            await getToken(messaging, {
-              vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-            })
-          );
-        }, 1000);
+      const token = await getToken(messaging, {
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
       });
+
       if (token) {
         console.log("FCM 토큰:", token);
         return token;
@@ -35,26 +30,35 @@ export const setupOnMessageHandler = () => {
   const addNotification = useNotificationStore.getState().addNotification;
 
   onMessage(messaging, (payload) => {
-    console.log("알림 수신:", payload);
+    console.log("포그라운드 알림 수신:", payload);
 
-    const notificationData = {
-      title: payload.notification?.title || "제목 없음",
-      body: payload.notification?.body || "내용 없음",
-      timestamp: new Date().toLocaleString(),
-    };
+    // 브라우저가 활성 상태일 때만 알림 표시
+    if (
+      Notification.permission === "granted" &&
+      document.visibilityState === "visible"
+    ) {
+      const notificationData = {
+        title: payload.notification?.title || "제목 없음",
+        body: payload.notification?.body || "내용 없음",
+        timestamp: new Date().toLocaleString(),
+      };
 
-    addNotification(notificationData);
+      // 상태 관리 스토어에 알림 추가
+      addNotification(notificationData);
 
-    const notification = new Notification(notificationData.title, {
-      body: notificationData.body,
-      icon: payload.notification?.icon || "/favicon.ico",
-    });
+      // 클릭 이벤트 핸들러
+      const notification = new Notification(notificationData.title, {
+        body: notificationData.body,
+        icon: payload.notification?.icon || "/favicon.ico",
+      });
 
-    notification.onclick = () => {
-      console.log("알림 클릭됨");
-      notification.close();
-    };
+      notification.onclick = () => {
+        console.log("알림 클릭됨");
+        notification.close();
+      };
+    }
   });
 };
 
+// 초기화
 setupOnMessageHandler();

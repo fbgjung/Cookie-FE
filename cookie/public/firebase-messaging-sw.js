@@ -14,13 +14,27 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function (payload) {
+messaging.onBackgroundMessage((payload) => {
   console.log("백그라운드에서 푸시 알림 받음:", payload);
 
-  const { title, body, icon } = payload.notification;
+  if (payload.notification) {
+    const { title, body, icon } = payload.notification;
 
-  self.registration.showNotification(title, {
-    body: body,
-    icon: icon,
-  });
+    self.registration.showNotification(title, {
+      body: body || "내용 없음",
+      icon: icon || "/favicon.ico",
+      tag: payload.notification?.tag || "default-tag",
+      data: payload.data || {},
+    });
+  }
+});
+
+self.addEventListener("notificationclick", (event) => {
+  console.log("알림 클릭됨:", event.notification);
+  event.notification.close();
+
+  const redirectUrl = event.notification.data?.url;
+  if (redirectUrl) {
+    event.waitUntil(clients.openWindow(redirectUrl));
+  }
 });
