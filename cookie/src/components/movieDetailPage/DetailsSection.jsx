@@ -10,11 +10,13 @@ const DetailsWrapper = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
   gap: 20px;
+  align-items: flex-start;
 
   img {
     width: 120px;
     height: auto;
     border-radius: 8px;
+    flex-shrink: 0;
   }
 
   .details {
