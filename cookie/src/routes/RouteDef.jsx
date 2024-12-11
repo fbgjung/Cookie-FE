@@ -24,7 +24,7 @@ import AdminMovie from "../pages/admin/AdminMovie";
 import CastDetail from "../components/movieDetailPage/CastDetail";
 import ErrorPage from "../pages/ErrorPage";
 import MyAllReviewList from "../pages/MyAllReviewList";
-import SpecialCategoryMovie from "../pages/SpecialCategoryMovie";
+import CategoryMovieFeed from "../pages/CategoryMovieFeed";
 
 export const AppRouteDef = {
   Main: {
@@ -252,11 +252,11 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
-  specialCategoryMovie: {
-    path: "/special/category/movies",
+  categoryMovieFeed: {
+    path: "/category/movies",
     element: (
       <PrivateRoute>
-        <SpecialCategoryMovie />
+        <CategoryMovieFeed />
       </PrivateRoute>
     ),
   },

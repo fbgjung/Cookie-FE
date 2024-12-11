@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 
-const MoreSpecialMovie = () => {
+const CategoryMovieFeed = () => {
     const location = useLocation();
     const mainCategory = location.state.mainCategory;
     const subCategory = location.state.subCategory;
@@ -80,7 +80,7 @@ const MoreSpecialMovie = () => {
     );
 };
 
-export default MoreSpecialMovie;
+export default CategoryMovieFeed;
 
 const Container = styled.div`
     padding: 20px;

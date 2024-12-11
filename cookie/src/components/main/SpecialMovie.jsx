@@ -75,7 +75,7 @@ function SpecialMovie({ categorydata }) {
 
 
   const handleMoreView = (mainCategory, subCategory) => {
-    navigate("/special/category/movies", { state: { mainCategory, subCategory } });
+    navigate("/category/movies", { state: { mainCategory, subCategory } });
   };
   
   return (
