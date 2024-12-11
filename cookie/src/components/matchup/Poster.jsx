@@ -1,16 +1,29 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
+import useAuthStore from "../../stores/useAuthStore";
+import { toast } from "react-hot-toast";
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const PosterWrapper = styled.div`
   position: relative;
-  width: 160px;
-  height: 230px;
-  border-radius: 10px;
+  width: 100%;
+  height: 350px;
+  border-radius: 5px;
   overflow: hidden;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease;
+  animation: ${fadeInUp} 0.8s ease-out;
 
   &:hover {
     transform: scale(1.05);
@@ -18,6 +31,21 @@ const PosterWrapper = styled.div`
 
   &:hover .overlay {
     opacity: 1;
+  }
+
+  @media (max-width: 1024px) {
+    width: 250px;
+    height: 360px;
+  }
+
+  @media (max-width: 768px) {
+    width: 218px;
+    height: 320px;
+  }
+
+  @media (max-width: 480px) {
+    width: 170px;
+    height: 250px;
   }
 `;
 
@@ -42,8 +70,8 @@ const Overlay = styled.div`
 `;
 
 const VoteButton = styled.button`
-  background-color: #aad6e7;
-  color: #724b2e;
+  background-color: #ffffff;
+  color: #006400;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -58,13 +86,34 @@ const VoteButton = styled.button`
   }
 `;
 
-const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
+const Poster = ({
+  src,
+  movieTitle,
+  movieId,
+  isVoteEnded,
+  matchUpId,
+  userVote,
+}) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const { isLogined, openLoginModal } = useAuthStore();
 
   const handleVoteClick = () => {
-    if (!isVoteEnded) {
-      setModalOpen(true);
+    if (userVote) {
+      toast.error("이미 참여하신 매치업입니다.");
+      return; // 모달 열기 차단
     }
+
+    if (isVoteEnded) {
+      toast.error("투표가 종료되었습니다.");
+      return; // 모달 열기 차단
+    }
+
+    if (!isLogined()) {
+      openLoginModal();
+      return; // 모달 열기 차단
+    }
+
+    setModalOpen(true); // 모달 열기 허용
   };
 
   const handleCloseModal = () => {
@@ -76,16 +125,16 @@ const Poster = ({ src, movieTitle, movieId, isVoteEnded }) => {
       <PosterWrapper>
         <PosterImage src={src} alt={`${movieTitle} 포스터`} />
         <Overlay className="overlay">
-          <VoteButton onClick={handleVoteClick} disabled={isVoteEnded}>
-            {isVoteEnded ? "투표 종료" : "투표하기"}
-          </VoteButton>
+          <VoteButton onClick={handleVoteClick}>투표하기</VoteButton>
         </Overlay>
       </PosterWrapper>
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         movieTitle={movieTitle}
+        imageUrl={src}
         movieId={movieId}
+        matchUpId={matchUpId}
       />
     </>
   );
@@ -96,6 +145,8 @@ Poster.propTypes = {
   movieTitle: PropTypes.string.isRequired,
   movieId: PropTypes.number.isRequired,
   isVoteEnded: PropTypes.bool.isRequired,
+  matchUpId: PropTypes.number.isRequired,
+  userVote: PropTypes.bool.isRequired,
 };
 
 export default Poster;

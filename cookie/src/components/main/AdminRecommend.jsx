@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../api/auth/axiosInstance";
+import serverBaseUrl from "../../config/apiConfig";
+import axios from "axios";
 
 function AdminRecommend() {
   const navigate = useNavigate();
   const [recommendMovies, setRecommendMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMainPageMovies = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/api/movies/mainAdminRecommend`
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/mainAdminRecommend`
+
         );
         const recommendMovies = response.data.response;
         setRecommendMovies(recommendMovies);
       } catch (error) {
         console.error("API 호출 오류 발생:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 

@@ -8,7 +8,7 @@ export const YoutubeAndStillCutContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 0 12rem;
+  padding: 0 11.2rem;
 `;
 
 export const YoutubeLink = styled.a`
@@ -68,8 +68,8 @@ export const SitllCut = styled.img`
 `;
 
 export const Button = styled.button`
-  background-color: var(--sub-btn);
-  color: var(--main);
+  background-color: var(--sub);
+  color: var(--text);
   border-radius: 18px;
   padding: 0.5rem 1rem;
   border: none;
@@ -95,12 +95,17 @@ const MovieInfoSection = ({ label, children }) => {
   );
 };
 
-function AddLinkStillCut({ selectedMovie }) {
-  const { movieList, setYoutubeLink, setStillCuts } = useAdminMovieStore();
+function AddLinkStillCut({ selectedMovie, movieList }) {
   const fileInputRef = useRef(null);
   const [inputValue, setInputValue] = useState("");
+  const [youtubeLink, setYoutubeLink] = useState("");
+  const [stillCuts, setStillCuts] = useState([]);
 
-  const movie = movieList.find((movie) => movie.movieId === selectedMovie);
+  const movie = selectedMovie;
+
+  if (!movie) {
+    return <p>영화 정보를 불러오는 중입니다...</p>;
+  }
 
   /*유튜브 링크 추가*/
   const handleAddLink = () => {
@@ -110,7 +115,7 @@ function AddLinkStillCut({ selectedMovie }) {
       ? [...new Set([...movie.youtube.split(", "), inputValue.trim()])]
       : [inputValue.trim()];
 
-    setYoutubeLink(movie.movieId, updatedLinks.join(", "));
+    setYoutubeLink(updatedLinks.join(", "));
     setInputValue("");
   };
 
@@ -120,7 +125,7 @@ function AddLinkStillCut({ selectedMovie }) {
       .split(", ")
       .filter((existingLink) => existingLink !== link);
 
-    setYoutubeLink(movie.movieId, updatedLinks.join(", "));
+    setYoutubeLink(updatedLinks.join(", "));
   };
 
   /*썸네일 업로드*/
@@ -131,8 +136,9 @@ function AddLinkStillCut({ selectedMovie }) {
       return;
     }
     const fileURLs = files.map((file) => URL.createObjectURL(file));
-    const updatedStillCuts = [...movie.stillCuts, ...fileURLs];
-    setStillCuts(movie.movieId, updatedStillCuts);
+    // const updatedStillCuts = [...movie.stillCuts, ...fileURLs];
+    // setStillCuts(movie.movieId, updatedStillCuts);
+    setStillCuts([...movie.stillCuts, ...fileURLs]);
   };
 
   /*썸네일 삭제*/
@@ -144,13 +150,13 @@ function AddLinkStillCut({ selectedMovie }) {
   return (
     <YoutubeAndStillCutContainer>
       <MovieInfoSection label="유튜브">
-        <YoutubeUrl
+        {/* <YoutubeUrl
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="ex) http://www.youtube.com"
         />
-        <Button onClick={handleAddLink}>링크 추가</Button>
+        <Button onClick={handleAddLink}>링크 추가</Button> */}
 
         {movie.youtube &&
           movie.youtube.split(", ").map((link, index) => (

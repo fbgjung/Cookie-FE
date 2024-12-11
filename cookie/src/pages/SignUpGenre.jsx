@@ -8,12 +8,20 @@ import useUserStore from "../stores/useUserStore";
 import axios from "axios";
 import useAuthStore from "../stores/useAuthStore";
 import Spinner from "../components/common/Spinner";
+import goBack from "../assets/images/admin/goBack_br.svg";
 
 const MainContainer = styled.div`
   background-color: #fff4b9;
   height: 100vh;
-  padding: 4.375rem 0 0 0;
+  padding: 2rem 0 0 0;
   margin: 0 auto;
+`;
+const GoBackBtn = styled.button`
+  padding: 0 2rem;
+  background: none;
+  border: none;
+  margin-bottom: 2rem;
+  cursor: pointer;
 `;
 
 const MainTitle = styled.div`
@@ -210,6 +218,9 @@ function SignUpGenre() {
     <>
       {showSpinner && <Spinner />}
       <MainContainer>
+        <GoBackBtn onClick={() => navigate(-1)}>
+          <img src={goBack} />
+        </GoBackBtn>
         <MainTitle>
           <h2>선호하는 장르를</h2>
           <h2>알려주세요</h2>
@@ -241,6 +252,7 @@ function SignUpGenre() {
             onEmailNotification={() =>
               handleFormDataSubmission("false", "true")
             }
+            onNoNotification={() => handleFormDataSubmission("false", "false")}
           />
         )}
       </MainContainer>

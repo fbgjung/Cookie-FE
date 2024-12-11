@@ -1,52 +1,46 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const useUserStore = create((set, get) => ({
-  userInfo: {
-    userId: null,
-    nickname: "",
-    profileImage: "",
-    genreId: null,
-  },
-
-  // 유저 정보 전체 설정
-  setUserInfo: (info) =>
-    set((state) => ({
-      userInfo: { ...state.userInfo, ...info },
-    })),
-
-  // 닉네임 수정
-  updateNickname: (nickname) =>
-    set((state) => ({
-      userInfo: { ...state.userInfo, nickname },
-    })),
-
-  // 프로필 이미지 수정
-  updateProfileImage: (profileImage) =>
-    set((state) => ({
-      userInfo: { ...state.userInfo, profileImage },
-    })),
-
-  // 장르 ID 수정
-  updateGenreId: (genreId) =>
-    set((state) => ({
-      userInfo: { ...state.userInfo, genreId },
-    })),
-
-  //로그아웃
-  logout: () =>
-    set(() => ({
+const useUserStore = create(
+  persist(
+    (set, get) => ({
       userInfo: {
         userId: null,
         nickname: "",
-        profileImage: "",
-        genreId: null,
       },
-    })),
-
-  getUserInfo: () => {
-    const state = get();
-    return state.userInfo;
-  },
-}));
+      setUserInfo: (info) =>
+        set((state) => ({
+          userInfo: { ...state.userInfo, ...info },
+        })),
+      logout: () =>
+        set(() => ({
+          userInfo: {
+            userId: null,
+            nickname: "",
+          },
+        })),
+      getUserInfo: () => get().userInfo,
+    }),
+    {
+      name: "userInfo",
+      getStorage: () => localStorage,
+      serialize: (state) => {
+        return JSON.stringify({
+          userInfo: {
+            nickname: state.userInfo.nickname,
+          },
+        });
+      },
+      deserialize: (str) => {
+        const parsed = JSON.parse(str);
+        return {
+          userInfo: {
+            nickname: parsed.userInfo.nickname,
+          },
+        };
+      },
+    }
+  )
+);
 
 export default useUserStore;

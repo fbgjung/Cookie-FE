@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
 
-
 function SpecialMovie({ categorydata }) {
   const filteredCategoryData = categorydata.filter(
     (item) => item.id >= 21 && item.id <= 40
@@ -24,18 +23,28 @@ function SpecialMovie({ categorydata }) {
 
   const fetchMoviesByCategory = async (mainCategory, subCategory) => {
     if (!mainCategory || !subCategory) return;
+    const cacheKey = `${mainCategory}_${subCategory}`;
+    const cachedMovies = localStorage.getItem(cacheKey);
 
-    try {
-      const response = await axios.get(`${serverBaseUrl}/api/movies/categoryMovies`, {
-        params: {
-          mainCategory: mainCategory,
-          subCategory: subCategory,
-        },
-      });
+    if (cachedMovies) {
+      setMovies(JSON.parse(cachedMovies));
+    } else {
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/categoryMovies`,
+          {
+            params: {
+              mainCategory: mainCategory,
+              subCategory: subCategory,
+            },
+          }
+        );
 
-      setMovies(response.data.movies);
-    } catch (error) {
-      console.error("영화 불러오기 실패:", error);
+        setMovies(response.data.movies);
+        localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
+      } catch (error) {
+        console.error("영화 불러오기 실패:", error);
+      }
     }
   };
 
@@ -43,7 +52,6 @@ function SpecialMovie({ categorydata }) {
     new Set(filteredCategoryData.map((item) => item.mainCategory))
   );
 
-  // 선택된 메인 카테고리의 세부카테고리
   const getSubCategories = (mainCategory) => {
     return filteredCategoryData
       .filter((item) => item.mainCategory === mainCategory)

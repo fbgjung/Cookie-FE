@@ -11,6 +11,9 @@ import ChartSection from "../components/matchup/ChartSection";
 import ChatUI from "../components/matchup/ChatUI";
 import { useParams, useLocation } from "react-router-dom";
 import ScrollToTop from "../components/common/ScrollToTop";
+
+import SnowEffect from "../components/common/SnowEffect";
+import axios from "axios";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
@@ -19,7 +22,14 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  background-color: #fff4b9;
+  background: linear-gradient(
+    to bottom,
+    #000000,
+    #0a0a0a,
+    #141414,
+    #1f1f1f,
+    #292929
+  );
   color: #ffffff;
   padding-top: 10px;
   font-family: "Arial", sans-serif;
@@ -29,13 +39,13 @@ const Container = styled.div`
 `;
 
 const sampleData = {
-  matchUpTitle: "테스트 빅매치",
+  matchUpTitle: "크리스마스 빅매치",
   startAt: "2024-11-21T17:21:03",
-  entAt: "2024-12-08T02:48:05",
+  entAt: "2024-12-11T02:48:05",
   movie1: {
-    movieTitle: "테스트 영화 1",
+    movieTitle: "나 홀로 집에",
     moviePoster: null,
-    movieLike: 32,
+    movieLike: 12,
     charmPoint: {
       ost: 20,
       direction: 18,
@@ -56,7 +66,7 @@ const sampleData = {
     },
   },
   movie2: {
-    movieTitle: "테스트 영화 2",
+    movieTitle: "뭐 있더라",
     moviePoster: null,
     movieLike: 22,
     charmPoint: {
@@ -93,6 +103,7 @@ const MatchupPage = () => {
       const endpoint = `/api/matchups/${matchUpId || 1}`;
       const response = await axiosInstance.get(endpoint);
       setMatchUpData(response.data.response || sampleData);
+      console.log(response.data.response);
     } catch (error) {
       console.error("API 요청 실패:", error);
       setMatchUpData(sampleData);
@@ -149,6 +160,7 @@ const MatchupPage = () => {
 
   return (
     <Container>
+      <SnowEffect />
       <ScrollToTop />
       <TitleSection
         matchUpTitle={matchUpData.matchUpTitle}
@@ -158,19 +170,23 @@ const MatchupPage = () => {
       <PosterList
         posters={[
           {
+            movieId: matchUpData.movie1.movieId,
             src:
               matchUpData.movie1.moviePoster ||
-              "/src/assets/images/matchup/sampleimage1.svg",
+              "/src/assets/images/matchup/testposter.png",
             title: matchUpData.movie1.movieTitle,
           },
           {
+            movieId: matchUpData.movie2.movieId,
             src:
               matchUpData.movie2.moviePoster ||
-              "/src/assets/images/matchup/sampleimage2.svg",
+              "/src/assets/images/matchup/testposter1.png",
             title: matchUpData.movie2.movieTitle,
           },
         ]}
+        matchUpId={matchUpData.matchUpId}
         isVoteEnded={isVoteEnded}
+        userVote={matchUpData.userVote}
       />
       <ProgressBar
         movie1Likes={matchUpData.movie1.movieLike}

@@ -10,7 +10,6 @@ const ReviewFeedWrapper = styled.div`
   background-color: #ffffff;
   border-radius: 8px;
   padding: 20px;
-  height: 100vh;
 `;
 
 const ReviewTitle = styled.div`
@@ -144,6 +143,12 @@ const ReviewCenter = styled.div`
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    &.blurred {
+      filter: blur(5px); /* 블러 효과 */
+      pointer-events: none; /* 마우스 이벤트 비활성화 */
+      user-select: none; /* 텍스트 선택 비활성화 */
+    }
   }
 `;
 
@@ -301,7 +306,9 @@ useEffect(() => {
   };
 
   const handleReviewClick = (reviewId) => {
-    navigate(`/reviews/${reviewId}`);
+    navigate(`/reviews/${reviewId}`, {
+      state: { fromReviewFeed: true },
+    });
   };
 
   return (
@@ -354,7 +361,11 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              <div className="comment">
+              <div
+                className={`comment ${
+                  !showSpoilerOnly && review.spoiler ? "blurred" : ""
+                }`}
+              >
                 {review.content.length > 100
                   ? `${review.content.slice(0, 105)}...`
                   : review.content}
@@ -377,7 +388,6 @@ useEffect(() => {
         ))}
       </ReviewContainer>
       {isLoading && <p>Loading more reviews...</p>}
-      {!hasMore && <p>No more reviews available.</p>}
     </ReviewFeedWrapper>
   );
 };

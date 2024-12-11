@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 import { toast } from "react-hot-toast";
+import ReviewHeader from "../components/searchpage/ReviewHeader";
 
 // styled-components 정의
 const FormWrapper = styled.div`
@@ -13,6 +14,7 @@ const FormWrapper = styled.div`
   border-radius: 16px;
   background-color: #ffffff;
   height: 100vh;
+  overflow: hidden;
 `;
 
 const PosterWrapper = styled.div`
@@ -56,7 +58,7 @@ const RatingWrapper = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 450px;
+  height: 200px;
   min-height: 100px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -179,7 +181,8 @@ const ReviewForm = () => {
       const response = await axiosInstance.post(`/api/reviews`, payload);
       if (response.status === 200) {
         toast.success("리뷰가 성공적으로 등록되었습니다.");
-        navigate("/reviews");
+        console.log("리뷰 등록 성공:", response.data.response);
+        navigate("/");
       } else {
         toast.error("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
       }
@@ -195,6 +198,7 @@ const ReviewForm = () => {
 
   return (
     <FormWrapper>
+      <ReviewHeader onBack={() => navigate(-1)} />
       <h1>{movieTitle} 리뷰 남기기</h1>
       {posterUrl && (
         <PosterWrapper>

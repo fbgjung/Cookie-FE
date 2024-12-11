@@ -1,9 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
+// 스타일 정의
 const ReviewContentContainer = styled.div`
   display: flex;
   margin-bottom: 20px;
@@ -51,8 +52,6 @@ const ReviewContentContainer = styled.div`
     }
 
     .movie-info {
-      display: flex;
-      flex-direction: column;
       margin-bottom: 10px;
 
       .movie-title {
@@ -71,38 +70,32 @@ const ReviewContentContainer = styled.div`
         width: 25px;
         height: 25px;
         margin-right: 5px;
-        cursor: pointer;
         transition: transform 0.2s ease;
 
-        &:hover {
-          transform: scale(1.2);
-        }
-
         &.selected {
-          filter: brightness(1.2);
+          filter: brightness(1.3);
         }
       }
     }
   }
 
   .options {
-    position: relative;
-    right: 10px;
-    width: 24px;
-    height: 24px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
     cursor: pointer;
 
     img {
-      width: 100%;
-      height: 100%;
+      width: 24px;
+      height: 24px;
     }
   }
 `;
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: 30px;
-  right: 0;
+  top: 40px;
+  right: 20px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -112,13 +105,10 @@ const DropdownMenu = styled.div`
   white-space: nowrap;
 
   div {
-    padding: 12px 20px;
+    padding: 10px 15px;
     font-size: 0.9rem;
     color: #333;
     cursor: pointer;
-    text-align: left;
-    line-height: 1.5;
-    display: block;
 
     &:hover {
       background: #f9f9f9;
@@ -129,29 +119,21 @@ const DropdownMenu = styled.div`
 const EditForm = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 300px;
+  gap: 10px;
 
-  textarea,
-  input {
+  textarea {
     padding: 10px;
     font-size: 0.85rem;
     border: 1px solid #ddd;
     border-radius: 8px;
-    width: 100%;
-    height: 180px;
-
-    @media (max-width: 768px) {
-      font-size: 0.8rem;
-      padding: 8px;
-      height: 180px;
-    }
+    resize: none;
+    height: 120px;
   }
 
   .action-buttons {
     display: flex;
-    gap: 8px;
     justify-content: flex-end;
+    gap: 10px;
 
     button {
       padding: 8px 14px;
@@ -173,16 +155,7 @@ const EditForm = styled.div`
           background-color: #888;
         }
       }
-
-      @media (max-width: 768px) {
-        font-size: 0.75rem;
-        padding: 6px 10px;
-      }
     }
-  }
-
-  @media (max-width: 768px) {
-    width: 90%;
   }
 `;
 
@@ -199,8 +172,12 @@ const ReviewContentSection = ({
   handleUpdateReview,
 }) => {
   const location = useLocation();
-  const isFromReviewList = location.state?.from === "reviewList";
   const navigate = useNavigate();
+
+  const fromReviewFeed = location.state?.fromReviewFeed || false;
+  const fromLikedReviews = location.state?.fromLikedReviews || false;
+  const fromMyPage = location.state?.fromMyPage || false;
+  const fromMyAllReviewList = location.state?.fromMyAllReviewList || false;
 
   const [isEditing, setIsEditing] = useState(false);
   const [newContent, setNewContent] = useState("");
@@ -210,10 +187,6 @@ const ReviewContentSection = ({
     setIsEditing(true);
     setNewContent("");
     setNewMovieScore(cookieScoreCount);
-  };
-
-  const handleManageClick = () => {
-    navigate("/mypage");
   };
 
   const handleCancelEdit = () => {
@@ -245,6 +218,27 @@ const ReviewContentSection = ({
     setNewMovieScore(index + 1);
   };
 
+  const renderMenuOptions = () => {
+    if (fromReviewFeed) {
+      return (
+        <DropdownMenu>
+          <div onClick={() => navigate("/mypage")}>내 정보 관리하기</div>
+        </DropdownMenu>
+      );
+    }
+
+    if ((fromMyPage || fromMyAllReviewList) && !fromLikedReviews) {
+      return (
+        <DropdownMenu>
+          <div onClick={handleEditClick}>수정하기</div>
+          <div onClick={handleDeleteWithConfirmation}>삭제하기</div>
+        </DropdownMenu>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <ReviewContentContainer>
       <img className="poster" src={posterSrc} alt="Movie Poster" />
@@ -253,7 +247,7 @@ const ReviewContentSection = ({
         {!isEditing ? (
           <>
             <div className="profile">
-              <img src={profileSrc} alt="Profile Picture" />
+              <img src={profileSrc} alt="Profile" />
               <div className="user-info">
                 <span className="name">{name}</span>
                 <span className="date">{date}</span>
@@ -271,7 +265,6 @@ const ReviewContentSection = ({
                   className={`cookie ${i < newMovieScore ? "selected" : ""}`}
                   src="/images/cookiescore.svg"
                   alt="Cookie Score"
-                  onClick={() => handleCookieClick(i)}
                 />
               ))}
             </div>
@@ -306,23 +299,13 @@ const ReviewContentSection = ({
 
       <div className="options" onClick={toggleMenu}>
         <img src="/images/more.svg" alt="More Options" />
-        {isMenuOpen && (
-          <DropdownMenu>
-            {isFromReviewList ? (
-              <>
-                <div onClick={handleEditClick}>수정하기</div>
-                <div onClick={handleDeleteWithConfirmation}>삭제하기</div>
-              </>
-            ) : (
-              <div onClick={() => navigate("/mypage")}>내 리뷰 관리하기</div>
-            )}
-          </DropdownMenu>
-        )}
+        {isMenuOpen && renderMenuOptions()}
       </div>
     </ReviewContentContainer>
   );
 };
 
+// PropTypes 지정
 ReviewContentSection.propTypes = {
   posterSrc: PropTypes.string.isRequired,
   profileSrc: PropTypes.string.isRequired,

@@ -52,14 +52,14 @@ const Message = styled.p`
   margin-top: 20px;
 `;
 
-const SearchResults = ({ results, onMovieClick, isLoading, activeTab, defaultResults }) => {
+const SearchResults = ({ results, onMovieClick, isLoading, activeTab, defaultResults, searchTerm }) => {
   if (isLoading) {
     return <Message>로딩 중...</Message>;
   }
 
-  // if (!isLoading && (!results || results.length === 0)) {
-  //   return <Message>검색 결과가 없습니다.</Message>;
-  // }
+  if (!isLoading && searchTerm.trim() && results.length === 0) {
+    return <Message>검색 결과가 없습니다.</Message>;
+  }
 
   if (!isLoading && results.length === 0 && defaultResults.length > 0) {
     return (
@@ -101,6 +101,7 @@ SearchResults.propTypes = {
   onMovieClick: PropTypes.func.isRequired, // 영화 클릭 핸들러
   isLoading: PropTypes.bool.isRequired, // 로딩 상태
   activeTab: PropTypes.string.isRequired, // 현재 활성화된 탭
+  searchTerm: PropTypes.string.isRequired, // 검색어
 };
 
 export default SearchResults;

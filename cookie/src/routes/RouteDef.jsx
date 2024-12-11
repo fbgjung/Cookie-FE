@@ -29,11 +29,7 @@ import CategoryMovieFeed from "../pages/CategoryMovieFeed";
 export const AppRouteDef = {
   Main: {
     path: "/",
-    element: (
-      <PrivateRoute>
-        <Main />
-      </PrivateRoute>
-    ),
+    element: <Main />,
   },
   Search: {
     path: "/search",

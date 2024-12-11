@@ -1,29 +1,56 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../../api/auth/axiosInstance";
-
+import axios from "axios";
+import serverBaseUrl from "../../config/apiConfig";
 
 function GenreMovie({ categorydata }) {
   const [selectedMainCategory] = useState("장르");
   const [selectedGenre, setSelectedGenre] = useState("로맨스");
   const [genreMovies, setGenreMovies] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [selectedPage, setSelectedPage] = useState(1);
+
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const fetchMoviesByGenre = async (genre) => {
-    try {
-      const response = await axiosInstance.get("/api/movies/categoryMovies", {
-        params: {
-          mainCategory: "장르",
-          subCategory: genre,
-        },
-      });
-      console.log(response.data);
-      setGenreMovies(response.data.movies);
-    } catch (error) {
-      console.error("영화 불러오기 실패:", error);
+    const cacheKey = `movies_${genre}_${currentPage}`;
+    const cachedData = localStorage.getItem(cacheKey);
+
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData);
+      setGenreMovies(parsedData.movies);
+      setTotalPages(parsedData.totalPages || 1);
+    } else {
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/categoryMovies`,
+          {
+            params: {
+              mainCategory: "장르",
+              subCategory: genre,
+              page: currentPage - 1,
+              size: 15,
+            },
+          }
+        );
+        console.log(response.data);
+
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({
+            movies: response.data.movies,
+            totalPages: response.data.totalPages,
+          })
+        );
+
+        setGenreMovies(response.data.movies);
+        setTotalPages(response.data.totalPages || 1);
+      } catch (error) {
+        console.error("영화 불러오기 실패:", error);
+      }
     }
   };
 
@@ -36,13 +63,17 @@ function GenreMovie({ categorydata }) {
 
   useEffect(() => {
     fetchMoviesByGenre(selectedGenre);
-  }, [selectedGenre]);
+  }, [selectedGenre, currentPage]);
 
   const handleGenreClick = (genre) => {
     setSelectedGenre(genre);
-    fetchMoviesByGenre(genre);
+    setCurrentPage(1);
+    setSelectedPage(1);
   };
-
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+    setSelectedPage(page);
+  };
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
   };
@@ -90,6 +121,7 @@ function GenreMovie({ categorydata }) {
           </div>
         ))}
       </div>
+
       </GenreMovieList>
     </>
   );
