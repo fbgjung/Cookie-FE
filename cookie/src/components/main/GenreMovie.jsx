@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import videoIcon from "../../assets/images/main/video_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../../api/auth/axiosInstance";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
 
@@ -129,24 +128,7 @@ const PaginationBtn = styled.button`
   color: ${(props) =>
     props.$selectedPage ? "var(--sub-text)" : "var(--text)"};
 `;
-const Skeleton = styled.div`
-  width: 100%;
-  height: 200px;
-  background-color: #e0e0e0;
-  animation: pulse 1.5s infinite ease-in-out;
 
-  @keyframes pulse {
-    0% {
-      background-color: #e0e0e0;
-    }
-    50% {
-      background-color: #d0d0d0;
-    }
-    100% {
-      background-color: #e0e0e0;
-    }
-  }
-`;
 function GenreMovie({ categorydata }) {
   const [selectedGenre, setSelectedGenre] = useState("로맨스");
   const [genreMovies, setGenreMovies] = useState([]);
