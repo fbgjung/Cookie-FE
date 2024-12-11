@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-// 스타일 정의
+// 스타일 컴포넌트 정의
 const ReviewContentContainer = styled.div`
   display: flex;
   margin-bottom: 20px;
@@ -70,10 +70,14 @@ const ReviewContentContainer = styled.div`
         width: 25px;
         height: 25px;
         margin-right: 5px;
-        transition: transform 0.2s ease;
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.2);
+        }
 
         &.selected {
-          filter: brightness(1.3);
+          filter: brightness(1.2);
         }
       }
     }
@@ -159,6 +163,7 @@ const EditForm = styled.div`
   }
 `;
 
+// 메인 컴포넌트
 const ReviewContentSection = ({
   posterSrc,
   profileSrc,
@@ -174,6 +179,7 @@ const ReviewContentSection = ({
   const location = useLocation();
   const navigate = useNavigate();
 
+  // 상태 값 체크
   const fromReviewFeed = location.state?.fromReviewFeed || false;
   const fromLikedReviews = location.state?.fromLikedReviews || false;
   const fromMyPage = location.state?.fromMyPage || false;
@@ -219,6 +225,10 @@ const ReviewContentSection = ({
   };
 
   const renderMenuOptions = () => {
+    if (fromLikedReviews) {
+      return null;
+    }
+
     if (fromReviewFeed) {
       return (
         <DropdownMenu>
@@ -265,6 +275,7 @@ const ReviewContentSection = ({
                   className={`cookie ${i < newMovieScore ? "selected" : ""}`}
                   src="/images/cookiescore.svg"
                   alt="Cookie Score"
+                  onClick={() => handleCookieClick(i)}
                 />
               ))}
             </div>
@@ -276,17 +287,6 @@ const ReviewContentSection = ({
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
             />
-            <div className="cookie-score">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <img
-                  key={i}
-                  className={`cookie ${i < newMovieScore ? "selected" : ""}`}
-                  src="/images/cookiescore.svg"
-                  alt="Cookie Score"
-                  onClick={() => handleCookieClick(i)}
-                />
-              ))}
-            </div>
             <div className="action-buttons">
               <button onClick={handleSaveEdit}>저장</button>
               <button className="cancel" onClick={handleCancelEdit}>
@@ -305,7 +305,6 @@ const ReviewContentSection = ({
   );
 };
 
-// PropTypes 지정
 ReviewContentSection.propTypes = {
   posterSrc: PropTypes.string.isRequired,
   profileSrc: PropTypes.string.isRequired,

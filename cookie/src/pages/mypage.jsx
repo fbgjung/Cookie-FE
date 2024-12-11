@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProfileImage from "../components/mypage/ProfileImage";
 import BadgeList from "../components/mypage/BadgeList";
-import GenreChart from "../components/mypage/GenreChart";
+
 import FavoriteList from "../components/mypage/FavoriteList";
 import ReviewList from "../components/mypage/ReviewList";
 import LogoutAndWithdraw from "../components/mypage/LogoutAndWithdraw";
@@ -12,27 +12,35 @@ import axiosInstance from "../api/auth/axiosInstance";
 import { toast } from "react-hot-toast";
 import useAuthStore from "../stores/useAuthStore";
 import Spinner from "../components/common/Spinner";
+import PointHistory from "../components/matchup/PointSection";
+import PushNotificationToggle from "../components/mypage/PushNotificationToggle";
 
 const MypageContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #fff4b9;
+  background-color: black;
   position: relative;
 `;
 
 const MypageContent = styled.div`
-  background-color: #ffffff;
+  background-color: black;
   border-radius: 24px 24px 0 0;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  margin-top: 180px;
-  box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 200px;
   z-index: 1;
   box-sizing: border-box;
   padding: 20px;
   padding-bottom: 80px;
+
+  border: 4px solid transparent;
+
+  box-shadow:
+    0 0 8px #00d6e8,
+    0 0 16px #00d6e8,
+    0 0 24px #00d6e8;
 `;
 
 const ReviewHeader = styled.div`
@@ -46,27 +54,28 @@ const ReviewTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 1.5rem;
-  margin-left: 1rem;
-  color: #04012d;
+
+  color: #ffffff;
 `;
 
 const MoreLink = styled.span`
   font-size: 1rem;
   font-weight: bold;
   margin-top: 1.5rem;
-  margin-right: 1rem;
-  color: #724b2e;
+
+  color: #ffffff;
   cursor: pointer;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #0056b3;
+    color: #00d6e8;
   }
 `;
 
 const MyPage = () => {
   const [userData, setUserData] = useState({ nickname: "", profileImage: "" });
   const [badgeData, setBadgeData] = useState([]);
+  const [badgePoint, setBadgePoint] = useState(0);
   const [genreScores, setGenreScores] = useState([]);
   const [reviewData, setReviewData] = useState([]);
   const logOut = useAuthStore((state) => state.logOut);
@@ -94,6 +103,7 @@ const MyPage = () => {
           response.data.response;
 
         setUserData({ nickname, profileImage });
+        setBadgePoint(badgePoint || 0);
         setBadgeData(
           badge.map((b) => ({
             name: b.name,
@@ -185,6 +195,7 @@ const MyPage = () => {
   return (
     <>
       <LoginModal />
+
       {isLoading && <Spinner />}
       <MypageContainer>
         <div
@@ -207,8 +218,11 @@ const MyPage = () => {
         </div>
         <MypageContent>
           <BadgeList title={`${userData.nickname}의 배지`} badges={badgeData} />
-          <GenreChart data={genreScores} />
+          {/* <GenreChart data={genreScores} /> */}
+          <PointHistory badgePoint={badgePoint} />
+
           <FavoriteList title="좋아요" items={favoriteItems} />
+          <PushNotificationToggle />
           <ReviewHeader>
             <ReviewTitle>{`${userData.nickname}의 리뷰`}</ReviewTitle>
             <MoreLink onClick={handleMoreClick}>{" 더보기"}</MoreLink>

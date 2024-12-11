@@ -11,13 +11,13 @@ const ProfileContainer = styled.div`
 
 const ImageContainer = styled.div`
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
 `;
 
 const Image = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 20px;
   background-color: #fff;
   background-image: ${(props) =>
@@ -41,7 +41,7 @@ const Title = styled.h3`
   font-size: 1.2rem;
   margin: 0 0 10px 0;
   text-align: center;
-  color: #6a91b1;
+  color: #ffffff;
   font-weight: bold;
 `;
 
@@ -49,7 +49,7 @@ const NameContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+
   margin: 30px;
 `;
 
@@ -57,9 +57,8 @@ const Name = styled.h2`
   font-size: 1.2rem;
   margin: 0;
   text-align: center;
-  color: #000;
+  color: #ffffff;
 `;
-
 const ManageProfileIcon = styled.img`
   width: 20px;
   height: 20px;

@@ -32,7 +32,7 @@ const BarContainer = styled.div`
   }
 
   @media (max-width: 480px) {
-    width: 80%;
+    width: 88%;
     max-width: none;
     height: 15px;
     margin-top: 30px;

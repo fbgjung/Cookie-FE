@@ -206,7 +206,6 @@ const ReviewDetail = () => {
     const previousLiked = likedByUser;
     const previousLikeCount = reviewData.reviewLike;
 
-    // 상태를 임시로 업데이트
     setLikedByUser(!previousLiked);
     setReviewData((prevData) => ({
       ...prevData,
@@ -226,7 +225,7 @@ const ReviewDetail = () => {
       }));
     }
   };
-/*
+  /*
   const toggleLike = async () => {
     const userId = getUserIdFromToken();
     if (!userId) return;
@@ -407,7 +406,7 @@ const ReviewDetail = () => {
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSectionStyled>
         <div className="icon-container">
-        <FaHeart
+          <FaHeart
             className={likedByUser ? "liked" : isHovered ? "hovered" : ""}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 
 const ReviewSection = styled.div`
   margin-top: 0.3rem;

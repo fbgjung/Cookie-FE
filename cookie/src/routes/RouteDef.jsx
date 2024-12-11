@@ -24,6 +24,8 @@ import AdminMovie from "../pages/admin/AdminMovie";
 import CastDetail from "../components/movieDetailPage/CastDetail";
 import ErrorPage from "../pages/ErrorPage";
 import MyAllReviewList from "../pages/MyAllReviewList";
+import PointHistory from "../components/matchup/PointSection";
+import PointHistoryPage from "../pages/PointHistoryPage";
 
 export const AppRouteDef = {
   Main: {
@@ -248,6 +250,15 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <CastDetail />
+      </PrivateRoute>
+    ),
+  },
+
+  PointHistory: {
+    path: "/point-history",
+    element: (
+      <PrivateRoute>
+        <PointHistoryPage />
       </PrivateRoute>
     ),
   },

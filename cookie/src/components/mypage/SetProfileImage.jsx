@@ -40,8 +40,8 @@ const BackButton = styled.img`
 `;
 
 const ImageWrapper = styled.label`
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 20px;
   position: relative;
   margin-top: 10px;
@@ -52,14 +52,14 @@ const ImageWrapper = styled.label`
   align-items: center;
 
   @media (max-width: 768px) {
-    width: 90px;
-    height: 90px;
+    width: 110px;
+    height: 110px;
     border-radius: 16px;
   }
 
   @media (max-width: 480px) {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 12px;
   }
 `;

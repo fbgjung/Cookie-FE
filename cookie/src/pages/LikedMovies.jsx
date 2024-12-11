@@ -8,34 +8,24 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #ffffff;
-  min-height: 80vh;
-  max-width: 800px;
+  background-color: black;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   position: relative;
 `;
 
 const BackButton = styled.img`
-  position: fixed;
-  top: 7rem;
-  left: 28rem;
+  position: absolute;
+  top: 20px;
+  left: 5%;
   width: 24px;
   height: 24px;
   cursor: pointer;
-  z-index: 1000;
 
-  @media (max-width: 768px) {
-    top: 7rem;
-    left: 1rem;
-    width: 20px;
-    height: 20px;
-  }
-
-  @media (max-width: 480px) {
-    top: 7rem;
-    left: 2rem;
-    width: 18px;
-    height: 18px;
+  &:hover {
+    transform: scale(1.2);
   }
 `;
 
@@ -43,7 +33,7 @@ const Title = styled.h1`
   font-size: 1.8rem;
   font-weight: bold;
   margin: 30px 0 20px;
-  color: #04012d;
+  color: #ffffff;
   text-align: center;
 `;
 
@@ -86,8 +76,15 @@ const MovieCard = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   cursor: pointer;
-`;
 
+  &:hover {
+    border-color: #33efff;
+    transform: scale(1.05);
+    border: 2px solid #00d6e8;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+`;
 const Poster = styled.img`
   width: 100%;
   height: 200px;
@@ -124,7 +121,7 @@ const MovieInfo = styled.div`
 
 const EmptyMessage = styled.div`
   font-size: 1rem;
-  color: #999;
+  color: #ffffff;
   text-align: center;
   margin: 30px 0;
 `;

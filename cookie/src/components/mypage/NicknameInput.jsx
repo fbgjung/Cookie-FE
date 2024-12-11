@@ -6,7 +6,7 @@ import axiosInstance from "../../api/auth/axiosInstance";
 const NicknameContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
+
   width: 100%;
   max-width: 600px;
 
@@ -20,6 +20,7 @@ const NicknameContainer = styled.div`
 const Label = styled.label`
   font-size: 1.2rem;
   font-weight: bold;
+  margin-top: 30px;
   margin-bottom: 8px;
   margin-left: 40px;
   color: #ffffff;
@@ -107,6 +108,7 @@ const CheckButton = styled.button`
   @media (max-width: 480px) {
     font-size: 0.8rem;
     padding: 7px;
+    margin-right: 15px;
     width: 60px;
   }
 `;
