@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 const MatchUpSection = () => {
+  const navigate = useNavigate();
+
   const [matchUps, setMatchUps] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -38,6 +41,10 @@ const MatchUpSection = () => {
     }
   };
 
+  const handleMatchUpVotePage = (matchUpId) => {
+    navigate(`/matchup/${matchUpId}`);  // 페이지 이동
+  }
+
   return (
     <Wrapper>
       {matchUps.length > 0 && (
@@ -46,7 +53,7 @@ const MatchUpSection = () => {
           <MatchUpContainer>
             <Overlay>
               <MatchUpInfo>
-                <VoteButton>
+                <VoteButton onClick={() => handleMatchUpVotePage(matchUps[currentIndex].matchUpId)}>
                   {matchUps[currentIndex].matchUpTitle}
                 </VoteButton>
                 <MatchUpDescription>쿠키에서 여운을 더 즐겨보세요!</MatchUpDescription>
