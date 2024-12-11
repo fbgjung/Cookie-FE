@@ -4,17 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import axiosInstance from "../../api/auth/axiosInstance";
 import { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
 
 const DetailsWrapper = styled.div`
   display: flex;
   margin-top: 20px;
   margin-bottom: 20px;
   gap: 20px;
+  align-items: flex-start;
 
   img {
     width: 120px;
     height: auto;
     border-radius: 8px;
+    flex-shrink: 0;
   }
 
   .details {
@@ -87,7 +90,19 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
     setLikeCount(likes);
   }, [liked, likes]);
 
+  const checkLogin = () => {
+    const token = localStorage.getItem("refreshToken");
+    if (!token) {
+      toast.error("로그인이 필요한 서비스입니다!");
+      navigate("/login");
+      return false;
+    }
+    return true;
+  };
+
   const handleLikeClick = async () => {
+    if (!checkLogin()) return;
+
     const previousLiked = likeValid;
     const previousLikeCount = likeCount;
 
@@ -105,6 +120,8 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
   };
 
   const handleWriteReviewClick = () => {
+    if (!checkLogin()) return;
+    
     navigate("/reviews/write", {
       state: { 
         movieId: movie.id,

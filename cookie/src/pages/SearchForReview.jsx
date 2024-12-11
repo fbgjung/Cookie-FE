@@ -148,18 +148,42 @@ const SearchForReview = () => {
 
   const handleMovieClick = (movie) => {
     console.log("Received movie in handleMovieClick:", movie);
-
-    if (!movie.id || !movie.title || !movie.poster) {
+  
+    // 데이터 형식에 따라 분기 처리
+    const movieId = movie.id || movie.movieId; // id 또는 movieId
+    const movieTitle = movie.title || movie.movieTitle; // title 또는 movieTitle
+    const posterUrl = movie.poster;
+  
+    // 유효성 검사
+    if (!movieId || !movieTitle || !posterUrl) {
       console.error("영화 정보가 올바르지 않습니다:", movie);
+      return;
+    }
+  
+    // 네비게이트
+    navigate("/reviews/write", {
+      state: { 
+        movieId,
+        movieTitle,
+        posterUrl,
+      },
+    });
+  };
+
+  const handleDefaultMovieClick = (movie) => {
+    console.log("Received default movie in handleDefaultMovieClick:", movie);
+
+    if (!movie.movieId || !movie.movieTitle || !movie.poster) {
+      console.error("기본 영화 정보가 올바르지 않습니다:", movie);
       return;
     }
 
     navigate("/reviews/write", {
-      state: { 
-        movieId: movie.id,
-        movieTitle: movie.title,
+      state: {
+        movieId: movie.movieId,
+        movieTitle: movie.movieTitle,
         posterUrl: movie.poster,
-       },
+      },
     });
   };
 
@@ -198,6 +222,7 @@ const SearchForReview = () => {
         <SearchResults
           results={results || []} // results가 undefined인 경우 빈 배열로 전달
           onMovieClick={handleMovieClick}
+          onDefaultMovieClick={handleDefaultMovieClick}
           isLoading={results.length === 0 && searchTerm.trim()} // 로딩 상태 처리
           activeTab={activeTab}
           defaultResults={defaultResults || []}
