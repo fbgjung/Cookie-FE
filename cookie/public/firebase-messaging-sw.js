@@ -14,23 +14,19 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
-// 백그라운드 메시지 처리
 messaging.onBackgroundMessage((payload) => {
   console.log("백그라운드에서 푸시 알림 수신:", payload);
 
   if (payload.data) {
-    const { title, body, icon, url, tag } = payload.data;
-
+    const { title, body } = payload.data;
     self.registration.showNotification(title || "제목 없음", {
       body: body || "내용 없음",
-      icon: icon || "/favicon.ico", // 커스텀 아이콘 경로
-      tag: tag || "default-tag", // 중복 방지 태그
-      data: { url }, // 클릭 이벤트에서 사용할 URL
+      icon: "/favicon.ico",
+      tag: "default-tag",
     });
   }
 });
 
-// 알림 클릭 이벤트 처리
 self.addEventListener("notificationclick", (event) => {
   console.log("알림 클릭됨:", event.notification);
   event.notification.close();
