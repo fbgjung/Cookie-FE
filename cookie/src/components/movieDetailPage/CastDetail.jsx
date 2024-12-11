@@ -171,8 +171,12 @@ function CastDetail() {
           <div className="info__director">
             <img
               className="info__director--img"
-              src={data.profileImage || "images/default.png"}
-              alt="Director"
+              src={
+                data.profileImage?.endsWith("/null")
+                  ? "/images/default.png"
+                  : data.profileImage || "/images/default.png"
+              }
+              alt={isActor ? "Actor" : "Director"}
             />
             <div>
               <h3>{data.name}</h3>
