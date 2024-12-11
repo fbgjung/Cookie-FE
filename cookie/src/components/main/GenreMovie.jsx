@@ -3,86 +3,6 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
 
-const GenreMovieList = styled.div`
-  .genreBtn__contianer {
-    margin-bottom: 0.8rem;
-  }
-  .genre__movie {
-    display: flex;
-    flex-direction: row;
-    gap: 0.9rem;
-    flex-wrap: wrap;
-    align-items: start;
-    padding: 0.625rem;
-  }
-
-  .genre__movie--list {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 0.5rem;
-    cursor: pointer;
-  }
-
-  .genre__movie--list img {
-    border-radius: 0.75rem;
-    width: 7.75rem;
-    height: 11.07rem;
-  }
-  .genre__movie--list p {
-    text-align: start;
-    width: 7.75rem;
-  }
-
-  .genre__info--sub {
-    color: #afafaf;
-    font-size: 0.82rem;
-  }
-
-  @media (max-width: 768px) {
-    .genre__movie {
-      gap: 0.625rem;
-      padding: 0.625rem 0;
-    }
-    .genre__movie p {
-      font-size: 0.7rem;
-    }
-    .genre__movie--list {
-      width: 5.7rem;
-      gap: 0.5rem;
-    }
-    .genre__movie--list img {
-      border-radius: 0.75rem;
-      width: 5.875rem;
-      height: 9.1875rem;
-    }
-    .genre__movie--list p {
-      text-align: start;
-      font-size: 0.7rem;
-      width: auto;
-    }
-    .genre__info--sub {
-      font-size: 0.7rem;
-    }
-  }
-  @media (max-width: 390px) {
-    .genre__movie {
-      gap: 0.3rem;
-    }
-    .genre__movie--list {
-      width: 5.35rem;
-    }
-    .genre__movie--list img {
-      border-radius: 0.75rem;
-      width: 5.375rem;
-      height: 8.6875rem;
-    }
-    .genre__movie--list p {
-      font-size: 0.65rem;
-    }
-  }
-`;
-
 
 function GenreMovie({ categorydata }) {
   const [selectedMainCategory] = useState("장르");
@@ -106,6 +26,7 @@ function GenreMovie({ categorydata }) {
       console.error("영화 불러오기 실패:", error);
     }
   };
+
   useEffect(() => {
     const genreList = categorydata
       .filter((category) => category.mainCategory === "장르")
@@ -148,34 +69,27 @@ function GenreMovie({ categorydata }) {
             ))}
         </div>
 
-        <MoreViewText onClick = {() => handleMoreView(selectedMainCategory, selectedGenre)}>{selectedGenre} 더보기 {'>'}</MoreViewText>
+        <MoreViewText onClick={() => handleMoreView(selectedMainCategory, selectedGenre)}>
+          {selectedGenre} 더보기 {'>'}
+        </MoreViewText>
 
         <div className="genre__movie">
-          {genreMovies.length > 0 ? (
-            genreMovies.slice(0, 12).map((movie, index) => (
-              <div
-                key={index}
-                className="genre__movie--list"
-                onClick={() => handleMovieClick(movie.id)}
-              >
-                <img src={movie.poster} alt={movie.title} />
-                <div>
-                  <p>
-                    <strong>{movie.title}</strong>
-                  </p>
-                  <p>
-                    {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
-                  </p>
-                  <p>{movie.genre}</p>
-                  <p className="genre__info--sub">리뷰 : {movie.reviews}개</p>
-                  <p className="genre__info--sub">좋아요 : {movie.likes}개</p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>해당하는 장르 영화가 없어요🥲</p>
-          )}
-        </div>
+        {genreMovies.map((movie, index) => (
+          <div key={index} className="genre__movie--list" onClick={() => handleMovieClick(movie.id)}>
+            <Poster src={movie.poster} alt={movie.title} />
+            <MovieInfo>
+              <Review>
+                <ReviewIcon alt="Review Icon" />
+                <Count>{movie.reviews}</Count>
+              </Review>
+              <Like>
+                <LikeIcon alt="Review Icon" />
+                <Count>{movie.likes}</Count>
+              </Like>
+            </MovieInfo>
+          </div>
+        ))}
+      </div>
       </GenreMovieList>
     </>
   );
@@ -184,8 +98,20 @@ function GenreMovie({ categorydata }) {
 export default GenreMovie;
 
 
+const GenreMovieList = styled.div`
+  .genreBtn__contianer {
+    margin-bottom: 0.8rem;
+  }
 
-const Title  = styled.h2`
+  .genre__movie {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    overflow-x: auto;
+  }
+`;
+
+const Title = styled.h2`
   color: var(--text-wh);
   padding: 2rem 0 0.7rem 0.375rem;
 
@@ -196,7 +122,28 @@ const Title  = styled.h2`
   @media (max-width: 480px) {
     font-size: 1rem;
   }
-`
+`;
+
+const Poster = styled.img`
+  transition: transform 0.3s ease;
+  border-radius: 0.65rem;
+  width: 7.75rem;
+  height: 11.07rem;
+  padding: 0.4rem 0.375rem;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    border-radius: 0.75rem;
+    width: 5.875rem;
+    height: 9.1875rem;
+  }
+
+  @media (max-width: 480px) {
+    border-radius: 0.75rem;
+    width: 5.375rem;
+    height: 8.6875rem;
+  }
+`;
 
 const GenreBtn = styled.button`
   background: none;
@@ -221,4 +168,38 @@ const MoreViewText = styled.p`
   justify-content: flex-end;
   cursor: pointer;
   font-size: 0.8rem;
+`;
+
+const Review = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.375rem;
+`
+
+const ReviewIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url('/assets/images/main/review.svg');
+`
+
+const Count = styled.p`
+  font-size: 0.8rem;
+  color: #ffffff;
+`
+
+const Like = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.375rem;
+`
+
+const LikeIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  background: no-repeat center/cover url('/assets/images/main/like.svg');
+`
+
+const MovieInfo = styled.div`
+  display: flex;
 `
