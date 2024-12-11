@@ -111,20 +111,60 @@ const GenreBtn = styled.button`
     font-size: 0.9rem;
   }
 `;
+const GenrePagination = styled.div`
+  width: 100%;
+  margin: 1rem 0;
 
+  .genre__moviepagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+`;
+const PaginationBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: ${(props) =>
+    props.$selectedPage ? "var(--sub-text)" : "var(--text)"};
+`;
+const Skeleton = styled.div`
+  width: 100%;
+  height: 200px;
+  background-color: #e0e0e0;
+  animation: pulse 1.5s infinite ease-in-out;
+
+  @keyframes pulse {
+    0% {
+      background-color: #e0e0e0;
+    }
+    50% {
+      background-color: #d0d0d0;
+    }
+    100% {
+      background-color: #e0e0e0;
+    }
+  }
+`;
 function GenreMovie({ categorydata }) {
   const [selectedGenre, setSelectedGenre] = useState("로맨스");
   const [genreMovies, setGenreMovies] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [selectedPage, setSelectedPage] = useState(1);
+
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const fetchMoviesByGenre = async (genre) => {
-    const cacheKey = `genreMovies_${genre}`;
-    const cachedMovies = localStorage.getItem(cacheKey);
+    const cacheKey = `movies_${genre}_${currentPage}`;
+    const cachedData = localStorage.getItem(cacheKey);
 
-    if (cachedMovies) {
-      setGenreMovies(JSON.parse(cachedMovies));
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData);
+      setGenreMovies(parsedData.movies);
+      setTotalPages(parsedData.totalPages || 1);
     } else {
       try {
         const response = await axios.get(
@@ -133,13 +173,23 @@ function GenreMovie({ categorydata }) {
             params: {
               mainCategory: "장르",
               subCategory: genre,
+              page: currentPage - 1,
+              size: 15,
             },
           }
         );
         console.log(response.data);
-        setGenreMovies(response.data.movies);
 
-        localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({
+            movies: response.data.movies,
+            totalPages: response.data.totalPages,
+          })
+        );
+
+        setGenreMovies(response.data.movies);
+        setTotalPages(response.data.totalPages || 1);
       } catch (error) {
         console.error("영화 불러오기 실패:", error);
       }
@@ -154,16 +204,25 @@ function GenreMovie({ categorydata }) {
 
   useEffect(() => {
     fetchMoviesByGenre(selectedGenre);
-  }, [selectedGenre]);
+  }, [selectedGenre, currentPage]);
 
   const handleGenreClick = (genre) => {
     setSelectedGenre(genre);
-    fetchMoviesByGenre(genre);
+    setCurrentPage(1);
+    setSelectedPage(1);
   };
-
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+    setSelectedPage(page);
+  };
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
   };
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <>
@@ -187,7 +246,7 @@ function GenreMovie({ categorydata }) {
         </div>
         <div className="genre__movie">
           {genreMovies.length > 0 ? (
-            genreMovies.slice(0, 12).map((movie, index) => (
+            genreMovies.map((movie, index) => (
               <div
                 key={index}
                 className="genre__movie--list"
@@ -211,6 +270,22 @@ function GenreMovie({ categorydata }) {
             <p>해당하는 장르 영화가 없어요🥲</p>
           )}
         </div>
+        <GenrePagination>
+          {totalPages > 1 && (
+            <div className="genre__moviepagination">
+              {pageNumbers.map((number) => (
+                <PaginationBtn
+                  key={number}
+                  onClick={() => handlePageClick(number)}
+                  disabled={number === currentPage}
+                  $selectedPage={selectedPage === number}
+                >
+                  {number}
+                </PaginationBtn>
+              ))}
+            </div>
+          )}
+        </GenrePagination>
       </GenreMovieList>
     </>
   );
