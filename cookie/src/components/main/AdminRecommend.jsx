@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import videoIcon from "../../assets/images/main/video_icon.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
 
@@ -80,32 +80,41 @@ const MovieRecommendList = styled.div`
     }
   }
 `;
+const SkeletonPoster = styled.div`
+  border-radius: 0.75rem;
+  width: 7.75rem;
+  height: 11.07rem;
+  background-color: #e0e0e0;
+  animation: shimmer 1.5s infinite;
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 400px 100%;
+`;
 
 function AdminRecommend() {
   const navigate = useNavigate();
   const [recommendMovies, setRecommendMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMainPageMovies = async () => {
-      const cachedData = localStorage.getItem("adminRecommendMovies");
-
-      if (cachedData) {
-        setRecommendMovies(JSON.parse(cachedData));
-      } else {
-        try {
-          const response = await axios.get(
-            `${serverBaseUrl}/api/movies/mainAdminRecommend`
-          );
-          const recommendMovies = response.data.response;
-          setRecommendMovies(recommendMovies);
-
-          localStorage.setItem(
-            "adminRecommendMovies",
-            JSON.stringify(recommendMovies)
-          );
-        } catch (error) {
-          console.error("API 호출 오류 발생:", error);
-        }
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/mainAdminRecommend`
+        );
+        const recommendMovies = response.data.response;
+        setRecommendMovies(recommendMovies);
+      } catch (error) {
+        console.error("API 호출 오류 발생:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -124,26 +133,33 @@ function AdminRecommend() {
           <h2> 이거봤어? 관리자 추천영화</h2>
         </div>
         <div className="recommend__movie">
-          {recommendMovies.map((movie, index) => (
-            <div key={index} className="recommend__movie--info">
-              <div
-                onClick={() => handleMovieClick(movie.id)}
-                style={{ cursor: "pointer" }}
-              >
-                <img src={movie.poster} alt={movie.title} />
-                <div>
-                  <p>
-                    <strong>{movie.title}</strong>
-                  </p>
-                  <p>
-                    {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
-                  </p>
+          {isLoading
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <div key={index}>
+                  <SkeletonPoster />
                 </div>
-                <p className="movie__info--sub">리뷰 : {movie.reviews}개</p>
-                <p className="movie__info--sub">좋아요 : {movie.likes}개</p>
-              </div>
-            </div>
-          ))}
+              ))
+            : recommendMovies.map((movie, index) => (
+                <div key={index} className="recommend__movie--info">
+                  <div
+                    onClick={() => handleMovieClick(movie.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img src={movie.poster} alt={movie.title} />
+                    <div>
+                      <p>
+                        <strong>{movie.title}</strong>
+                      </p>
+                      <p>
+                        {new Date(movie.releasedAt).getFullYear()}﹒
+                        {movie.country}
+                      </p>
+                    </div>
+                    <p className="movie__info--sub">리뷰 : {movie.reviews}개</p>
+                    <p className="movie__info--sub">좋아요 : {movie.likes}개</p>
+                  </div>
+                </div>
+              ))}
         </div>
       </MovieRecommendList>
     </>

@@ -96,31 +96,19 @@ function CookieMovies() {
   const navigate = useNavigate();
   const userInfo = getUserInfo();
 
-  if (!userInfo?.userId) {
+  if (!userInfo?.nickname) {
     return null;
   }
 
   useEffect(() => {
     const fetchRecommendedMovies = async () => {
-      const cachedData = localStorage.getItem("recommendedMovies");
-
-      if (cachedData) {
-        setRecommendedMovies(JSON.parse(cachedData));
-        console.log("로컬스토리지에서 추천 영화 데이터 사용");
-      } else {
-        try {
-          const response = await axiosInstance.get(
-            `/api/movies/recommendations`
-          );
-          const movies = response.data.response || [];
-
-          setRecommendedMovies(movies);
-
-          localStorage.setItem("recommendedMovies", JSON.stringify(movies));
-          console.log("API에서 추천 영화 데이터 가져옴");
-        } catch (error) {
-          console.error("영화 추천 목록을 가져오는 데 실패했습니다.", error);
-        }
+      try {
+        const response = await axiosInstance.get(`/api/movies/recommendations`);
+        const movies = response.data.response || [];
+        console.log(response);
+        setRecommendedMovies(movies);
+      } catch (error) {
+        console.error("영화 추천 목록을 가져오는 데 실패했습니다.", error);
       }
     };
 

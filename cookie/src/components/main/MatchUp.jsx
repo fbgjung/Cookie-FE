@@ -195,12 +195,30 @@ const MatchUpContainer = styled.div`
     }
   }
 `;
+const SkeletonContainer = styled.div`
+  border-radius: 0.75rem;
+  width: 260px;
+  height: 242px;
+  background-color: #e0e0e0;
+  animation: shimmer 1.5s infinite;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 400px 100%;
 
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
+`;
 function MatchUp() {
   const [matchUps, setMatchUps] = useState([]);
   const [access, setAccess] = useState(true);
   const [leftDays, setLeftDays] = useState(null);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMainPageMovies = async () => {
@@ -228,72 +246,75 @@ function MatchUp() {
         }
       } catch (error) {
         console.error("API 호출 오류 발생:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchMainPageMovies();
   }, []);
 
-  const getDisplayText = () => {
-    if (leftDays === 0) {
-      return "D-DAY";
-    } else if (leftDays < 0) {
-      return "..🤔";
-    } else {
-      return `D-${leftDays}`;
-    }
-  };
+  // const getDisplayText = () => {
+  //   if (leftDays === 0) {
+  //     return "D-DAY";
+  //   } else if (leftDays < 0) {
+  //     return "..🤔";
+  //   } else {
+  //     return `D-${leftDays}`;
+  //   }
+  // };
+  // {getDisplayText()}
   return (
     <MatchUpContainer>
       <div className="matchUp__title">
         <img src={matchUp} alt="matchUp_icon" />
-        <h2> 이번주 영화 매치업! {getDisplayText()}</h2>
+        <h2> 이번주 영화 매치업! </h2>
       </div>
       <div className="matchUp__content">
-        {matchUps.map((matchUp) => (
-          <div className="matchUp__movie" key={matchUp.matchUpId}>
-            <img
-              className="matchUp__movie--icon"
-              src={fight}
-              alt="fight_icon"
-            />
-            <div className="matchUp__overlay">
-              <button
-                onClick={() => navigate(`/matchup/${matchUp.matchUpId}`)}
-                disabled={!access}
-              >
-                {access
-                  ? "투표하러 가기👀 "
-                  : "오늘은 투표일이 아니에요🥲 내일 만나요"}
-              </button>
-            </div>
-            <p className="matchUp__movie--title">{matchUp.matchUpTitle}</p>
-            <div className="matchUp__movie--container">
-              <div className="matchUp__movie--list">
-                <img
-                  className="matchUp__movie--poster"
-                  src={matchUp.movie1.moviePoster}
-                  // src={
-                  //   "https://image.tmdb.org/t/p/w500/4Zb4Z2HjX1t5zr1qYOTdVoisJKp.jpg"
-                  // }
-                  alt={matchUp.movie1.movieTitle}
-                />
-                <p>{matchUp.movie1.movieTitle}</p>
+        {isLoading
+          ? Array.from({ length: 2 }).map((_, index) => (
+              <div key={index}>
+                <SkeletonContainer />
               </div>
-              <div className="matchUp__movie--list">
+            ))
+          : matchUps.map((matchUp) => (
+              <div className="matchUp__movie" key={matchUp.matchUpId}>
                 <img
-                  className="matchUp__movie--poster"
-                  src={matchUp.movie2.moviePoster}
-                  // src={
-                  //   "https://image.tmdb.org/t/p/w500//1ZNOOMmILNUzVYbzG1j7GYb5bEV.jpg"
-                  // }
-                  alt={matchUp.movie2.movieTitle}
+                  className="matchUp__movie--icon"
+                  src={fight}
+                  alt="fight_icon"
                 />
-                <p>{matchUp.movie2.movieTitle}</p>
+                <div className="matchUp__overlay">
+                  <button
+                    onClick={() => navigate(`/matchup/${matchUp.matchUpId}`)}
+                    disabled={!access}
+                  >
+                    {access
+                      ? "투표하러 가기👀 "
+                      : "오늘은 투표일이 아니에요🥲 내일 만나요"}
+                  </button>
+                </div>
+                <p className="matchUp__movie--title">{matchUp.matchUpTitle}</p>
+                <div className="matchUp__movie--container">
+                  <div className="matchUp__movie--list">
+                    <img
+                      className="matchUp__movie--poster"
+                      src={matchUp.movie1.moviePoster}
+                      alt={matchUp.movie1.movieTitle}
+                    />
+                    <p>{matchUp.movie1.movieTitle}</p>
+                  </div>
+                  <div className="matchUp__movie--list">
+                    <img
+                      className="matchUp__movie--poster"
+                      src={matchUp.movie2.moviePoster}
+                      alt={matchUp.movie2.movieTitle}
+                    />
+                    <p>{matchUp.movie2.movieTitle}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))}
       </div>
     </MatchUpContainer>
   );
