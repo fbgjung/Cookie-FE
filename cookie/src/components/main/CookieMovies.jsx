@@ -3,14 +3,14 @@ import styled from "styled-components";
 import useUserStore from "../../stores/useUserStore";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
+import useAuthStore from "../../stores/useAuthStore";
 
 function CookieMovies() {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
   const userInfo = useUserStore((state) => state.getUserInfo());
 
   const [recommendedMovies, setRecommendedMovies] = useState([]);
-  const navigate = useNavigate();
-  const userInfo = getUserInfo();
 
   if (!userInfo?.nickname) {
     return null;

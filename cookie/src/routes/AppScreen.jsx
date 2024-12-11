@@ -236,7 +236,7 @@ const AppScreen = () => {
                 {/* <img src={CookieLogo} alt="Cookie Logo" /> */}
               </Logo>
               <div className="header-right">                
-                {userInfo.userId ? (<Notification />) : (<button>로그인</button>)}
+                {userInfo.nickName ? (<Notification />) : (<button>로그인</button>)}
               </div>
             </HeaderContainer>
           )}
