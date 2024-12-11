@@ -30,9 +30,8 @@ export const setupOnMessageHandler = () => {
   const addNotification = useNotificationStore.getState().addNotification;
 
   onMessage(messaging, (payload) => {
-    console.log("포그라운드 알림 수신:", payload);
+    console.log("알림 수신:", payload);
 
-    // 브라우저가 활성 상태일 때만 알림 표시
     if (
       Notification.permission === "granted" &&
       document.visibilityState === "visible"
@@ -43,10 +42,8 @@ export const setupOnMessageHandler = () => {
         timestamp: new Date().toLocaleString(),
       };
 
-      // 상태 관리 스토어에 알림 추가
       addNotification(notificationData);
 
-      // 클릭 이벤트 핸들러
       const notification = new Notification(notificationData.title, {
         body: notificationData.body,
         icon: payload.notification?.icon || "/favicon.ico",
@@ -56,9 +53,12 @@ export const setupOnMessageHandler = () => {
         console.log("알림 클릭됨");
         notification.close();
       };
+    } else {
+      console.log(
+        "브라우저가 비활성 상태이므로 포그라운드 알림이 표시되지 않았습니다."
+      );
     }
   });
 };
 
-// 초기화
 setupOnMessageHandler();
