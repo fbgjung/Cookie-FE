@@ -9,6 +9,7 @@ export const requestNotificationPermission = async () => {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
       });
       if (token) {
+        console.log("FCM 토큰:", token);
         return token;
       } else {
         console.error("토큰 가져오기 실패");
@@ -21,25 +22,42 @@ export const requestNotificationPermission = async () => {
   }
 };
 
+let onMessageListenerInitialized = false;
+
 export const setupOnMessageHandler = () => {
-  onMessage(messaging, (payload) => {
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      image: payload.notification.image,
-      icon: payload.notification.icon || "/alarm-logo.png",
-    };
+  if (!onMessageListenerInitialized) {
+    onMessage(messaging, (payload) => {
+      console.log("Message received in foreground:", payload);
 
-    const notification = new Notification(
-      notificationTitle,
-      notificationOptions
-    );
+      const notificationTitle = payload.data.title || "제목 없음";
+      const notificationOptions = {
+        body: payload.data.body || "내용 없음",
+        icon: payload.data.icon || "/alarm-logo.png",
+        data: payload.data,
+      };
 
-    notification.onclick = function (event) {
-      event.preventDefault();
-      notification.close();
-    };
-  });
+      if (
+        Notification.permission === "granted" &&
+        document.visibilityState === "visible"
+      ) {
+        const notification = new Notification(
+          notificationTitle,
+          notificationOptions
+        );
+
+        notification.onclick = (event) => {
+          event.preventDefault();
+          const redirectUrl = payload.data.url;
+          if (redirectUrl) window.open(redirectUrl, "_self");
+          notification.close();
+        };
+      } else {
+        console.log("브라우저가 비활성 상태이므로 알림이 표시되지 않았습니다.");
+      }
+    });
+
+    onMessageListenerInitialized = true;
+  }
 };
 
 setupOnMessageHandler();
