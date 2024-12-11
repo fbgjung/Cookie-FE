@@ -1,4 +1,3 @@
-import useNotificationStore from "../stores/notificationStore";
 import { messaging } from "./firebase";
 import { getToken, onMessage } from "firebase/messaging";
 
@@ -6,14 +5,10 @@ export const requestNotificationPermission = async () => {
   try {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
-      console.log("알림 권한 허용");
-
       const token = await getToken(messaging, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
       });
-
       if (token) {
-        console.log("FCM 토큰:", token);
         return token;
       } else {
         console.error("토큰 가져오기 실패");
@@ -27,37 +22,23 @@ export const requestNotificationPermission = async () => {
 };
 
 export const setupOnMessageHandler = () => {
-  const addNotification = useNotificationStore.getState().addNotification;
-
   onMessage(messaging, (payload) => {
-    console.log("알림 수신:", payload);
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+      body: payload.notification.body,
+      image: payload.notification.image,
+      icon: payload.notification.icon || "/alarm-logo.png",
+    };
 
-    if (
-      Notification.permission === "granted" &&
-      document.visibilityState === "visible"
-    ) {
-      const notificationData = {
-        title: payload.notification?.title || "제목 없음",
-        body: payload.notification?.body || "내용 없음",
-        timestamp: new Date().toLocaleString(),
-      };
+    const notification = new Notification(
+      notificationTitle,
+      notificationOptions
+    );
 
-      addNotification(notificationData);
-
-      const notification = new Notification(notificationData.title, {
-        body: notificationData.body,
-        icon: payload.notification?.icon || "/favicon.ico",
-      });
-
-      notification.onclick = () => {
-        console.log("알림 클릭됨");
-        notification.close();
-      };
-    } else {
-      console.log(
-        "브라우저가 비활성 상태이므로 포그라운드 알림이 표시되지 않았습니다."
-      );
-    }
+    notification.onclick = function (event) {
+      event.preventDefault();
+      notification.close();
+    };
   });
 };
 
