@@ -5,16 +5,16 @@ import axiosInstance from "../api/auth/axiosInstance";
 import { toast } from "react-hot-toast";
 import ReviewHeader from "../components/searchpage/ReviewHeader";
 
-// styled-components 정의
 const FormWrapper = styled.div`
-  width: 90%;
-  margin: 30px auto;
+  width: 100%;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 16px;
-  background-color: #ffffff;
-  height: 100vh;
-  overflow: hidden;
+  background-color: black;
+  min-height: 100vh;
+  overflow-y: auto;
+
+  h1 {
+    color: white;
+  }
 `;
 
 const PosterWrapper = styled.div`
@@ -120,18 +120,17 @@ const ButtonWrapper = styled.div`
     }
 
     &.submit {
-      background-color: #04012d;
+      background-color: #00d6e8;
       color: #fff;
       border: none;
 
       &:hover {
-        background-color: #000;
+        background-color: #00a8b5;
       }
     }
   }
 `;
 
-// ReviewForm 컴포넌트
 const ReviewForm = () => {
   const [movieScore, setMovieScore] = useState(0);
   const [content, setContent] = useState("");
@@ -188,7 +187,9 @@ const ReviewForm = () => {
       }
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
-      if (error.response?.data.message === "해당 영화에 이미 리뷰를 등록했습니다.") {
+      if (
+        error.response?.data.message === "해당 영화에 이미 리뷰를 등록했습니다."
+      ) {
         toast.error("해당 영화에 이미 리뷰를 등록했습니다.");
       } else {
         toast.error("리뷰 등록 중 오류가 발생했습니다.");
@@ -215,8 +216,8 @@ const ReviewForm = () => {
                 key={index}
                 src={
                   index < movieScore
-                    ? "images/cookiescore.svg"
-                    : "images/cookieinactive.svg"
+                    ? "/assets/images/review/cookiescore.svg"
+                    : "/assets/images/review/cookieinactive.svg"
                 }
                 alt="Cookie"
                 className={index >= movieScore ? "inactive" : ""}

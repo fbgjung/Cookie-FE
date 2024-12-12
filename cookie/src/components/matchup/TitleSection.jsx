@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 import TopicImage from "/src/assets/images/matchup/topic_image.svg";
 import { FiChevronDown } from "react-icons/fi";
@@ -21,7 +21,7 @@ const MatchUpTitle = styled.div`
   display: flex;
   align-items: center;
   gap: 0.6rem;
-`
+`;
 
 const TitleImage = styled.img`
   width: 60px;
@@ -38,7 +38,6 @@ const Title = styled.h1`
   font-weight: bold;
   color: #006400;
   text-align: center;
-
 
   @media (max-width: 768px) {
     font-size: 1.8rem;
@@ -176,28 +175,39 @@ const bounceEvent = keyframes`
 
 const MatchUpHistory = styled.div`
   width: 80px;
+  height: auto;
   border-radius: 30px 0 0 30px;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
-  cursor: pointer;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  padding: 2px;
+  cursor: pointer;
+  padding: 5px;
+
+ @media (max-width: 480px) {
+    right: 5px;
+    top: 200px;
+   position: fixed;
+    right: 0;
+    z-index : 1;
+    width: 70px;
+  }
+  }
 `;
 
 const HistoryIcon = styled.img`
   width: 35px;
   height: 35px;
   animation: ${bounceEvent} 0.5s ease-in-out infinite;
-`
+`;
 
 const HistoryText = styled.p`
   margin: 0;
   font-size: 10px;
   color: brown;
-`
+`;
 
 const TitleSection = ({ matchUpTitle, endAt }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -251,10 +261,10 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
           <DDay>{calculateDDay()}</DDay>
           <TitleImage src={TopicImage} alt="Topic Icon" />
         </MatchUpTitle>
-      
+
         <InfoContainer>
           <MatchUpHistory onClick={handleModalToggle}>
-            <HistoryIcon src='/assets/images/matchup/history.png'></HistoryIcon>
+            <HistoryIcon src="/assets/images/matchup/history.png"></HistoryIcon>
             <HistoryText>히스토리</HistoryText>
           </MatchUpHistory>
         </InfoContainer>
@@ -295,4 +305,3 @@ TitleSection.propTypes = {
 };
 
 export default TitleSection;
-

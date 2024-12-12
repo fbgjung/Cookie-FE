@@ -7,10 +7,9 @@ import DetailHeader from "../components/searchpage/MovieReviewDetailHeader";
 const ReviewFeedWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
-  max-width: 900px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  background-color: black;
+
   padding: 20px;
   height: 100vh;
 `;
@@ -31,8 +30,8 @@ const FilterButtons = styled.div`
     transition: background-color 0.3s ease;
 
     &.active {
-      background-color: #04012d;
-      color: #fff;
+      background-color: #00d6e8;
+      color: #black;
     }
 
     &.inactive {
@@ -41,13 +40,15 @@ const FilterButtons = styled.div`
     }
 
     &:hover {
-      background-color: #ddd;
+      background-color: #00b3c6;
+      color: white;
     }
   }
 `;
 
 const MovieInfoWrapper = styled.div`
   display: flex;
+
   margin-bottom: 20px;
 `;
 
@@ -72,6 +73,7 @@ const MovieDetails = styled.div`
   .movie-title {
     font-size: 2rem;
     font-weight: bold;
+    color: white;
   }
 
   .movie-info {
@@ -90,7 +92,6 @@ const ReviewContainer = styled.div`
   flex-direction: column;
   gap: 0px;
 `;
-
 
 const NoReviewsMessage = styled.div`
   text-align: center;
@@ -275,44 +276,44 @@ const MovieReviewFeed = () => {
       {reviews.length === 0 && !isLoading ? (
         <NoReviewsMessage>이 영화에 등록된 리뷰가 없습니다!</NoReviewsMessage>
       ) : (
-      <ReviewContainer>
-        {reviews.map((review) => (
-          <ReviewTicket
-            key={review.reviewId}
-            onClick={() => handleReviewClick(review.reviewId)}
-          >
-            <ReviewLeft></ReviewLeft>
-            <ReviewCenter>
-              <div className="profile">
-                <img
-                  src={review.user.profileImage}
-                  alt={review.user.nickname}
-                />
-                <div className="user-info">
-                  <div className="name">{review.user.nickname}</div>
-                  <div className="date">
-                    {new Date(review.createdAt).toLocaleDateString()}
+        <ReviewContainer>
+          {reviews.map((review) => (
+            <ReviewTicket
+              key={review.reviewId}
+              onClick={() => handleReviewClick(review.reviewId)}
+            >
+              <ReviewLeft></ReviewLeft>
+              <ReviewCenter>
+                <div className="profile">
+                  <img
+                    src={review.user.profileImage}
+                    alt={review.user.nickname}
+                  />
+                  <div className="user-info">
+                    <div className="name">{review.user.nickname}</div>
+                    <div className="date">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="comment">{review.content}</div>
-            </ReviewCenter>
-            <ReviewRight>
-              <div className="score">
-                {Array.from({ length: Math.round(review.movieScore) }).map(
-                  (_, i) => (
-                    <img
-                      key={`${review.reviewId}-score-${i}`}
-                      src="/images/cookiescore.svg"
-                      alt="score"
-                    />
-                  )
-                )}
-              </div>
-            </ReviewRight>
-          </ReviewTicket>
-        ))}
-      </ReviewContainer>
+                <div className="comment">{review.content}</div>
+              </ReviewCenter>
+              <ReviewRight>
+                <div className="score">
+                  {Array.from({ length: Math.round(review.movieScore) }).map(
+                    (_, i) => (
+                      <img
+                        key={`${review.reviewId}-score-${i}`}
+                        src="/images/cookiescore.svg"
+                        alt="score"
+                      />
+                    )
+                  )}
+                </div>
+              </ReviewRight>
+            </ReviewTicket>
+          ))}
+        </ReviewContainer>
       )}
 
       {isLoading && <p>Loading more reviews...</p>}
