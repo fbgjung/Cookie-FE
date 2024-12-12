@@ -207,6 +207,9 @@ const MyPage = () => {
     navigate("/myAllReviewList");
   };
 
+  const handleNotificationClick = () => {
+    navigate("/notifications");
+  }
   return (
     <>
       <LoginModal />
@@ -250,6 +253,7 @@ const MyPage = () => {
             />
           )}
         </MypageContent>
+        <button onClick={() => handleNotificationClick()}>알림 목록</button>
       </MypageContainer>
     </>
   );
