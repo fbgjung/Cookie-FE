@@ -100,35 +100,39 @@ function GenreMovie({ categorydata }) {
             ))}
         </div>
 
-        <MoreViewText onClick={() => handleMoreView(selectedMainCategory, selectedGenre)}>
-          {selectedGenre} 더보기 {'>'}
+        <MoreViewText
+          onClick={() => handleMoreView(selectedMainCategory, selectedGenre)}
+        >
+          {selectedGenre} 더보기 {">"}
         </MoreViewText>
 
         <div className="genre__movie">
-        {genreMovies.map((movie, index) => (
-          <div key={index} className="genre__movie--list" onClick={() => handleMovieClick(movie.id)}>
-            <Poster src={movie.poster} alt={movie.title} />
-            <MovieInfo>
-              <Review>
-                <ReviewIcon alt="Review Icon" />
-                <Count>{movie.reviews}</Count>
-              </Review>
-              <Like>
-                <LikeIcon alt="Review Icon" />
-                <Count>{movie.likes}</Count>
-              </Like>
-            </MovieInfo>
-          </div>
-        ))}
-      </div>
-
+          {genreMovies.map((movie, index) => (
+            <div
+              key={index}
+              className="genre__movie--list"
+              onClick={() => handleMovieClick(movie.id)}
+            >
+              <Poster src={movie.poster} alt={movie.title} />
+              <MovieInfo>
+                <Review>
+                  <ReviewIcon alt="Review Icon" />
+                  <Count>{movie.reviews}</Count>
+                </Review>
+                <Like>
+                  <LikeIcon alt="Review Icon" />
+                  <Count>{movie.likes}</Count>
+                </Like>
+              </MovieInfo>
+            </div>
+          ))}
+        </div>
       </GenreMovieList>
     </>
   );
 }
 
 export default GenreMovie;
-
 
 const GenreMovieList = styled.div`
   .genreBtn__contianer {
@@ -156,12 +160,11 @@ const Title = styled.h2`
   }
 `;
 
-
 const Poster = styled.img`
   transition: transform 0.3s ease;
   border-radius: 0.65rem;
-  width: 7.75rem;
-  height: 11.07rem;
+  width: 8.75rem;
+  height: 12.0625rem;
   padding: 0.4rem 0.375rem;
   cursor: pointer;
 
@@ -191,7 +194,7 @@ const GenreBtn = styled.button`
   font-size: 1rem;
   color: ${(props) => (props.$isSelected ? "#82DCFF" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
-  
+
   @media (max-width: 768px) {
     margin: 0 0.7rem 0.5rem 0;
     font-size: 0.9rem;
@@ -211,32 +214,32 @@ const Review = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0.375rem;
-`
+`;
 
 const ReviewIcon = styled.svg`
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url('/assets/images/main/review.svg');
-`
+  background: no-repeat center/cover url("/assets/images/main/review.svg");
+`;
 
 const Count = styled.p`
   font-size: 0.8rem;
   color: #ffffff;
-`
+`;
 
 const Like = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0.375rem;
-`
+`;
 
 const LikeIcon = styled.svg`
   width: 14px;
   height: 14px;
   margin: 0;
-  background: no-repeat center/cover url('/assets/images/main/like.svg');
-`
+  background: no-repeat center/cover url("/assets/images/main/like.svg");
+`;
 
 const MovieInfo = styled.div`
   display: flex;
-`
+`;
