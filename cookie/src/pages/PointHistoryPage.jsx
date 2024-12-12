@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import axiosInstance from "../api/auth/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   padding: 2rem;
-  background-color: #000;
+  background-color: white;
   min-height: 100vh;
-  color: white;
+  color: black;
   position: relative;
 `;
 
@@ -38,11 +37,12 @@ const BackButton = styled.img`
 `;
 
 const HistoryItem = styled.li`
-  background: #121212;
+  background: white;
   border-radius: 12px;
   padding: 1.5rem 2rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 0 8px #00d6e8;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  border: 2px solid black;
 
   display: grid;
   grid-template-columns: 1fr auto;
@@ -52,7 +52,7 @@ const HistoryItem = styled.li`
 const MovieName = styled.h3`
   font-size: 1.8rem;
   font-weight: bold;
-  color: #ffffff;
+  color: #333;
   margin: 0 0 0.5rem;
 `;
 
@@ -92,24 +92,33 @@ const BadgeHistory = () => {
     navigate(-1);
   };
 
-  const fetchBadgeHistory = async () => {
-    try {
-      const response = await axiosInstance.get("/api/users/badgeHistory");
-      const historyData = response.data.response || [];
-
-      const sortedHistory = historyData.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-
-      setBadgeHistory(sortedHistory);
-    } catch (error) {
-      console.error("뱃지 내역 로딩 실패:", error);
-      setBadgeHistory([]);
-    }
-  };
-
   useEffect(() => {
-    fetchBadgeHistory();
+    const dummyData = [
+      {
+        movieName: "인셉션",
+        actionName: "리뷰 작성",
+        point: 50,
+        createdAt: "2024-12-10T15:30:00",
+      },
+      {
+        movieName: "인터스텔라",
+        actionName: "좋아요 클릭",
+        point: 20,
+        createdAt: "2024-12-09T12:45:00",
+      },
+      {
+        movieName: "다크 나이트",
+        actionName: "리뷰 추천",
+        point: 100,
+        createdAt: "2024-12-08T18:20:00",
+      },
+    ];
+
+    const sortedHistory = dummyData.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    setBadgeHistory(sortedHistory);
   }, []);
 
   return (
@@ -126,11 +135,13 @@ const BadgeHistory = () => {
         <HistoryList>
           {badgeHistory.map((item, index) => (
             <HistoryItem key={index}>
-              <MovieName>{item.movieName}</MovieName>
+              <MovieName>영화제목 : {item.movieName}</MovieName>
               <HistoryDetails>
                 <p className="action-name">액션: {item.actionName}</p>
                 <p className="points">포인트: +{item.point}P</p>
-                <p className="date">날짜: {item.createdAt}</p>
+                <p className="date">
+                  날짜: {new Date(item.createdAt).toLocaleDateString()}
+                </p>
               </HistoryDetails>
             </HistoryItem>
           ))}

@@ -47,26 +47,31 @@ const Title = styled.h3`
 
 const NameContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-
-  margin: 30px;
+  margin-top: 20px;
 `;
 
 const Name = styled.h2`
   font-size: 1.2rem;
   margin: 0;
   text-align: center;
-  color: #ffffff;
+  color: black;
 `;
-const ManageProfileIcon = styled.img`
-  width: 20px;
-  height: 20px;
-  margin-left: 2px;
+
+const ManageButton = styled.button`
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #f9f9f9;
+  color: black;
+  border: none;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: bold;
   cursor: pointer;
 
   &:hover {
-    opacity: 0.8;
+    background: #e0e0e0;
   }
 `;
 
@@ -100,11 +105,9 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
       </ImageContainer>
       <NameContainer>
         {name && <Name>{name}</Name>}
-        <ManageProfileIcon
-          src="/assets/images/mypage/manageprofile.svg"
-          alt="Manage Profile"
-          onClick={handleManageClick}
-        />
+        <ManageButton onClick={handleManageClick}>
+          내 정보 관리하기
+        </ManageButton>
       </NameContainer>
     </ProfileContainer>
   );

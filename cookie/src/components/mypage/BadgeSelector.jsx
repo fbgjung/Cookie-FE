@@ -13,7 +13,7 @@ const BadgeTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #ffffff;
+  color: black;
   margin-left: 40px;
   text-align: left;
   width: 100%;
@@ -36,7 +36,8 @@ const BadgeList = styled.div`
   justify-content: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")};
   align-items: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")};
   margin-left: ${({ isEmpty }) => (isEmpty ? "0" : "40px")};
-  background-color: #f4f4f4;
+  background-color: white;
+  border: 2px solid black;
   border-radius: 12px;
   padding: ${({ isEmpty }) => (isEmpty ? "40px" : "80px")};
   width: 100%;

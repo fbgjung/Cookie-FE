@@ -10,7 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: black;
+  background-color: white;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
@@ -35,7 +35,7 @@ const Title = styled.h1`
   font-size: 1.8rem;
   font-weight: bold;
   margin: 50px 0 10px;
-  color: #ffffff;
+  color: black;
   text-align: center;
 `;
 

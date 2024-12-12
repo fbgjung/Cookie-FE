@@ -14,20 +14,17 @@ const FavoriteTitle = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 10px;
   margin-left: 5px;
-  color: #ffffff;
+  color: black;
   font-weight: bold;
 `;
 
 const FavoriteListContainer = styled.div`
   border: 2px solid transparent;
+  border: 2px solid black;
 
   border-radius: 12px;
   overflow: hidden;
   background-color: #black;
-
-  box-shadow:
-    0 0 8px #00d6e8,
-    0 0 16px #00d6e8;
 `;
 
 const FavoriteItem = styled.div`
@@ -49,12 +46,12 @@ const FavoriteItem = styled.div`
 
 const FavoriteText = styled.span`
   font-size: 1rem;
-  color: #ffffff;
+  color: #black;
   font-weight: bold;
 `;
 
 const FavoriteIcon = styled.div`
-  color: #ffffff;
+  color: #black;
   font-size: 1rem;
 `;
 

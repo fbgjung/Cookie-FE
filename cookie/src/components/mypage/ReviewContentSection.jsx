@@ -156,7 +156,7 @@ const ReviewContentSection = ({
         </div>
       </div>
 
-      {/* 옵션 메뉴 렌더링 조건 */}
+
       {!fromLikedReviews && (
         <div className="options" onClick={toggleMenu}>
           <img src="/assets/images/mypage/More.svg" alt="More Options" />

@@ -8,7 +8,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: black;
+  background-color: 조ㅑㅅ;
   min-height: 100vh;
   width: 100%;
   max-width: 1200px;
@@ -33,7 +33,7 @@ const Title = styled.h1`
   font-size: 1.8rem;
   font-weight: bold;
   margin: 30px 0 20px;
-  color: #ffffff;
+  color: black;
   text-align: center;
 `;
 
@@ -80,7 +80,7 @@ const MovieCard = styled.div`
   &:hover {
     border-color: #33efff;
     transform: scale(1.05);
-    border: 2px solid #00d6e8;
+    border: 2px solid black;
     border-radius: 10px;
     transition: all 0.3s ease;
   }

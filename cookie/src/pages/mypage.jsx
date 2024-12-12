@@ -19,13 +19,13 @@ const MypageContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: black;
+  background-color: white;
   position: relative;
 `;
 
 const MypageContent = styled.div`
-  background-color: black;
-  border-radius: 24px 24px 0 0;
+  background-color: white;
+
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
@@ -33,14 +33,8 @@ const MypageContent = styled.div`
   z-index: 1;
   box-sizing: border-box;
   padding: 20px;
-  padding-bottom: 80px;
 
   border: 4px solid transparent;
-
-  box-shadow:
-    0 0 8px #00d6e8,
-    0 0 16px #00d6e8,
-    0 0 24px #00d6e8;
 `;
 
 const ReviewHeader = styled.div`
@@ -104,34 +98,46 @@ const MyPage = () => {
 
         setUserData({ nickname, profileImage });
         setBadgePoint(badgePoint || 0);
+
+        // 안전하게 badge 설정
         setBadgeData(
-          badge.map((b) => ({
-            name: b.name,
-            badgeImage: b.badgeImage,
-            main: b.main,
-          }))
+          badge?.map((b) => ({
+            name: b.name || "배지 없음",
+            badgeImage: b.badgeImage || "/assets/images/defaultBadge.png",
+            main: b.main || false,
+          })) || []
         );
 
-        const genreData = Object.entries(genreScores[0])
-          .filter(([key]) => key !== "id" && key !== "userId")
-          .map(([name, points]) => ({ name, points }));
+        // genreScores 안전하게 접근
+        const genreData =
+          genreScores?.length > 0
+            ? Object.entries(genreScores[0])
+                .filter(([key]) => key !== "id" && key !== "userId")
+                .map(([name, points]) => ({ name, points }))
+            : [];
         setGenreScores(genreData);
 
-        const transformedReviews = reviews.map((review) => ({
-          reviewId: review.reviewId,
-          content: review.content,
-          movieScore: review.movieScore,
-          reviewLike: review.reviewLike,
-          createdAt: review.createdAt,
-          movie: {
-            title: review.movie.title,
-            poster: review.movie.poster,
-          },
-          user: {
-            nickname: review.user.nickname,
-            profileImage: review.user.profileImage,
-          },
-        }));
+        // 리뷰 데이터 변환
+        const transformedReviews =
+          reviews?.map((review) => ({
+            reviewId: review.reviewId,
+            content: review.content,
+            movieScore: review.movieScore,
+            reviewLike: review.reviewLike,
+            createdAt: review.createdAt,
+            movie: {
+              title: review.movie.title || "영화 제목 없음",
+              poster:
+                review.movie.poster || "/assets/images/default-poster.png",
+            },
+            user: {
+              nickname: review.user.nickname || "익명",
+              profileImage:
+                review.user.profileImage || "/assets/images/default-user.png",
+            },
+          })) || [];
+
+        console.log("변환된 리뷰:", transformedReviews);
         setReviewData(transformedReviews);
       } catch (error) {
         console.error("데이터 로드 실패:", error);
@@ -201,7 +207,7 @@ const MyPage = () => {
         <div
           style={{
             position: "absolute",
-            top: "100px",
+            top: "50px",
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 2,

@@ -100,20 +100,20 @@ const Poster = ({
   const handleVoteClick = () => {
     if (userVote) {
       toast.error("이미 참여하신 매치업입니다.");
-      return; // 모달 열기 차단
+      return; 
     }
 
     if (isVoteEnded) {
       toast.error("투표가 종료되었습니다.");
-      return; // 모달 열기 차단
+      return; 
     }
 
     if (!isLogined()) {
       openLoginModal();
-      return; // 모달 열기 차단
+      return; 
     }
 
-    setModalOpen(true); // 모달 열기 허용
+    setModalOpen(true); 
   };
 
   const handleCloseModal = () => {

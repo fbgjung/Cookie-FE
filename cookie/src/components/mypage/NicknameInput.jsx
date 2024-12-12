@@ -23,7 +23,7 @@ const Label = styled.label`
   margin-top: 30px;
   margin-bottom: 8px;
   margin-left: 40px;
-  color: #ffffff;
+  color: black;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -67,8 +67,8 @@ const Input = styled.input`
   outline: none;
 
   &:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    border-color: black;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* 블랙 섀도우 */
   }
 
   @media (max-width: 768px) {
@@ -94,6 +94,10 @@ const CheckButton = styled.button`
   white-space: nowrap;
   flex-shrink: 0;
   margin-left: 2%;
+
+  &:hover {
+    background-color: #33efff;
+  }
 
   &:disabled {
     background-color: #ccc;

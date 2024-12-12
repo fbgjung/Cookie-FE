@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const MainContainer = styled.div`
-  background-color: black;
+  background-color: white;
   min-height: 60vh;
   padding: 2rem 1rem 0 1rem;
 
@@ -36,7 +36,7 @@ const SubTitle = styled.div`
   }
 
   p {
-    color: #ffffff;
+    color: black;
     margin: 0;
     font-size: 1rem;
     text-align: center;

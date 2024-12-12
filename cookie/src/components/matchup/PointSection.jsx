@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types"; // PropTypes 추가
+import PropTypes from "prop-types";
 
 const PointSection = styled.div`
   margin-top: 20px;
@@ -10,51 +10,50 @@ const PointSection = styled.div`
   margin-right: auto;
 `;
 
-const PointTitle = styled.h3`
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  margin-left: 5px;
-  color: #ffffff;
-  font-weight: bold;
-`;
-
 const PointListContainer = styled.div`
-  border: 2px solid transparent;
+  border: 2px solid #000;
   border-radius: 8px;
   overflow: hidden;
-  background-color: black;
-
-  box-shadow:
-    0 0 8px #00d6e8,
-    0 0 16px #00d6e8;
+  background-color: #ffffff;
 `;
 
 const PointItem = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 15px 20px;
-  border-bottom: 1px solid #333;
   cursor: pointer;
-
-  &:last-child {
-    border-bottom: none;
-  }
 
   &:hover {
     background-color: #00d6e8;
   }
 `;
 
+const PointTitle = styled.span`
+  font-size: 0.8rem;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: left;
+  width: 100%;
+`;
+
+const PointContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
 const PointText = styled.span`
   font-size: 1rem;
-  color: #ffffff;
+  color: #333;
   font-weight: bold;
 `;
 
 const PointIcon = styled.div`
-  color: #ffffff;
-  font-size: 1rem;
+  color: #333;
+  font-size: 1.2rem;
 `;
 
 const PointHistory = ({ badgePoint }) => {
@@ -66,20 +65,21 @@ const PointHistory = ({ badgePoint }) => {
 
   return (
     <PointSection>
-      <PointTitle>포인트 내역</PointTitle>
       <PointListContainer>
         <PointItem onClick={handleNavigate}>
-          <PointText>뱃지 포인트 {badgePoint}P</PointText>
-          <PointIcon>
-            <FaChevronRight />
-          </PointIcon>
+          <PointTitle>포인트 내역</PointTitle>
+          <PointContent>
+            <PointText>뱃지 포인트 {badgePoint}P</PointText>
+            <PointIcon>
+              <FaChevronRight />
+            </PointIcon>
+          </PointContent>
         </PointItem>
       </PointListContainer>
     </PointSection>
   );
 };
 
-// PropTypes 설정
 PointHistory.propTypes = {
   badgePoint: PropTypes.number.isRequired,
 };
