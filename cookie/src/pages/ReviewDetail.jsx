@@ -456,6 +456,10 @@ const ReviewDetail = () => {
     }
   };
 
+  const handlePosterClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   return (
     <Container>
       <DetailHeader onBack={() => navigate(-1)} />
@@ -470,6 +474,7 @@ const ReviewDetail = () => {
         handleUpdateReview={handleUpdateReview}
         isMenuOpen={isMenuOpen && !fromLikedReviews}
         toggleMenu={fromLikedReviews ? undefined : toggleMenu}
+        onPosterClick={() => handlePosterClick(reviewData.movie?.movieId)}
       />
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSectionStyled>

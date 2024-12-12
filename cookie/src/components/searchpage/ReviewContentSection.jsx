@@ -16,6 +16,7 @@ const ReviewContentContainer = styled.div`
     object-fit: cover;
     border-radius: 8px;
     margin-right: 15px;
+    cursor: pointer;
   }
 
   .details {
@@ -170,6 +171,7 @@ const ReviewContentSection = ({
   toggleMenu,
   handleDelete,
   handleUpdateReview,
+  onPosterClick,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -241,7 +243,7 @@ const ReviewContentSection = ({
 
   return (
     <ReviewContentContainer>
-      <img className="poster" src={posterSrc} alt="Movie Poster" />
+      <img className="poster" src={posterSrc} alt="Movie Poster" onClick={onPosterClick} />
 
       <div className="details">
         {!isEditing ? (
@@ -317,6 +319,7 @@ ReviewContentSection.propTypes = {
   toggleMenu: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdateReview: PropTypes.func.isRequired,
+  onPosterClick: PropTypes.func.isRequired,
 };
 
 export default ReviewContentSection;
