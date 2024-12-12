@@ -125,12 +125,8 @@ const SetProfileImage = ({ profileImage, onChange }) => {
   };
 
   const handleResetImage = () => {
-    const defaultFile = new File([""], "192.png", {
-      type: "image/png",
-    });
-
     onChange({
-      file: defaultFile,
+      file: null,
       preview: "192.png",
     });
     setShowModal(false);
