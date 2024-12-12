@@ -25,6 +25,7 @@ import CastDetail from "../components/movieDetailPage/CastDetail";
 import ErrorPage from "../pages/ErrorPage";
 import MyAllReviewList from "../pages/MyAllReviewList";
 import CategoryMovieFeed from "../pages/CategoryMovieFeed";
+import Notification from "../pages/Notification";
 
 export const AppRouteDef = {
   Main: {
@@ -256,4 +257,13 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   },
+
+  notification: {
+    path: "/notifications",
+    element: (
+      <PrivateRoute>
+        <Notification />
+      </PrivateRoute>
+    ),
+  }
 };

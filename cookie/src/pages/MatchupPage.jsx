@@ -15,6 +15,7 @@ import ScrollToTop from "../components/common/ScrollToTop";
 import SnowEffect from "../components/common/SnowEffect";
 import axios from "axios";
 import axiosInstance from "../api/auth/axiosInstance";
+import serverBaseUrl from "../config/apiConfig";
 
 const Container = styled.div`
   display: flex;
@@ -118,7 +119,7 @@ const MatchupPage = () => {
       return;
     }
 
-    const socket = new SockJS("https://cookiekie.com/ws");
+    const socket = new SockJS(`${serverBaseUrl}/ws`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
