@@ -259,7 +259,7 @@ const ReviewDetail = () => {
         setLikedByUser(review.likedByUser);
       } catch (error) {
         console.error("Failed to fetch review data:", error);
-        toast.error("리뷰 데이터를 가져오지 못했습니다.");
+        toast.error("리뷰 상세보기 삭제되거나 존재하지 않는 리뷰입니다!");
       } finally {
         setIsLoading(false);
       }
