@@ -12,12 +12,30 @@ const HeaderContainer = styled.div`
     font-size: 1.5rem;
     margin-right: 10px;
     color: white;
+
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+      margin-right: 8px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.1rem;
+      margin-right: 5px;
+    }
   }
 
   .title {
     font-size: 1.5rem;
     font-weight: bold;
     color: white;
+
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.1rem;
+    }
   }
 `;
 

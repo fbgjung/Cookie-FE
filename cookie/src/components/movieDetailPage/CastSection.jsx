@@ -10,8 +10,16 @@ const Title = styled.h2`
 const CastGrid = styled.div`
   margin-top: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* 3열로 고정 */
   gap: 10px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr); /* 태블릿에서도 3열로 고정 */
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr); /* 모바일에서도 3열로 고정 */
+  }
 
   .cast-item {
     display: flex;
@@ -21,8 +29,9 @@ const CastGrid = styled.div`
     cursor: pointer;
 
     img {
-      width: 70px;
-      height: 70px;
+      width: 100%;
+      max-width: 100px; /* 이미지의 최대 너비 */
+      height: 100px;
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 5px;

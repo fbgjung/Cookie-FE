@@ -12,6 +12,7 @@ const DetailsWrapper = styled.div`
   margin-bottom: 20px;
   gap: 20px;
   align-items: flex-start;
+  flex-wrap: wrap; /* Ensures it wraps on smaller screens */
 
   img {
     width: 120px;
@@ -24,11 +25,13 @@ const DetailsWrapper = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 10px;
 
     .categories {
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
+      flex-wrap: wrap;
 
       span {
         background: #aad6e7;
@@ -45,6 +48,15 @@ const DetailsWrapper = styled.div`
       line-height: 1.6;
     }
   }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
 `;
 
 const PosterImage = styled.img`
@@ -57,6 +69,14 @@ const PosterImage = styled.img`
   &:hover {
     transform: scale(1.1);
   }
+
+  @media (max-width: 768px) {
+    width: 100px;
+  }
+
+  @media (max-width: 480px) {
+    width: 80px;
+  }
 `;
 
 const MovieDetailRight = styled.div`
@@ -68,9 +88,16 @@ const MovieDetailRight = styled.div`
 const MovieEvaluationFunction = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   .write-review-button {
     cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
   }
 `;
 
@@ -80,6 +107,14 @@ const MovieScore = styled.div`
   gap: 8px;
   font-size: 14px;
   color: #ffffff;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const HeartIcon = styled(FaHeart)`
@@ -109,6 +144,36 @@ const ModalImage = styled.img`
   max-width: 90%;
   max-height: 90%;
   border-radius: 8px;
+`;
+
+const ReviewButton = styled.button`
+  background: #00d6e8;
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #00c4d3;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background: #00aabf;
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const DetailsSection = ({
