@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from 'styled-components';
 import PropTypes from "prop-types";
 import TopicImage from "/src/assets/images/matchup/topic_image.svg";
 import { FiChevronDown } from "react-icons/fi";
@@ -13,9 +13,15 @@ const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
   margin-bottom: 20px;
+  width: 100%;
 `;
+
+const MatchUpTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+`
 
 const TitleImage = styled.img`
   width: 60px;
@@ -32,7 +38,7 @@ const Title = styled.h1`
   font-weight: bold;
   color: #006400;
   text-align: center;
-  margin: 5px 0;
+
 
   @media (max-width: 768px) {
     font-size: 1.8rem;
@@ -45,9 +51,8 @@ const Title = styled.h1`
 
 const InfoContainer = styled.div`
   display: flex;
-  gap: 15px;
-  align-items: center;
-  margin-top: 10px;
+  width: 100%;
+  justify-content: flex-end;
 
   @media (max-width: 480px) {
     flex-direction: column;
@@ -59,7 +64,6 @@ const DDay = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   color: #006400;
-  margin-left: 6.5rem;
   text-align: center;
 
   @media (max-width: 768px) {
@@ -69,31 +73,6 @@ const DDay = styled.div`
   @media (max-width: 480px) {
     font-size: 1.1rem;
     margin-left: 0.1rem;
-  }
-`;
-
-const HistoryButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: transparent;
-  border: none;
-  color: #006400;
-
-  font-size: 0.9rem;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.8rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.7rem;
   }
 `;
 
@@ -186,6 +165,40 @@ const CloseButton = styled.button`
   }
 `;
 
+const bounceEvent = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+`;
+
+const MatchUpHistory = styled.div`
+  width: 80px;
+  border-radius: 30px 0 0 30px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2px;
+`;
+
+const HistoryIcon = styled.img`
+  width: 35px;
+  height: 35px;
+  animation: ${bounceEvent} 0.5s ease-in-out infinite;
+`
+
+const HistoryText = styled.p`
+  margin: 0;
+  font-size: 10px;
+  color: brown;
+`
+
 const TitleSection = ({ matchUpTitle, endAt }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [historyData, setHistoryData] = useState([]);
@@ -232,14 +245,18 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
   return (
     <>
       <TitleContainer>
-        <TitleImage src={TopicImage} alt="Topic Icon" />
-        <Title>{matchUpTitle}</Title>
-
-        <InfoContainer>
+        <MatchUpTitle>
+          <TitleImage src={TopicImage} alt="Topic Icon" />
+          <Title>{matchUpTitle}</Title>
           <DDay>{calculateDDay()}</DDay>
-          <HistoryButton onClick={handleModalToggle}>
-            히스토리 보기 <FiChevronDown size={16} />
-          </HistoryButton>
+          <TitleImage src={TopicImage} alt="Topic Icon" />
+        </MatchUpTitle>
+      
+        <InfoContainer>
+          <MatchUpHistory onClick={handleModalToggle}>
+            <HistoryIcon src='/assets/images/matchup/history.png'></HistoryIcon>
+            <HistoryText>히스토리</HistoryText>
+          </MatchUpHistory>
         </InfoContainer>
       </TitleContainer>
 
@@ -278,3 +295,4 @@ TitleSection.propTypes = {
 };
 
 export default TitleSection;
+
