@@ -318,7 +318,7 @@ const ReviewDetail = () => {
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("refreshToken");
     if (!token) {
-      navigate("/login");
+      openLoginModal();
       return null;
     }
     try {
