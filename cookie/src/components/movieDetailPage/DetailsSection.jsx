@@ -5,6 +5,8 @@ import { FaHeart } from "react-icons/fa";
 import axiosInstance from "../../api/auth/axiosInstance";
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import LoginModal from "../components/common/LoginModal";
+import useAuthStore from "../stores/useAuthStore";
 
 const DetailsWrapper = styled.div`
   display: flex;
@@ -84,6 +86,7 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
 
   const [likeCount, setLikeCount] = useState(likes);
   const [likeValid, setLikeValid] = useState(false);
+  const { openLoginModal } = useAuthStore();
 
   useEffect(() => {
     setLikeValid(liked);
@@ -93,8 +96,7 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
   const checkLogin = () => {
     const token = localStorage.getItem("refreshToken");
     if (!token) {
-      toast.error("로그인이 필요한 서비스입니다!");
-      navigate("/login");
+      openLoginModal();
       return false;
     }
     return true;
