@@ -18,26 +18,30 @@ const ReviewWrapper = styled.div`
 
     .review-count {
       font-size: 14px;
-      color: #white;
+      color: white;
       margin-left: 10px;
     }
 
-    .more-review-button {
-      margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
+      .more-review-button {
+      margin-left: auto;
       font-size: 14px;
       color: #fff;
-      background-color: #007bff;
+      background: none;
       border: none;
-      border-radius: 4px;
-      padding: 5px 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      padding: 0;
+      transition: color 0.3s ease;
 
       &:hover {
-        background-color: #0056b3;
+        color: #00d6e8; 
+      }
+
+      &::after {
+        content: " >"; 
+        font-size: 14px;
+        margin-left: 5px;
       }
     }
-  }
 
   .review-grid {
     display: grid;
@@ -52,7 +56,7 @@ const ReviewWrapper = styled.div`
 
     .review-item {
       position: relative;
-      background-image: url("/images/reviewticket.svg"); // 리뷰 티켓 이미지 경로
+      background-image: url("/images/reviewticket.svg"); 
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -195,7 +199,7 @@ ReviewSection.propTypes = {
   ).isRequired,
   reviewCount: PropTypes.number.isRequired,
   onViewAllReviews: PropTypes.func.isRequired,
-  movie: PropTypes.object.isRequired, // 영화 정보 전달
+  movie: PropTypes.object.isRequired,
 };
 
 export default ReviewSection;

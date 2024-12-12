@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import debounce from "lodash.debounce";
 import SearchBar from "../components/searchpage/SearchBar";
 import SearchResults from "../components/searchpage/SearchResults";
 import TopButton from "../components/searchpage/TopButton";
@@ -61,10 +62,12 @@ const Tabs = styled.div`
 
   @media (max-width: 768px) {
     max-width: 100%;
+    margin-top: -30px;
   }
 
   @media (max-width: 480px) {
     border-radius: 15px;
+    margin-top: -20px;
   }
 `;
 
@@ -190,25 +193,25 @@ const Search = () => {
     }
   }, [page]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
-      setShowTopButton(scrollTop > 200);
+  const debouncedScrollHandler = debounce(() => {
+    const scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    setShowTopButton(scrollTop > 200);
 
-      if (
-        window.innerHeight + scrollTop + 1 >=
-        document.documentElement.scrollHeight
-      ) {
-        if (hasMore) {
-          setPage((prevPage) => prevPage + 1);
-        }
+    if (
+      window.innerHeight + scrollTop + 1 >=
+      document.documentElement.scrollHeight
+    ) {
+      if (hasMore && !isLoading) {
+        setPage((prevPage) => prevPage + 1);
       }
-    };
+    }
+  }, 300); // 300ms delay
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
+  useEffect(() => {
+    window.addEventListener("scroll", debouncedScrollHandler);
+    return () => window.removeEventListener("scroll", debouncedScrollHandler);
+  }, [hasMore, isLoading]);
 
   const handleTabClick = (tab, index) => {
     setActiveTab(tab);

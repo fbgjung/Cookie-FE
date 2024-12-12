@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const PageWrapper = styled.div`
-    width: 90%;
+  width: 90%;
   margin: 30px auto;
   padding: 20px;
   border: 1px solid #ddd;
@@ -178,19 +178,16 @@ const MovieReviewForm = () => {
     navigate(-1); // 이전 페이지로 돌아가기
   };
 
-  const handleSubmit = async () => {  
+  const handleSubmit = async () => {
     const payload = {
       movieId: 1,
       movieScore,
       content,
       isSpoiler,
     };
-  
+
     try {
-      const response = await axiosInstance.post(
-        `/api/reviews/`,
-        payload
-      );
+      const response = await axiosInstance.post(`/api/reviews/`, payload);
       if (response.status === 200) {
         alert("리뷰가 성공적으로 등록되었습니다.");
         navigate("/reviews"); // 리뷰 페이지로 이동

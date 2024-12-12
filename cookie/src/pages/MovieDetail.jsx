@@ -9,12 +9,16 @@ import ReviewSection from "../components/movieDetailPage/ReviewSection";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 import DetailHeader from "../components/searchpage/MovieDetailHeader";
+import Spinner from "../components/common/Spinner";
 
 const ContentWrapper = styled.div`
-  max-width: 600px;
+  width: 100%;
+  min-width: 320px;
   margin: 0 auto;
   padding: 20px;
   background-color: black;
+  box-sizing: border-box;
+  overflow-x: hidden;
 `;
 
 const MovieDetail = () => {
@@ -22,17 +26,20 @@ const MovieDetail = () => {
   const navigate = useNavigate();
 
   const [movieData, setMovieData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
   const [selectedImage, setSelectedImage] = useState(""); // 클릭된 이미지
 
   useEffect(() => {
     const fetchMovieData = async () => {
+      setIsLoading(true);
       try {
         const response = await axiosInstance.get(`/api/movies/${id}`);
-        console.log("영화 상세 데이터:", response.data.response);
         setMovieData(response.data.response);
       } catch (error) {
-        console.log(error);
+        console.error("영화 데이터 로드 실패:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -44,15 +51,17 @@ const MovieDetail = () => {
     : "정보 없음";
 
   const handleViewAllReviews = () => {
-    // /reviews/movie/:movieId로 이동
     navigate(`/reviews/movie/${id}`);
   };
 
-  // 이미지 클릭 핸들러
   const handleImageClick = (imageUrl) => {
     setSelectedImage(imageUrl);
     setIsModalOpen(true);
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <ContentWrapper>

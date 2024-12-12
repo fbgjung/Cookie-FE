@@ -170,6 +170,7 @@ const MainContent = styled.main`
   flex-direction: column;
   overflow-y: auto;
   margin-top: 70px;
+  background-color: black;
   margin-bottom: 60px;
   padding: 0;
   box-sizing: border-box;
