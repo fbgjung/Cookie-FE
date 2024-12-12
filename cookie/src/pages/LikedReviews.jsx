@@ -10,7 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #ffffff;
+  background-color: white;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
@@ -25,13 +25,17 @@ const BackButton = styled.img`
   width: 24px;
   height: 24px;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.2);
+  }
 `;
 
 const Title = styled.h1`
   font-size: 1.8rem;
   font-weight: bold;
   margin: 50px 0 10px;
-  color: #04012d;
+  color: black;
   text-align: center;
 `;
 

@@ -250,7 +250,9 @@ const ReviewDetail = () => {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axios.get(`${serverBaseUrl}/api/reviews/${reviewId}`);
+        const response = await axios.get(
+          `${serverBaseUrl}/api/reviews/${reviewId}`
+        );
         console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
@@ -270,7 +272,6 @@ const ReviewDetail = () => {
     const previousLiked = likedByUser;
     const previousLikeCount = reviewData.reviewLike;
 
-    // 상태를 임시로 업데이트
     setLikedByUser(!previousLiked);
     setReviewData((prevData) => ({
       ...prevData,
@@ -291,7 +292,6 @@ const ReviewDetail = () => {
     }
   };
   /*
-
   const toggleLike = async () => {
     const userId = getUserIdFromToken();
     if (!userId) return;
@@ -338,10 +338,13 @@ const ReviewDetail = () => {
     }
 
     try {
-      await axios.put(`${serverBaseUrl}/api/reviews/comments/${editingComment.id}`, {
-        reviewId,
-        comment: editingComment.text,
-      });
+      await axios.put(
+        `${serverBaseUrl}/api/reviews/comments/${editingComment.id}`,
+        {
+          reviewId,
+          comment: editingComment.text,
+        }
+      );
 
       setReviewData((prevData) => ({
         ...prevData,
@@ -507,9 +510,8 @@ const ReviewDetail = () => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 handleAddComment(); // 댓글 추가 함수 호출
-                }
               }
-            }
+            }}
           />
           <button
             onClick={() => {

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/useAuthStore";
 
 const FavoriteSection = styled.div`
-  margin-top: 30px;
-  max-width: 540px;
+  margin-top: 20px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -14,15 +14,17 @@ const FavoriteTitle = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 10px;
   margin-left: 5px;
-  color: #333;
+  color: black;
   font-weight: bold;
 `;
 
 const FavoriteListContainer = styled.div`
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 2px solid transparent;
+  border: 2px solid black;
+
+  border-radius: 12px;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #black;
 `;
 
 const FavoriteItem = styled.div`
@@ -38,18 +40,18 @@ const FavoriteItem = styled.div`
   }
 
   &:hover {
-    background-color: #f9f9f9;
+    background-color: #00d6e8;
   }
 `;
 
 const FavoriteText = styled.span`
   font-size: 1rem;
-  color: #724b2e;
+  color: #black;
   font-weight: bold;
 `;
 
 const FavoriteIcon = styled.div`
-  color: #724b2e;
+  color: #black;
   font-size: 1rem;
 `;
 
