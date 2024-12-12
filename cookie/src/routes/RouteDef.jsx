@@ -267,7 +267,8 @@ export const AppRouteDef = {
         <Notification />
       </PrivateRoute>
     ),
-  }
+  },
+  
   PointHistory: {
     path: "/point-history",
     element: (
