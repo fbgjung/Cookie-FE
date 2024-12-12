@@ -1,11 +1,9 @@
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 import { FaHeart } from "react-icons/fa";
 import axiosInstance from "../../api/auth/axiosInstance";
-import { useState, useEffect } from "react";
-import { toast } from "react-hot-toast";
-import LoginModal from "../common/LoginModal";
 import useAuthStore from "../../stores/useAuthStore";
 
 const DetailsWrapper = styled.div`
@@ -37,19 +35,32 @@ const DetailsWrapper = styled.div`
         padding: 5px 10px;
         border-radius: 8px;
         font-size: 12px;
-        color: #555;
+        color: black;
       }
     }
 
     p {
       font-size: 14px;
-      color: #333;
+      color: #ffffff;
       line-height: 1.6;
     }
   }
 `;
 
+const PosterImage = styled.img`
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
 const MovieDetailRight = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
 `;
@@ -68,11 +79,11 @@ const MovieScore = styled.div`
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #333;
+  color: #ffffff;
 `;
 
 const HeartIcon = styled(FaHeart)`
-  color: ${(props) => (props.liked ? "#ff4d4d" : "#ccc")};
+  color: ${(props) => (props.liked ? "#ff4d4d" : "#ffffff")};
   font-size: 16px;
   cursor: pointer;
 
@@ -81,12 +92,40 @@ const HeartIcon = styled(FaHeart)`
   }
 `;
 
-const DetailsSection = ({ posterUrl, categories = [], description, likes, score, movie, liked }) => {
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalImage = styled.img`
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+`;
+
+const DetailsSection = ({
+  posterUrl,
+  categories = [],
+  description,
+  likes,
+  score,
+  movie,
+  liked,
+}) => {
   const navigate = useNavigate();
+  const { openLoginModal } = useAuthStore();
 
   const [likeCount, setLikeCount] = useState(likes);
   const [likeValid, setLikeValid] = useState(false);
-  const { openLoginModal } = useAuthStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setLikeValid(liked);
@@ -115,50 +154,88 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
       await axiosInstance.post(`/api/users/movie-like/${movie.id}`);
     } catch (error) {
       console.error("좋아요 처리 중 오류:", error);
-
       setLikeValid(previousLiked);
       setLikeCount(previousLikeCount);
     }
   };
 
+  const ReviewButton = styled.button`
+    background: #00d6e8;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #00c4d3;
+      transform: scale(1.05);
+    }
+
+    &:active {
+      background: #00aabf;
+      transform: scale(0.95);
+    }
+  `;
+
   const handleWriteReviewClick = () => {
     if (!checkLogin()) return;
-    
+
     navigate("/reviews/write", {
-      state: { 
+      state: {
         movieId: movie.id,
         movieTitle: movie.title,
-        posterUrl: posterUrl,
-       },
+        posterUrl,
+      },
     });
+  };
+
+  const handlePosterClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
   const roundedScore = Math.round(score * 100) / 100;
 
   return (
-    <DetailsWrapper>
-      <img src={posterUrl} alt="포스터" />
+    <>
+      <DetailsWrapper>
+        <PosterImage src={posterUrl} alt="포스터" onClick={handlePosterClick} />
 
-      <MovieDetailRight>
-        <div className="details">
-          <div className="categories">
-            {categories.map((category, index) => (
-              <span key={index}>{category.subCategory}</span>
-            ))}
+        <MovieDetailRight>
+          <div className="details">
+            <div className="categories">
+              {categories.map((category, index) => (
+                <span key={index}>{category.subCategory}</span>
+              ))}
+            </div>
+            <p>{description}</p>
           </div>
-          <p>{description}</p>
-        </div>
 
-        <MovieEvaluationFunction>
-          <button className="write-review-button" onClick={handleWriteReviewClick}>
-            리뷰 작성하기
-          </button>
-          <MovieScore>
-            <HeartIcon liked={likeValid} onClick={handleLikeClick} /> {likeCount} | 평점: {roundedScore}
-          </MovieScore>
-        </MovieEvaluationFunction>
-      </MovieDetailRight>
-    </DetailsWrapper>
+          <MovieEvaluationFunction>
+            <ReviewButton onClick={handleWriteReviewClick}>
+              리뷰 작성
+            </ReviewButton>
+            <MovieScore>
+              <HeartIcon liked={likeValid} onClick={handleLikeClick} />{" "}
+              {likeCount} | 평점: {roundedScore}
+            </MovieScore>
+          </MovieEvaluationFunction>
+        </MovieDetailRight>
+      </DetailsWrapper>
+
+      {isModalOpen && (
+        <ModalOverlay onClick={handleModalClose}>
+          <ModalImage src={posterUrl} alt="확대된 포스터" />
+        </ModalOverlay>
+      )}
+    </>
   );
 };
 
@@ -169,6 +246,7 @@ DetailsSection.propTypes = {
   likes: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
   movie: PropTypes.object.isRequired,
+  liked: PropTypes.bool.isRequired,
 };
 
 export default DetailsSection;

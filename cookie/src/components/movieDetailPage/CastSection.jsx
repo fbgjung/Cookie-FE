@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Title = styled.h2`
   margin-top: 50px;
+  color: white;
 `;
 
 const CastGrid = styled.div`
@@ -25,11 +26,19 @@ const CastGrid = styled.div`
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 5px;
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+      &:hover {
+        transform: scale(1.2);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      }
     }
 
     span {
       font-size: 12px;
-      color: #333;
+      color: white;
     }
   }
 `;

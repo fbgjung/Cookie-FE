@@ -2,10 +2,9 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-
 const Title = styled.h2`
   margin-top: 50px;
-`
+`;
 
 const ReviewWrapper = styled.div`
   margin-top: 3%;
@@ -14,11 +13,12 @@ const ReviewWrapper = styled.div`
     font-size: 18px;
     font-weight: bold;
     display: flex;
+    color: white;
     align-items: center;
 
     .review-count {
       font-size: 14px;
-      color: #666;
+      color: #white;
       margin-left: 10px;
     }
 
@@ -115,22 +115,25 @@ const ReviewWrapper = styled.div`
   }
 `;
 
-
-
 const ReviewUserProfile = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const ReviewDetail = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`
+`;
 
-const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) => {
+const ReviewSection = ({
+  reviews = [],
+  reviewCount,
+  onViewAllReviews,
+  movie,
+}) => {
   const navigate = useNavigate();
   console.log(reviews);
 
@@ -143,37 +146,40 @@ const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) =
       <Title>
         리뷰
         <span className="review-count">{reviewCount}</span>
-        <button className="more-review-button" onClick={onViewAllReviews}>더보기</button>
+        <button className="more-review-button" onClick={onViewAllReviews}>
+          더보기
+        </button>
       </Title>
       <div className="review-grid">
         {reviews.map((review, index) => (
-          <div className="review-item" key={index} onClick={() => handleReviewClick(review.reviewId)}>
-            
+          <div
+            className="review-item"
+            key={index}
+            onClick={() => handleReviewClick(review.reviewId)}
+          >
             <ReviewUserProfile>
               <img
-                  src={review.user.profileImage}
-                  alt={review.user.nickname}
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "50%",
-                    marginBottom: "5px",
-                  }}
-                />
+                src={review.user.profileImage}
+                alt={review.user.nickname}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  marginBottom: "5px",
+                }}
+              />
               <div className="review-user">{review.user.nickname}</div>
             </ReviewUserProfile>
-            
+
             <ReviewDetail>
               <div className="review-comment">{review.content}</div>
               <div className="review-footer">
                 <div className="likes">❤️ {review.reviewLike}</div>
               </div>
             </ReviewDetail>
-            
           </div>
         ))}
       </div>
-      
     </ReviewWrapper>
   );
 };
