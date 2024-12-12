@@ -10,8 +10,6 @@ import More from "../../assets/images/admin/more.svg";
 import MovieInfoModal from "./MovieInfoModal";
 import EditCategory from "./EditCategory";
 import axiosInstance from "../../api/auth/axiosInstance";
-import serverBaseUrl from "../../config/apiConfig";
-import axios from "axios";
 
 const AddMovieContainer = styled.div`
   width: 1239px;
@@ -27,7 +25,7 @@ const AddMovieContainer = styled.div`
     -3px 4px 8px rgba(0, 0, 0, 0.06),
     3px -4px 8px rgba(0, 0, 0, 0.06);
 `;
-const TableTitle = styled.div`
+export const TableTitle = styled.div`
   width: 1175px;
   height: 32px;
   border: none;
@@ -50,7 +48,7 @@ const TableTitle = styled.div`
   }
 `;
 
-const MovieListContainer = styled.div`
+export const MovieListContainer = styled.div`
   padding: 1rem 3rem;
   display: grid;
   grid-template-columns: 0.1fr 2fr 0.5fr 1fr 1.5fr 3fr 0.8fr;
@@ -88,10 +86,10 @@ const IconButton = styled.button`
 export const UnderlinedButton = styled.button`
   padding: 3px 33px;
   background: none;
-  color: var(--text);
+  color: #ffff;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
   position: relative;
 
@@ -121,7 +119,9 @@ const TitleSection = styled.div`
 const RecommendTitle = styled.div`
   display: flex;
   align-items: center;
-
+  h1 {
+    color: #ffff;
+  }
   img {
     margin-right: 10px;
     width: 30px;
@@ -166,7 +166,6 @@ const CookieMovieList = () => {
   const [recommendList, setRecommendList] = useState([]);
   const [addMovieIds, setAddMovieIds] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState(""); // 검색 키워드 상태
-
   const handleSearchChange = (e) => {
     setSearchKeyword(e.target.value);
   };
@@ -186,6 +185,7 @@ const CookieMovieList = () => {
     }
   };
 
+  //등록된 영화목록
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -233,7 +233,7 @@ const CookieMovieList = () => {
       e.stopPropagation();
       switch (type) {
         case "like":
-          handleLikeClick(movie.movieId);
+          handleLikeClick(movie.movieId, movie.title);
           break;
         case "edit":
           setSelectedMovie(movie);
@@ -267,18 +267,22 @@ const CookieMovieList = () => {
     setIsModalOpen(false);
   };
 
-  const handleLikeClick = (movieId) => {
-    console.log("선택한 MovieId:", movieId);
+  const handleUpdateCategories = (updatedCategories) => {
+    // selectedMovie의 categories를 수정된 카테고리로 업데이트
+    setSelectedMovie((prevMovie) => ({
+      ...prevMovie,
+      categories: updatedCategories,
+    }));
 
-    setAddMovieIds((prevIds) => {
-      if (prevIds.includes(movieId)) {
-        return prevIds.filter((id) => id !== movieId);
-      } else {
-        return [...prevIds, movieId];
-      }
-    });
+    // 등록된 영화 목록에서 카테고리 반영
+    setRegisteredMovies((prevMovies) =>
+      prevMovies.map((movie) =>
+        movie.movieId === selectedMovie.movieId
+          ? { ...movie, categories: updatedCategories }
+          : movie
+      )
+    );
   };
-
   const handleDelete = async () => {
     if (selectedMovieId.length > 0) {
       const isConfirmed = window.confirm("선택한 영화를 삭제할까요?");
@@ -304,7 +308,7 @@ const CookieMovieList = () => {
     }
   };
 
-  /*관리자 추천 영화 삭제*/
+  //관리자 추천 영화 삭제
   const handlRecommendDeleteAll = async () => {
     const movieIds = recommendList.map((movie) => movie.movieId);
     if (movieIds.length === 0) {
@@ -317,26 +321,45 @@ const CookieMovieList = () => {
         movieIds
       );
       console.log("삭제 성공", response);
-
+      alert("삭제가 완료되었어요!");
       setRecommendList([]);
     } catch (error) {
       console.error("추천 리스트 삭제 실패", error);
     }
   };
+
+  const handleLikeClick = (movieId, title) => {
+    alert(`${title} 선택되었어요!`);
+
+    setAddMovieIds((prevIds) => {
+      const movieExists = prevIds.some((movie) => movie.movieId === movieId);
+
+      if (movieExists) {
+        return prevIds.filter((movie) => movie.movieId !== movieId);
+      } else {
+        return [...prevIds, { movieId, title }];
+      }
+    });
+  };
+
+  //관리자 추천 영화 추가
   const handleAddRecommendMovie = async () => {
     if (addMovieIds.length === 0) {
       alert("추가할 영화가 선택되지 않았습니다.");
       return;
     }
-    console.log("Sending movie IDs:", addMovieIds);
+    const movieIds = addMovieIds.map((movie) => movie.movieId);
+
+    console.log("Sending movie IDs:", movieIds);
 
     try {
       const response = await axiosInstance.post(
         `/api/admin/recommend`,
-        addMovieIds
+        movieIds
       );
       console.log("추천 영화 추가 성공", response);
       setRecommendList((prevList) => [...prevList, ...addMovieIds]);
+      alert("추천 영화가 추가되었어요!");
       setAddMovieIds([]);
     } catch (error) {
       console.error("추천 영화 추가 실패", error);
@@ -376,7 +399,7 @@ const CookieMovieList = () => {
         </TableTitle>
         <MovieListContainer>
           {loading ? (
-            <p>Loading...</p>
+            <p></p>
           ) : Array.isArray(registeredMovies) && registeredMovies.length > 0 ? (
             registeredMovies.map((movie) => (
               <React.Fragment key={movie.movieId}>
@@ -423,10 +446,7 @@ const CookieMovieList = () => {
         </MovieListContainer>
 
         {isModalOpen && selectedMovie && (
-          <MovieInfoModal
-            movieId={selectedMovie.movieId}
-            onClose={closeModal}
-          />
+          <MovieInfoModal movie={selectedMovie} onClose={closeModal} />
         )}
         <Pagination
           currentPage={currentPage}
@@ -438,12 +458,13 @@ const CookieMovieList = () => {
         <EditCategory
           movie={selectedMovie}
           closeModal={() => setIsEditOpen(false)}
+          onUpdateCategories={handleUpdateCategories}
         />
       )}
       <TitleSection>
         <RecommendTitle>
           <img src={Like} />
-          <h1>추천리스트 10</h1>
+          <h1>추천리스트</h1>
         </RecommendTitle>
 
         {recommendList.length > 0 ? (
