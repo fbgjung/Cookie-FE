@@ -5,8 +5,8 @@ import { FaHeart } from "react-icons/fa";
 import axiosInstance from "../../api/auth/axiosInstance";
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import LoginModal from "../components/common/LoginModal";
-import useAuthStore from "../stores/useAuthStore";
+import LoginModal from "../common/LoginModal";
+import useAuthStore from "../../stores/useAuthStore";
 
 const DetailsWrapper = styled.div`
   display: flex;
@@ -133,6 +133,8 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
     });
   };
 
+  const roundedScore = Math.round(score * 100) / 100;
+
   return (
     <DetailsWrapper>
       <img src={posterUrl} alt="포스터" />
@@ -152,7 +154,7 @@ const DetailsSection = ({ posterUrl, categories = [], description, likes, score,
             리뷰 작성하기
           </button>
           <MovieScore>
-            <HeartIcon liked={likeValid} onClick={handleLikeClick} /> {likeCount} | 평점: {score}
+            <HeartIcon liked={likeValid} onClick={handleLikeClick} /> {likeCount} | 평점: {roundedScore}
           </MovieScore>
         </MovieEvaluationFunction>
       </MovieDetailRight>
