@@ -8,13 +8,13 @@ function AdminRecommend() {
   const navigate = useNavigate();
   const [recommendMovies, setRecommendMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchMainPageMovies = async () => {
       try {
         const response = await axios.get(
           `${serverBaseUrl}/api/movies/mainAdminRecommend`
-
         );
         const recommendMovies = response.data.response;
         setRecommendMovies(recommendMovies);
@@ -31,29 +31,64 @@ function AdminRecommend() {
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
   };
+  const handleNext = () => {
+    setCurrentIndex(currentIndex + 1);
+  };
+  const handlePrev = () => {
+    console.log("Current Index:", currentIndex);
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
 
   return (
     <>
       <MovieRecommendList>
         <Title>쿠키 추천 영화</Title>
-        <div className="recommend__movie">
-          {recommendMovies.map((movie, index) => (
-            <div key={index} className="recommend__movie--info">
-              <div onClick={() => handleMovieClick(movie.id)} style={{ cursor: "pointer" }}>
-                <Poster src={movie.poster} alt={movie.title} />
-                <MovieInfo>
-                  <Review>
-                    <ReviewIcon alt="Review Icon"/>
-                    <Count>{movie.reviews}</Count>
-                  </Review>
-                  <Like>
-                    <LikeIcon alt="Review Icon"/>
-                    <Count>{movie.likes}</Count>
-                  </Like>
-                </MovieInfo>
+        <div className="recommend__movie--wrapper">
+          <button
+            className="prev"
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+          >
+            &lt;
+          </button>
+          <div
+            className="recommend__movie"
+            style={{
+              transform: `translateX(-${currentIndex * 40}%)`,
+            }}
+          >
+            {recommendMovies.map((movie, index) => (
+              <div key={index} className="recommend__movie--info">
+                <div
+                  onClick={() => handleMovieClick(movie.id)}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                >
+                  <Poster src={movie.poster} alt={movie.title} />
+                  <MovieInfo>
+                    <Review>
+                      <ReviewIcon alt="Review Icon" />
+                      <Count>{movie.reviews}</Count>
+                    </Review>
+                    <Like>
+                      <LikeIcon alt="Review Icon" />
+                      <Count>{movie.likes}</Count>
+                    </Like>
+                  </MovieInfo>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <button
+            className="next"
+            onClick={handleNext}
+            disabled={currentIndex === recommendMovies.length - 1}
+          >
+            &gt;
+          </button>
         </div>
       </MovieRecommendList>
     </>
@@ -63,15 +98,54 @@ function AdminRecommend() {
 export default AdminRecommend;
 
 const MovieRecommendList = styled.div`
+  position: relative;
+  .recommend__movie--wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
   .recommend__movie {
     display: flex;
     flex-direction: row;
     align-items: start;
-    overflow-x: auto;
+    transition: transform 1s ease;
+  }
+
+  .prev,
+  .next {
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+  }
+
+  .prev {
+    left: -15px;
+  }
+
+  .next {
+    right: -15px;
+  }
+
+  .prev:disabled,
+  .next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 
-const Title  = styled.h2`
+const Title = styled.h2`
   color: var(--text-wh);
   padding: 2rem 0 0 0.375rem;
 
@@ -82,47 +156,47 @@ const Title  = styled.h2`
   @media (max-width: 480px) {
     font-size: 1rem;
   }
-`
+`;
 
 const Review = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0.375rem;
-`
+`;
 
 const ReviewIcon = styled.svg`
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url('/assets/images/main/review.svg');
-`
+  background: no-repeat center/cover url("/assets/images/main/review.svg");
+`;
 
 const Count = styled.p`
   font-size: 0.8rem;
   color: #ffffff;
-`
+`;
 
 const Like = styled.div`
   display: flex;
   align-items: center;
   padding: 0 0.375rem;
-`
+`;
 
 const LikeIcon = styled.svg`
   width: 14px;
   height: 14px;
   margin: 0;
-  background: no-repeat center/cover url('/assets/images/main/like.svg');
-`
+  background: no-repeat center/cover url("/assets/images/main/like.svg");
+`;
 
 const MovieInfo = styled.div`
   display: flex;
-`
+`;
 
 const Poster = styled.img`
   transition: transform 0.3s ease;
   border-radius: 0.65rem;
-  width: 7.75rem;
-  height: 11.07rem;
+  width: 8.75rem;
+  height: 12.0625rem;
   padding: 0.4rem 0.375rem;
   cursor: pointer;
 
@@ -142,4 +216,3 @@ const Poster = styled.img`
     height: 9.5rem;
   }
 `;
-

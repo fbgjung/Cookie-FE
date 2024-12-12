@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import PropTypes from "prop-types"; // PropTypes를 import
+import PropTypes from "prop-types";
 import { useState } from "react";
 
 const Title = styled.h2`
-  margin-top: 50px;
+  margin-top: 20px;
+  color: white;
 `;
 
 const GalleryWrapper = styled.div`

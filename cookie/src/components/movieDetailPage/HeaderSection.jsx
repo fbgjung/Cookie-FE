@@ -19,19 +19,21 @@ const HeaderWrapper = styled.div`
     bottom: 10px;
     left: 10px;
     color: white;
-    background: rgba(0, 0, 0, 0.6);
+    background: white;
     padding: 10px;
     border-radius: 8px;
 
     h1 {
       font-size: 20px;
       font-weight: bold;
+      color: black;
       margin: 0;
     }
 
     p {
       font-size: 14px;
       margin: 5px 0 0 0;
+      color: black;
     }
   }
 `;
@@ -42,13 +44,12 @@ const HeaderSection = ({
   country,
   runtime,
   certification,
-  mainImage
+  mainImage,
 }) => {
   console.log(title);
   console.log(runtime);
   console.log(country);
   // const [currentIndex, setCurrentIndex] = useState(0);
-
 
   // const nextImage = () => {
   //   setCurrentIndex((prev) => (prev + 1) % stillCuts.length);
@@ -82,7 +83,7 @@ HeaderSection.propTypes = {
   country: PropTypes.string.isRequired, // country은 필수 string 타입
   runtime: PropTypes.string.isRequired, // duration은 필수 string 타입
   certification: PropTypes.string.isRequired, // rating은 필수 string 타입
-  mainImage: PropTypes.string.isRequired
+  mainImage: PropTypes.string.isRequired,
   // stillCuts: PropTypes.arrayOf(PropTypes.string).isRequired, // stillCuts는 string 배열의 필수 props
 };
 

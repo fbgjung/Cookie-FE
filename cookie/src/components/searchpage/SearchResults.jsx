@@ -16,6 +16,17 @@ const ResultItem = styled.div`
   align-items: ${(props) => (props.$isGrid ? "center" : "flex-start")};
   gap: ${(props) => (props.$isGrid ? "0" : "10px")};
   cursor: pointer;
+  padding: 10px;
+  border: 2px solid white;
+  border-radius: 8px;
+  transition:
+    transform 0.2s ease,
+    background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.02);
+  }
 `;
 
 const Poster = styled.img`
@@ -33,26 +44,37 @@ const Content = styled.div`
 const Title = styled.h3`
   font-size: 1.2rem;
   margin: 0;
+  color: white;
 `;
 
 const Detail = styled.p`
-  font-size: 1.0rem;
+  font-size: 1rem;
+  color: white;
   margin: 0;
-`
+`;
 
 const Director = styled.p`
-  font-size: 1.0rem;
+  font-size: 1rem;
+  color: white;
   margin: 0;
-`
+`;
 
 const Message = styled.p`
   font-size: 16px;
   color: #666;
+  color: white;
   text-align: center;
   margin-top: 20px;
 `;
 
-const SearchResults = ({ results, onMovieClick, isLoading, activeTab, defaultResults, searchTerm }) => {
+const SearchResults = ({
+  results,
+  onMovieClick,
+  isLoading,
+  activeTab,
+  defaultResults,
+  searchTerm,
+}) => {
   if (isLoading) {
     return <Message>로딩 중...</Message>;
   }
@@ -65,8 +87,14 @@ const SearchResults = ({ results, onMovieClick, isLoading, activeTab, defaultRes
     return (
       <ResultsContainer $isGrid={false}>
         {defaultResults.map((result) => (
-          <ResultItem key={result.movieId} onClick={() => onMovieClick(result.movieId)}>
-            <Poster src={result.poster || result.profileImage} alt={result.title || result.name} />
+          <ResultItem
+            key={result.movieId}
+            onClick={() => onMovieClick(result.movieId)}
+          >
+            <Poster
+              src={result.poster || result.profileImage}
+              alt={result.title || result.name}
+            />
             <Content>
               <Title>{result.movieTitle || result.name}</Title>
               <Detail>{result.releaseAt}</Detail>
@@ -82,12 +110,14 @@ const SearchResults = ({ results, onMovieClick, isLoading, activeTab, defaultRes
     <ResultsContainer $isGrid={false}>
       {results.map((result) => (
         <ResultItem key={result.id} onClick={() => onMovieClick(result.id)}>
-          <Poster src={result.poster || result.profileImage} alt={result.title || result.name} />
+          <Poster
+            src={result.poster || result.profileImage}
+            alt={result.title || result.name}
+          />
           <Content>
             <Title>{result.title || result.name}</Title>
             <Detail>{result.releasedAt}</Detail>
             <Director>감독: {result.director}</Director>
-            
           </Content>
         </ResultItem>
       ))}

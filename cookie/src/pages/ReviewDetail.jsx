@@ -9,6 +9,8 @@ import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
 import axios from "axios";
 import serverBaseUrl from "../config/apiConfig";
+import LoginModal from "../components/common/LoginModal";
+import useAuthStore from "../stores/useAuthStore";
 
 const Container = styled.div`
   padding: 20px;
@@ -228,6 +230,7 @@ const ModalContent = styled.div`
 const ReviewDetail = () => {
   const { reviewId } = useParams();
   const navigate = useNavigate();
+  const { openLoginModal } = useAuthStore();
   const [reviewData, setReviewData] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
@@ -247,7 +250,9 @@ const ReviewDetail = () => {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axios.get(`${serverBaseUrl}/api/reviews/${reviewId}`);
+        const response = await axios.get(
+          `${serverBaseUrl}/api/reviews/${reviewId}`
+        );
         console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
@@ -267,7 +272,6 @@ const ReviewDetail = () => {
     const previousLiked = likedByUser;
     const previousLikeCount = reviewData.reviewLike;
 
-    // 상태를 임시로 업데이트
     setLikedByUser(!previousLiked);
     setReviewData((prevData) => ({
       ...prevData,
@@ -278,7 +282,7 @@ const ReviewDetail = () => {
       await axios.post(`${serverBaseUrl}/api/users/review-like/${reviewId}`);
     } catch (error) {
       console.error("Failed to toggle like:", error);
-      toast.error("좋아요 처리에 실패했습니다.");
+      openLoginModal();
       // 오류 발생 시 이전 상태로 복구
       setLikedByUser(previousLiked);
       setReviewData((prevData) => ({
@@ -288,7 +292,6 @@ const ReviewDetail = () => {
     }
   };
   /*
-
   const toggleLike = async () => {
     const userId = getUserIdFromToken();
     if (!userId) return;
@@ -315,7 +318,7 @@ const ReviewDetail = () => {
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("refreshToken");
     if (!token) {
-      navigate("/login");
+      openLoginModal();
       return null;
     }
     try {
@@ -335,10 +338,13 @@ const ReviewDetail = () => {
     }
 
     try {
-      await axios.put(`${serverBaseUrl}/api/reviews/comments/${editingComment.id}`, {
-        reviewId,
-        comment: editingComment.text,
-      });
+      await axios.put(
+        `${serverBaseUrl}/api/reviews/comments/${editingComment.id}`,
+        {
+          reviewId,
+          comment: editingComment.text,
+        }
+      );
 
       setReviewData((prevData) => ({
         ...prevData,
@@ -431,7 +437,7 @@ const ReviewDetail = () => {
       window.location.reload();
     } catch (error) {
       console.error("Error during comment submission:", error);
-      toast.error("댓글 작성에 실패했습니다.");
+      openLoginModal();
     } finally {
       setIsSubmitting(false); // 플래그 해제
     }
@@ -456,6 +462,10 @@ const ReviewDetail = () => {
     }
   };
 
+  const handlePosterClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   return (
     <Container>
       <DetailHeader onBack={() => navigate(-1)} />
@@ -470,6 +480,7 @@ const ReviewDetail = () => {
         handleUpdateReview={handleUpdateReview}
         isMenuOpen={isMenuOpen && !fromLikedReviews}
         toggleMenu={fromLikedReviews ? undefined : toggleMenu}
+        onPosterClick={() => handlePosterClick(reviewData.movie?.movieId)}
       />
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSectionStyled>
@@ -499,9 +510,8 @@ const ReviewDetail = () => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 handleAddComment(); // 댓글 추가 함수 호출
-                }
               }
-            }
+            }}
           />
           <button
             onClick={() => {

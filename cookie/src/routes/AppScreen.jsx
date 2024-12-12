@@ -20,6 +20,7 @@ import SelectedProfileIcon from "/src/assets/images/selected_profile.svg";
 import Notification from "../components/common/Notification";
 import { Toaster } from "react-hot-toast";
 import ToggleSwitch from "../components/common/ToggleSwitch";
+import useAuthStore from "../stores/useAuthStore";
 
 const Container = styled.div`
   position: relative;
@@ -201,7 +202,6 @@ const AppScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const userInfo = useUserStore((state) => state.getUserInfo());
-
   const handleLogoClick = () => {
     navigate("/");
   };
@@ -235,8 +235,8 @@ const AppScreen = () => {
               <Logo onClick={handleLogoClick}>
                 {/* <img src={CookieLogo} alt="Cookie Logo" /> */}
               </Logo>
-              <div className="header-right">                
-                {userInfo.nickName ? (<Notification />) : (<button>로그인</button>)}
+              <div className="header-right">
+                {userInfo.nickname ? <Notification /> : <button>로그인</button>}
               </div>
             </HeaderContainer>
           )}

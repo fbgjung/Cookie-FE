@@ -11,9 +11,8 @@ import ChartSection from "../components/matchup/ChartSection";
 import ChatUI from "../components/matchup/ChatUI";
 import { useParams, useLocation } from "react-router-dom";
 import ScrollToTop from "../components/common/ScrollToTop";
-
 import SnowEffect from "../components/common/SnowEffect";
-import axios from "axios";
+import Spinner from "../components/common/Spinner";
 import axiosInstance from "../api/auth/axiosInstance";
 import serverBaseUrl from "../config/apiConfig";
 
@@ -39,58 +38,6 @@ const Container = styled.div`
   overflow-x: hidden;
 `;
 
-const sampleData = {
-  matchUpTitle: "크리스마스 빅매치",
-  startAt: "2024-11-21T17:21:03",
-  entAt: "2024-12-11T02:48:05",
-  movie1: {
-    movieTitle: "나 홀로 집에",
-    moviePoster: null,
-    movieLike: 12,
-    charmPoint: {
-      ost: 20,
-      direction: 18,
-      story: 15,
-      dialogue: 25,
-      visual: 30,
-      acting: 35,
-      specialEffect: 15,
-    },
-    emotionPoint: {
-      touching: 25,
-      angry: 5,
-      joy: 35,
-      immersion: 30,
-      excited: 20,
-      empathy: 15,
-      tension: 10,
-    },
-  },
-  movie2: {
-    movieTitle: "뭐 있더라",
-    moviePoster: null,
-    movieLike: 22,
-    charmPoint: {
-      ost: 15,
-      direction: 25,
-      story: 20,
-      dialogue: 18,
-      visual: 28,
-      acting: 20,
-      specialEffect: 25,
-    },
-    emotionPoint: {
-      touching: 20,
-      angry: 10,
-      joy: 30,
-      immersion: 25,
-      excited: 15,
-      empathy: 10,
-      tension: 15,
-    },
-  },
-};
-
 const MatchupPage = () => {
   const { matchUpId } = useParams();
   const location = useLocation();
@@ -98,16 +45,19 @@ const MatchupPage = () => {
   const [isVoteEnded, setIsVoteEnded] = useState(false);
   const [stompClient, setStompClient] = useState(null);
   const [isConnected, setIsConnected] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchMatchUpData = async () => {
+    setIsLoading(true);
     try {
       const endpoint = `/api/matchups/${matchUpId || 1}`;
       const response = await axiosInstance.get(endpoint);
-      setMatchUpData(response.data.response || sampleData);
+      setMatchUpData(response.data.response || {});
       console.log(response.data.response);
     } catch (error) {
       console.error("API 요청 실패:", error);
-      setMatchUpData(sampleData);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -155,8 +105,12 @@ const MatchupPage = () => {
     setIsVoteEnded(true);
   };
 
-  if (!matchUpData) {
-    return <Container>로딩 중...</Container>;
+  if (isLoading || !matchUpData) {
+    return (
+      <Container>
+        <Spinner />
+      </Container>
+    );
   }
 
   return (
@@ -174,14 +128,14 @@ const MatchupPage = () => {
             movieId: matchUpData.movie1.movieId,
             src:
               matchUpData.movie1.moviePoster ||
-              "/src/assets/images/matchup/testposter.png",
+              "/assets/images/main/cookie_icon.svg",
             title: matchUpData.movie1.movieTitle,
           },
           {
             movieId: matchUpData.movie2.movieId,
             src:
               matchUpData.movie2.moviePoster ||
-              "/src/assets/images/matchup/testposter1.png",
+              "/assets/images/main/cookie_icon.svg",
             title: matchUpData.movie2.movieTitle,
           },
         ]}

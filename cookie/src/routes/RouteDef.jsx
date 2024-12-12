@@ -26,6 +26,8 @@ import ErrorPage from "../pages/ErrorPage";
 import MyAllReviewList from "../pages/MyAllReviewList";
 import CategoryMovieFeed from "../pages/CategoryMovieFeed";
 import Notification from "../pages/Notification";
+import PointHistory from "../components/matchup/PointSection";
+import PointHistoryPage from "../pages/PointHistoryPage";
 
 export const AppRouteDef = {
   Main: {
@@ -266,4 +268,12 @@ export const AppRouteDef = {
       </PrivateRoute>
     ),
   }
+  PointHistory: {
+    path: "/point-history",
+    element: (
+      <PrivateRoute>
+        <PointHistoryPage />
+      </PrivateRoute>
+    ),
+  },
 };
