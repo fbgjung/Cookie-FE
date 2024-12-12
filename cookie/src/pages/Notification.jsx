@@ -46,7 +46,7 @@ const Notification = () => {
 
   const handleMarkAsRead = async (notificationId) => {
     try {
-      await axiosInstance.post("/api/notification/read", { notificationId });
+      await axiosInstance.post("/api/notification/read-status", { notificationId });
 
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
