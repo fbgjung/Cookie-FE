@@ -93,8 +93,14 @@ const MyPage = () => {
       try {
         const response = await axiosInstance.get("/api/users");
 
-        const { nickname, profileImage, badge, genreScores, reviews } =
-          response.data.response;
+        const {
+          nickname,
+          profileImage,
+          badge,
+          badgePoint,
+          genreScores,
+          reviews,
+        } = response.data.response;
 
         setUserData({ nickname, profileImage });
         setBadgePoint(badgePoint || 0);
