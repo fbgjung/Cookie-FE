@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
+import goBackBtn from "../assets/images/main/goBack_wh.svg";
 
 const CategoryMovieFeed = () => {
   const location = useLocation();
@@ -14,7 +15,7 @@ const CategoryMovieFeed = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const observer = useRef();
-  const navivate = useNavigate();
+  const navigate = useNavigate();
 
   const fetchMovies = async (page) => {
     if (isLoading || page >= totalPages) return;
@@ -56,27 +57,33 @@ const CategoryMovieFeed = () => {
   }, []);
 
   const handleMovieClick = (movieId) => {
-    navivate(`/movie/${movieId}`);
+    navigate(`/movie/${movieId}`);
   };
   return (
     <Container>
+      <GoBackBtn onClick={() => navigate(-1)}>
+        <img src={goBackBtn} />
+      </GoBackBtn>
       <Header>
         {mainCategory} - {subCategory}
       </Header>
+
       <CategoryTitle></CategoryTitle>
       <MovieList>
-        {movies.map((movie, index) => (
-          <MovieItem
-            key={movie.id}
-            ref={index === movies.length - 1 ? lastMovieElementRef : null}
-            onClick={() => handleMovieClick(movie.id)}
-          >
-            <Poster src={movie.poster} alt={movie.title} />
-            <Info>
-              <Title>{movie.title}</Title>
-            </Info>
-          </MovieItem>
-        ))}
+        <div className="movie__List--info">
+          {movies.map((movie, index) => (
+            <MovieItem
+              key={movie.id}
+              ref={index === movies.length - 1 ? lastMovieElementRef : null}
+              onClick={() => handleMovieClick(movie.id)}
+            >
+              <Poster src={movie.poster} alt={movie.title} />
+              <Info>
+                <Title>{movie.title}</Title>
+              </Info>
+            </MovieItem>
+          ))}
+        </div>
       </MovieList>
       {isLoading && <Loading>Loading...</Loading>}
     </Container>
@@ -88,24 +95,43 @@ export default CategoryMovieFeed;
 const Container = styled.div`
   padding: 20px;
   max-width: 800px;
+  min-width: 600px;
+  min-height: 1245px;
   margin: 0 auto;
   background-color: #000000;
 `;
-
+const GoBackBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 1rem;
+  margin-bottom: 1.5rem;
+`;
 const Header = styled.h2`
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
   text-align: center;
+  color: white;
 `;
 
-const CategoryTitle = styled.div``;
+const CategoryTitle = styled.div`
+  color: white;
+  font-size: 30px;
+  margin-bottom: 1rem;
+`;
 
 const MovieList = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
   justify-content: center;
-  align-items: center;
+
+  .movie__List--info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    justify-content: start;
+    align-items: center;
+    padding: 0 2em;
+  }
 `;
 
 const MovieItem = styled.div`
@@ -125,6 +151,7 @@ const Poster = styled.img`
 
 const Info = styled.div`
   font-size: 14px;
+  color: white;
 `;
 
 const Title = styled.div`
