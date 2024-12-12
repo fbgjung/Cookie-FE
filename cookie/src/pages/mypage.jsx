@@ -162,6 +162,9 @@ const MyPage = () => {
         console.log("FCM 토큰 삭제 성공");
 
         logOut();
+        sessionStorage.clear();
+        localStorage.clear();
+
         toast.success("로그아웃 되었습니다.");
         navigate("/login");
       } catch (error) {
