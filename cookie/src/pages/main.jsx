@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import MatchUp from "../components/main/MatchUp";
+// import MatchUp from "../components/main/MatchUp";
+import MatchUpSection from "../components/main/MatchUpSection";
 import AdminRecommend from "../components/main/AdminRecommend";
 import CookieMovies from "../components/main/CookieMovies";
 import SpecialMovie from "../components/main/SpecialMovie";
@@ -8,6 +9,52 @@ import TopButton from "../components/searchpage/TopButton";
 import { useEffect, useState } from "react";
 import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
+import Question from "../components/main/Question"
+
+const Main = () => {
+  const [showTopButton, setShowTopButton] = useState(false);
+  const { isLogined } = useAuthStore();
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      setShowTopButton(scrollTop > 200);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <>
+      {/* <HeaderWrapper></HeaderWrapper> */}
+      <MainContainer>
+        <Content>
+          <MatchUpSection />
+          <AdminRecommend />
+          <CookieMovies />
+          <SpecialMovie categorydata={categoryData} />
+          <GenreMovie categorydata={categoryData} />
+          <Question />
+          </Content>
+        <LoginModal />
+        <WriteReviewButton onClick={() => isLogined("/searchmov")}>
+          리뷰 작성하기
+        </WriteReviewButton>
+        <TopButton visible={showTopButton} onClick={scrollToTop} />
+      </MainContainer>
+      <NavbarWrapper></NavbarWrapper>
+    </>
+  );
+};
+
+export default Main;
+
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -21,7 +68,7 @@ const MainContainer = styled(CommonContainer)`
   flex-direction: column;
   min-height: 100vh;
   background-color: white;
-  margin-bottom: 50px;
+  background-color: black;
 `;
 
 const Content = styled.div`
@@ -35,17 +82,17 @@ const Content = styled.div`
   }
 `;
 
-const HeaderWrapper = styled(CommonContainer)`
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  background-color: #04012d;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+// const HeaderWrapper = styled(CommonContainer)`
+//   position: fixed;
+//   top: 0;
+//   z-index: 100;
+//   background-color: #04012d;
+//   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 
-  @media (max-width: 600px) {
-    padding: 0 10px;
-  }
-`;
+//   @media (max-width: 600px) {
+//     padding: 0 10px;
+//   }
+// `;
 
 const NavbarWrapper = styled(CommonContainer)`
   position: fixed;
@@ -64,7 +111,7 @@ const WriteReviewButton = styled.button`
   bottom: 9.375rem;
   right: calc(50% - 20.88rem);
   transform: translateX(-50%);
-  background-color: var(--main);
+  background-color: #AAD6E7;
   color: var(--text);
   font-size: 1rem;
   font-weight: 700;
@@ -76,19 +123,19 @@ const WriteReviewButton = styled.button`
   z-index: 1000;
 
   &:hover {
-    background-color: var(--main);
-  }
-  @media (max-width: 600px) {
-    font-size: 0.8rem;
-    padding: 0.5rem 0.8125rem;
-    right: calc(50% - 15.5rem);
-    bottom: 8rem;
-  }
-  @media (max-width: 390px) {
-    font-size: 0.75rem;
-    padding: 0.5rem 0.6875rem;
-    right: calc(50% - 14.1rem);
-    bottom: 6rem;
+    background-color: #82DCFF;
+    @media (max-width: 600px) {
+      font-size: 0.8rem;
+      padding: 0.5rem 0.8125rem;
+      right: calc(50% - 15.5rem);
+      bottom: 8rem;
+    }
+    @media (max-width: 390px) {
+      font-size: 0.75rem;
+      padding: 0.5rem 0.6875rem;
+      right: calc(50% - 14.1rem);
+      bottom: 6rem;
+    }
   }
 `;
 
@@ -118,8 +165,8 @@ const categoryData = [
   { id: 23, mainCategory: "시즌", subCategory: "포근한 가을" },
   { id: 24, mainCategory: "시즌", subCategory: "눈 오는 겨울" },
   { id: 25, mainCategory: "시즌", subCategory: "어린이날" },
-  { id: 26, mainCategory: "시즌", subCategory: "크리스마스" },
   { id: 27, mainCategory: "시즌", subCategory: "새해" },
+  { id: 26, mainCategory: "시즌", subCategory: "크리스마스" },
   { id: 28, mainCategory: "시즌", subCategory: "명절" },
   { id: 29, mainCategory: "테마", subCategory: "실화를 소재로 한" },
   { id: 30, mainCategory: "테마", subCategory: "가족과 함께" },
@@ -134,46 +181,3 @@ const categoryData = [
   { id: 39, mainCategory: "연령대", subCategory: "40대" },
   { id: 40, mainCategory: "연령대", subCategory: "50대" },
 ];
-const Main = () => {
-  const [showTopButton, setShowTopButton] = useState(false);
-  const { isLogined } = useAuthStore();
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
-      setShowTopButton(scrollTop > 200);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <>
-      <HeaderWrapper></HeaderWrapper>
-      <MainContainer>
-        <img src={"https://via.placeholder.com/600x250"} alt="배너" />
-        <Content>
-          <MatchUp />
-          <AdminRecommend />
-          <CookieMovies />
-          <SpecialMovie categorydata={categoryData} />
-          <GenreMovie categorydata={categoryData} />
-        </Content>
-        <LoginModal />
-        <WriteReviewButton onClick={() => isLogined("/searchmov")}>
-          리뷰 작성하기
-        </WriteReviewButton>
-        <TopButton visible={showTopButton} onClick={scrollToTop} />
-      </MainContainer>
-      <NavbarWrapper></NavbarWrapper>
-    </>
-  );
-};
-
-export default Main;

@@ -24,17 +24,14 @@ import AdminMovie from "../pages/admin/AdminMovie";
 import CastDetail from "../components/movieDetailPage/CastDetail";
 import ErrorPage from "../pages/ErrorPage";
 import MyAllReviewList from "../pages/MyAllReviewList";
+import CategoryMovieFeed from "../pages/CategoryMovieFeed";
 import PointHistory from "../components/matchup/PointSection";
 import PointHistoryPage from "../pages/PointHistoryPage";
 
 export const AppRouteDef = {
   Main: {
     path: "/",
-    element: (
-      <PrivateRoute>
-        <Main />
-      </PrivateRoute>
-    ),
+    element: <Main />,
   },
   Search: {
     path: "/search",
@@ -250,6 +247,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <CastDetail />
+      </PrivateRoute>
+    ),
+  },
+  categoryMovieFeed: {
+    path: "/category/movies",
+    element: (
+      <PrivateRoute>
+        <CategoryMovieFeed />
       </PrivateRoute>
     ),
   },

@@ -1,144 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import specialIcon from "../../assets/images/main/special_icon.svg";
-import { useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../../api/auth/axiosInstance";
-
-const SpecialMovieList = styled.div`
-  position: relative;
-  overflow-x: hidden;
-
-  .specialMovie__title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .movie__categoty {
-    display: flex;
-    gap: 0.4rem;
-    margin: 0.5rem 0 1rem 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .specialMovie__list {
-    display: flex;
-    align-items: start;
-    padding: 0.625rem;
-    gap: 1rem;
-    overflow-x: scroll;
-  }
-
-  .specialMovie__list--info {
-    display: flex;
-    gap: 0.5rem;
-    flex-direction: column;
-    align-items: start;
-    justify-content: center;
-    cursor: pointer;
-    width: 7.75rem;
-  }
-
-  .specialMovie__list--info img {
-    border-radius: 0.75rem;
-    width: 7.75rem;
-    height: 11.07rem;
-  }
-
-  .specialMovie__list--info p {
-    text-align: start;
-  }
-
-  .movie__info--sub {
-    color: #afafaf;
-    font-size: 0.82rem;
-  }
-  @media (max-width: 768px) {
-    .specialMovie__title {
-      font-size: 0.8rem;
-    }
-    .movie__categoty {
-      gap: 0.3rem;
-      margin: 0.3rem 0 0.3rem 0;
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
-    .specialMovie__list {
-      gap: 0.5rem;
-      padding: 0.625rem 0;
-      width: 5.875rem;
-    }
-    .specialMovie__list p {
-      font-size: 0.62rem;
-    }
-    .specialMovie__list--info img {
-      border-radius: 0.75rem;
-      width: 5.875rem;
-      height: 9.1875rem;
-    }
-    .specialMovie__list--info p {
-      text-align: start;
-      font-size: 0.7rem;
-    }
-  }
-
-  @media (max-width: 390px) {
-    .specialMovie__list--info {
-      gap: 0.3rem;
-      padding: 0.625rem 0;
-    }
-    .specialMovie__list {
-      width: 5.35rem;
-    }
-    .specialMovie__list--info img {
-      border-radius: 0.75rem;
-      width: 5.375rem;
-      height: 8.6875rem;
-    }
-    .specialMovie__list--info p {
-      font-size: 0.65rem;
-    }
-  }
-`;
-
-const ThemeBtn = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin: 0 0.8rem 0.8rem 0;
-  font-size: 1rem;
-  color: ${(props) => (props.$isSelected ? "var(--text)" : "#afafaf")};
-  font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
-
-  @media (max-width: 768px) {
-    margin: 0 0.7rem 0.5rem 0;
-    font-size: 0.9rem;
-  }
-`;
-
-const CategoryBtn = styled.button`
-  background-color: ${(props) => (props.$isSelected ? "var(--sub)" : "white")};
-  color: ${(props) => (props.$isSelected ? "var(--text)" : "var(--text)")};
-  font-size: 13px;
-  font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
-  border-radius: 5rem;
-  border: 1px solid var(--sub);
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  &:hover {
-    background-color: var(--sub);
-    color: var(--text);
-  }
-  white-space: nowrap;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-    padding: 0.4rem 0.8rem;
-  }
-`;
+import { useNavigate } from "react-router-dom";
+import serverBaseUrl from "../../config/apiConfig";
+import axios from "axios";
 
 function SpecialMovie({ categorydata }) {
   const filteredCategoryData = categorydata.filter(
@@ -147,8 +11,9 @@ function SpecialMovie({ categorydata }) {
   const [selectedMainCategory, setSelectedMainCategory] = useState("시즌");
   const [selectedSubCategory, setSelectedSubCategory] = useState("설레는봄");
   const [movies, setMovies] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const handleMainCategoryClick = (mainCategory) => {
     setSelectedMainCategory(mainCategory);
@@ -160,18 +25,28 @@ function SpecialMovie({ categorydata }) {
 
   const fetchMoviesByCategory = async (mainCategory, subCategory) => {
     if (!mainCategory || !subCategory) return;
+    const cacheKey = `${mainCategory}_${subCategory}`;
+    const cachedMovies = localStorage.getItem(cacheKey);
 
-    try {
-      const response = await axiosInstance.get("/api/movies/categoryMovies", {
-        params: {
-          mainCategory: mainCategory,
-          subCategory: subCategory,
-        },
-      });
+    if (cachedMovies) {
+      setMovies(JSON.parse(cachedMovies));
+    } else {
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/categoryMovies`,
+          {
+            params: {
+              mainCategory: mainCategory,
+              subCategory: subCategory,
+            },
+          }
+        );
 
-      setMovies(response.data.movies);
-    } catch (error) {
-      console.error("영화 불러오기 실패:", error);
+        setMovies(response.data.movies);
+        localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
+      } catch (error) {
+        console.error("영화 불러오기 실패:", error);
+      }
     }
   };
 
@@ -179,7 +54,6 @@ function SpecialMovie({ categorydata }) {
     new Set(filteredCategoryData.map((item) => item.mainCategory))
   );
 
-  // 선택된 메인 카테고리의 세부카테고리
   const getSubCategories = (mainCategory) => {
     return filteredCategoryData
       .filter((item) => item.mainCategory === mainCategory)
@@ -209,13 +83,25 @@ function SpecialMovie({ categorydata }) {
     }
   }, [selectedMainCategory, selectedSubCategory]);
 
+  const handleMoreView = (mainCategory, subCategory) => {
+    navigate("/category/movies", { state: { mainCategory, subCategory } });
+  };
+
+  const handleNext = () => {
+    if (currentIndex < movies.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
   return (
     <>
       <SpecialMovieList>
-        <div className="specialMovie__title">
-          <img src={specialIcon} alt="special_icon" />
-          <h2>뭘 좋아할지 몰라서 다준비했어</h2>
-        </div>
+        <Title>영화 선택 시간을 덜어드려요</Title>
         <div>
           <div>
             {mainCategories.map((mainCategory, index) => (
@@ -230,7 +116,7 @@ function SpecialMovie({ categorydata }) {
           </div>
 
           {selectedMainCategory && (
-            <div className="movie__categoty">
+            <div className="movie__category">
               {getSubCategories(selectedMainCategory).map(
                 (subCategory, index) => (
                   <CategoryBtn
@@ -244,32 +130,56 @@ function SpecialMovie({ categorydata }) {
               )}
             </div>
           )}
+          <MoreViewText
+            onClick={() =>
+              handleMoreView(selectedMainCategory, selectedSubCategory)
+            }
+          >
+            {selectedSubCategory} 더보기 {">"}
+          </MoreViewText>
 
-          <div className="specialMovie__list">
-            {movies.length > 0 ? (
-              movies.map((movie, index) => (
-                <div
-                  key={index}
-                  className="specialMovie__list--info"
-                  onClick={() => handleMovieClick(movie.id)}
-                >
-                  <img src={movie.poster} alt={movie.title} />
-                  <div>
-                    <p>
-                      <strong>{movie.title}</strong>
-                    </p>
-                    <p>
-                      {new Date(movie.releasedAt).getFullYear()}﹒
-                      {movie.country}
-                    </p>
-                    <p className="movie__info--sub">리뷰: {movie.reviews}개</p>
-                    <p className="movie__info--sub">좋아요: {movie.likes}개</p>
+          <div className="specialMovie__movie--wrapper">
+            <button
+              className="prev"
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+            >
+              &lt;
+            </button>
+            <div
+              className="specialMovie__list"
+              style={{
+                transform: `translateX(-${currentIndex * 40}%)`,
+              }}
+            >
+              {movies &&
+                movies.map((movie, index) => (
+                  <div
+                    key={index}
+                    className="specialMovie__list--info"
+                    onClick={() => handleMovieClick(movie.id)}
+                  >
+                    <Poster src={movie.poster} alt={movie.title} />
+                    <MovieInfo>
+                      <Review>
+                        <ReviewIcon alt="Review Icon" />
+                        <Count>{movie.reviews}</Count>
+                      </Review>
+                      <Like>
+                        <LikeIcon alt="Review Icon" />
+                        <Count>{movie.likes}</Count>
+                      </Like>
+                    </MovieInfo>
                   </div>
-                </div>
-              ))
-            ) : (
-              <p>해당 영화가 없어요🥲</p>
-            )}
+                ))}
+            </div>
+            <button
+              className="next"
+              onClick={handleNext}
+              disabled={currentIndex === movies.length - 1}
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </SpecialMovieList>
@@ -278,3 +188,178 @@ function SpecialMovie({ categorydata }) {
 }
 
 export default SpecialMovie;
+
+const SpecialMovieList = styled.div`
+  position: relative;
+  .movie__category {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0.5rem 0 0 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 0 0 0.375rem;
+  }
+
+  .specialMovie__movie--wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .specialMovie__list {
+    display: flex;
+    transition: transform 1s ease;
+    align-items: start;
+  }
+
+  .prev,
+  .next {
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+  }
+
+  .prev {
+    left: -15px;
+  }
+
+  .next {
+    right: -15px;
+  }
+
+  .prev:disabled,
+  .next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const ThemeBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0 0.8rem 0 0;
+  font-size: 1rem;
+  color: ${(props) => (props.$isSelected ? "#82DCFF" : "#afafaf")};
+  font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
+  padding: 0 0 0 0.375rem;
+
+  @media (max-width: 768px) {
+    margin: 0 0.7rem 0.5rem 0;
+    font-size: 0.9rem;
+  }
+`;
+
+const CategoryBtn = styled.button`
+  background-color: ${(props) => (props.$isSelected ? "var(--sub)" : "white")};
+  color: ${(props) => (props.$isSelected ? "var(--text)" : "var(--text)")};
+  font-size: 13px;
+  font-weight: ${(props) => (props.$isSelected ? "bold" : "500")};
+  border-radius: 0.3rem;
+  border: 1px solid var(--sub);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--sub);
+    color: var(--text);
+  }
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 0.4rem 0.8rem;
+  }
+`;
+
+const Title = styled.h2`
+  color: var(--text-wh);
+  padding: 2rem 0 0.7rem 0.375rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`;
+
+const Review = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.375rem;
+`;
+
+const ReviewIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url("/assets/images/main/review.svg");
+  padding-right: 0.4rem;
+`;
+
+const Count = styled.p`
+  font-size: 0.8rem;
+  color: #ffffff;
+`;
+
+const Like = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.375rem;
+`;
+
+const LikeIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  background: no-repeat center/cover url("/assets/images/main/like.svg");
+`;
+
+const MovieInfo = styled.div`
+  display: flex;
+`;
+
+const Poster = styled.img`
+  transition: transform 0.3s ease;
+  border-radius: 0.65rem;
+  width: 8.75rem;
+  height: 12.0625rem;
+  padding: 0.4rem 0.375rem;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.3rem;
+    width: 7rem;
+    height: 10rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.4rem 0.3rem;
+    width: 6.4rem;
+    height: 9.5rem;
+  }
+`;
+
+const MoreViewText = styled.p`
+  color: #ffffff;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+  font-size: 0.8rem;
+`;

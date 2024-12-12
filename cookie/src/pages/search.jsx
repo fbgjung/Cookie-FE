@@ -5,6 +5,7 @@ import axios from "axios";
 import SearchBar from "../components/searchpage/SearchBar";
 import SearchResults from "../components/searchpage/SearchResults";
 import TopButton from "../components/searchpage/TopButton";
+import serverBaseUrl from "../config/apiConfig";
 
 const Container = styled.div`
   flex: 1;
@@ -77,11 +78,13 @@ const Search = () => {
   const [page, setPage] = useState(0); // 페이지 번호
   const [hasMore, setHasMore] = useState(true); // 추가 데이터 여부
   const [showTopButton, setShowTopButton] = useState(false); // 상단 이동 버튼 상태
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchSearchResults = async () => {
+    setIsLoading(true);
     try {
       if (searchTerm.trim()) {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/search`, {
+        const response = await axios.get(`${serverBaseUrl}/api/search`, {
           params: { type: activeTab, keyword: searchTerm, page, size: 10 },
         });
         const newResults = response.data || [];
@@ -91,7 +94,7 @@ const Search = () => {
         );
         setHasMore(!response.data?.last);
       } else {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/search/default`);
+        const response = await axios.get(`${serverBaseUrl}/api/search/default`);
         const defaultResults = response.data.response || [];
         console.log("디폴트",defaultResults);
         setDefaultResults(defaultResults);
@@ -101,6 +104,8 @@ const Search = () => {
       console.error("Error fetching search results:", error);
       setResults([]);
       setHasMore(false);
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
   
@@ -185,9 +190,10 @@ const Search = () => {
         <SearchResults
           results={results || []} // results가 undefined인 경우 빈 배열로 전달
           onMovieClick={handleMovieClick}
-          isLoading={results.length === 0 && searchTerm.trim()} // 로딩 상태 처리
+          isLoading={isLoading} // 로딩 상태 처리
           activeTab={activeTab}
           defaultResults={defaultResults || []}
+          searchTerm={searchTerm}
         />
       </ContentWrapper>
       {showTopButton && <TopButton onClick={scrollToTop} />}

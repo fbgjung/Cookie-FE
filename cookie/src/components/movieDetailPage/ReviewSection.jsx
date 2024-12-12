@@ -134,6 +134,10 @@ const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) =
   const navigate = useNavigate();
   console.log(reviews);
 
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`);
+  };
+
   return (
     <ReviewWrapper>
       <Title>
@@ -143,7 +147,7 @@ const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) =
       </Title>
       <div className="review-grid">
         {reviews.map((review, index) => (
-          <div className="review-item" key={index}>
+          <div className="review-item" key={index} onClick={() => handleReviewClick(review.reviewId)}>
             
             <ReviewUserProfile>
               <img
@@ -177,6 +181,7 @@ const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) =
 ReviewSection.propTypes = {
   reviews: PropTypes.arrayOf(
     PropTypes.shape({
+      reviewId: PropTypes.number.isRequired,
       userName: PropTypes.string.isRequired,
       comment: PropTypes.string.isRequired,
       likes: PropTypes.number.isRequired,

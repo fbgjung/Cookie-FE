@@ -38,12 +38,12 @@ const CastSection = ({ actors = [], director }) => {
   const navigate = useNavigate();
 
   const castList = [
-    { ...director, role: 'director' },
-    ...actors.map((actor) => ({ ...actor, role: 'actor' }))
+    { ...director, role: "director" },
+    ...actors.map((actor) => ({ ...actor, role: "actor" })),
   ];
 
   const handleCastClick = (id, role) => {
-    if (role === 'director') {
+    if (role === "director") {
       navigate(`/movie/director/${id}`);
     } else {
       navigate(`/movie/actor/${id}`);
@@ -55,14 +55,21 @@ const CastSection = ({ actors = [], director }) => {
       <Title>출연/제작</Title>
       <CastGrid>
         {castList.map((person, index) => (
-          <div 
-            key={index} 
-            className="cast-item" 
+          <div
+            key={index}
+            className="cast-item"
             onClick={() => handleCastClick(person.id, person.role)}
           >
-            <img src={person.profileImage || "/default-profile.jpg"} alt={person.name} />
+            <img
+              src={
+                person.profileImage?.endsWith("/null")
+                  ? "/images/default.png"
+                  : person.profileImage || "/images/default.png"
+              }
+              alt={person.name}
+            />
             <span>{person.name} </span>
-            <span>{person.role === 'director' ? '감독' : '출연'}</span>
+            <span>{person.role === "director" ? "감독" : "출연"}</span>
           </div>
         ))}
       </CastGrid>
@@ -79,8 +86,8 @@ CastSection.propTypes = {
   actors: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired, 
-      profileImage: PropTypes.string, 
+      name: PropTypes.string.isRequired,
+      profileImage: PropTypes.string,
     })
   ).isRequired,
 };

@@ -46,7 +46,7 @@ const ReTokenPage = () => {
         );
         const userInfo = userInfoResponse.data.response;
         console.log("유저 정보:", userInfo);
-        setUserInfo(userInfo);
+        setUserInfo({ nickname: userInfo.nickname });
 
         const fcmToken = await requestNotificationPermission();
         console.log("token값", fcmToken);
