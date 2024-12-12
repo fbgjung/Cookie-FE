@@ -202,7 +202,6 @@ const AppScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const userInfo = useUserStore((state) => state.getUserInfo());
-  const { openLoginModal } = useAuthStore();
   const handleLogoClick = () => {
     navigate("/");
   };
@@ -215,10 +214,6 @@ const AppScreen = () => {
   ];
   const isAuthPage = hideHeaderFooterPages.includes(location.pathname);
   const currentPath = location.pathname;
-
-  const handleLoginClick = () => {
-    openLoginModal();
-  };
 
   return (
     <Container>
@@ -241,11 +236,7 @@ const AppScreen = () => {
                 {/* <img src={CookieLogo} alt="Cookie Logo" /> */}
               </Logo>
               <div className="header-right">
-                {userInfo.nickName ? (
-                  <Notification />
-                ) : (
-                  <button onClick={handleLoginClick}>로그인</button>
-                )}
+                {userInfo.nickname ? <Notification /> : <button>로그인</button>}
               </div>
             </HeaderContainer>
           )}
