@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
   padding: 2rem;
@@ -92,33 +93,24 @@ const BadgeHistory = () => {
     navigate(-1);
   };
 
+  const fetchBadgeHistory = async () => {
+    try {
+      const response = await axiosInstance.get("/api/users/badgeHistory");
+      const historyData = response.data.response || [];
+
+      const sortedHistory = historyData.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+
+      setBadgeHistory(sortedHistory);
+    } catch (error) {
+      console.error("뱃지 내역 로딩 실패:", error);
+      setBadgeHistory([]);
+    }
+  };
+
   useEffect(() => {
-    const dummyData = [
-      {
-        movieName: "인셉션",
-        actionName: "리뷰 작성",
-        point: 50,
-        createdAt: "2024-12-10T15:30:00",
-      },
-      {
-        movieName: "인터스텔라",
-        actionName: "좋아요 클릭",
-        point: 20,
-        createdAt: "2024-12-09T12:45:00",
-      },
-      {
-        movieName: "다크 나이트",
-        actionName: "리뷰 추천",
-        point: 100,
-        createdAt: "2024-12-08T18:20:00",
-      },
-    ];
-
-    const sortedHistory = dummyData.sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-    );
-
-    setBadgeHistory(sortedHistory);
+    fetchBadgeHistory();
   }, []);
 
   return (
@@ -135,7 +127,7 @@ const BadgeHistory = () => {
         <HistoryList>
           {badgeHistory.map((item, index) => (
             <HistoryItem key={index}>
-              <MovieName>영화제목 : {item.movieName}</MovieName>
+              <MovieName>영화제목: {item.movieName}</MovieName>
               <HistoryDetails>
                 <p className="action-name">액션: {item.actionName}</p>
                 <p className="points">포인트: +{item.point}P</p>
