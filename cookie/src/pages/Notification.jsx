@@ -1,43 +1,67 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useUserStore from "../stores/useUserStore";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const Notification = () => {
-  const userInfo = useUserStore((state) => state.getUserInfo());
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const dummyData = [
-      {
-        body: "류설윤님이 올드보이에 리뷰를 남겼어요.",
-        senderProfileImage:
-          "https://uplus-bucket.s3.ap-northeast-2.amazonaws.com/aa5ae67f-3%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202024-12-05%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%201.53.50.png",
-        timestamp: "2024-12-12 14:23",
-        reviewId: 79,
-      },
-      {
-        body: "김의진님이 쿵푸팬더에 리뷰를 남겼어요.",
-        senderProfileImage:
-          "https://uplus-bucket.s3.ap-northeast-2.amazonaws.com/6bc46d8d-b_default.jpeg",
-        timestamp: "2024-12-12 15:00",
-        reviewId: 84,
-      },
-    ];
+    const fetchNotifications = async () => {
+      try {
+        const response = await axiosInstance.get("/api/notification");
+        console.log(response.data.response);
+        
+        if (response.data && response.data.response) {
+          const formattedNotifications = response.data.response.map((notification) => {
+            return {
+              notificationId: notification.notificationId,
+              body: notification.body,
+              senderProfileImage: notification.senderProfileImage,
+              timestamp: formatTimestamp(notification.timestamp),
+              reviewId: notification.reviewId,
+              status: notification.status
+            };
+          });
 
-    setNotifications(dummyData);
+          setNotifications(formattedNotifications);
+        }
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotifications();
   }, []);
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+  };
 
   const handleNavigate = (reviewId) => {
     navigate(`/reviews/${reviewId}`);
   };
 
+  const handleMarkAsRead = async (notificationId) => {
+    try {
+      await axiosInstance.post("/api/notification/read", { notificationId });
+
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification.notificationId === notificationId
+            ? { ...notification, status: "READ" }
+            : notification
+        )
+      );
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+  };
+
   return (
     <NotificationContainer>
-      <TitleSection>
-        <h2>{userInfo.nickName}님의 알림 목록</h2>
-      </TitleSection>
       <NoticeWrapper>
         {notifications.length > 0 ? (
           notifications.map((notification, index) => (
@@ -48,15 +72,22 @@ const Notification = () => {
                 className="profile-img"
               />
               <div className="content">
-                <p>{notification.body}</p>
+                <div className="body-and-status">
+                  <p>{notification.body}</p>
+                  {notification.status === "READ" && <span className="read-status">읽음</span>}
+                </div>
                 <span className="timestamp">{notification.timestamp}</span>
               </div>
+            
               <button
-                className="navigate-button"
-                onClick={() => handleNavigate(notification.reviewId)}
-              >
-                &gt;
-              </button>
+                  className="navigate-button"
+                  onClick={() => {
+                    handleMarkAsRead(notification.notificationId);
+                    handleNavigate(notification.reviewId);
+                  }}
+                >
+                  &gt;
+                </button>
             </NoticeItem>
           ))
         ) : (
@@ -69,6 +100,7 @@ const Notification = () => {
 
 export default Notification;
 
+
 const NotificationContainer = styled.div`
   display: flex;
   align-items: center;
@@ -77,22 +109,11 @@ const NotificationContainer = styled.div`
   height: 100vh;
 `;
 
-const TitleSection = styled.div`
-  /* width: 95%; */
-  margin-top: 2rem;
-
-  h2 {
-    color: #000000;
-  }
-`;
-
 const NoticeWrapper = styled.div`
   border-radius: 0.2rem;
   width: 95%;
   margin: 10px 0;
-
 `;
-
 
 const NoticeItem = styled.div`
   display: flex;
@@ -104,6 +125,7 @@ const NoticeItem = styled.div`
   border: 1px solid #ddd;
   border-radius: 0.2rem;
   cursor: pointer;
+
   .profile-img {
     width: 40px;
     height: 40px;
@@ -114,9 +136,20 @@ const NoticeItem = styled.div`
   .content {
     flex: 1;
 
-    p {
-      margin: 0;
-      font-size: 1rem;
+    .body-and-status {
+      display: flex;
+      align-items: center;
+      
+      p {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .read-status {
+        font-size: 0.8rem;
+        color: #4caf50;
+        margin-left: 10px;
+      }
     }
 
     .timestamp {
@@ -141,8 +174,7 @@ const NoticeItem = styled.div`
   }
 
   &:hover {
-    border: px solid #b846ea;
-    background-color: #e9f5f9;
     border: 2px solid #00D6E8;
+    background-color: #e9f5f9;
   }
 `;
