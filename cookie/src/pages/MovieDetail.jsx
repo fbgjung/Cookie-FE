@@ -43,6 +43,7 @@ const MovieDetail = () => {
       setIsLoading(true);
       try {
         const response = await axiosInstance.get(`/api/movies/${id}`);
+        console.log("영화 데이터 로드 성공:", response.data.response);
         setMovieData(response.data.response);
       } catch (error) {
         console.error("영화 데이터 로드 실패:", error);
@@ -92,7 +93,7 @@ const MovieDetail = () => {
         liked={movieData.liked}
       />
       <CastSection director={movieData.director} actors={movieData.actors} />
-      <VideoSection videoUrl={movieData.video} />
+      {movieData.video !== "N/A" && <VideoSection videoUrl={movieData.video} />}
       <GallerySection
         images={movieData.images}
         onImageClick={handleImageClick}
