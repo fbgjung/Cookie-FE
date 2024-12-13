@@ -25,7 +25,7 @@ const LogoutButton = styled.button`
 `;
 
 const WithdrawText = styled.p`
-  margin-top: 10px;
+  margin-top: 80px;
   font-size: 0.9rem;
   color: #999;
   text-decoration: underline;
