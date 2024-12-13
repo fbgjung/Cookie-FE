@@ -9,11 +9,22 @@ import AppPages from "./AppPages";
 import ScrollToTop from "../components/common/ScrollToTop";
 
 const Container = styled.div`
+  position: relative;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
-  width: 100%;
-  min-height: 100vh;
+  align-items: center;
   background: #ffffff;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const ViewArea = styled.div`
