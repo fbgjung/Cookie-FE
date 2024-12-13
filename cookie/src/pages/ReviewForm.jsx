@@ -242,8 +242,13 @@ const ReviewForm = () => {
       isSpoiler,
     };
 
+    console.log("서버로 보낼 데이터:", payload);
+
     try {
       const response = await axiosInstance.post(`/api/reviews`, payload);
+
+      console.log("Axios 요청 정보:", response.config);
+
       if (response.status === 200) {
         toast.success("리뷰가 성공적으로 등록되었습니다.");
         console.log("리뷰 등록 성공:", response.data.response);
