@@ -133,6 +133,21 @@ const SearchInfoText = styled.p`
   }
 `;
 
+const DefaultResultsHeader = styled.div`
+  color: #00c4d3;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`;
+
 const Search = () => {
   const navigate = useNavigate();
 
@@ -257,6 +272,9 @@ const Search = () => {
           </TabButton>
           <Slider activeIndex={activeIndex} />
         </Tabs>
+        {!searchTerm.trim() && (
+          <DefaultResultsHeader>박스오피스 TOP 10</DefaultResultsHeader>
+        )}
         <SearchResults
           results={results || []}
           onMovieClick={handleMovieClick}
