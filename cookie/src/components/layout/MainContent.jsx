@@ -8,7 +8,6 @@ const MainContentContainer = styled.main`
   flex-direction: column;
   overflow-y: auto;
   margin-top: 70px;
-  background-color: black;
   margin-bottom: 60px;
   padding: 0;
   box-sizing: border-box;
@@ -18,6 +17,11 @@ const MainContentContainer = styled.main`
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
+  }
+
+  @media (min-width: 769px) {
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
