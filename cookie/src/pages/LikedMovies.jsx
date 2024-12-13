@@ -8,7 +8,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: 조ㅑㅅ;
+  background-color: #ffffff;
   min-height: 100vh;
   width: 100%;
   max-width: 1200px;
@@ -121,7 +121,7 @@ const MovieInfo = styled.div`
 
 const EmptyMessage = styled.div`
   font-size: 1rem;
-  color: #ffffff;
+  color: #999999;
   text-align: center;
   margin: 30px 0;
 `;

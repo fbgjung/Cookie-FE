@@ -4,6 +4,7 @@ import CookieLogo from "../assets/images/login/cookie_lg.svg";
 import styled from "styled-components";
 import { OAuth_LOGIN_PROVIDER } from "../config/OAuthConfig";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../stores/useAuthStore";
 
 export const LoginContainer = styled.div`
   background-color: #fff4b9;
@@ -85,12 +86,14 @@ const GuestLink = styled.div`
 
 function Login() {
   const navigate = useNavigate();
+  const guestLogin = useAuthStore((state) => state.guestLogin);
 
   const handleLoginClick = (url) => {
     window.location.href = url;
   };
 
   const handleGuestAccess = () => {
+    guestLogin();
     navigate("/");
   };
 

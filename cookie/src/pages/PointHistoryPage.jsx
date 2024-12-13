@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
+import useAuthStore from "../stores/useAuthStore"; // useAuthStore import
+import LoginModal from "../components/common/LoginModal"; // LoginModal import
 
 const Container = styled.div`
   padding: 2rem;
@@ -88,6 +90,8 @@ const EmptyMessage = styled.div`
 const BadgeHistory = () => {
   const [badgeHistory, setBadgeHistory] = useState([]);
   const navigate = useNavigate();
+  const openLoginModal = useAuthStore((state) => state.openLoginModal);
+  const isLogined = useAuthStore((state) => state.isLogined);
 
   const handleBackClick = () => {
     navigate(-1);
@@ -110,23 +114,32 @@ const BadgeHistory = () => {
   };
 
   useEffect(() => {
-    fetchBadgeHistory();
-  }, []);
+    // 로그인 상태일 때만 데이터 요청
+    if (isLogined()) {
+      fetchBadgeHistory();
+    }
+  }, [isLogined]);
+
+  const handleHistoryItemClick = () => {
+    if (!isLogined()) {
+      openLoginModal();
+    } else {
+      // 로그인 상태라면 기존 동작을 계속 유지
+    }
+  };
 
   return (
     <Container>
       <Title>뱃지 포인트 내역</Title>
-
       <BackButton
         src="/assets/images/mypage/ic_back.svg"
         alt="뒤로가기"
         onClick={handleBackClick}
       />
-
       {badgeHistory.length > 0 ? (
         <HistoryList>
           {badgeHistory.map((item, index) => (
-            <HistoryItem key={index}>
+            <HistoryItem key={index} onClick={handleHistoryItemClick}>
               <MovieName>영화제목: {item.movieName}</MovieName>
               <HistoryDetails>
                 <p className="action-name">액션: {item.actionName}</p>
@@ -141,6 +154,7 @@ const BadgeHistory = () => {
       ) : (
         <EmptyMessage>뱃지 포인트를 획득한 내역이 없습니다.</EmptyMessage>
       )}
+      <LoginModal />
     </Container>
   );
 };

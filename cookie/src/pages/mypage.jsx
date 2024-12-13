@@ -105,7 +105,6 @@ const MyPage = () => {
         setUserData({ nickname, profileImage });
         setBadgePoint(badgePoint || 0);
 
-        // 안전하게 badge 설정
         setBadgeData(
           badge?.map((b) => ({
             name: b.name || "배지 없음",
@@ -114,7 +113,6 @@ const MyPage = () => {
           })) || []
         );
 
-        // genreScores 안전하게 접근
         const genreData =
           genreScores?.length > 0
             ? Object.entries(genreScores[0])
@@ -123,7 +121,6 @@ const MyPage = () => {
             : [];
         setGenreScores(genreData);
 
-        // 리뷰 데이터 변환
         const transformedReviews =
           reviews?.map((review) => ({
             reviewId: review.reviewId,
@@ -209,7 +206,15 @@ const MyPage = () => {
 
   const handleNotificationClick = () => {
     navigate("/notifications");
-  }
+  };
+
+  const handlePointHistoryClick = () => {
+    if (!isLogined()) {
+      openLoginModal();
+    } else {
+      navigate("/point-history");
+    }
+  };
   return (
     <>
       <LoginModal />
@@ -237,7 +242,10 @@ const MyPage = () => {
         <MypageContent>
           <BadgeList title={`${userData.nickname}의 배지`} badges={badgeData} />
           {/* <GenreChart data={genreScores} /> */}
-          <PointHistory badgePoint={badgePoint} />
+          <PointHistory
+            badgePoint={badgePoint}
+            onClick={handlePointHistoryClick}
+          />
 
           <FavoriteList title="좋아요" items={favoriteItems} />
           <PushNotificationToggle />
