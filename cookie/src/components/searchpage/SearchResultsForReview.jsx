@@ -1,28 +1,32 @@
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const skeletonLoading = keyframes`
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+`;
 
 const ResultsContainer = styled.div`
   display: grid;
-  grid-template-columns: ${(props) =>
-    props.$isGrid ? "repeat(3, 1fr)" : "1fr"};
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr); /* 항상 3열로 표시 */
+  gap: 15px;
   width: 100%;
-  padding: 10px;
+  padding: 20px;
+  min-height: 300px;
   box-sizing: border-box;
-`;
 
-const ResultItem = styled.div`
-  display: ${(props) => (props.$isGrid ? "block" : "flex")};
-  align-items: ${(props) => (props.$isGrid ? "center" : "flex-start")};
-  gap: ${(props) => (props.$isGrid ? "0" : "10px")};
-  cursor: pointer;
-`;
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr); /* 태블릿에서도 3열로 유지 */
+  }
 
-const Poster = styled.img`
-  width: 20%;
-  aspect-ratio: 1 / 1.4;
-  object-fit: cover;
-  border-radius: 5px;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr); /* 모바일에서도 3열로 유지 */
+    padding: 15px;
+  }
 `;
 
 const Content = styled.div`
@@ -35,72 +39,114 @@ const Title = styled.h3`
   margin: 0;
 `;
 
-const Detail = styled.p`
-  font-size: 1.0rem;
-  margin: 0;
-`
+const ResultItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  height: 100%;
 
-const Director = styled.p`
-  font-size: 1.0rem;
-  margin: 0;
-`
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const PosterSkeleton = styled.div`
+  width: 100%;
+  aspect-ratio: 2/3;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: ${skeletonLoading} 1.5s infinite;
+  border-radius: 8px;
+  min-height: 250px;
+  display: ${(props) => (props.isLoading ? "block" : "none")};
+`;
+
+const Poster = styled.img`
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 8px;
+  min-height: 250px;
+  background-color: #2c2c2c;
+  display: ${(props) => (props.isLoading ? "none" : "block")};
+`;
 
 const Message = styled.p`
   font-size: 16px;
-  color: #666;
+  color: white;
   text-align: center;
   margin-top: 20px;
 `;
 
-const SearchResultsForReview = ({ results, onMovieClick, isLoading, activeTab, defaultResults }) => {
+const EndMessage = styled.p`
+  font-size: 16px;
+  color: #aaaaaa; /* Softer color for less visual disruption */
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+  width: 100%; /* Ensure full width */
+  padding: 10px;
+  box-sizing: border-box; /* Include padding in width calculation */
+  position: relative; /* For better layout stability */
+`;
+
+const SearchResults = ({
+  results,
+  onMovieClick,
+  isLoading,
+  activeTab,
+  defaultResults,
+  searchTerm,
+  hasMore,
+  fetchMoreResults,
+}) => {
+  // 로딩 중일 때 "로딩 중..." 메시지 표시
   if (isLoading) {
     return <Message>로딩 중...</Message>;
   }
 
-  // if (!isLoading && (!results || results.length === 0)) {
-  //   return <Message>검색 결과가 없습니다.</Message>;
-  // }
+  // 검색 결과가 없을 때 "검색 결과가 없습니다." 메시지 표시
+  if (!isLoading && searchTerm.trim() && results.length === 0) {
+    return <Message>검색 결과가 없습니다.</Message>;
+  }
 
-  if (!isLoading && results.length === 0 && defaultResults.length > 0) {
-    return (
-      <ResultsContainer $isGrid={false}>
-        {defaultResults.map((result) => (
-          <ResultItem key={result.movieId} onClick={() => {console.log("Clicked default result:", result); onMovieClick(result)}}>
-            <Poster src={result.poster || result.profileImage} alt={result.title || result.name} />
+  const displayResults = results.length > 0 ? results : defaultResults;
+
+  return (
+    <div>
+      <ResultsContainer>
+        {displayResults.map((result) => (
+          <ResultItem
+            key={result.id || result.movieId}
+            onClick={() => onMovieClick(result)}
+          >
+            <PosterSkeleton isLoading={isLoading} />
+            <Poster
+              src={result.poster || result.profileImage}
+              alt={result.title || result.name}
+              isLoading={isLoading}
+            />
             <Content>
-              <Title>{result.movieTitle || result.name}</Title>
-              <Detail>{result.releaseAt}</Detail>
-              <Director>감독: {result.director}</Director>
+              <Title>{result.title || result.name}</Title>
             </Content>
           </ResultItem>
         ))}
       </ResultsContainer>
-    );
-  }
-
-  return (
-    <ResultsContainer $isGrid={false}>
-      {results.map((result) => (
-        <ResultItem key={result.id} onClick={() => onMovieClick(result)}>
-          <Poster src={result.poster || result.profileImage} alt={result.title || result.name} />
-          <Content>
-            <Title>{result.title || result.name}</Title>
-            <Detail>{result.releasedAt}</Detail>
-            <Director>감독: {result.director}</Director>
-            
-          </Content>
-        </ResultItem>
-      ))}
-    </ResultsContainer>
+    </div>
   );
 };
 
-SearchResultsForReview.propTypes = {
+SearchResults.propTypes = {
   results: PropTypes.array.isRequired, // 검색 결과 배열
-  defaultResults: PropTypes.array.isRequired, // 검색 결과 배열
+  defaultResults: PropTypes.array.isRequired, // 기본 검색 결과 배열
   onMovieClick: PropTypes.func.isRequired, // 영화 클릭 핸들러
   isLoading: PropTypes.bool.isRequired, // 로딩 상태
   activeTab: PropTypes.string.isRequired, // 현재 활성화된 탭
+  searchTerm: PropTypes.string.isRequired, // 검색어
+  hasMore: PropTypes.bool.isRequired, // 추가 데이터를 더 불러올 수 있는지 여부
+  fetchMoreResults: PropTypes.func.isRequired, // 더 많은 결과를 불러오는 함수
 };
 
-export default SearchResultsForReview;
+export default SearchResults;
