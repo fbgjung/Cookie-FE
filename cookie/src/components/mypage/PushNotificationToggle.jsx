@@ -77,18 +77,28 @@ const PushNotificationToggle = () => {
   const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
+    const token = sessionStorage.getItem("accessToken"); // 엑세스 토큰 확인
+    if (!token) return; // 엑세스토큰 없으면 요청하지 않음
+
     const fetchNotificationStatus = async () => {
       try {
-        const response = await axiosInstance.get("/api/notification/status");
+        const response = await axiosInstance.post("/api/notification/settings");
         setIsEnabled(response.data.response.enabled);
       } catch (error) {
         console.error("알림 상태 로드 실패:", error);
       }
     };
+
     fetchNotificationStatus();
   }, []);
 
   const handleToggle = async () => {
+    const token = sessionStorage.getItem("accessToken"); // 엑세스 토큰 확인
+    if (!token) {
+      toast.error("로그인 상태에서만 알림 설정을 변경할 수 있습니다.");
+      return;
+    }
+
     try {
       const updatedStatus = !isEnabled;
 
