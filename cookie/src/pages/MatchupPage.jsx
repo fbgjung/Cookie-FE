@@ -69,7 +69,7 @@ const MatchupPage = () => {
       return;
     }
 
-    const socket = new SockJS(`${serverBaseUrl}/ws`);
+    const socket = new SockJS(`wss://www.cookiekie.com/ws`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
