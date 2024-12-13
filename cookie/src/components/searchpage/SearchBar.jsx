@@ -28,15 +28,14 @@ const SearchInput = styled.input`
   padding: 10px 50px 10px 20px;
   font-size: 20px;
   border: 1px solid #ddd;
-  border-radius: 24px;
+  border-radius: 1.4rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background-color: white;
   transition: all 0.2s ease-in-out;
 
   &:focus {
     outline: none;
-    border-color: #666;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    border: 2.5px solid #f84b99;
   }
 
   @media (max-width: 768px) {

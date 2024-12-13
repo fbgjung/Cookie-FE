@@ -179,7 +179,8 @@ const VoteButton = styled.button`
   height: 42px;
   border-radius: 0.32rem;
   border: none;
-  background-color: #00D6E8;
+  background-color: #f84b99;
+  // 00D6E8
   cursor:pointer;
   margin-bottom: 8px;
 `

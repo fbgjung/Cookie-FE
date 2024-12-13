@@ -7,7 +7,6 @@ import DetailHeader from "../components/searchpage/ReviewDetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
-import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
 
 const Container = styled.div`
@@ -18,6 +17,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background-color: #ffffff;
 `;
 
 const FooterSectionStyled = styled.div`

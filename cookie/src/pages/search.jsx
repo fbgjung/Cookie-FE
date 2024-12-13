@@ -56,8 +56,8 @@ const Tabs = styled.div`
   justify-content: space-between;
   width: 100%;
   max-width: 600px;
-  background: #333;
-  border-radius: 25px;
+  background: #4d4c4c;
+  border-radius: 1.4rem;
   position: relative;
   overflow: hidden;
 
@@ -86,7 +86,7 @@ const TabButton = styled.button`
   transition: all 0.3s ease;
 
   &:hover {
-    color: ${({ isActive }) => (isActive ? "white" : "#00C4D3")};
+    color: ${({ isActive }) => (isActive ? "white" : "#f84b99")};
   }
 
   @media (max-width: 768px) {
@@ -106,7 +106,7 @@ const Slider = styled.div`
   left: ${({ activeIndex }) => `${activeIndex * 33.33}%`};
   width: 33.33%;
   height: 5px;
-  background: #00d6e8;
+  background: #f84b99;
   transition: left 0.3s ease;
 
   @media (max-width: 480px) {
@@ -115,7 +115,7 @@ const Slider = styled.div`
 `;
 
 const SearchInfoText = styled.p`
-  color: white;
+  color: #f84b99;
   font-size: 2rem;
   font-weight: bold;
   text-align: left;

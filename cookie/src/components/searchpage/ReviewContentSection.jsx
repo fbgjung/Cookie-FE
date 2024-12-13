@@ -275,7 +275,7 @@ const ReviewContentSection = ({
                 <img
                   key={i}
                   className={`cookie ${i < newMovieScore ? "selected" : ""}`}
-                  src="/images/cookiescore.svg"
+                  src="/assets/images/review/score-macarong.png"
                   alt="Cookie Score"
                   onClick={() => handleCookieClick(i)}
                 />

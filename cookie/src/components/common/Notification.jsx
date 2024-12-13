@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import NotificationIcon from "/src/assets/images/Notification.svg";
+import NotificationIcon from "/assets/images/notification.svg";
 import useNotificationStore from "../../stores/notificationStore";
 
 const NotificationContainer = styled.div`

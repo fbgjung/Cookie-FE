@@ -2,24 +2,46 @@ import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
+// import { symbol } from "prop-types";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
-  margin: 0 auto;
-  max-width: 900px;
-  background-color: #f9f9f9;
+  background-color: #000000;
   padding: 20px;
+`;
+
+const SearchInfoText = styled.p`
+  color: #f84b99;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: left;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  padding-left: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    padding-left: 15px;
+    max-width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+    padding-left: 10px;
+  }
 `;
 
 
 const FilterButtons = styled.div`
   display: flex;
-  justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
+  width: 100%;
+  padding-left: 1rem;
 
   button {
-    padding: 10px 20px;
     font-size: 1rem;
     border-radius: 8px;
     cursor: pointer;
@@ -28,17 +50,13 @@ const FilterButtons = styled.div`
     transition: background-color 0.3s ease;
 
     &.active {
-      background-color: #04012d;
-      color: #fff;
+      background-color: #000000;
+      color: #F84B99;
     }
 
     &.inactive {
-      background-color: #f0f0f0;
-      color: #666;
-    }
-
-    &:hover {
-      background-color: #ddd;
+      background-color: #000000;
+      color: #ffffff;
     }
   }
 `;
@@ -46,41 +64,30 @@ const FilterButtons = styled.div`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  padding: 0 1rem;
+  
 `;
 
 const ReviewTicket = styled.div`
   display: flex;
-  /* background-image: url("/assets/images/review/ticket-skyblue.svg"); */
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 30px;
-  border-radius: 0.2rem;
+  padding: 1rem 0.8rem;
+  border-radius: 0.4rem;
   box-sizing: border-box;
-  min-height: 180px;
   cursor: pointer;
-  width: 100%;
-  margin: 10px;
-  background-color: #ffffff;
-  border: 1px solid #00D6E8;
+  background-color: #fdf8fa;
+  margin: 0.4rem 0;
 
   @media (max-width: 768px) {
     padding: 10px;
-    
   }
-
-  @media (max-width: 390px) {
-    
-  }
-
 `;
 
 const ReviewLeft = styled.div`
   img {
-    width: 7rem;
-    height: 11rem;
+    width: 7.75rem;
+    height: 100%;
     object-fit: cover;
-    border-radius: 0.2rem;
   }
   .title {
     font-size: 0.6rem;
@@ -88,18 +95,31 @@ const ReviewLeft = styled.div`
     font-weight: normal;
     color: #434141;
     text-align: center;
-    /* margin-top: ${({ isLongTitle }) => (isLongTitle ? "1px" : "10px")}; */
     overflow: hidden;
     text-overflow: ellipsis;
   }
 `;
 
+const ReviewInfoSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+
+`
+
+const ReviewInfoFirst = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`
+
 const ReviewCenter = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30rem;
-  padding: 0 2rem 0 2.5rem;
-  justify-content: space-between;
+  padding: 0 0 0 1.5rem;
+  width: 18rem;
+
   .profile {
     display: flex;
     align-items: center;
@@ -109,7 +129,7 @@ const ReviewCenter = styled.div`
       height: 44px;
       border-radius: 50%;
       margin-right: 10px;
-      border: solid 2px #ffffff;
+      border: solid 1.5px #b3afb1;
     }
 
     .user-info {
@@ -125,50 +145,73 @@ const ReviewCenter = styled.div`
   }
 
   .comment {
+    margin-top: 0.5rem;
     font-size: 0.8rem;
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
 
     &.blurred {
-      filter: blur(5px); /* 블러 효과 */
-      pointer-events: none; /* 마우스 이벤트 비활성화 */
-      user-select: none; /* 텍스트 선택 비활성화 */
+      filter: blur(5px);
+      pointer-events: none; 
+      user-select: none;
     }
   }
 
   .movie-title {
-    margin: 0;
+    margin-top: 0.5rem;
     font-size: 0.7rem;
     font-weight: 600;
+    color: #F84B99;
   }
 `;
 
 const ReviewRight = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  justify-content: flex-start;
   .score {
-    display: flex;
-    align-items: center;
+    
     img {
       width: 16px;
       height: 16px;
       margin-right: 0.1rem;
     }
   }
-  .actions {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
 
-    img {
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-    }
+  .score-text {
+    font-size: 0.8rem;
+    color: #888;
+    margin-right: 0.5rem;
   }
 `;
+
+
+const ReviewInfoSecond = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+
+const LikeIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url("/assets/images/review/heart-review-feed.svg");
+`
+
+const ReviewLike = styled.p`
+  font-size: 0.9rem;
+`
+
+const CommentIcon = styled.svg`
+  margin-left: 0.5rem;
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url("/assets/images/review/comment-review-feed.svg");
+`
+
+const ReviewComment = styled.p`
+  font-size: 0.9rem;
+`
 
 const ReviewFeed = () => {
   const navigate = useNavigate();
@@ -178,44 +221,6 @@ const ReviewFeed = () => {
   const [hasMore, setHasMore] = useState(true); // 추가 로딩 가능 여부
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const [initialLoad, setInitialLoad] = useState(true); // 초기 로딩 여부
-
-  /* SSE 연결
-useEffect(() => {
-  const eventSource = new EventSource(
-    `http://localhost:8080/api/reviews/subscribe/feed`
-  );
-
-  eventSource.addEventListener("message", (event) => {
-    const newReview = JSON.parse(event.data);
-
-    setReviews((prevReviews) => {
-      // 새 리뷰가 이미 존재하는지 확인
-      const isAlreadyExists = prevReviews.some(
-        (review) => review.reviewId === newReview.reviewId
-      );
-
-      if (isAlreadyExists) {
-        return prevReviews; // 중복된 리뷰는 추가하지 않음
-      }
-
-      // 최상단에 새 리뷰 추가
-      return [newReview, ...prevReviews];
-    });
-
-    console.log("새 리뷰 수신:", newReview);
-  });
-
-  eventSource.addEventListener("error", (error) => {
-    console.error("SSE 연결 에러:", error);
-    eventSource.close();
-  });
-
-  // 컴포넌트 언마운트 시 SSE 연결 닫기
-  return () => {
-    eventSource.close();
-  };
-}, []);
-*/
 
   // 초기 데이터 로드 및 페이지네이션
   const fetchReviews = useCallback(async () => {
@@ -268,6 +273,13 @@ useEffect(() => {
     }
   }, [page]);
 
+  // 리뷰 클릭 시 상세 페이지로 이동
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`, {
+      state: { fromReviewFeed: true },
+    });
+  };
+
   // 스크롤 이벤트 핸들러
   const handleScroll = useCallback(() => {
     if (
@@ -298,18 +310,13 @@ useEffect(() => {
     setInitialLoad(true); // 초기 로드 트리거
   };
 
-  const handleReviewClick = (reviewId) => {
-    navigate(`/reviews/${reviewId}`, {
-      state: { fromReviewFeed: true },
-    });
-  };
-
   return (
     <ReviewFeedWrapper>
-      {/* <ReviewTitle>
-        <h1>Cookie Review</h1>
-        <h2>쿠키의 전체리뷰</h2>
-      </ReviewTitle> */}
+      <SearchInfoText>
+        영화 리뷰
+        <br />
+        한눈에 보기
+      </SearchInfoText>
       <FilterButtons>
         <button
           className={!showSpoilerOnly ? "active" : "inactive"}
@@ -324,68 +331,88 @@ useEffect(() => {
           스포일러 리뷰
         </button>
       </FilterButtons>
+
+
       <ReviewContainer>
         {reviews.map((review, index) => (
           <ReviewTicket
             key={`${review.reviewId}-${index}`} // 고유 키 생성
             onClick={() => handleReviewClick(review.reviewId)}
           >
-            <ReviewLeft
-              isLongTitle={review.movie.title.length > 9}
-              title={review.movie.title} // 전체 제목을 tooltip으로 제공
-            >
+            <ReviewLeft>
               <img src={review.movie.poster} alt={review.movie.title} />
-              {/* <p className="title">
-                {review.movie.title.length > 18
-                  ? `${review.movie.title.slice(0, 18)}...`
-                  : review.movie.title}
-              </p> */}
             </ReviewLeft>
-            <ReviewCenter>
-              <div className="profile">
-                <img
-                  src={review.user.profileImage}
-                  alt={review.user.nickname}
-                />
-                <div className="user-info">
-                  <div className="name">{review.user.nickname}</div>
-                  <div className="date">
-                    {new Date(review.createdAt)
-                      .toLocaleDateString()
-                      .replace(/\./g, "-") 
-                      .replace(/-$/, "")
-                      .replace(/-\s/g, "-")}
-                  </div>
-
-                </div>
-              </div>
-              <div
-                className={`comment ${
-                  !showSpoilerOnly && review.spoiler ? "blurred" : ""
-                }`}
-              >
-                {review.content.length > 100
-                  ? `${review.content.slice(0, 105)}...`
-                  : review.content}
-              </div>
-              <p className="movie-title">{review.movie.title}</p>
-            </ReviewCenter>
-            <ReviewRight>
-              <div className="score">
-                {Array.from({ length: Math.round(review.movieScore) }).map(
-                  (_, i) => (
+            <ReviewInfoSection>
+              <ReviewInfoFirst>
+                <ReviewCenter>
+                  <div className="profile">
                     <img
-                      key={`${review.reviewId}-score-${i}`} // 고유 키 생성
-                      src="/images/cookiescore.svg"
-                      alt="score"
+                      src={review.user.profileImage}
+                      alt={review.user.nickname}
                     />
-                  )
-                )}
-              </div>
-            </ReviewRight>
+                    <div className="user-info">
+                      <div className="name">{review.user.nickname}</div>
+                      <div className="date">
+                        {new Date(review.createdAt)
+                          .toLocaleDateString('ko-KR', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                          })
+                          .replace(/\./g, "-")
+                          .replace(/-$/, "")
+                          .replace(/-\s/g, "-")}
+                        {' '}
+                        {new Date(review.createdAt)
+                          .toLocaleTimeString('ko-KR', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <p className="movie-title">{review.movie.title}</p>
+                  <div
+                    className={`comment ${
+                      !showSpoilerOnly && review.spoiler ? "blurred" : ""
+                    }`}
+                  >
+                    {review.content.length > 100
+                      ? `${review.content.slice(0, 105)}...`
+                      : review.content}
+                  </div>
+                  
+                </ReviewCenter>
+                
+                <ReviewRight>
+                  <div className="score">
+                    {Array.from({ length: Math.round(review.movieScore) }).map(
+                      (_, i) => (
+                        <img
+                          key={`${review.reviewId}-score-${i}`}
+                          src="/assets/images/review/score-macarong.png"
+                          alt="score"
+                        />
+                      )
+                    )}
+                  </div>
+                </ReviewRight>  
+              </ReviewInfoFirst>
+
+              <ReviewInfoSecond>
+                <LikeIcon />
+                <ReviewLike>{review.reviewLike}</ReviewLike>
+                <CommentIcon />
+                <ReviewComment>{review.comments}</ReviewComment>
+              </ReviewInfoSecond>
+
+            </ReviewInfoSection>
           </ReviewTicket>
         ))}
       </ReviewContainer>
+
+
       {isLoading && <p>Loading more reviews...</p>}
     </ReviewFeedWrapper>
   );
