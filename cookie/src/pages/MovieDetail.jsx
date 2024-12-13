@@ -19,6 +19,7 @@ const ContentWrapper = styled.div`
   background-color: black;
   box-sizing: border-box;
   overflow-x: hidden;
+  min-height: 100vh;
 
   @media (max-width: 768px) {
     padding: 10px;
@@ -75,14 +76,16 @@ const MovieDetail = () => {
   return (
     <ContentWrapper>
       <DetailHeader onBack={() => navigate(-1)} />
-      <HeaderSection
-        title={movieData.title}
-        releasedAt={movieData.releasedAt}
-        country={movieData.country}
-        runtime={runtimeString}
-        certification={movieData.certification}
-        mainImage={movieData.images ? movieData.images[0] : ""}
-      />
+      {movieData.images && movieData.images.length > 0 && (
+        <HeaderSection
+          title={movieData.title}
+          releasedAt={movieData.releasedAt}
+          country={movieData.country}
+          runtime={runtimeString}
+          certification={movieData.certification}
+          mainImage={movieData.images[0]}
+        />
+      )}
       <DetailsSection
         posterUrl={movieData.poster}
         categories={movieData.categories}
