@@ -81,8 +81,8 @@ const LikedReviews = () => {
       const newReviews = reviews.map((review) => ({
         reviewId: review.reviewId,
         content: review.content,
-        score: review.movieScore,
-        likes: review.reviewLike,
+        movieScore: review.movieScore, // 영화 평점 추가
+        reviewLike: review.reviewLike, // 좋아요 수 추가
         createdAt: new Date(review.createdAt).toLocaleDateString(),
         updatedAt: new Date(review.updatedAt).toLocaleDateString(),
         movie: {
@@ -93,7 +93,7 @@ const LikedReviews = () => {
         user: {
           nickname: review.user.nickname,
           profileImage: review.user.profileImage,
-          badgeImage: review.user.mainBadgeImage,
+          mainBadgeImage: review.user.mainBadgeImage,
         },
       }));
 
