@@ -2,22 +2,25 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const Title = styled.h2`
-  margin-top: 50px;
-`
+  margin-top: 30px;
+  color: white;
+`;
 
 const VideoWrapper = styled.div`
-  margin-top: 30px;
+  margin-top: 20px;
 
   h2 {
     margin-bottom: 10px;
+    color: white;
   }
 
   .video-grid {
     display: flex;
     gap: 15px;
+    flex-wrap: wrap;
 
     .video-item {
-      flex: 1;
+      flex: 1 1 30%;
       position: relative;
       cursor: pointer;
 
@@ -60,8 +63,25 @@ const VideoWrapper = styled.div`
       }
     }
   }
-`;
 
+  @media (max-width: 1024px) {
+    .video-grid {
+      gap: 10px;
+      .video-item {
+        flex: 1 1 45%;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .video-grid {
+      gap: 10px;
+      .video-item {
+        flex: 1 1 100%;
+      }
+    }
+  }
+`;
 const VideoSection = ({ videoUrl }) => {
   if (!videoUrl) return null;
 
@@ -72,7 +92,10 @@ const VideoSection = ({ videoUrl }) => {
       <Title>동영상</Title>
 
       <div className="video-grid">
-        <div className="video-item" onClick={() => window.open(videoUrl, "_blank")}>
+        <div
+          className="video-item"
+          onClick={() => window.open(videoUrl, "_blank")}
+        >
           <img
             src={`https://img.youtube.com/vi/${videoId}/0.jpg`}
             alt="Video Thumbnail"
@@ -90,4 +113,3 @@ VideoSection.propTypes = {
 };
 
 export default VideoSection;
-

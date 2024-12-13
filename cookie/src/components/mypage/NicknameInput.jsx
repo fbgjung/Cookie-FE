@@ -6,7 +6,7 @@ import axiosInstance from "../../api/auth/axiosInstance";
 const NicknameContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+
   width: 100%;
   max-width: 600px;
 
@@ -20,9 +20,10 @@ const NicknameContainer = styled.div`
 const Label = styled.label`
   font-size: 1.2rem;
   font-weight: bold;
+  margin-top: 30px;
   margin-bottom: 8px;
   margin-left: 40px;
-  color: #333;
+  color: black;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -66,8 +67,8 @@ const Input = styled.input`
   outline: none;
 
   &:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    border-color: black;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* 블랙 섀도우 */
   }
 
   @media (max-width: 768px) {
@@ -85,14 +86,18 @@ const Input = styled.input`
 const CheckButton = styled.button`
   padding: 10px 15px;
   font-size: 1rem;
-  background-color: #6a91b1;
-  color: white;
+  background-color: #00d6e8;
+  color: #02172a;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
   margin-left: 2%;
+
+  &:hover {
+    background-color: #33efff;
+  }
 
   &:disabled {
     background-color: #ccc;
@@ -107,6 +112,7 @@ const CheckButton = styled.button`
   @media (max-width: 480px) {
     font-size: 0.8rem;
     padding: 7px;
+    margin-right: 15px;
     width: 60px;
   }
 `;
@@ -115,7 +121,10 @@ const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
   const handleCheckNickname = async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/auth/check-nickname?nickname=${nickname}`
+        `/api/users/setting/check-nickname`,
+        {
+          params: { nickname },
+        }
       );
 
       if (response.data.response === "SUCCESS") {

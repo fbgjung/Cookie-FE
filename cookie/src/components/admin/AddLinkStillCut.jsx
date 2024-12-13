@@ -1,14 +1,13 @@
 import styled from "styled-components";
-import useAdminMovieStore from "../../stores/useAdminMovieStore";
 import deleteBtn from "../../assets/images/signUp/close_icon.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
 export const YoutubeAndStillCutContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 0 12rem;
+  padding: 0 11.2rem;
 `;
 
 export const YoutubeLink = styled.a`
@@ -68,8 +67,8 @@ export const SitllCut = styled.img`
 `;
 
 export const Button = styled.button`
-  background-color: var(--sub-btn);
-  color: var(--main);
+  background-color: var(--sub);
+  color: var(--text);
   border-radius: 18px;
   padding: 0.5rem 1rem;
   border: none;
@@ -95,24 +94,33 @@ const MovieInfoSection = ({ label, children }) => {
   );
 };
 
-function AddLinkStillCut({ selectedMovie }) {
-  const { movieList, setYoutubeLink, setStillCuts } = useAdminMovieStore();
+function AddLinkStillCut({ selectedMovie, stillCuts, onUpdateStillCuts }) {
   const fileInputRef = useRef(null);
   const [inputValue, setInputValue] = useState("");
+  const [youtubeLink, setYoutubeLink] = useState("");
+  // const [stillCuts, setStillCuts] = useState([]);
+  const [additionalCuts, setAdditionalCuts] = useState([]); //스틸컷 추가
 
-  const movie = movieList.find((movie) => movie.movieId === selectedMovie);
+  const movie = selectedMovie;
+
+  if (!movie) {
+    return <p>영화 정보를 불러오는 중입니다...</p>;
+  }
+
+  const displayedStillCuts = stillCuts;
+  const allStillCuts = [...displayedStillCuts, ...additionalCuts];
 
   /*유튜브 링크 추가*/
-  const handleAddLink = () => {
-    if (!inputValue.trim()) return;
+  // const handleAddLink = () => {
+  //   if (!inputValue.trim()) return;
 
-    const updatedLinks = movie.youtube
-      ? [...new Set([...movie.youtube.split(", "), inputValue.trim()])]
-      : [inputValue.trim()];
+  //   const updatedLinks = movie.youtube
+  //     ? [...new Set([...movie.youtube.split(", "), inputValue.trim()])]
+  //     : [inputValue.trim()];
 
-    setYoutubeLink(movie.movieId, updatedLinks.join(", "));
-    setInputValue("");
-  };
+  //   setYoutubeLink(updatedLinks.join(", "));
+  //   setInputValue("");
+  // };
 
   /*유튜브 링크 삭제*/
   const handleDeleteYoutubeLink = (link) => {
@@ -120,37 +128,39 @@ function AddLinkStillCut({ selectedMovie }) {
       .split(", ")
       .filter((existingLink) => existingLink !== link);
 
-    setYoutubeLink(movie.movieId, updatedLinks.join(", "));
+    setYoutubeLink(updatedLinks.join(", "));
   };
 
-  /*썸네일 업로드*/
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    if (movie.stillCuts.length + files.length > 3) {
-      alert("최대 3개까지 업로드 가능합니다.");
+    if (allStillCuts.length + files.length > 12) {
+      alert("최대 12개까지 업로드 가능합니다.");
       return;
     }
     const fileURLs = files.map((file) => URL.createObjectURL(file));
-    const updatedStillCuts = [...movie.stillCuts, ...fileURLs];
-    setStillCuts(movie.movieId, updatedStillCuts);
+    setAdditionalCuts([...additionalCuts, ...fileURLs]);
   };
 
-  /*썸네일 삭제*/
   const handleDeleteThumbnail = (index) => {
-    const updatedFiles = movie.stillCuts.filter((_, idx) => idx !== index);
-    setStillCuts(movie.movieId, updatedFiles);
+    const updatedFiles = additionalCuts.filter((_, idx) => idx !== index);
+    setAdditionalCuts(updatedFiles);
   };
+
+  //상위 컴포넌트로 전달
+  useEffect(() => {
+    onUpdateStillCuts(additionalCuts);
+  }, [additionalCuts, onUpdateStillCuts]);
 
   return (
     <YoutubeAndStillCutContainer>
       <MovieInfoSection label="유튜브">
-        <YoutubeUrl
+        {/* <YoutubeUrl
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="ex) http://www.youtube.com"
         />
-        <Button onClick={handleAddLink}>링크 추가</Button>
+        <Button onClick={handleAddLink}>링크 추가</Button> */}
 
         {movie.youtube &&
           movie.youtube.split(", ").map((link, index) => (
@@ -171,18 +181,26 @@ function AddLinkStillCut({ selectedMovie }) {
       </MovieInfoSection>
 
       <MovieInfoSection label="스틸컷">
-        {movie?.stillCuts && movie.stillCuts.length > 0
-          ? movie.stillCuts.map((image, index) => (
-              <StillCutContainer key={index}>
-                <SitllCut src={image} alt={`Still cut ${index + 1}`} />
-                <button onClick={() => handleDeleteThumbnail(index)}>
-                  <img src={deleteBtn} alt="delete_button" />
-                </button>
-              </StillCutContainer>
-            ))
-          : null}
+        {stillCuts.length > 0 &&
+          stillCuts.map((image, index) => (
+            <StillCutContainer key={index}>
+              <SitllCut src={image} alt={`Still cut ${index + 1}`} />
+            </StillCutContainer>
+          ))}
 
-        {movie?.stillCuts.length < 3 && (
+        {/* 추가 업로드된 스틸컷 5개 렌더링 */}
+        {additionalCuts.length > 0 &&
+          additionalCuts.map((image, index) => (
+            <StillCutContainer key={index}>
+              <SitllCut src={image} alt={`Uploaded cut ${index + 1}`} />
+              <button onClick={() => handleDeleteThumbnail(index)}>
+                <img src={deleteBtn} alt="delete_button" />
+              </button>
+            </StillCutContainer>
+          ))}
+
+        {/* 최대 5개 업로드 가능 */}
+        {additionalCuts.length < 5 && (
           <Button onClick={() => fileInputRef.current.click()}>
             파일 업로드
           </Button>
@@ -191,7 +209,7 @@ function AddLinkStillCut({ selectedMovie }) {
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
+          accept="image/jpeg, image/jpg, image/png, image/svg+xml"
           multiple
           onChange={handleFileChange}
           style={{ display: "none" }}

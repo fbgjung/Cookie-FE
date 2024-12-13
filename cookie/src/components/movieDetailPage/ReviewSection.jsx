@@ -2,10 +2,10 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-
 const Title = styled.h2`
   margin-top: 50px;
-`
+  color: white;
+`;
 
 const ReviewWrapper = styled.div`
   margin-top: 3%;
@@ -14,30 +14,36 @@ const ReviewWrapper = styled.div`
     font-size: 18px;
     font-weight: bold;
     display: flex;
+    
+    color: white;
     align-items: center;
 
     .review-count {
       font-size: 14px;
-      color: #666;
+      color: white;
       margin-left: 10px;
     }
 
-    .more-review-button {
-      margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
+      .more-review-button {
+      margin-left: auto;
       font-size: 14px;
       color: #fff;
-      background-color: #007bff;
+      background: none;
       border: none;
-      border-radius: 4px;
-      padding: 5px 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      padding: 0;
+      transition: color 0.3s ease;
 
       &:hover {
-        background-color: #0056b3;
+        color: #00d6e8; 
+      }
+
+      &::after {
+        content: " >"; 
+        font-size: 14px;
+        margin-left: 5px;
       }
     }
-  }
 
   .review-grid {
     display: grid;
@@ -52,7 +58,7 @@ const ReviewWrapper = styled.div`
 
     .review-item {
       position: relative;
-      background-image: url("/images/reviewticket.svg"); // 리뷰 티켓 이미지 경로
+    background-image: url("/images/review/reviewticket.svg");
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -68,7 +74,7 @@ const ReviewWrapper = styled.div`
       .review-user {
         font-size: 14px;
         font-weight: bold;
-        color: #333;
+         color: white;
       }
 
       .review-comment {
@@ -115,61 +121,73 @@ const ReviewWrapper = styled.div`
   }
 `;
 
-
-
 const ReviewUserProfile = styled.div`
   display: flex;
   flex-direction: column;
+  color: white;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const ReviewDetail = styled.div`
   display: flex;
   flex-direction: column;
+  color: white;
   justify-content: space-between;
-`
+`;
 
-const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) => {
+const ReviewSection = ({
+  reviews = [],
+  reviewCount,
+  onViewAllReviews,
+  movie,
+}) => {
   const navigate = useNavigate();
   console.log(reviews);
+
+  const handleReviewClick = (reviewId) => {
+    navigate(`/reviews/${reviewId}`);
+  };
 
   return (
     <ReviewWrapper>
       <Title>
         리뷰
         <span className="review-count">{reviewCount}</span>
-        <button className="more-review-button" onClick={onViewAllReviews}>더보기</button>
+        <button className="more-review-button" onClick={onViewAllReviews}>
+          더보기
+        </button>
       </Title>
       <div className="review-grid">
         {reviews.map((review, index) => (
-          <div className="review-item" key={index}>
-            
+          <div
+            className="review-item"
+            key={index}
+            onClick={() => handleReviewClick(review.reviewId)}
+          >
             <ReviewUserProfile>
               <img
-                  src={review.user.profileImage}
-                  alt={review.user.nickname}
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "50%",
-                    marginBottom: "5px",
-                  }}
-                />
+                src={review.user.profileImage}
+                alt={review.user.nickname}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  marginBottom: "5px",
+                }}
+              />
               <div className="review-user">{review.user.nickname}</div>
             </ReviewUserProfile>
-            
+
             <ReviewDetail>
               <div className="review-comment">{review.content}</div>
               <div className="review-footer">
                 <div className="likes">❤️ {review.reviewLike}</div>
               </div>
             </ReviewDetail>
-            
           </div>
         ))}
       </div>
-      
     </ReviewWrapper>
   );
 };
@@ -177,6 +195,7 @@ const ReviewSection = ({ reviews = [], reviewCount, onViewAllReviews, movie }) =
 ReviewSection.propTypes = {
   reviews: PropTypes.arrayOf(
     PropTypes.shape({
+      reviewId: PropTypes.number.isRequired,
       userName: PropTypes.string.isRequired,
       comment: PropTypes.string.isRequired,
       likes: PropTypes.number.isRequired,
@@ -184,7 +203,7 @@ ReviewSection.propTypes = {
   ).isRequired,
   reviewCount: PropTypes.number.isRequired,
   onViewAllReviews: PropTypes.func.isRequired,
-  movie: PropTypes.object.isRequired, // 영화 정보 전달
+  movie: PropTypes.object.isRequired,
 };
 
 export default ReviewSection;

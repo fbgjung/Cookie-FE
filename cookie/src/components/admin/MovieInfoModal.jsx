@@ -15,6 +15,8 @@ import {
   MovieTitle,
   SubmitBtn,
 } from "./SearchMovieDetail";
+import { useEffect, useState } from "react";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const Overlay = styled.div`
   position: fixed;
@@ -31,12 +33,13 @@ const ModalContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  width: 1450px;
+  width: 1650px;
   height: 800px;
   z-index: 1000;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(35, 35, 35, 0.1);
-  overflow: auto;
+  overflow: scroll;
+  padding: 0 10px;
 `;
 
 const ButtonContainer = styled.div`
@@ -48,26 +51,55 @@ const ButtonContainer = styled.div`
 `;
 
 const MovieInfoModal = ({ movie, onClose }) => {
-  if (!movie) return null;
+  const [modalMovie, setModalMovie] = useState(movie);
+
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/api/admin/movie/${movie.movieId}/detail`
+        );
+        console.log(response);
+        setModalMovie(response.data.response);
+      } catch (error) {
+        console.error("영화 정보를 불러오는 데 실패했습니다.", error);
+      }
+    };
+
+    if (movie && movie.movieId) {
+      fetchMovieDetails();
+    }
+  }, [movie]);
+
+  if (!modalMovie) return null;
 
   return (
     <>
       <Overlay onClick={onClose} />
       <ModalContainer>
         <MovieDetail>
-          <MovieContainer key={movie.movieId}>
+          <MovieContainer key={modalMovie.movieId}>
             <MovieRow>
-              <img src={movie.posterPath} alt={movie.title} />
+              <img
+                className="movie__poster"
+                src={modalMovie.posterPath}
+                alt={modalMovie.title}
+              />
               <MovieInfo>
-                <MovieTitle>{movie.title}</MovieTitle>
+                <MovieTitle>{modalMovie.title}</MovieTitle>
 
                 {[
-                  { label: "러닝타임", value: `${movie.runtime}분` },
-                  { label: "개봉일", value: movie.releaseDate },
-                  { label: "연령", value: movie.certification },
-                  { label: "국가", value: movie.country },
-                  { label: "줄거리", value: movie.plot },
-                  { label: "카테고리", value: movie.categories.join(", ") },
+                  { label: "러닝타임", value: `${modalMovie.runtime}분` },
+                  { label: "개봉일", value: modalMovie.releaseDate },
+                  { label: "연령", value: modalMovie.certification },
+                  { label: "국가", value: modalMovie.country },
+                  { label: "줄거리", value: modalMovie.plot },
+                  {
+                    label: "카테고리",
+                    value: Array.isArray(modalMovie.categories)
+                      ? modalMovie.categories.join(", ")
+                      : "카테고리 정보 없음",
+                  },
                 ].map((section, index) => (
                   <MovieInfoSection key={index} label={section.label}>
                     {section.value}
@@ -75,20 +107,25 @@ const MovieInfoModal = ({ movie, onClose }) => {
                 ))}
 
                 <MovieInfoSection label="감독">
-                  <ActorItem actor={movie.director} />
+                  <ActorItem actor={modalMovie.director || "감독 정보 없음"} />
                 </MovieInfoSection>
 
                 <MovieInfoSection label="배우">
-                  {movie.actors.map((actor, index) => (
-                    <ActorItem key={index} actor={actor} />
-                  ))}
+                  {Array.isArray(modalMovie.actors) &&
+                  modalMovie.actors.length > 0 ? (
+                    modalMovie.actors.map((actor, index) => (
+                      <ActorItem key={index} actor={actor} />
+                    ))
+                  ) : (
+                    <p>배우 정보 없음</p>
+                  )}
                 </MovieInfoSection>
               </MovieInfo>
             </MovieRow>
             <YoutubeAndStillCutContainer>
               <MovieInfoSection label="유튜브">
-                {movie.youtube &&
-                  movie.youtube.split(", ").map((link, index) => (
+                {modalMovie.youtube &&
+                  modalMovie.youtube.split(", ").map((link, index) => (
                     <div key={index}>
                       📎
                       <YoutubeLink
@@ -103,13 +140,23 @@ const MovieInfoModal = ({ movie, onClose }) => {
               </MovieInfoSection>
 
               <MovieInfoSection label="스틸컷">
-                {movie?.stillCuts && movie.stillCuts.length > 0
-                  ? movie.stillCuts.map((image, index) => (
-                      <StillCutContainer key={index}>
-                        <SitllCut src={image} alt={`Still cut ${index + 1}`} />
-                      </StillCutContainer>
-                    ))
-                  : null}
+                {Array.isArray(modalMovie.stillCuts) &&
+                modalMovie.stillCuts.length > 0 ? (
+                  modalMovie.stillCuts.map((image, index) => (
+                    <StillCutContainer
+                      key={index}
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        width: "80%",
+                      }}
+                    >
+                      <SitllCut src={image} alt={`Still cut ${index + 1}`} />
+                    </StillCutContainer>
+                  ))
+                ) : (
+                  <p>스틸컷 정보 없음</p>
+                )}
               </MovieInfoSection>
             </YoutubeAndStillCutContainer>
             <ButtonContainer>

@@ -7,6 +7,8 @@ import DetailHeader from "../components/searchpage/ReviewDetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
+import LoginModal from "../components/common/LoginModal";
+import useAuthStore from "../stores/useAuthStore";
 
 const Container = styled.div`
   padding: 20px;
@@ -42,7 +44,7 @@ const FooterSectionStyled = styled.div`
     }
 
     .hovered {
-      fill: #ff9999; /* 마우스 오버 시 색상 */
+      fill: #ff9999;
     }
 
     span {
@@ -144,22 +146,79 @@ const CommentsSectionContainer = styled.div`
         }
       }
     }
-
     .comment-actions {
       position: absolute; /* 우측 상단에 고정 */
       top: 10px; /* 위에서 간격 */
       right: 10px;
       display: flex;
       gap: 10px;
-
       button {
         background: none;
         border: none;
         color: #c99d66;
         cursor: pointer;
-
         &:hover {
           color: #9b7a4c;
+        }
+      }
+    }
+  }
+`;
+
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    button {
+      padding: 8px 15px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      &.save {
+        background-color: #66beff;
+        color: white;
+        &:hover {
+          background-color: #005faa;
+        }
+      }
+      &.cancel {
+        background-color: #ddd;
+        &:hover {
+          background-color: #bbb;
         }
       }
     }
@@ -169,14 +228,17 @@ const CommentsSectionContainer = styled.div`
 const ReviewDetail = () => {
   const { reviewId } = useParams();
   const navigate = useNavigate();
+  const { openLoginModal } = useAuthStore();
   const [reviewData, setReviewData] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingComment, setEditingComment] = useState(null);
   const [editingCommentText, setEditingCommentText] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
   const [likedByUser, setLikedByUser] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
   const fromLikedReviews = location.state?.fromLikedReviews || false;
   const fromMyPage = location.state?.fromMyPage || false;
@@ -186,14 +248,16 @@ const ReviewDetail = () => {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
+        const response = await axiosInstance.get(
+          `/api/reviews/${reviewId}`
+        );
         console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
         setLikedByUser(review.likedByUser);
       } catch (error) {
         console.error("Failed to fetch review data:", error);
-        toast.error("리뷰 데이터를 가져오지 못했습니다.");
+        toast.error("리뷰 상세보기 삭제되거나 존재하지 않는 리뷰입니다!");
       } finally {
         setIsLoading(false);
       }
@@ -206,7 +270,6 @@ const ReviewDetail = () => {
     const previousLiked = likedByUser;
     const previousLikeCount = reviewData.reviewLike;
 
-    // 상태를 임시로 업데이트
     setLikedByUser(!previousLiked);
     setReviewData((prevData) => ({
       ...prevData,
@@ -217,7 +280,7 @@ const ReviewDetail = () => {
       await axiosInstance.post(`/api/users/review-like/${reviewId}`);
     } catch (error) {
       console.error("Failed to toggle like:", error);
-      toast.error("좋아요 처리에 실패했습니다.");
+      openLoginModal();
       // 오류 발생 시 이전 상태로 복구
       setLikedByUser(previousLiked);
       setReviewData((prevData) => ({
@@ -226,7 +289,7 @@ const ReviewDetail = () => {
       }));
     }
   };
-/*
+  /*
   const toggleLike = async () => {
     const userId = getUserIdFromToken();
     if (!userId) return;
@@ -248,13 +311,12 @@ const ReviewDetail = () => {
       toast.error("좋아요 처리에 실패했습니다.");
     }
   };
-*/
+  */
 
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("refreshToken");
     if (!token) {
-      toast.error("로그인이 필요한 서비스입니다.");
-      navigate("/login");
+      openLoginModal();
       return null;
     }
     try {
@@ -267,29 +329,31 @@ const ReviewDetail = () => {
     }
   };
 
-  const handleEditComment = async (commentId) => {
-    if (!editingCommentText.trim()) {
+  const handleEditComment = async () => {
+    if (!editingComment?.text.trim()) {
       toast.error("수정할 댓글 내용을 입력해주세요.");
       return;
     }
 
     try {
-      await axiosInstance.post(`/api/reviews/comments/${commentId}`, {
-        reviewId,
-        comment: editingCommentText,
-      });
+      await axiosInstance.put(
+        `/api/reviews/comments/${editingComment.id}`,
+        {
+          reviewId,
+          comment: editingComment.text,
+        }
+      );
 
       setReviewData((prevData) => ({
         ...prevData,
         comments: prevData.comments.map((comment) =>
-          comment.commentId === commentId
-            ? { ...comment, comment: editingCommentText }
+          comment.commentId === editingComment.id
+            ? { ...comment, comment: editingComment.text }
             : comment
         ),
       }));
 
-      setEditingCommentId(null);
-      setEditingCommentText("");
+      setEditingComment(null);
       toast.success("댓글이 수정되었습니다!");
     } catch (error) {
       console.error("Failed to edit comment:", error);
@@ -297,8 +361,16 @@ const ReviewDetail = () => {
     }
   };
 
+  const handleOpenEditModal = (comment) => {
+    setEditingComment({ id: comment.commentId, text: comment.comment });
+  };
+
+  const handleCloseEditModal = () => {
+    setEditingComment(null);
+  };
+
   const handleDeleteComment = async (commentId) => {
-    console.log("삭제 요청 - commentId:", commentId);
+    console.log("삭제 요청 - commentId:", commentId); // 전달된 commentId 확인
 
     if (!commentId) {
       toast.error("삭제할 댓글 ID가 존재하지 않습니다.");
@@ -336,10 +408,13 @@ const ReviewDetail = () => {
   };
 
   const handleAddComment = async () => {
+    if (isSubmitting) return;
+
     const userId = getUserIdFromToken();
     if (!userId || !newComment.trim()) return;
 
     try {
+      setIsSubmitting(true);
       const response = await axiosInstance.post(
         `/api/reviews/${reviewId}/comments`,
         {
@@ -355,18 +430,14 @@ const ReviewDetail = () => {
         comments: [...prevData.comments, updatedComment],
       }));
 
+      setNewComment("");
       toast.success("댓글이 작성되었습니다!");
       window.location.reload();
     } catch (error) {
       console.error("Error during comment submission:", error);
-      if (
-        error.response?.data.message ===
-        "자신의 리뷰에는 댓글을 작성할 수 없습니다."
-      ) {
-        toast.error("본인이 작성한 리뷰에는 댓글을 작성할 수 없습니다!");
-      } else {
-        toast.error("예기치 못한 오류가 발생했습니다.");
-      }
+      openLoginModal();
+    } finally {
+      setIsSubmitting(false); // 플래그 해제
     }
   };
 
@@ -389,6 +460,10 @@ const ReviewDetail = () => {
     }
   };
 
+  const handlePosterClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   return (
     <Container>
       <DetailHeader onBack={() => navigate(-1)} />
@@ -403,11 +478,12 @@ const ReviewDetail = () => {
         handleUpdateReview={handleUpdateReview}
         isMenuOpen={isMenuOpen && !fromLikedReviews}
         toggleMenu={fromLikedReviews ? undefined : toggleMenu}
+        onPosterClick={() => handlePosterClick(reviewData.movie?.movieId)}
       />
       <ReviewTextSection reviewText={reviewData.content} />
       <FooterSectionStyled>
         <div className="icon-container">
-        <FaHeart
+          <FaHeart
             className={likedByUser ? "liked" : isHovered ? "hovered" : ""}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -431,11 +507,15 @@ const ReviewDetail = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                handleAddComment();
+                handleAddComment(); // 댓글 추가 함수 호출
               }
             }}
           />
-          <button onClick={handleAddComment}>
+          <button
+            onClick={() => {
+              handleAddComment(); // 댓글 추가 함수 호출
+            }}
+          >
             <FaPaperPlane />
           </button>
         </div>
@@ -465,31 +545,14 @@ const ReviewDetail = () => {
                   return (
                     comment.user.userId === userId && (
                       <div className="comment-actions">
-                        {editingCommentId === comment.user.userId ? (
-                          <button
-                            onClick={() => handleEditComment(comment.commentId)}
-                          >
-                            저장
-                          </button>
-                        ) : (
-                          <>
-                            <button
-                              onClick={() => {
-                                setEditingCommentId(comment.commentId);
-                                setEditingCommentText(comment.comment);
-                              }}
-                            >
-                              수정
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleDeleteComment(comment.commentId)
-                              }
-                            >
-                              삭제
-                            </button>
-                          </>
-                        )}
+                        <button onClick={() => handleOpenEditModal(comment)}>
+                          수정
+                        </button>
+                        <button
+                          onClick={() => handleDeleteComment(comment.commentId)}
+                        >
+                          삭제
+                        </button>
                       </div>
                     )
                   );
@@ -498,6 +561,30 @@ const ReviewDetail = () => {
             </div>
           </div>
         ))}
+        {editingComment && (
+          <ModalWrapper>
+            <ModalContent>
+              <h2>댓글 수정</h2>
+              <textarea
+                value={editingComment.text}
+                onChange={(e) =>
+                  setEditingComment((prev) => ({
+                    ...prev,
+                    text: e.target.value,
+                  }))
+                }
+              />
+              <div className="modal-actions">
+                <button className="cancel" onClick={handleCloseEditModal}>
+                  취소
+                </button>
+                <button className="save" onClick={handleEditComment}>
+                  저장
+                </button>
+              </div>
+            </ModalContent>
+          </ModalWrapper>
+        )}
       </CommentsSectionContainer>
     </Container>
   );

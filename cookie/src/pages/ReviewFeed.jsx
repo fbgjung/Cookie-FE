@@ -9,7 +9,6 @@ const ReviewFeedWrapper = styled.div`
   max-width: 900px;
   background-color: #f9f9f9;
   padding: 20px;
-  height: 100vh;
 `;
 
 
@@ -388,7 +387,6 @@ useEffect(() => {
         ))}
       </ReviewContainer>
       {isLoading && <p>Loading more reviews...</p>}
-      {!hasMore && <p>No more reviews available.</p>}
     </ReviewFeedWrapper>
   );
 };

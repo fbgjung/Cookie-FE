@@ -4,6 +4,7 @@ import userDefaultImg from "../assets/images/signUp/user_img.svg";
 import deleteBtn from "../assets/images/signUp/close_icon.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
+import toast from "react-hot-toast";
 
 const MainContainer = styled.div`
   background-color: #fff4b9;
@@ -181,9 +182,27 @@ function SignUpProfile() {
     const file = e.target.files[0];
 
     if (file) {
+      const validFileTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/svg+xml",
+      ];
+      if (!validFileTypes.includes(file.type)) {
+        toast.error(
+          "지원하지 않는 파일 형식입니다. jpg, jpeg, png, svg 파일만 업로드 가능합니다."
+        );
+        return;
+      }
+
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast.error("파일 크기는 5MB 이하로 업로드 가능합니다.");
+        return;
+      }
+
       const fileUrl = URL.createObjectURL(file);
       setProfileImage(file);
-      console.log("파일 정보:", fileUrl);
     }
   };
 
@@ -269,7 +288,7 @@ function SignUpProfile() {
               />
               <input
                 type="file"
-                accept="image/*"
+                accept="image/jpeg, image/jpg, image/png, image/svg+xml"
                 ref={fileInputRef}
                 onChange={handleImageUpload}
                 style={{ display: "none" }}

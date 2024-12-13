@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const BadgeSection = styled.div`
   text-align: center;
@@ -22,7 +23,7 @@ const BadgeContainer = styled.div`
   overflow-x: auto;
   padding: 20px 10px;
   flex-wrap: wrap;
-  height: 350px;
+  height: 150px;
   overflow-y: scroll;
 `;
 
@@ -52,7 +53,7 @@ const BadgeLabel = styled.span`
   color: #333;
 `;
 
-const BadgeList = ({ title = "배지 리스트", badges = [] }) => {
+const BadgeList = ({ title, badges }) => {
   return (
     <BadgeSection>
       <BadgeTitle>{title}</BadgeTitle>
@@ -73,6 +74,21 @@ const BadgeList = ({ title = "배지 리스트", badges = [] }) => {
       </BadgeContainer>
     </BadgeSection>
   );
+};
+
+BadgeList.propTypes = {
+  title: PropTypes.string.isRequired,
+  badges: PropTypes.arrayOf(
+    PropTypes.shape({
+      badgeImage: PropTypes.string,
+      name: PropTypes.string,
+    })
+  ),
+};
+
+BadgeList.defaultProps = {
+  title: "배지 리스트",
+  badges: [],
 };
 
 export default BadgeList;

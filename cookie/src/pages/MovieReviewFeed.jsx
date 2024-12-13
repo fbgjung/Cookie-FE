@@ -7,12 +7,18 @@ import DetailHeader from "../components/searchpage/MovieReviewDetailHeader";
 const ReviewFeedWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
-  max-width: 900px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  background-color: black;
   padding: 20px;
   height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 20px 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 10px;
+  }
 `;
 
 const FilterButtons = styled.div`
@@ -31,8 +37,8 @@ const FilterButtons = styled.div`
     transition: background-color 0.3s ease;
 
     &.active {
-      background-color: #04012d;
-      color: #fff;
+      background-color: #00d6e8;
+      color: black;
     }
 
     &.inactive {
@@ -41,7 +47,18 @@ const FilterButtons = styled.div`
     }
 
     &:hover {
-      background-color: #ddd;
+      background-color: #00b3c6;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+      padding: 6px 14px;
     }
   }
 `;
@@ -49,6 +66,11 @@ const FilterButtons = styled.div`
 const MovieInfoWrapper = styled.div`
   display: flex;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const MoviePoster = styled.div`
@@ -56,11 +78,22 @@ const MoviePoster = styled.div`
   height: 300px;
   margin-left: 30px;
   margin-right: 30px;
+
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 225px;
+  }
+
+  @media (max-width: 480px) {
+    width: 120px;
+    height: 180px;
   }
 `;
 
@@ -72,6 +105,7 @@ const MovieDetails = styled.div`
   .movie-title {
     font-size: 2rem;
     font-weight: bold;
+    color: white;
   }
 
   .movie-info {
@@ -83,6 +117,19 @@ const MovieDetails = styled.div`
       margin-bottom: 5px;
     }
   }
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .movie-title {
+      font-size: 1.5rem;
+    }
+    .movie-info {
+      font-size: 0.9rem;
+    }
+  }
 `;
 
 const ReviewContainer = styled.div`
@@ -91,12 +138,15 @@ const ReviewContainer = styled.div`
   gap: 0px;
 `;
 
-
 const NoReviewsMessage = styled.div`
   text-align: center;
   font-size: 1.2rem;
   color: #888;
   margin-top: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const ReviewTicket = styled.div`
@@ -112,6 +162,17 @@ const ReviewTicket = styled.div`
   cursor: pointer;
   width: 90%;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 20px;
+    min-height: 150px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+    min-height: 130px;
+  }
 `;
 
 const ReviewLeft = styled.div`
@@ -153,6 +214,28 @@ const ReviewCenter = styled.div`
     font-size: 0.9rem;
     line-height: 1.5;
   }
+
+  @media (max-width: 768px) {
+    .profile img {
+      width: 35px;
+      height: 35px;
+    }
+
+    .comment {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .profile img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .comment {
+      font-size: 0.7rem;
+    }
+  }
 `;
 
 const ReviewRight = styled.div`
@@ -167,6 +250,20 @@ const ReviewRight = styled.div`
     img {
       width: 20px;
       height: 20px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .score img {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .score img {
+      width: 16px;
+      height: 16px;
     }
   }
 `;
@@ -275,44 +372,44 @@ const MovieReviewFeed = () => {
       {reviews.length === 0 && !isLoading ? (
         <NoReviewsMessage>이 영화에 등록된 리뷰가 없습니다!</NoReviewsMessage>
       ) : (
-      <ReviewContainer>
-        {reviews.map((review) => (
-          <ReviewTicket
-            key={review.reviewId}
-            onClick={() => handleReviewClick(review.reviewId)}
-          >
-            <ReviewLeft></ReviewLeft>
-            <ReviewCenter>
-              <div className="profile">
-                <img
-                  src={review.user.profileImage}
-                  alt={review.user.nickname}
-                />
-                <div className="user-info">
-                  <div className="name">{review.user.nickname}</div>
-                  <div className="date">
-                    {new Date(review.createdAt).toLocaleDateString()}
+        <ReviewContainer>
+          {reviews.map((review) => (
+            <ReviewTicket
+              key={review.reviewId}
+              onClick={() => handleReviewClick(review.reviewId)}
+            >
+              <ReviewLeft></ReviewLeft>
+              <ReviewCenter>
+                <div className="profile">
+                  <img
+                    src={review.user.profileImage}
+                    alt={review.user.nickname}
+                  />
+                  <div className="user-info">
+                    <div className="name">{review.user.nickname}</div>
+                    <div className="date">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="comment">{review.content}</div>
-            </ReviewCenter>
-            <ReviewRight>
-              <div className="score">
-                {Array.from({ length: Math.round(review.movieScore) }).map(
-                  (_, i) => (
-                    <img
-                      key={`${review.reviewId}-score-${i}`}
-                      src="/images/cookiescore.svg"
-                      alt="score"
-                    />
-                  )
-                )}
-              </div>
-            </ReviewRight>
-          </ReviewTicket>
-        ))}
-      </ReviewContainer>
+                <div className="comment">{review.content}</div>
+              </ReviewCenter>
+              <ReviewRight>
+                <div className="score">
+                  {Array.from({ length: Math.round(review.movieScore) }).map(
+                    (_, i) => (
+                      <img
+                        key={`${review.reviewId}-score-${i}`}
+                        src="/images/cookiescore.svg"
+                        alt="score"
+                      />
+                    )
+                  )}
+                </div>
+              </ReviewRight>
+            </ReviewTicket>
+          ))}
+        </ReviewContainer>
       )}
 
       {isLoading && <p>Loading more reviews...</p>}

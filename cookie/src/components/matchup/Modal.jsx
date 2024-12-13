@@ -233,6 +233,12 @@ const Modal = ({
       emotionPoint,
     };
 
+    console.log("투표 데이터:", {
+      matchUpId,
+      movieId,
+      payload,
+    });
+
     try {
       const response = await axiosInstance.post(
         `/api/matchups/${matchUpId}/movies/${movieId}/vote`,
@@ -245,7 +251,7 @@ const Modal = ({
       }
     } catch (error) {
       console.error("투표 요청 실패:", error);
-      toast.error("이미 투표하셨습니다.\n다시 시도해주세요.");
+      toast.error("이미 투표하셨습니다.");
     } finally {
       setIsSubmitting(false);
     }

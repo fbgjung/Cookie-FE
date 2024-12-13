@@ -47,6 +47,7 @@ const GlobalStyle = createGlobalStyle`
     --text: #724B2E;
     --sub-text: #a7a7a7;
     --notice: #235B97;
+    --text-wh: #ffffff;
   }
 
 
@@ -56,12 +57,13 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
    html, body {
-  margin: 0;
-  padding: 0;
-overscroll-behavior: none;
-   overflow-x: hidden;
-   background-color: #202020;
-}
+
+    margin: 0;
+    padding: 0;
+    overscroll-behavior: none;
+    overflow-x: hidden;
+    background-color: #202020;
+  }
 
 
   #root {

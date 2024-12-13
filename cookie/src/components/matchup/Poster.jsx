@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
 import useAuthStore from "../../stores/useAuthStore";
+import { toast } from "react-hot-toast";
 
 const fadeInUp = keyframes`
   from {
@@ -85,19 +86,34 @@ const VoteButton = styled.button`
   }
 `;
 
-const Poster = ({ src, movieTitle, movieId, isVoteEnded, matchUpId }) => {
+const Poster = ({
+  src,
+  movieTitle,
+  movieId,
+  isVoteEnded,
+  matchUpId,
+  userVote,
+}) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const { isLogined, openLoginModal } = useAuthStore();
 
   const handleVoteClick = () => {
-    if (isVoteEnded) return;
+    if (userVote) {
+      toast.error("이미 참여하신 매치업입니다.");
+      return; 
+    }
+
+    if (isVoteEnded) {
+      toast.error("투표가 종료되었습니다.");
+      return; 
+    }
 
     if (!isLogined()) {
       openLoginModal();
-      return;
+      return; 
     }
 
-    setModalOpen(true);
+    setModalOpen(true); 
   };
 
   const handleCloseModal = () => {
@@ -109,9 +125,7 @@ const Poster = ({ src, movieTitle, movieId, isVoteEnded, matchUpId }) => {
       <PosterWrapper>
         <PosterImage src={src} alt={`${movieTitle} 포스터`} />
         <Overlay className="overlay">
-          <VoteButton onClick={handleVoteClick} disabled={isVoteEnded}>
-            {isVoteEnded ? "투표 종료" : "투표하기"}
-          </VoteButton>
+          <VoteButton onClick={handleVoteClick}>투표하기</VoteButton>
         </Overlay>
       </PosterWrapper>
       <Modal
@@ -132,6 +146,7 @@ Poster.propTypes = {
   movieId: PropTypes.number.isRequired,
   isVoteEnded: PropTypes.bool.isRequired,
   matchUpId: PropTypes.number.isRequired,
+  userVote: PropTypes.bool.isRequired,
 };
 
 export default Poster;

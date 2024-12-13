@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const MainContainer = styled.div`
@@ -20,13 +21,10 @@ const SubTitle = styled.div`
   margin: 1rem 1rem 1.5rem;
 
   h3 {
-    color: #724b2e;
-
+    color: #00d6e8;
     margin: 0;
     font-size: 1.2rem;
-    margin-left: 10px;
     text-align: center;
-    margin-left: 0;
 
     @media (max-width: 768px) {
       font-size: 1.3rem;
@@ -34,19 +32,14 @@ const SubTitle = styled.div`
 
     @media (max-width: 480px) {
       font-size: 1.1rem;
-      text-align: center;
-      margin-left: 0;
     }
   }
 
   p {
-    color: var(--main);
-    color: #235b97;
+    color: black;
     margin: 0;
     font-size: 1rem;
-    margin-left: 10px;
     text-align: center;
-    margin-left: 0;
 
     @media (max-width: 768px) {
       font-size: 0.9rem;
@@ -54,14 +47,12 @@ const SubTitle = styled.div`
 
     @media (max-width: 480px) {
       font-size: 0.8rem;
-      text-align: center;
-      margin-left: 0;
     }
   }
 `;
 
 const ThemeContainer = styled.div`
-  margin: 1rem auto 0; /* 하단 여백 제거 */
+  margin: 1rem auto 0;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -82,16 +73,16 @@ const ThemeContainer = styled.div`
 `;
 
 const ThemeBtn = styled.button`
-  background-color: ${(props) => (props.$isSelected ? "#aad6e7" : "white")};
-  color: ${(props) => (props.$isSelected ? "#724b2e" : "#724b2e")};
+  background-color: ${(props) => (props.$isSelected ? "#00D6E8" : "white")};
+  color: ${(props) => (props.$isSelected ? "#02172a" : "#02172a")};
   border-radius: 12px;
   padding: 0.8rem 1rem;
   border: 1px solid #aad6e7;
   cursor: pointer;
 
   &:hover {
-    background-color: #aad6e7;
-    color: #724b2e;
+    background-color: #33efff;
+    color: #02172a;
   }
 
   @media (max-width: 768px) {
@@ -129,14 +120,14 @@ const SetGenre = ({ selectedGenreId, onSelectGenre }) => {
   ];
 
   const handleButtonClick = (id) => {
-    onSelectGenre(id); // 선택한 장르 ID 업데이트
+    onSelectGenre(id);
   };
 
   return (
     <MainContainer>
       <SubTitle>
         <h3>좋아하는 장르 1개를 골라주세요👀</h3>
-        <p>해당 장르 영화의 새로운 리뷰 알림을 받아볼 수 있어요</p>
+        <p>해당 장르 영화의 새로운 리뷰 알림을 받아볼 수 있어요.</p>
       </SubTitle>
       <ThemeContainer>
         {MovieGenre.map((item) => (
@@ -151,6 +142,11 @@ const SetGenre = ({ selectedGenreId, onSelectGenre }) => {
       </ThemeContainer>
     </MainContainer>
   );
+};
+
+SetGenre.propTypes = {
+  selectedGenreId: PropTypes.number.isRequired,
+  onSelectGenre: PropTypes.func.isRequired,
 };
 
 export default SetGenre;

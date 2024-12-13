@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import goBack from "../../assets/images/admin/goBack_br.svg";
+import { FiChevronLeft } from "react-icons/fi";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
 
 const CastInfo = styled.div`
   padding: 1.25rem;
-
-  .info__title {
-    color: var(--text);
-    margin-bottom: 1rem;
-  }
+  background-color: black;
+  color: white;
 `;
 
 const BackBtn = styled.button`
@@ -19,34 +16,59 @@ const BackBtn = styled.button`
   border: none;
   cursor: pointer;
   margin: 0 0 1.2rem 0;
+  color: white;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
 `;
 
 const DirecrtorInfoContainer = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 
   .info__director {
     display: flex;
     gap: 0.8rem;
-    margin-bottom: 6rem;
+    margin-bottom: 2rem;
+    align-items: center;
+
+    img {
+      border-radius: 0.75rem;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #ddd;
+    }
   }
 
-  .info__director--img {
-    border-radius: 0.75rem;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-  }
+  @media (max-width: 768px) {
+    .info__director {
+      flex-direction: column;
+      align-items: center;
+    }
 
-  p {
-    color: var(--sub-text);
-    margin: 0.5rem 0;
+    img {
+      width: 120px;
+      height: 120px;
+    }
   }
 `;
 
 const DirectorMovieInfo = styled.div`
   width: 100%;
+  color: white;
   display: flex;
   flex-direction: column;
 `;
@@ -84,6 +106,7 @@ const TitleGrid = styled.div`
 const TitleItem = styled.div`
   font-size: 1rem;
   display: flex;
+  color: white;
   align-items: start;
 `;
 
@@ -93,6 +116,7 @@ const MovieContentGrid = styled.div`
   gap: 0.625rem;
   align-items: center;
   justify-content: start;
+  color: white;
   margin-bottom: 0.625rem;
   padding: 0.625rem 0;
   border-bottom: 0.0625rem solid var(--ticket-bg);
@@ -127,8 +151,29 @@ const ContentItem = styled.div`
   }
 `;
 
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: ${(props) => (props.isOpen ? "flex" : "none")};
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+
+  img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+  }
+`;
+
 function CastDetail() {
   const [data, setData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
@@ -137,6 +182,7 @@ function CastDetail() {
   };
   const isActor = location.pathname.includes("actor");
   const isDirector = location.pathname.includes("director");
+
   useEffect(() => {
     const fetchData = async () => {
       let url = "";
@@ -159,20 +205,41 @@ function CastDetail() {
     fetchData();
   }, [id, location.pathname]);
 
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   if (!data) return null;
+
   return (
     <>
       <CastInfo>
         <BackBtn onClick={() => handleNavigate(-1)}>
-          <img src={goBack} alt="Go Back" />
+          <FiChevronLeft />
         </BackBtn>
         <h2 className="info__title">🎬 {isActor ? "배우" : "감독"}</h2>
         <DirecrtorInfoContainer>
           <div className="info__director">
             <img
               className="info__director--img"
-              src={data.profileImage || "http://via.placeholder.com/70x70"}
-              alt="Director"
+              src={
+                data.profileImage?.endsWith("/null")
+                  ? "/images/default.png"
+                  : data.profileImage || "/images/default.png"
+              }
+              alt={isActor ? "Actor" : "Director"}
+              onClick={() =>
+                handleImageClick(
+                  data.profileImage?.endsWith("/null")
+                    ? "/images/default.png"
+                    : data.profileImage || "/images/default.png"
+                )
+              }
             />
             <div>
               <h3>{data.name}</h3>
@@ -215,6 +282,10 @@ function CastDetail() {
           )}
         </DirectorMovieInfo>
       </CastInfo>
+
+      <Modal isOpen={isModalOpen} onClick={closeModal}>
+        <img src={selectedImage} alt="Enlarged view" />
+      </Modal>
     </>
   );
 }

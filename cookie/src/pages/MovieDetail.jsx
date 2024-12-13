@@ -9,11 +9,24 @@ import ReviewSection from "../components/movieDetailPage/ReviewSection";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 import DetailHeader from "../components/searchpage/MovieDetailHeader";
+import Spinner from "../components/common/Spinner";
 
 const ContentWrapper = styled.div`
-  max-width: 600px;
+  width: 100%;
+  min-width: 320px;
   margin: 0 auto;
   padding: 20px;
+  background-color: black;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 5px;
+  }
 `;
 
 const MovieDetail = () => {
@@ -21,36 +34,42 @@ const MovieDetail = () => {
   const navigate = useNavigate();
 
   const [movieData, setMovieData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
   const [selectedImage, setSelectedImage] = useState(""); // 클릭된 이미지
 
   useEffect(() => {
     const fetchMovieData = async () => {
+      setIsLoading(true);
       try {
         const response = await axiosInstance.get(`/api/movies/${id}`);
-        console.log("영화 상세 데이터:", response.data.response);
         setMovieData(response.data.response);
       } catch (error) {
-        console.log(error);
+        console.error("영화 데이터 로드 실패:", error);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
 
     fetchMovieData();
+  }, [id]);
 
-  }, [id])
+  const runtimeString = movieData.runtime
+    ? `${movieData.runtime}분`
+    : "정보 없음";
 
-  const runtimeString = movieData.runtime ? `${movieData.runtime}분` : "정보 없음";
-  
   const handleViewAllReviews = () => {
-    // /reviews/movie/:movieId로 이동
     navigate(`/reviews/movie/${id}`);
   };
 
-  // 이미지 클릭 핸들러
   const handleImageClick = (imageUrl) => {
     setSelectedImage(imageUrl);
     setIsModalOpen(true);
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <ContentWrapper>
@@ -72,19 +91,20 @@ const MovieDetail = () => {
         movie={movieData}
         liked={movieData.liked}
       />
-      <CastSection 
-        director={movieData.director}
-        actors={movieData.actors} />
+      <CastSection director={movieData.director} actors={movieData.actors} />
       <VideoSection videoUrl={movieData.video} />
-      <GallerySection images={movieData.images} onImageClick={handleImageClick} />
-      {movieData.reviews && (
-      <ReviewSection
-        reviews={movieData.reviews}
-        reviewCount={movieData.reviews.length}
-        onViewAllReviews={handleViewAllReviews}
-        movie={movieData}
+      <GallerySection
+        images={movieData.images}
+        onImageClick={handleImageClick}
       />
-    )}
+      {movieData.reviews && (
+        <ReviewSection
+          reviews={movieData.reviews}
+          reviewCount={movieData.reviews.length}
+          onViewAllReviews={handleViewAllReviews}
+          movie={movieData}
+        />
+      )}
     </ContentWrapper>
   );
 };

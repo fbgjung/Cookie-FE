@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const SaveButtonWrapper = styled.div`
   width: 100%;
@@ -7,8 +8,8 @@ const SaveButtonWrapper = styled.div`
 `;
 
 const SaveButton = styled.button`
-  background-color: #6a91b1;
-  color: white;
+  background-color: #00d6e8;
+  color: #02172a;
   font-size: 1rem;
   font-weight: bold;
   padding: 15px 30px;
@@ -17,6 +18,11 @@ const SaveButton = styled.button`
   cursor: pointer;
   width: 460px;
   margin-top: -30px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #33efff;
+  }
 
   &:disabled {
     background-color: #ccc;
@@ -46,6 +52,15 @@ const SaveProfileButton = ({ onClick, disabled }) => {
       </SaveButton>
     </SaveButtonWrapper>
   );
+};
+
+SaveProfileButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+
+SaveProfileButton.defaultProps = {
+  disabled: false,
 };
 
 export default SaveProfileButton;

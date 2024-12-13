@@ -1,4 +1,3 @@
-import useNotificationStore from "../stores/notificationStore";
 import { messaging } from "./firebase";
 import { getToken, onMessage } from "firebase/messaging";
 
@@ -6,16 +5,8 @@ export const requestNotificationPermission = async () => {
   try {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
-      console.log("알림 권한 허용");
-
-      const token = await new Promise((resolve) => {
-        setTimeout(async () => {
-          resolve(
-            await getToken(messaging, {
-              vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-            })
-          );
-        }, 1000);
+      const token = await getToken(messaging, {
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
       });
       if (token) {
         console.log("FCM 토큰:", token);
@@ -31,30 +22,42 @@ export const requestNotificationPermission = async () => {
   }
 };
 
+let onMessageListenerInitialized = false;
+
 export const setupOnMessageHandler = () => {
-  const addNotification = useNotificationStore.getState().addNotification;
+  if (!onMessageListenerInitialized) {
+    onMessage(messaging, (payload) => {
+      console.log("Message received in foreground:", payload);
 
-  onMessage(messaging, (payload) => {
-    console.log("알림 수신:", payload);
+      const notificationTitle = payload.data.title || "제목 없음";
+      const notificationOptions = {
+        body: payload.data.body || "내용 없음",
+        icon: payload.data.icon || "/alarm-logo.png",
+        data: payload.data,
+      };
 
-    const notificationData = {
-      title: payload.notification?.title || "제목 없음",
-      body: payload.notification?.body || "내용 없음",
-      timestamp: new Date().toLocaleString(),
-    };
+      if (
+        Notification.permission === "granted" &&
+        document.visibilityState === "visible"
+      ) {
+        const notification = new Notification(
+          notificationTitle,
+          notificationOptions
+        );
 
-    addNotification(notificationData);
-
-    const notification = new Notification(notificationData.title, {
-      body: notificationData.body,
-      icon: payload.notification?.icon || "/favicon.ico",
+        notification.onclick = (event) => {
+          event.preventDefault();
+          const redirectUrl = payload.data.url;
+          if (redirectUrl) window.open(redirectUrl, "_self");
+          notification.close();
+        };
+      } else {
+        console.log("브라우저가 비활성 상태이므로 알림이 표시되지 않았습니다.");
+      }
     });
 
-    notification.onclick = () => {
-      console.log("알림 클릭됨");
-      notification.close();
-    };
-  });
+    onMessageListenerInitialized = true;
+  }
 };
 
 setupOnMessageHandler();

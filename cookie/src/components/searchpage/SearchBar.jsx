@@ -23,7 +23,7 @@ const SearchBarContainer = styled.div`
 `;
 
 const SearchInput = styled.input`
-  width: 100%; 
+  width: 100%;
   height: 100%;
   padding: 10px 50px 10px 20px;
   font-size: 20px;
@@ -103,7 +103,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, onSearch }) => {
   return (
     <SearchBarContainer>
       <SearchInput
-        placeholder="영화 제목 또는 배우/감독명을 입력하세요"
+        placeholder="검색어를 입력하세요."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={handleKeyDown}

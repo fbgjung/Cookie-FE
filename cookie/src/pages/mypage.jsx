@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ProfileImage from "../components/mypage/ProfileImage";
 import BadgeList from "../components/mypage/BadgeList";
-import GenreChart from "../components/mypage/GenreChart";
+
 import FavoriteList from "../components/mypage/FavoriteList";
 import ReviewList from "../components/mypage/ReviewList";
 import LogoutAndWithdraw from "../components/mypage/LogoutAndWithdraw";
@@ -12,27 +12,29 @@ import axiosInstance from "../api/auth/axiosInstance";
 import { toast } from "react-hot-toast";
 import useAuthStore from "../stores/useAuthStore";
 import Spinner from "../components/common/Spinner";
+import PointHistory from "../components/matchup/PointSection";
+import PushNotificationToggle from "../components/mypage/PushNotificationToggle";
 
 const MypageContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #fff4b9;
+  background-color: white;
   position: relative;
 `;
 
 const MypageContent = styled.div`
-  background-color: #ffffff;
-  border-radius: 24px 24px 0 0;
+  background-color: white;
+
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  margin-top: 180px;
-  box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 200px;
   z-index: 1;
   box-sizing: border-box;
   padding: 20px;
-  padding-bottom: 80px;
+
+  border: 4px solid transparent;
 `;
 
 const ReviewHeader = styled.div`
@@ -46,27 +48,28 @@ const ReviewTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 1.5rem;
-  margin-left: 1rem;
-  color: #04012d;
+
+  color: #ffffff;
 `;
 
 const MoreLink = styled.span`
   font-size: 1rem;
   font-weight: bold;
   margin-top: 1.5rem;
-  margin-right: 1rem;
-  color: #724b2e;
+
+  color: #ffffff;
   cursor: pointer;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #0056b3;
+    color: #00d6e8;
   }
 `;
 
 const MyPage = () => {
   const [userData, setUserData] = useState({ nickname: "", profileImage: "" });
   const [badgeData, setBadgeData] = useState([]);
+  const [badgePoint, setBadgePoint] = useState(0);
   const [genreScores, setGenreScores] = useState([]);
   const [reviewData, setReviewData] = useState([]);
   const logOut = useAuthStore((state) => state.logOut);
@@ -74,6 +77,7 @@ const MyPage = () => {
   const openLoginModal = useAuthStore((state) => state.openLoginModal);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState(false);
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -90,38 +94,59 @@ const MyPage = () => {
       try {
         const response = await axiosInstance.get("/api/users");
 
-        const { nickname, profileImage, badge, genreScores, reviews } =
-          response.data.response;
+        const {
+          nickname,
+          profileImage,
+          badge,
+          badgePoint,
+          genreScores,
+          reviews,
+          pushEnabled,
+        } = response.data.response;
+
+        console.log("푸시 알림 상태:", pushEnabled);
+        console.log("닉네임:", nickname);
 
         setUserData({ nickname, profileImage });
+        setBadgePoint(badgePoint || 0);
+        setPushEnabled(pushEnabled);
+
         setBadgeData(
-          badge.map((b) => ({
-            name: b.name,
-            badgeImage: b.badgeImage,
-            main: b.main,
-          }))
+          badge?.map((b) => ({
+            name: b.name || "배지 없음",
+            badgeImage: b.badgeImage || "/assets/images/defaultBadge.png",
+            main: b.main || false,
+          })) || []
         );
 
-        const genreData = Object.entries(genreScores[0])
-          .filter(([key]) => key !== "id" && key !== "userId")
-          .map(([name, points]) => ({ name, points }));
+        const genreData =
+          genreScores?.length > 0
+            ? Object.entries(genreScores[0])
+                .filter(([key]) => key !== "id" && key !== "userId")
+                .map(([name, points]) => ({ name, points }))
+            : [];
         setGenreScores(genreData);
 
-        const transformedReviews = reviews.map((review) => ({
-          reviewId: review.reviewId,
-          content: review.content,
-          movieScore: review.movieScore,
-          reviewLike: review.reviewLike,
-          createdAt: review.createdAt,
-          movie: {
-            title: review.movie.title,
-            poster: review.movie.poster,
-          },
-          user: {
-            nickname: review.user.nickname,
-            profileImage: review.user.profileImage,
-          },
-        }));
+        const transformedReviews =
+          reviews?.map((review) => ({
+            reviewId: review.reviewId,
+            content: review.content,
+            movieScore: review.movieScore,
+            reviewLike: review.reviewLike,
+            createdAt: review.createdAt,
+            movie: {
+              title: review.movie.title || "영화 제목 없음",
+              poster:
+                review.movie.poster || "/assets/images/default-poster.png",
+            },
+            user: {
+              nickname: review.user.nickname || "익명",
+              profileImage:
+                review.user.profileImage || "/assets/images/default-user.png",
+            },
+          })) || [];
+
+        console.log("변환된 리뷰:", transformedReviews);
         setReviewData(transformedReviews);
       } catch (error) {
         console.error("데이터 로드 실패:", error);
@@ -146,6 +171,9 @@ const MyPage = () => {
         console.log("FCM 토큰 삭제 성공");
 
         logOut();
+        sessionStorage.clear();
+        localStorage.clear();
+
         toast.success("로그아웃 되었습니다.");
         navigate("/login");
       } catch (error) {
@@ -182,15 +210,27 @@ const MyPage = () => {
     navigate("/myAllReviewList");
   };
 
+  const handleNotificationClick = () => {
+    navigate("/notifications");
+  };
+
+  const handlePointHistoryClick = () => {
+    if (!isLogined()) {
+      openLoginModal();
+    } else {
+      navigate("/point-history");
+    }
+  };
   return (
     <>
       <LoginModal />
+
       {isLoading && <Spinner />}
       <MypageContainer>
         <div
           style={{
             position: "absolute",
-            top: "100px",
+            top: "50px",
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 2,
@@ -207,8 +247,14 @@ const MyPage = () => {
         </div>
         <MypageContent>
           <BadgeList title={`${userData.nickname}의 배지`} badges={badgeData} />
-          <GenreChart data={genreScores} />
+          {/* <GenreChart data={genreScores} /> */}
+          <PointHistory
+            badgePoint={badgePoint}
+            onClick={handlePointHistoryClick}
+          />
+
           <FavoriteList title="좋아요" items={favoriteItems} />
+          <PushNotificationToggle pushEnabled={pushEnabled} />
           <ReviewHeader>
             <ReviewTitle>{`${userData.nickname}의 리뷰`}</ReviewTitle>
             <MoreLink onClick={handleMoreClick}>{" 더보기"}</MoreLink>
@@ -221,6 +267,7 @@ const MyPage = () => {
             />
           )}
         </MypageContent>
+        <button onClick={() => handleNotificationClick()}>알림 목록</button>
       </MypageContainer>
     </>
   );

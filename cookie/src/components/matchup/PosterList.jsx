@@ -53,14 +53,16 @@ const FightImage = styled.img`
   }
 `;
 
-const PosterList = ({ posters, isVoteEnded }) => (
+const PosterList = ({ posters, matchUpId, isVoteEnded, userVote }) => (
   <PosterContainer>
     <Poster
       key={posters[0].movieId}
       src={posters[0].src}
       movieTitle={posters[0].title}
       movieId={posters[0].movieId}
+      matchUpId={matchUpId}
       isVoteEnded={isVoteEnded}
+      userVote={userVote}
     />
     <FightImageWrapper>
       <FightImage src={FightIcon} alt="빅매치 아이콘" />
@@ -70,7 +72,9 @@ const PosterList = ({ posters, isVoteEnded }) => (
       src={posters[1].src}
       movieTitle={posters[1].title}
       movieId={posters[1].movieId}
+      matchUpId={matchUpId}
       isVoteEnded={isVoteEnded}
+      userVote={userVote}
     />
   </PosterContainer>
 );
@@ -83,7 +87,9 @@ PosterList.propTypes = {
       title: PropTypes.string.isRequired,
     })
   ).isRequired,
+  matchUpId: PropTypes.number.isRequired,
   isVoteEnded: PropTypes.bool.isRequired,
+  userVote: PropTypes.bool.isRequired,
 };
 
 export default PosterList;

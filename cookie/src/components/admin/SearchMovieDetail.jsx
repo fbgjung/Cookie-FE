@@ -3,6 +3,9 @@ import frame from "../../assets/images/admin/frame.svg";
 import back from "../../assets/images/admin/goBack.svg";
 import AddLinkStillCut from "./AddLinkStillCut";
 import useAdminMovieStore from "../../stores/useAdminMovieStore";
+import { useEffect, useState } from "react";
+import axiosInstance from "../../api/auth/axiosInstance";
+import serverBaseUrl from "../../config/apiConfig";
 
 const flexRowCenter = `
   display: flex;
@@ -13,8 +16,8 @@ const flexRowCenter = `
 
 const AddMovieDetail = styled.div`
   margin: 1rem;
-  height: 780px;
-  border: 1px solid var(--main);
+  min-height: 1200px;
+  border: 1px solid var(--sub);
   border-radius: 12px;
   position: relative;
   display: flex;
@@ -24,14 +27,14 @@ const AddMovieDetail = styled.div`
 const TitleContainer = styled.div`
   position: absolute;
   padding: 0.8rem 1rem;
-  background-color: var(--main);
+  background-color: var(--sub);
   height: 32px;
   border-radius: 11px;
   width: 1175px;
   display: flex;
   justify-content: start;
   align-items: center;
-  color: white;
+  color: var(--text);
   font-weight: 700;
 
   button {
@@ -52,10 +55,10 @@ const TitleContainer = styled.div`
 
 export const MovieDetail = styled.div`
   display: flex;
-  margin: 40px 50px;
+  margin: 40px 10px;
   height: 600px;
   background-color: white;
-  color: var(--main);
+  color: var(--text);
 `;
 
 export const MovieContainer = styled.div`
@@ -71,8 +74,10 @@ export const MovieRow = styled.div`
   align-items: flex-start;
   margin-bottom: 1rem;
 
-  img {
+  .movie__poster {
     border-radius: 10px;
+    width: 177px;
+    height: 245px;
   }
 `;
 
@@ -97,27 +102,30 @@ export const Label = styled.p`
 export const ActorProfile = styled.img`
   border-radius: 10px;
   margin-right: 0.5rem;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
 `;
 
 export const ButtonWrapper = styled.div`
   ${flexRowCenter}
-  margin: 2rem;
+  margin:3rem 1rem 0 0;
   display: flex;
   justify-content: end;
 `;
 
 export const SubmitBtn = styled.button`
-  background-color: var(--main);
-  color: white;
+  background-color: white;
+  color: var(--text);
   border-radius: 18px;
   padding: 0.625rem 1rem;
-  border: none;
+  border: 1px solid var(--sub);
   font-size: 1.25rem;
 
   cursor: pointer;
   &:hover {
-    background-color: var(--sub-btn);
-    color: var(--main);
+    background-color: var(--sub);
+    color: var(--text);
   }
 `;
 export const MovieInfoSection = ({ label, children }) => {
@@ -136,9 +144,10 @@ export const ActorItem = ({ actor }) => (
     style={{
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
-      marginRight: "1rem",
-      width: "70px",
+      alignItems: "start",
+      marginRight: "4px",
+      height: "95px",
+      width: "80px",
     }}
   >
     <ActorProfile src={actor.profilePath} alt={actor.name} />
@@ -147,20 +156,68 @@ export const ActorItem = ({ actor }) => (
 );
 
 const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
-  const { movieList, isSelected, setIsSelected, addRegisteredMovie } =
-    useAdminMovieStore();
+  const [movie, setMovie] = useState(null);
+  const [isSelected, setIsSelected] = useState(false);
+  const [additionalStillCuts, setAdditionalStillCuts] = useState([]); // 추가된 스틸컷 상태
 
-  const movie = movieList.find((movie) => movie.movieId === selectedMovie);
-  if (!movie) return <p>영화가 없습니다.</p>;
-
-  const handleSelect = () => {
-    addRegisteredMovie(movie);
-    setIsSelected(!isSelected);
-    alert("영화가 등록되었어요!");
+  useEffect(() => {
+    if (selectedMovie) {
+      setMovie(selectedMovie);
+    }
+  }, [selectedMovie]);
+  if (!movie) {
+    return <p>영화 정보를 불러오는 중입니다...</p>;
+  }
+  const handleSetAdditionalStillCuts = (newCuts) => {
+    setAdditionalStillCuts(newCuts); // 추가된 스틸컷 상태 업데이트
   };
+  const handleSelect = async () => {
+    try {
+      const movieData = {
+        movieId: movie.movieId,
+        title: movie.title,
+        director: {
+          name: movie.director.name,
+          profilePath: movie.director.profilePath,
+          tmdbCasterId: movie.director.tmdbCasterId,
+        },
+        runtime: movie.runtime,
+        posterPath: movie.posterPath,
+        releaseDate: movie.releaseDate,
+        certification: movie.certification,
+        country: movie.country,
+        plot: movie.plot,
+        youtube: movie.youtube,
+        stillCuts: [...movie.stillCuts, ...additionalStillCuts],
+        actors: movie.actors.map((actor) => ({
+          name: actor.name,
+          profilePath: actor.profilePath,
+          tmdbCasterId: actor.tmdbCasterId,
+        })),
+        categories: movie.categories || [],
+      };
 
+      const registerResponse = await axiosInstance.post(
+        `/api/admin/movie`,
+        movieData
+      );
+      alert("영화가 등록되었습니다!");
+      setIsSelected(true);
+    } catch (error) {
+      if (error.response?.status === 400) {
+        alert("이미 등록된 영화입니다.");
+      } else {
+        alert("영화 등록에 실패했습니다.");
+      }
+    }
+  };
   return (
     <AddMovieDetail>
+      <ButtonWrapper>
+        <SubmitBtn $isSelected={isSelected} onClick={handleSelect}>
+          등록하기
+        </SubmitBtn>
+      </ButtonWrapper>
       <TitleContainer>
         <button onClick={handleGoBack}>
           <img src={back} alt="back" />
@@ -171,7 +228,11 @@ const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
       <MovieDetail>
         <MovieContainer key={movie.movieId}>
           <MovieRow>
-            <img src={movie.posterPath} alt={movie.title} />
+            <img
+              className="movie__poster"
+              src={movie.posterPath}
+              alt={movie.title}
+            />
             <MovieInfo>
               <MovieTitle>{movie.title}</MovieTitle>
 
@@ -181,7 +242,12 @@ const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
                 { label: "연령", value: movie.certification },
                 { label: "국가", value: movie.country },
                 { label: "줄거리", value: movie.plot },
-                { label: "카테고리", value: movie.categories.join(", ") },
+                {
+                  label: "카테고리",
+                  value: movie.categories
+                    ? movie.categories.join(", ")
+                    : "정보 없음",
+                },
               ].map((section, index) => (
                 <MovieInfoSection key={index} label={section.label}>
                   {section.value}
@@ -200,14 +266,13 @@ const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
             </MovieInfo>
           </MovieRow>
 
-          <AddLinkStillCut selectedMovie={selectedMovie} />
+          <AddLinkStillCut
+            selectedMovie={selectedMovie}
+            stillCuts={movie.stillCuts}
+            onUpdateStillCuts={handleSetAdditionalStillCuts}
+          />
         </MovieContainer>
       </MovieDetail>
-      <ButtonWrapper>
-        <SubmitBtn $isSelected={isSelected} onClick={handleSelect}>
-          등록하기
-        </SubmitBtn>
-      </ButtonWrapper>
     </AddMovieDetail>
   );
 };

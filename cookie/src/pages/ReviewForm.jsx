@@ -1,18 +1,28 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
-import axiosInstance from "../api/auth/axiosInstance";
 import { toast } from "react-hot-toast";
+import ReviewHeader from "../components/searchpage/ReviewHeader";
+import axiosInstance from "../api/auth/axiosInstance";
 
-// styled-components 정의
 const FormWrapper = styled.div`
-  width: 90%;
-  margin: 30px auto;
+  width: 100%;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 16px;
-  background-color: #ffffff;
-  height: 100vh;
+  background-color: black;
+  min-height: 100vh;
+  overflow-y: auto;
+
+  h1 {
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 10px;
+  }
 `;
 
 const PosterWrapper = styled.div`
@@ -24,6 +34,20 @@ const PosterWrapper = styled.div`
     width: 200px;
     height: auto;
     border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    margin: 15px 0;
+    img {
+      width: 150px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    img {
+      width: 120px;
+    }
   }
 `;
 
@@ -52,11 +76,22 @@ const RatingWrapper = styled.div`
       filter: grayscale(100%);
     }
   }
+
+  @media (max-width: 768px) {
+    span {
+      font-size: 14px;
+    }
+
+    .rating-icons img {
+      width: 20px;
+      height: 20px;
+    }
+  }
 `;
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 450px;
+  height: 200px;
   min-height: 100px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -69,6 +104,16 @@ const TextArea = styled.textarea`
   &:focus {
     outline: none;
     border-color: #007bff;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    height: 150px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    height: 120px;
   }
 `;
 
@@ -91,6 +136,10 @@ const SpoilerWrapper = styled.div`
     font-size: 12px;
     color: #666;
     margin-left: 10px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `;
 
@@ -118,18 +167,36 @@ const ButtonWrapper = styled.div`
     }
 
     &.submit {
-      background-color: #04012d;
+      background-color: #00d6e8;
       color: #fff;
       border: none;
 
       &:hover {
-        background-color: #000;
+        background-color: #00a8b5;
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    button {
+      width: 45%;
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    button {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .cancel {
+      margin-bottom: 10px;
     }
   }
 `;
 
-// ReviewForm 컴포넌트
 const ReviewForm = () => {
   const [movieScore, setMovieScore] = useState(0);
   const [content, setContent] = useState("");
@@ -179,13 +246,16 @@ const ReviewForm = () => {
       const response = await axiosInstance.post(`/api/reviews`, payload);
       if (response.status === 200) {
         toast.success("리뷰가 성공적으로 등록되었습니다.");
-        navigate("/reviews");
+        console.log("리뷰 등록 성공:", response.data.response);
+        navigate("/");
       } else {
         toast.error("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
-      if (error.response?.data.message === "해당 영화에 이미 리뷰를 등록했습니다.") {
+      if (
+        error.response?.data.message === "해당 영화에 이미 리뷰를 등록했습니다."
+      ) {
         toast.error("해당 영화에 이미 리뷰를 등록했습니다.");
       } else {
         toast.error("리뷰 등록 중 오류가 발생했습니다.");
@@ -195,6 +265,7 @@ const ReviewForm = () => {
 
   return (
     <FormWrapper>
+      <ReviewHeader onBack={() => navigate(-1)} />
       <h1>{movieTitle} 리뷰 남기기</h1>
       {posterUrl && (
         <PosterWrapper>
@@ -211,8 +282,8 @@ const ReviewForm = () => {
                 key={index}
                 src={
                   index < movieScore
-                    ? "images/cookiescore.svg"
-                    : "images/cookieinactive.svg"
+                    ? "/assets/images/review/cookiescore.svg"
+                    : "/assets/images/review/cookieinactive.svg"
                 }
                 alt="Cookie"
                 className={index >= movieScore ? "inactive" : ""}

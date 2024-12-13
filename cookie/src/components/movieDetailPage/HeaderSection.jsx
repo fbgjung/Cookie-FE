@@ -1,17 +1,66 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import styled from "styled-components";
-import ArrowButton from "./ArrowButton";
+import styled, { keyframes } from "styled-components";
+
+const spin = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
 
 const HeaderWrapper = styled.div`
   position: relative;
   width: 100%;
   border-radius: 10px;
   overflow: hidden;
+  background: #333;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    min-height: 200px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 150px;
+  }
+
+  .skeleton {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+
+    .spinner {
+      position: absolute;
+      top: 45%;
+      left: 45%;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #fff;
+      border-top: 4px solid #00d6e8;
+      border-radius: 50%;
+      animation: ${spin} 1s linear infinite;
+      transform: translate(-50%, -50%);
+    }
+  }
 
   img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
     object-fit: cover;
+    display: ${(props) => (props.isLoading ? "none" : "block")};
+    z-index: 0;
   }
 
   .info-overlay {
@@ -22,16 +71,60 @@ const HeaderWrapper = styled.div`
     background: rgba(0, 0, 0, 0.6);
     padding: 10px;
     border-radius: 8px;
+    opacity: ${(props) => (props.isLoading ? 0 : 1)};
+    transition: opacity 0.3s ease;
+    max-width: 90%;
+    width: 100%;
 
     h1 {
       font-size: 20px;
       font-weight: bold;
+      color: white;
       margin: 0;
+      word-wrap: break-word;
     }
 
     p {
       font-size: 14px;
       margin: 5px 0 0 0;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      bottom: 15px;
+      left: 15px;
+      padding: 8px;
+
+      h1 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      bottom: 10px;
+      left: 10px;
+      padding: 5px;
+
+      h1 {
+        font-size: 16px;
+      }
+
+      p {
+        font-size: 10px;
+      }
+    }
+  }
+
+  @keyframes skeleton-loading {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: 200% 0%;
     }
   }
 `;
@@ -42,31 +135,22 @@ const HeaderSection = ({
   country,
   runtime,
   certification,
-  mainImage
+  mainImage,
 }) => {
-  console.log(title);
-  console.log(runtime);
-  console.log(country);
-  // const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-
-  // const nextImage = () => {
-  //   setCurrentIndex((prev) => (prev + 1) % stillCuts.length);
-  // };
-
-  // const prevImage = () => {
-  //   setCurrentIndex((prev) => (prev === 0 ? stillCuts.length - 1 : prev - 1));
-  // };
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
 
   return (
-    <HeaderWrapper>
-      <img src={mainImage} alt="스틸컷" />
-      {/* <ArrowButton className="left" onClick={prevImage}>
-        ◀
-      </ArrowButton>
-      <ArrowButton className="right" onClick={nextImage}>
-        ▶
-      </ArrowButton> */}
+    <HeaderWrapper isLoading={isLoading}>
+      {isLoading && (
+        <div className="skeleton">
+          <div className="spinner" />
+        </div>
+      )}
+      <img src={mainImage} alt="스틸컷" onLoad={handleImageLoad} />
       <div className="info-overlay">
         <h1>{title}</h1>
         <p>{`${releasedAt} · ${country} · ${runtime} · ${certification}`}</p>
@@ -75,15 +159,13 @@ const HeaderSection = ({
   );
 };
 
-// PropTypes 정의
 HeaderSection.propTypes = {
-  title: PropTypes.string.isRequired, // title은 필수 string 타입
-  releasedAt: PropTypes.string.isRequired, // year은 필수 string 타입
-  country: PropTypes.string.isRequired, // country은 필수 string 타입
-  runtime: PropTypes.string.isRequired, // duration은 필수 string 타입
-  certification: PropTypes.string.isRequired, // rating은 필수 string 타입
-  mainImage: PropTypes.string.isRequired
-  // stillCuts: PropTypes.arrayOf(PropTypes.string).isRequired, // stillCuts는 string 배열의 필수 props
+  title: PropTypes.string.isRequired,
+  releasedAt: PropTypes.string.isRequired,
+  country: PropTypes.string.isRequired,
+  runtime: PropTypes.string.isRequired,
+  certification: PropTypes.string.isRequired,
+  mainImage: PropTypes.string.isRequired,
 };
 
 export default HeaderSection;
