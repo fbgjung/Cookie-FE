@@ -12,7 +12,9 @@ function SpecialMovie({ categorydata }) {
   const [selectedSubCategory, setSelectedSubCategory] = useState("설레는봄");
   const [movies, setMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [totalPages, setTotalPages] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const moviesPerSlide = 4;
   const navigate = useNavigate();
 
   const handleMainCategoryClick = (mainCategory) => {
@@ -38,6 +40,8 @@ function SpecialMovie({ categorydata }) {
             params: {
               mainCategory: mainCategory,
               subCategory: subCategory,
+              page: currentPage - 1,
+              size: 12,
             },
           }
         );
@@ -87,100 +91,105 @@ function SpecialMovie({ categorydata }) {
     navigate("/category/movies", { state: { mainCategory, subCategory } });
   };
 
+  const slides = Array.from(
+    { length: Math.ceil(movies.length / moviesPerSlide) },
+    (_, i) => movies.slice(i * moviesPerSlide, (i + 1) * moviesPerSlide)
+  );
+
   const handleNext = () => {
-    if (currentIndex < movies.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+    if (currentIndex < slides.length - 1) {
+      setCurrentIndex((prevIndex) => prevIndex + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      setCurrentIndex((prevIndex) => prevIndex - 1);
     }
   };
+
   return (
     <>
       <SpecialMovieList>
         <Title>영화 선택 시간을 덜어드려요</Title>
+
         <div>
-          <div>
-            {mainCategories.map((mainCategory, index) => (
-              <ThemeBtn
-                key={index}
-                onClick={() => handleMainCategoryClick(mainCategory)}
-                $isSelected={selectedMainCategory === mainCategory}
-              >
-                {mainCategory}
-              </ThemeBtn>
-            ))}
-          </div>
+          {mainCategories.map((mainCategory, index) => (
+            <ThemeBtn
+              key={index}
+              onClick={() => handleMainCategoryClick(mainCategory)}
+              $isSelected={selectedMainCategory === mainCategory}
+            >
+              {mainCategory}
+            </ThemeBtn>
+          ))}
+        </div>
 
-          {selectedMainCategory && (
-            <div className="movie__category">
-              {getSubCategories(selectedMainCategory).map(
-                (subCategory, index) => (
-                  <CategoryBtn
-                    key={index}
-                    onClick={() => handleSubCategoryClick(subCategory)}
-                    $isSelected={selectedSubCategory === subCategory}
-                  >
-                    {subCategory}
-                  </CategoryBtn>
-                )
-              )}
-            </div>
-          )}
-          <MoreViewText
-            onClick={() =>
-              handleMoreView(selectedMainCategory, selectedSubCategory)
-            }
+        {selectedMainCategory && (
+          <div className="movie__category">
+            {getSubCategories(selectedMainCategory).map(
+              (subCategory, index) => (
+                <CategoryBtn
+                  key={index}
+                  onClick={() => handleSubCategoryClick(subCategory)}
+                  $isSelected={selectedSubCategory === subCategory}
+                >
+                  {subCategory}
+                </CategoryBtn>
+              )
+            )}
+          </div>
+        )}
+        <MoreViewText
+          onClick={() =>
+            handleMoreView(selectedMainCategory, selectedSubCategory)
+          }
+        >
+          {selectedSubCategory} 더보기 {">"}
+        </MoreViewText>
+
+        <div className="specialMovie__movie--wrapper">
+          <button
+            className="prev"
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
           >
-            {selectedSubCategory} 더보기 {">"}
-          </MoreViewText>
-
-          <div className="specialMovie__movie--wrapper">
-            <button
-              className="prev"
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-            >
-              &lt;
-            </button>
-            <div
-              className="specialMovie__list"
-              style={{
-                transform: `translateX(-${currentIndex * 40}%)`,
-              }}
-            >
-              {movies &&
-                movies.map((movie, index) => (
-                  <div
-                    key={index}
-                    className="specialMovie__list--info"
-                    onClick={() => handleMovieClick(movie.id)}
-                  >
-                    <Poster src={movie.poster} alt={movie.title} />
-                    <MovieInfo>
-                      <Review>
-                        <ReviewIcon alt="Review Icon" />
-                        <Count>{movie.reviews}</Count>
-                      </Review>
-                      <Like>
-                        <LikeIcon alt="Review Icon" />
-                        <Count>{movie.likes}</Count>
-                      </Like>
-                    </MovieInfo>
-                  </div>
-                ))}
-            </div>
-            <button
-              className="next"
-              onClick={handleNext}
-              disabled={currentIndex === movies.length - 1}
-            >
-              &gt;
-            </button>
+            &lt;
+          </button>
+          <div
+            className="specialMovie__list"
+            style={{
+              transform: `translateX(-${currentIndex * 57}%)`,
+            }}
+          >
+            {movies &&
+              movies.map((movie, index) => (
+                <div
+                  key={index}
+                  className="specialMovie__list--info"
+                  onClick={() => handleMovieClick(movie.id)}
+                >
+                  <Poster src={movie.poster} alt={movie.title} />
+                  <MovieInfo>
+                    <Review>
+                      <ReviewIcon alt="Review Icon" />
+                      <Count>{movie.reviews}</Count>
+                    </Review>
+                    <Like>
+                      <LikeIcon alt="Review Icon" />
+                      <Count>{movie.likes}</Count>
+                    </Like>
+                  </MovieInfo>
+                </div>
+              ))}
           </div>
+          <button
+            className="next"
+            onClick={handleNext}
+            disabled={currentIndex === slides.length - 1}
+          >
+            &gt;
+          </button>
         </div>
       </SpecialMovieList>
     </>

@@ -16,7 +16,7 @@ const flexRowCenter = `
 
 const AddMovieDetail = styled.div`
   margin: 1rem;
-  height: 970px;
+  min-height: 1200px;
   border: 1px solid var(--sub);
   border-radius: 12px;
   position: relative;
@@ -109,7 +109,7 @@ export const ActorProfile = styled.img`
 
 export const ButtonWrapper = styled.div`
   ${flexRowCenter}
-  margin:13.7rem 1rem;
+  margin:3rem 1rem 0 0;
   display: flex;
   justify-content: end;
 `;
@@ -158,6 +158,7 @@ export const ActorItem = ({ actor }) => (
 const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
   const [movie, setMovie] = useState(null);
   const [isSelected, setIsSelected] = useState(false);
+  const [additionalStillCuts, setAdditionalStillCuts] = useState([]); // 추가된 스틸컷 상태
 
   useEffect(() => {
     if (selectedMovie) {
@@ -167,47 +168,56 @@ const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
   if (!movie) {
     return <p>영화 정보를 불러오는 중입니다...</p>;
   }
-
-  const handleSelect = () => {
-    const movieData = {
-      movieId: movie.movieId,
-      title: movie.title,
-      director: {
-        name: movie.director.name,
-        profilePath: movie.director.profilePath,
-        tmdbCasterId: movie.director.tmdbCasterId,
-      },
-      runtime: movie.runtime,
-      posterPath: movie.posterPath,
-      releaseDate: movie.releaseDate,
-      certification: movie.certification,
-      country: movie.country,
-      plot: movie.plot,
-      youtube: movie.youtube,
-      stillCuts: movie.stillCuts,
-      actors: movie.actors.map((actor) => ({
-        name: actor.name,
-        profilePath: actor.profilePath,
-        tmdbCasterId: actor.tmdbCasterId,
-      })),
-      categories: movie.categories || [],
-    };
-
-    axiosInstance
-      .post(`/api/admin/movie`, movieData)
-      .then((response) => {
-        console.log("영화 등록 성공:", response.data.response);
-        alert("영화가 등록되었습니다!");
-        setIsSelected(true);
-      })
-      .catch((error) => {
-        console.error("영화 등록 오류:", error);
-        alert("영화 등록에 실패했습니다.");
-      });
+  const handleSetAdditionalStillCuts = (newCuts) => {
+    setAdditionalStillCuts(newCuts); // 추가된 스틸컷 상태 업데이트
   };
+  const handleSelect = async () => {
+    try {
+      const movieData = {
+        movieId: movie.movieId,
+        title: movie.title,
+        director: {
+          name: movie.director.name,
+          profilePath: movie.director.profilePath,
+          tmdbCasterId: movie.director.tmdbCasterId,
+        },
+        runtime: movie.runtime,
+        posterPath: movie.posterPath,
+        releaseDate: movie.releaseDate,
+        certification: movie.certification,
+        country: movie.country,
+        plot: movie.plot,
+        youtube: movie.youtube,
+        stillCuts: [...movie.stillCuts, ...additionalStillCuts],
+        actors: movie.actors.map((actor) => ({
+          name: actor.name,
+          profilePath: actor.profilePath,
+          tmdbCasterId: actor.tmdbCasterId,
+        })),
+        categories: movie.categories || [],
+      };
 
+      const registerResponse = await axiosInstance.post(
+        `/api/admin/movie`,
+        movieData
+      );
+      alert("영화가 등록되었습니다!");
+      setIsSelected(true);
+    } catch (error) {
+      if (error.response?.status === 400) {
+        alert("이미 등록된 영화입니다.");
+      } else {
+        alert("영화 등록에 실패했습니다.");
+      }
+    }
+  };
   return (
     <AddMovieDetail>
+      <ButtonWrapper>
+        <SubmitBtn $isSelected={isSelected} onClick={handleSelect}>
+          등록하기
+        </SubmitBtn>
+      </ButtonWrapper>
       <TitleContainer>
         <button onClick={handleGoBack}>
           <img src={back} alt="back" />
@@ -256,14 +266,13 @@ const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
             </MovieInfo>
           </MovieRow>
 
-          <AddLinkStillCut selectedMovie={selectedMovie} movieList={movie} />
+          <AddLinkStillCut
+            selectedMovie={selectedMovie}
+            stillCuts={movie.stillCuts}
+            onUpdateStillCuts={handleSetAdditionalStillCuts}
+          />
         </MovieContainer>
       </MovieDetail>
-      <ButtonWrapper>
-        <SubmitBtn $isSelected={isSelected} onClick={handleSelect}>
-          등록하기
-        </SubmitBtn>
-      </ButtonWrapper>
     </AddMovieDetail>
   );
 };

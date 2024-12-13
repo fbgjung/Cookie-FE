@@ -17,7 +17,6 @@ import {
 } from "./SearchMovieDetail";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/auth/axiosInstance";
-import serverBaseUrl from "../../config/apiConfig";
 
 const Overlay = styled.div`
   position: fixed;
@@ -51,54 +50,54 @@ const ButtonContainer = styled.div`
   transform: translateX(-50%);
 `;
 
-const MovieInfoModal = ({ movieId, onClose }) => {
-  const [movie, setMovie] = useState(null);
+const MovieInfoModal = ({ movie, onClose }) => {
+  const [modalMovie, setModalMovie] = useState(movie);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
         const response = await axiosInstance.get(
-          `/api/admin/movie/${movieId}/detail`
+          `/api/admin/movie/${movie.movieId}/detail`
         );
         console.log(response);
-        setMovie(response.data.response);
+        setModalMovie(response.data.response);
       } catch (error) {
         console.error("영화 정보를 불러오는 데 실패했습니다.", error);
       }
     };
 
-    if (movieId) {
+    if (movie && movie.movieId) {
       fetchMovieDetails();
     }
-  }, [movieId]);
+  }, [movie]);
 
-  if (!movie) return null;
+  if (!modalMovie) return null;
 
   return (
     <>
       <Overlay onClick={onClose} />
       <ModalContainer>
         <MovieDetail>
-          <MovieContainer key={movie.movieId}>
+          <MovieContainer key={modalMovie.movieId}>
             <MovieRow>
               <img
                 className="movie__poster"
-                src={movie.posterPath}
-                alt={movie.title}
+                src={modalMovie.posterPath}
+                alt={modalMovie.title}
               />
               <MovieInfo>
-                <MovieTitle>{movie.title}</MovieTitle>
+                <MovieTitle>{modalMovie.title}</MovieTitle>
 
                 {[
-                  { label: "러닝타임", value: `${movie.runtime}분` },
-                  { label: "개봉일", value: movie.releaseDate },
-                  { label: "연령", value: movie.certification },
-                  { label: "국가", value: movie.country },
-                  { label: "줄거리", value: movie.plot },
+                  { label: "러닝타임", value: `${modalMovie.runtime}분` },
+                  { label: "개봉일", value: modalMovie.releaseDate },
+                  { label: "연령", value: modalMovie.certification },
+                  { label: "국가", value: modalMovie.country },
+                  { label: "줄거리", value: modalMovie.plot },
                   {
                     label: "카테고리",
-                    value: Array.isArray(movie.categories)
-                      ? movie.categories.join(", ")
+                    value: Array.isArray(modalMovie.categories)
+                      ? modalMovie.categories.join(", ")
                       : "카테고리 정보 없음",
                   },
                 ].map((section, index) => (
@@ -108,12 +107,13 @@ const MovieInfoModal = ({ movieId, onClose }) => {
                 ))}
 
                 <MovieInfoSection label="감독">
-                  <ActorItem actor={movie.director || "감독 정보 없음"} />
+                  <ActorItem actor={modalMovie.director || "감독 정보 없음"} />
                 </MovieInfoSection>
 
                 <MovieInfoSection label="배우">
-                  {Array.isArray(movie.actors) && movie.actors.length > 0 ? (
-                    movie.actors.map((actor, index) => (
+                  {Array.isArray(modalMovie.actors) &&
+                  modalMovie.actors.length > 0 ? (
+                    modalMovie.actors.map((actor, index) => (
                       <ActorItem key={index} actor={actor} />
                     ))
                   ) : (
@@ -124,8 +124,8 @@ const MovieInfoModal = ({ movieId, onClose }) => {
             </MovieRow>
             <YoutubeAndStillCutContainer>
               <MovieInfoSection label="유튜브">
-                {movie.youtube &&
-                  movie.youtube.split(", ").map((link, index) => (
+                {modalMovie.youtube &&
+                  modalMovie.youtube.split(", ").map((link, index) => (
                     <div key={index}>
                       📎
                       <YoutubeLink
@@ -140,9 +140,9 @@ const MovieInfoModal = ({ movieId, onClose }) => {
               </MovieInfoSection>
 
               <MovieInfoSection label="스틸컷">
-                {Array.isArray(movie.stillCuts) &&
-                movie.stillCuts.length > 0 ? (
-                  movie.stillCuts.map((image, index) => (
+                {Array.isArray(modalMovie.stillCuts) &&
+                modalMovie.stillCuts.length > 0 ? (
+                  modalMovie.stillCuts.map((image, index) => (
                     <StillCutContainer
                       key={index}
                       style={{

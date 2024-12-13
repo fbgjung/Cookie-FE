@@ -10,7 +10,8 @@ function GenreMovie({ categorydata }) {
   const [genreMovies, setGenreMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [totalPages, setTotalPages] = useState();
   const [selectedPage, setSelectedPage] = useState(1);
 
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function GenreMovie({ categorydata }) {
               mainCategory: "장르",
               subCategory: genre,
               page: currentPage - 1,
-              size: 15,
+              size: 12,
             },
           }
         );
@@ -82,6 +83,17 @@ function GenreMovie({ categorydata }) {
     navigate("/category/movies", { state: { mainCategory, subCategory } });
   };
 
+  const handleNext = () => {
+    if (currentIndex < genreMovies.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
   return (
     <>
       <GenreMovieList>
@@ -105,27 +117,47 @@ function GenreMovie({ categorydata }) {
         >
           {selectedGenre} 더보기 {">"}
         </MoreViewText>
-
-        <div className="genre__movie">
-          {genreMovies.map((movie, index) => (
-            <div
-              key={index}
-              className="genre__movie--list"
-              onClick={() => handleMovieClick(movie.id)}
-            >
-              <Poster src={movie.poster} alt={movie.title} />
-              <MovieInfo>
-                <Review>
-                  <ReviewIcon alt="Review Icon" />
-                  <Count>{movie.reviews}</Count>
-                </Review>
-                <Like>
-                  <LikeIcon alt="Review Icon" />
-                  <Count>{movie.likes}</Count>
-                </Like>
-              </MovieInfo>
-            </div>
-          ))}
+        <div className="genre__movie--wrapper">
+          <button
+            className="prev"
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+          >
+            &lt;
+          </button>
+          <div
+            className="genre__movie"
+            style={{
+              transform: `translateX(-${currentIndex * 100}%)`,
+            }}
+          >
+            {genreMovies.map((movie, index) => (
+              <div
+                key={index}
+                className="genre__movie--list"
+                onClick={() => handleMovieClick(movie.id)}
+              >
+                <Poster src={movie.poster} alt={movie.title} />
+                <MovieInfo>
+                  <Review>
+                    <ReviewIcon alt="Review Icon" />
+                    <Count>{movie.reviews}</Count>
+                  </Review>
+                  <Like>
+                    <LikeIcon alt="Review Icon" />
+                    <Count>{movie.likes}</Count>
+                  </Like>
+                </MovieInfo>
+              </div>
+            ))}
+          </div>
+          <button
+            className="next"
+            onClick={handleNext}
+            disabled={currentIndex === totalPages}
+          >
+            &gt;
+          </button>
         </div>
       </GenreMovieList>
     </>
@@ -135,15 +167,51 @@ function GenreMovie({ categorydata }) {
 export default GenreMovie;
 
 const GenreMovieList = styled.div`
+  position: relative;
+  overflow: hidden;
   .genreBtn__contianer {
     margin-bottom: 0.8rem;
   }
 
+  .genr__movie--wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
   .genre__movie {
     display: flex;
-    flex-direction: row;
+    transition: transform 1s ease;
     align-items: start;
-    overflow-x: auto;
+  }
+  .prev,
+  .next {
+    position: absolute;
+    top: 69%;
+    width: 50px;
+    height: 50px;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+  }
+
+  .prev {
+    left: -15px;
+  }
+
+  .next {
+    right: -15px;
+  }
+
+  .prev:disabled,
+  .next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 
