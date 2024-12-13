@@ -141,6 +141,7 @@ const DefaultResultsHeader = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
+  margin-top: 20px;
 
   @media (max-width: 768px) {
     font-size: 1.2rem;
