@@ -8,6 +8,7 @@ const ReviewText = styled.div`
 
   p {
     margin-bottom: 10px;
+    color: white;
   }
 `;
 

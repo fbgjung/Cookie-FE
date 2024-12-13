@@ -9,6 +9,12 @@ const CastInfo = styled.div`
   padding: 1.25rem;
   background-color: black;
   color: white;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const BackBtn = styled.button`
@@ -20,6 +26,10 @@ const BackBtn = styled.button`
   font-size: 2rem;
   display: flex;
   align-items: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const DirecrtorInfoContainer = styled.div`
@@ -101,6 +111,10 @@ const TitleGrid = styled.div`
   &::after {
     bottom: 0;
   }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 2fr 4fr 2fr 2fr 2fr;
+  }
 `;
 
 const TitleItem = styled.div`
@@ -138,6 +152,11 @@ const MovieContentGrid = styled.div`
     width: 85px;
     height: 122px;
   }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 3fr 5fr 2fr 2fr 2fr;
+    padding: 1rem 0;
+  }
 `;
 
 const ContentItem = styled.div`
@@ -148,6 +167,10 @@ const ContentItem = styled.div`
   }
   p {
     margin: 0.8rem 0;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
   }
 `;
 
@@ -167,6 +190,12 @@ const Modal = styled.div`
     max-width: 90%;
     max-height: 90%;
     object-fit: contain;
+  }
+
+  @media (max-width: 768px) {
+    img {
+      max-width: 100%;
+    }
   }
 `;
 

@@ -138,6 +138,7 @@ const LikedMovies = () => {
     try {
       const response = await axiosInstance.get("/api/users/likedMovieList");
       const fetchedMovies = response.data.response.movies || [];
+      console.log("좋아한 영화", response.data.movies);
       setMovies(fetchedMovies);
     } catch (error) {
       console.error("좋아하는 영화 목록 불러오기 실패:", error);
@@ -147,6 +148,11 @@ const LikedMovies = () => {
   useEffect(() => {
     fetchLikedMovies();
   }, []);
+
+  const handleMovieClick = (movieId) => {
+    // 영화 클릭 시 디테일 페이지로 이동
+    navigate(`/movie/${movieId}`);
+  };
 
   return (
     <Container>
@@ -161,7 +167,7 @@ const LikedMovies = () => {
       {movies.length > 0 ? (
         <MoviesGrid>
           {movies.map((movie, index) => (
-            <MovieCard key={index}>
+            <MovieCard key={index} onClick={() => handleMovieClick(movie.id)}>
               <Poster src={movie.poster} alt={movie.title} />
               <MovieInfo>
                 <h2>{movie.title}</h2>

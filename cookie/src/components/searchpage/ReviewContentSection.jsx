@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-// 스타일 컴포넌트 정의
 const ReviewContentContainer = styled.div`
   display: flex;
   margin-bottom: 20px;
@@ -42,12 +41,13 @@ const ReviewContentContainer = styled.div`
 
         .name {
           font-size: 0.9rem;
+          color: white;
           font-weight: bold;
         }
 
         .date {
           font-size: 0.8rem;
-          color: #666;
+          color: #f9f9f9;
         }
       }
     }
@@ -58,7 +58,7 @@ const ReviewContentContainer = styled.div`
       .movie-title {
         font-size: 1rem;
         font-weight: bold;
-        color: #04012d;
+        color: white;
       }
     }
 
@@ -72,14 +72,6 @@ const ReviewContentContainer = styled.div`
         height: 25px;
         margin-right: 5px;
         cursor: pointer;
-
-        &:hover {
-          transform: scale(1.2);
-        }
-
-        &.selected {
-          filter: brightness(1.2);
-        }
       }
     }
   }
@@ -99,7 +91,7 @@ const ReviewContentContainer = styled.div`
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: 40px;
+  top: 20px;
   right: 20px;
   background: white;
   border: 1px solid #ddd;
@@ -129,6 +121,8 @@ const EditForm = styled.div`
   textarea {
     padding: 10px;
     font-size: 0.85rem;
+    color: white;
+
     border: 1px solid #ddd;
     border-radius: 8px;
     resize: none;
@@ -181,7 +175,6 @@ const ReviewContentSection = ({
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 상태 값 체크
   const fromReviewFeed = location.state?.fromReviewFeed || false;
   const fromLikedReviews = location.state?.fromLikedReviews || false;
   const fromMyPage = location.state?.fromMyPage || false;
@@ -253,7 +246,12 @@ const ReviewContentSection = ({
 
   return (
     <ReviewContentContainer>
-      <img className="poster" src={posterSrc} alt="Movie Poster" onClick={onPosterClick} />
+      <img
+        className="poster"
+        src={posterSrc}
+        alt="Movie Poster"
+        onClick={onPosterClick}
+      />
 
       <div className="details">
         {!isEditing ? (
@@ -271,13 +269,13 @@ const ReviewContentSection = ({
             </div>
 
             <div className="cookie-score">
-              {Array.from({ length: 5 }).map((_, i) => (
+              {/* 동적으로 쿠키 점수에 맞는 수만큼 아이콘을 표시 */}
+              {Array.from({ length: cookieScoreCount }).map((_, i) => (
                 <img
                   key={i}
-                  className={`cookie ${i < newMovieScore ? "selected" : ""}`}
-                  src="/images/cookiescore.svg"
+                  className="cookie selected"
+                  src="/assets/images/review/cookiescore.svg"
                   alt="Cookie Score"
-                  onClick={() => handleCookieClick(i)}
                 />
               ))}
             </div>
