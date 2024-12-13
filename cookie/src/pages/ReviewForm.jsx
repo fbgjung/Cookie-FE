@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import ReviewHeader from "../components/searchpage/ReviewHeader";
-import axios from "axios";
-import serverBaseUrl from "../config/apiConfig";
+import axiosInstance from "../api/auth/axiosInstance";
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -178,7 +177,7 @@ const ReviewForm = () => {
     };
 
     try {
-      const response = await axios.post(`${serverBaseUrl}/api/reviews`, payload);
+      const response = await axiosInstance.post(`/api/reviews`, payload);
       if (response.status === 200) {
         toast.success("리뷰가 성공적으로 등록되었습니다.");
         console.log("리뷰 등록 성공:", response.data.response);
