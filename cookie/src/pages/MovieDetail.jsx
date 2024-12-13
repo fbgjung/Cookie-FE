@@ -94,10 +94,12 @@ const MovieDetail = () => {
       />
       <CastSection director={movieData.director} actors={movieData.actors} />
       {movieData.video !== "N/A" && <VideoSection videoUrl={movieData.video} />}
-      <GallerySection
-        images={movieData.images}
-        onImageClick={handleImageClick}
-      />
+      {movieData.images && movieData.images.length > 0 && (
+        <GallerySection
+          images={movieData.images}
+          onImageClick={handleImageClick}
+        />
+      )}
       {movieData.reviews && (
         <ReviewSection
           reviews={movieData.reviews}
