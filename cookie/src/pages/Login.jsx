@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../stores/useAuthStore";
 
 export const LoginContainer = styled.div`
-  background-color: #fff4b9;
+  background-color: #000000;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@ export const LoginContainer = styled.div`
   position: relative;
 
   h2 {
-    color: #724b2e;
+    color: #ffff;
   }
 
   .login__img {
@@ -70,12 +70,12 @@ const GuestLink = styled.div`
   top: 5rem;
   right: 1rem;
   font-size: 1rem;
-  color: #724b2e;
+  color: #ffff;
   text-decoration: underline;
   cursor: pointer;
 
   &:hover {
-    color: #a8673a;
+    color: #909090;
   }
 
   @media (max-width: 768px) {

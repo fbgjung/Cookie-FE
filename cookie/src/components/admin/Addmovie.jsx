@@ -5,9 +5,9 @@ import SearchMovieDetail from "./SearchMovieDetail";
 import axiosInstance from "../../api/auth/axiosInstance";
 import serverBaseUrl from "../../config/apiConfig";
 
-const AddMovieContainer = styled.div`
+export const DefalutContainer = styled.div`
   width: 1239px;
-  height: 1030px;
+  min-height: 1130px;
   border: none;
   padding: 1rem;
   border-radius: 12px;
@@ -140,7 +140,6 @@ const SearchedMovie = styled.div`
 `;
 function AddMovie() {
   const [movies, setMovies] = useState([]); // 검색된 영화 목록 상태
-  // const [visibleCount, setVisibleCount] = useState(10); // 보이는 영화 개수
   const [selectedMovie, setSelectedMovie] = useState(null); // 선택된 영화 상태
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -157,9 +156,11 @@ function AddMovie() {
           ? response.data.response
           : [];
         setMovies(movieData);
+        setIsSearching(false);
       })
       .catch((error) => {
         console.error("API Error:", error);
+        setIsSearching(false);
       });
   };
   const handleKeyPress = (e) => {
@@ -184,16 +185,10 @@ function AddMovie() {
 
   const handleGoBack = () => {
     setSelectedMovie(null);
-    setIsSelected(false);
   };
 
-  // const onShowMore = () => {
-  //   setVisibleCount((prevCount) => prevCount + 10);
-  // };
-  // const visibleMovies = movies.slice(0, visibleCount);
-
   return (
-    <AddMovieContainer>
+    <DefalutContainer>
       {selectedMovie ? (
         <SearchMovieDetail
           selectedMovie={selectedMovie}
@@ -249,7 +244,7 @@ function AddMovie() {
           )} */}
         </>
       )}
-    </AddMovieContainer>
+    </DefalutContainer>
   );
 }
 

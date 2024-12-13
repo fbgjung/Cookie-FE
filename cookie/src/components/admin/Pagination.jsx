@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Button } from "./AddLinkStillCut";
+import { useEffect, useState } from "react";
 
 const NumberBtn = styled.button`
   border: none;
@@ -11,6 +12,10 @@ const NumberBtn = styled.button`
   &:hover {
     color: var(--sub);
   }
+  &.active {
+    color: var(--sub);
+    font-weight: bold;
+  }
 `;
 const PaginationContainer = styled.div`
   display: flex;
@@ -18,6 +23,22 @@ const PaginationContainer = styled.div`
 `;
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const [pages, setPages] = useState([]);
+
+  const calculatePages = () => {
+    const start = Math.floor((currentPage - 1) / 10) * 10 + 1;
+    const end = Math.min(start + 9, totalPages);
+    const newPages = [];
+    for (let i = start; i <= end; i++) {
+      newPages.push(i);
+    }
+    setPages(newPages);
+  };
+
+  useEffect(() => {
+    calculatePages();
+  }, [currentPage, totalPages]);
+
   const handlePageClick = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       onPageChange(pageNumber);
@@ -33,15 +54,16 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         이전
       </Button>
 
-      {[...Array(totalPages)].map((_, index) => (
+      {pages.map((page) => (
         <NumberBtn
-          key={index + 1}
-          onClick={() => handlePageClick(index + 1)}
-          className={currentPage === index + 1 ? "active" : ""}
+          key={page}
+          onClick={() => handlePageClick(page)}
+          className={currentPage === page ? "active" : ""}
         >
-          {index + 1}
+          {page}
         </NumberBtn>
       ))}
+
       <Button
         onClick={() => handlePageClick(currentPage + 1)}
         disabled={currentPage === totalPages}

@@ -28,6 +28,7 @@ import CategoryMovieFeed from "../pages/CategoryMovieFeed";
 import Notification from "../pages/Notification";
 import PointHistory from "../components/matchup/PointSection";
 import PointHistoryPage from "../pages/PointHistoryPage";
+import AdminReviewLike from "../pages/admin/AdminReviewLike";
 
 export const AppRouteDef = {
   Main: {
@@ -274,6 +275,14 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <PointHistoryPage />
+      </PrivateRoute>
+    ),
+  },
+  AdminReviewLikes: {
+    path: "/admin/reviews-likes",
+    element: (
+      <PrivateRoute>
+        <AdminReviewLike />
       </PrivateRoute>
     ),
   },
