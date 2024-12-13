@@ -121,8 +121,6 @@ const SearchResults = ({
           </ResultItem>
         ))}
       </ResultsContainer>
-
-      {/* 끝까지 본 경우 */}
     </div>
   );
 };

@@ -17,7 +17,8 @@ const Container = styled.div`
   font-family: "Arial", sans-serif;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh; /* 전체 높이는 화면 크기에 맞추기 */
+  overflow-y: auto; /* 내용이 많을 경우 스크롤 발생 */
 `;
 
 const FooterSectionStyled = styled.div`
@@ -248,9 +249,7 @@ const ReviewDetail = () => {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/api/reviews/${reviewId}`
-        );
+        const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
         console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
@@ -336,13 +335,10 @@ const ReviewDetail = () => {
     }
 
     try {
-      await axiosInstance.put(
-        `/api/reviews/comments/${editingComment.id}`,
-        {
-          reviewId,
-          comment: editingComment.text,
-        }
-      );
+      await axiosInstance.put(`/api/reviews/comments/${editingComment.id}`, {
+        reviewId,
+        comment: editingComment.text,
+      });
 
       setReviewData((prevData) => ({
         ...prevData,
@@ -437,7 +433,7 @@ const ReviewDetail = () => {
       console.error("Error during comment submission:", error);
       openLoginModal();
     } finally {
-      setIsSubmitting(false); // 플래그 해제
+      setIsSubmitting(false);
     }
   };
 

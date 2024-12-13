@@ -1,5 +1,5 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
 import axiosInstance from "../../api/auth/axiosInstance";
@@ -257,10 +257,16 @@ const Modal = ({
     }
   };
 
+  const handleBackgroundClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
-    <ModalBackground>
+    <ModalBackground onClick={handleBackgroundClick}>
       {isSubmitting && <Spinner />}
       <ModalContainer>
         <CloseButton onClick={onClose}>×</CloseButton>

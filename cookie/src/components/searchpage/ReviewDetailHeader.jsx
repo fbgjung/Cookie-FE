@@ -11,13 +11,13 @@ const HeaderContainer = styled.div`
     cursor: pointer;
     font-size: 1.5rem;
     margin-right: 10px;
-    color: #333;
+    color: white;
   }
 
   .title {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #333;
+    color: white;
   }
 `;
 
