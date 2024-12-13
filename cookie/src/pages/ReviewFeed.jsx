@@ -7,38 +7,11 @@ const ReviewFeedWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   max-width: 900px;
-  background-color: #ffffff;
-  border-radius: 8px;
+  background-color: #f9f9f9;
   padding: 20px;
   height: 100vh;
 `;
 
-const ReviewTitle = styled.div`
-  text-align: center; /* 텍스트를 중앙 정렬 */
-  margin-bottom: 20px;
-
-  h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px; /* 텍스트와 쿠키 이미지 간격 */
-  }
-
-  h2 {
-    font-size: 1rem;
-    font-weight: normal;
-    color: #b29463; /* 쿠키 색상과 유사한 색상 */
-    margin-top: 10px;
-  }
-
-  img {
-    width: 30px;
-    height: 30px;
-  }
-`;
 
 const FilterButtons = styled.div`
   display: flex;
@@ -78,53 +51,66 @@ const ReviewContainer = styled.div`
 
 const ReviewTicket = styled.div`
   display: flex;
-  background-image: url("/images/reviewticket.svg");
+  /* background-image: url("/assets/images/review/ticket-skyblue.svg"); */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   padding: 30px;
-  border-radius: 8px;
+  border-radius: 0.2rem;
   box-sizing: border-box;
   min-height: 180px;
   cursor: pointer;
   width: 100%;
-  margin: 0 auto;
-  margin-bottom: 0px;
+  margin: 10px;
+  background-color: #ffffff;
+  border: 1px solid #00D6E8;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    
+  }
+
+  @media (max-width: 390px) {
+    
+  }
+
 `;
 
 const ReviewLeft = styled.div`
-  flex: 0 0 100px;
   img {
-    width: 100px;
-    height: 120px;
+    width: 7rem;
+    height: 11rem;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 0.2rem;
   }
   .title {
-    font-size: 0.9rem;
-    font-weight: bold;
+    font-size: 0.6rem;
+    margin: 0;
+    font-weight: normal;
+    color: #434141;
     text-align: center;
-    margin-top: ${({ isLongTitle }) => (isLongTitle ? "1px" : "10px")};
-    overflow: hidden; /* 넘치는 텍스트 숨김 */
-    text-overflow: ellipsis; /* 말줄임표 추가 */
+    /* margin-top: ${({ isLongTitle }) => (isLongTitle ? "1px" : "10px")}; */
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
 const ReviewCenter = styled.div`
-  flex: 1;
-  margin-left: 20px;
   display: flex;
   flex-direction: column;
+  width: 30rem;
+  padding: 0 2rem 0 2.5rem;
+  justify-content: space-between;
   .profile {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       margin-right: 10px;
+      border: solid 2px #ffffff;
     }
 
     .user-info {
@@ -140,7 +126,7 @@ const ReviewCenter = styled.div`
   }
 
   .comment {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -150,6 +136,12 @@ const ReviewCenter = styled.div`
       pointer-events: none; /* 마우스 이벤트 비활성화 */
       user-select: none; /* 텍스트 선택 비활성화 */
     }
+  }
+
+  .movie-title {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
   }
 `;
 
@@ -161,8 +153,9 @@ const ReviewRight = styled.div`
     display: flex;
     align-items: center;
     img {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
+      margin-right: 0.1rem;
     }
   }
   .actions {
@@ -314,10 +307,10 @@ useEffect(() => {
 
   return (
     <ReviewFeedWrapper>
-      <ReviewTitle>
+      {/* <ReviewTitle>
         <h1>Cookie Review</h1>
         <h2>쿠키의 전체리뷰</h2>
-      </ReviewTitle>
+      </ReviewTitle> */}
       <FilterButtons>
         <button
           className={!showSpoilerOnly ? "active" : "inactive"}
@@ -343,11 +336,11 @@ useEffect(() => {
               title={review.movie.title} // 전체 제목을 tooltip으로 제공
             >
               <img src={review.movie.poster} alt={review.movie.title} />
-              <div className="title">
+              {/* <p className="title">
                 {review.movie.title.length > 18
                   ? `${review.movie.title.slice(0, 18)}...`
                   : review.movie.title}
-              </div>
+              </p> */}
             </ReviewLeft>
             <ReviewCenter>
               <div className="profile">
@@ -358,8 +351,13 @@ useEffect(() => {
                 <div className="user-info">
                   <div className="name">{review.user.nickname}</div>
                   <div className="date">
-                    {new Date(review.createdAt).toLocaleDateString()}
+                    {new Date(review.createdAt)
+                      .toLocaleDateString()
+                      .replace(/\./g, "-") 
+                      .replace(/-$/, "")
+                      .replace(/-\s/g, "-")}
                   </div>
+
                 </div>
               </div>
               <div
@@ -371,6 +369,7 @@ useEffect(() => {
                   ? `${review.content.slice(0, 105)}...`
                   : review.content}
               </div>
+              <p className="movie-title">{review.movie.title}</p>
             </ReviewCenter>
             <ReviewRight>
               <div className="score">

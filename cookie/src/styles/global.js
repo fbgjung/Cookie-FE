@@ -60,6 +60,7 @@ const GlobalStyle = createGlobalStyle`
   padding: 0;
 overscroll-behavior: none;
    overflow-x: hidden;
+   background-color: #202020;
 }
 
 
