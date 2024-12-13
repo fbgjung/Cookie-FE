@@ -86,7 +86,7 @@ const IconButton = styled.button`
 export const UnderlinedButton = styled.button`
   padding: 3px 33px;
   background: none;
-  color: #ffff;
+  color: var(--text);
   border: none;
   border-radius: 5px;
   font-size: 20px;
@@ -99,7 +99,7 @@ export const UnderlinedButton = styled.button`
       position: absolute;
       bottom: 0;
       left: 30px;
-      width: 40%;
+      width: 57%;
       height: 1px;
       background-color: var(--text);
     }
@@ -110,7 +110,7 @@ const DeleteCheckBox = styled.input`
   height: 20px;
   border-radius: 12px;
 `;
-const TitleSection = styled.div`
+export const TitleSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;

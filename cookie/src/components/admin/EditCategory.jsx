@@ -9,6 +9,10 @@ const CategoryTitle = styled.div`
   display: flex;
   align-items: center;
 
+  h1 {
+    color: #ffff;
+  }
+
   img {
     margin-right: 10px;
     width: 30px;
@@ -88,6 +92,7 @@ const MoviePoster = styled.img`
 
 const MovieTitle = styled.h2`
   font-size: 24px;
+  margin: 15px 0;
 `;
 
 const MovieInfoContainer = styled.div`
@@ -100,6 +105,9 @@ const MovieInfoContainer = styled.div`
   margin-right: 3px;
   position: relative;
   display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
 
   &::after {
     content: "";
@@ -182,10 +190,9 @@ const categoryData = [
   { categoryId: 40, mainCategory: "연령대", subCategory: "50대" },
 ];
 
-const EditCategory = ({ movie }) => {
-  const { movieId, title, movieCategories } = movie;
+const EditCategory = ({ movie, onUpdateCategories }) => {
+  const { movieId, title } = movie;
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [categories, setCategories] = useState([]);
 
   const fetchMovieCategories = async (movieId) => {
     try {
@@ -197,103 +204,46 @@ const EditCategory = ({ movie }) => {
         .filter((category) => category.connect)
         .map((category) => category.categoryId);
 
-      return connectedCategories;
+      setSelectedCategories(connectedCategories);
     } catch (error) {
       console.error("Error fetching movie categories", error);
-      return [];
     }
   };
 
-  const handleEditClick = async (movie) => {
-    console.log("movie", movie);
-    const movieId = movie.movieId;
-    console.log("movieId", movieId);
-    setIsEditOpen(true);
-    setSelectedMovie(movie);
-
-    const movieCategories = await fetchMovieCategories(movieId);
-
-    setSelectedMovie((prevMovie) => {
-      if (prevMovie) {
-        return {
-          ...prevMovie,
-          movieCategories: movieCategories,
-        };
-      }
-      return prevMovie;
-    });
-  };
-  const updateMovieCategories = (updatedCategories) => {
-    setSelectedMovie((prevMovie) => {
-      if (prevMovie) {
-        const allCategories = [...prevMovie.categories, ...updatedCategories];
-
-        const uniqueCategories = Array.from(
-          new Map(allCategories.map((item) => [item.categoryId, item])).values()
-        );
-
-        return {
-          ...prevMovie,
-          categories: uniqueCategories,
-        };
-      }
-      return prevMovie;
-    });
-  };
   useEffect(() => {
-    if (movieCategories && movieCategories.length > 0) {
-      const updatedCategories = movieCategories.map((category) => ({
-        ...category,
-        isChecked: category.isConnect, // isConnect 값에 따라 체크 여부 설정
-      }));
-      setCategories(updatedCategories);
-
-      // selectedCategories 배열을 초기화
-      const selected = movieCategories
-        .filter((category) => category.isConnect)
-        .map((category) => category.categoryId);
-      setSelectedCategories(selected);
+    if (movieId) {
+      fetchMovieCategories(movieId);
     }
-  }, [movieCategories]);
+  }, [movieId]);
 
-  // 카테고리 체크박스를 클릭했을 때 호출되는 함수
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prevSelected) => {
       if (prevSelected.includes(categoryId)) {
-        return prevSelected.filter((id) => id !== categoryId); // 선택 해제
+        return prevSelected.filter((id) => id !== categoryId);
       } else {
-        return [...prevSelected, categoryId]; // 선택
+        return [...prevSelected, categoryId];
       }
     });
-
-    setCategories((prevCategories) =>
-      prevCategories.map((category) =>
-        category.categoryId === categoryId
-          ? {
-              ...category,
-              isChecked: !category.isChecked,
-              isConnect: !category.isChecked, // isConnect 값 반전
-            }
-          : category
-      )
-    );
   };
 
-  // 수정 버튼 클릭 시, 변경된 카테고리 정보를 서버에 전송
   const handleUpdate = async () => {
-    const updatedCategories = categories.map((category) => ({
-      categoryId: category.categoryId,
-      mainCategory: category.mainCategory,
-      subCategory: category.subCategory,
-      isConnect: category.isChecked, // isChecked 값을 isConnect로 전송
-    }));
+    const updatedCategories = categoryData.map((category) => {
+      const isSelected = selectedCategories.includes(category.categoryId);
 
-    // 수정된 카테고리들을 서버에 전송
+      return {
+        categoryId: category.categoryId,
+        mainCategory: category.mainCategory,
+        subCategory: category.subCategory,
+        isConnect: isSelected,
+      };
+    });
+
     try {
-      await axiosInstance.put(`/api/admin/movie/${movieId}`, {
-        updatedCategories,
-      });
+      await axiosInstance.put(`/api/admin/movie/${movieId}`, updatedCategories);
       alert("카테고리가 성공적으로 수정되었습니다.");
+      console.log("Category ID toggled:", movie.categoryId);
+      console.log("Updated selectedCategories:", updatedCategories);
+      onUpdateCategories(updatedCategories);
     } catch (error) {
       console.error("카테고리 수정 실패", error);
       alert("카테고리 수정 중 오류가 발생했습니다.");
@@ -316,7 +266,7 @@ const EditCategory = ({ movie }) => {
       <CategoryWrapper>
         {movie && (
           <MovieInfoContainer>
-            <MoviePoster src={movie.posterUrl} alt="Movie Poster" />
+            <MoviePoster src={movie.posterPath} alt="Movie Poster" />
             <MovieTitle>{title}</MovieTitle>
           </MovieInfoContainer>
         )}
