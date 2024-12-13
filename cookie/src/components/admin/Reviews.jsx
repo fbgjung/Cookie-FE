@@ -12,7 +12,7 @@ import Pagination from "./Pagination";
 import Edit from "../../assets/images/admin/Edit.svg";
 import axiosInstance from "../../api/auth/axiosInstance";
 import toast from "react-hot-toast";
-import ReviewList from "./ReviewList";
+// import ReviewList from "./ReviewList";
 
 const IconContainer = styled.div``;
 const IconButton = styled.button`

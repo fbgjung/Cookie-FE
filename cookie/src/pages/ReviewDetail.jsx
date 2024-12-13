@@ -7,8 +7,6 @@ import DetailHeader from "../components/searchpage/ReviewDetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
-import axios from "axios";
-import serverBaseUrl from "../config/apiConfig";
 import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
 
@@ -250,8 +248,8 @@ const ReviewDetail = () => {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axios.get(
-          `${serverBaseUrl}/api/reviews/${reviewId}`
+        const response = await axiosInstance.get(
+          `/api/reviews/${reviewId}`
         );
         console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
@@ -279,7 +277,7 @@ const ReviewDetail = () => {
     }));
 
     try {
-      await axios.post(`${serverBaseUrl}/api/users/review-like/${reviewId}`);
+      await axiosInstance.post(`/api/users/review-like/${reviewId}`);
     } catch (error) {
       console.error("Failed to toggle like:", error);
       openLoginModal();
@@ -338,8 +336,8 @@ const ReviewDetail = () => {
     }
 
     try {
-      await axios.put(
-        `${serverBaseUrl}/api/reviews/comments/${editingComment.id}`,
+      await axiosInstance.put(
+        `/api/reviews/comments/${editingComment.id}`,
         {
           reviewId,
           comment: editingComment.text,
@@ -380,7 +378,7 @@ const ReviewDetail = () => {
     }
 
     try {
-      await axios.delete(`${serverBaseUrl}/api/reviews/comments/${commentId}`, {
+      await axiosInstance.delete(`/api/reviews/comments/${commentId}`, {
         data: { reviewId, commentId },
       });
 
@@ -400,7 +398,7 @@ const ReviewDetail = () => {
 
   const handleDeleteReview = async () => {
     try {
-      await axios.delete(`${serverBaseUrl}/api/reviews/${reviewId}`);
+      await axiosInstance.delete(`/api/reviews/${reviewId}`);
       toast.success("리뷰가 성공적으로 삭제되었습니다.");
       navigate("/");
     } catch (error) {
@@ -417,8 +415,8 @@ const ReviewDetail = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await axios.post(
-        `${serverBaseUrl}/api/reviews/${reviewId}/comments`,
+      const response = await axiosInstance.post(
+        `/api/reviews/${reviewId}/comments`,
         {
           userId,
           comment: newComment,
