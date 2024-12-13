@@ -1,136 +1,60 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import videoIcon from "../../assets/images/main/video_icon.svg";
 import { useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../../api/auth/axiosInstance";
-
-const GenreMovieList = styled.div`
-  position: relative;
-
-  .genre__title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  .genreBtn__contianer {
-    margin-bottom: 0.8rem;
-  }
-  .genre__movie {
-    display: flex;
-    flex-direction: row;
-    gap: 0.9rem;
-    flex-wrap: wrap;
-    align-items: start;
-    padding: 0.625rem;
-  }
-
-  .genre__movie--list {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 0.5rem;
-    cursor: pointer;
-  }
-
-  .genre__movie--list img {
-    border-radius: 0.75rem;
-    width: 7.75rem;
-    height: 11.07rem;
-  }
-  .genre__movie--list p {
-    text-align: start;
-    width: 7.75rem;
-  }
-
-  .genre__info--sub {
-    color: #afafaf;
-    font-size: 0.82rem;
-  }
-
-  @media (max-width: 768px) {
-    .genre__title {
-      font-size: 0.8rem;
-    }
-    .genre__movie {
-      gap: 0.625rem;
-      padding: 0.625rem 0;
-    }
-    .genre__movie p {
-      font-size: 0.7rem;
-    }
-    .genre__movie--list {
-      width: 5.7rem;
-      gap: 0.5rem;
-    }
-    .genre__movie--list img {
-      border-radius: 0.75rem;
-      width: 5.875rem;
-      height: 9.1875rem;
-    }
-    .genre__movie--list p {
-      text-align: start;
-      font-size: 0.7rem;
-      width: auto;
-    }
-    .genre__info--sub {
-      font-size: 0.7rem;
-    }
-  }
-  @media (max-width: 390px) {
-    .genre__movie {
-      gap: 0.3rem;
-    }
-    .genre__movie--list {
-      width: 5.35rem;
-    }
-    .genre__movie--list img {
-      border-radius: 0.75rem;
-      width: 5.375rem;
-      height: 8.6875rem;
-    }
-    .genre__movie--list p {
-      font-size: 0.65rem;
-    }
-  }
-`;
-
-const GenreBtn = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin: 0 0.8rem 0.3rem 0;
-  font-size: 1rem;
-  color: ${(props) => (props.$isSelected ? "var(--text)" : "#afafaf")};
-  font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
-  @media (max-width: 768px) {
-    margin: 0 0.7rem 0.5rem 0;
-    font-size: 0.9rem;
-  }
-`;
+import axios from "axios";
+import serverBaseUrl from "../../config/apiConfig";
 
 function GenreMovie({ categorydata }) {
+  const [selectedMainCategory] = useState("장르");
   const [selectedGenre, setSelectedGenre] = useState("로맨스");
   const [genreMovies, setGenreMovies] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [totalPages, setTotalPages] = useState();
+  const [selectedPage, setSelectedPage] = useState(1);
+
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const fetchMoviesByGenre = async (genre) => {
-    try {
-      const response = await axiosInstance.get("/api/movies/categoryMovies", {
-        params: {
-          mainCategory: "장르",
-          subCategory: genre,
-        },
-      });
-      console.log(response.data);
-      setGenreMovies(response.data.movies);
-    } catch (error) {
-      console.error("영화 불러오기 실패:", error);
+    const cacheKey = `movies_${genre}_${currentPage}`;
+    const cachedData = localStorage.getItem(cacheKey);
+
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData);
+      setGenreMovies(parsedData.movies);
+      setTotalPages(parsedData.totalPages || 1);
+    } else {
+      try {
+        const response = await axios.get(
+          `${serverBaseUrl}/api/movies/categoryMovies`,
+          {
+            params: {
+              mainCategory: "장르",
+              subCategory: genre,
+              page: currentPage - 1,
+              size: 12,
+            },
+          }
+        );
+        console.log(response.data);
+
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({
+            movies: response.data.movies,
+            totalPages: response.data.totalPages,
+          })
+        );
+
+        setGenreMovies(response.data.movies);
+        setTotalPages(response.data.totalPages || 1);
+      } catch (error) {
+        console.error("영화 불러오기 실패:", error);
+      }
     }
   };
+
   useEffect(() => {
     const genreList = categorydata
       .filter((category) => category.mainCategory === "장르")
@@ -140,24 +64,40 @@ function GenreMovie({ categorydata }) {
 
   useEffect(() => {
     fetchMoviesByGenre(selectedGenre);
-  }, [selectedGenre]);
+  }, [selectedGenre, currentPage]);
 
   const handleGenreClick = (genre) => {
     setSelectedGenre(genre);
-    fetchMoviesByGenre(genre);
+    setCurrentPage(1);
+    setSelectedPage(1);
   };
-
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+    setSelectedPage(page);
+  };
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
   };
 
+  const handleMoreView = (mainCategory, subCategory) => {
+    navigate("/category/movies", { state: { mainCategory, subCategory } });
+  };
+
+  const handleNext = () => {
+    if (currentIndex < genreMovies.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
   return (
     <>
       <GenreMovieList>
-        <div className="genre__title">
-          <img src={videoIcon} alt="video_icon" />
-          <h2>장르별 영화</h2>
-        </div>
+        <Title>장르로 영화 찾기</Title>
         <div className="genreBtn__contianer">
           {genres
             .filter((genre) => genre !== "N/A")
@@ -171,31 +111,53 @@ function GenreMovie({ categorydata }) {
               </GenreBtn>
             ))}
         </div>
-        <div className="genre__movie">
-          {genreMovies.length > 0 ? (
-            genreMovies.slice(0, 12).map((movie, index) => (
+
+        <MoreViewText
+          onClick={() => handleMoreView(selectedMainCategory, selectedGenre)}
+        >
+          {selectedGenre} 더보기 {">"}
+        </MoreViewText>
+        <div className="genre__movie--wrapper">
+          <button
+            className="prev"
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+          >
+            &lt;
+          </button>
+          <div
+            className="genre__movie"
+            style={{
+              transform: `translateX(-${currentIndex * 100}%)`,
+            }}
+          >
+            {genreMovies.map((movie, index) => (
               <div
                 key={index}
                 className="genre__movie--list"
                 onClick={() => handleMovieClick(movie.id)}
               >
-                <img src={movie.poster} alt={movie.title} />
-                <div>
-                  <p>
-                    <strong>{movie.title}</strong>
-                  </p>
-                  <p>
-                    {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
-                  </p>
-                  <p>{movie.genre}</p>
-                  <p className="genre__info--sub">리뷰 : {movie.reviews}개</p>
-                  <p className="genre__info--sub">좋아요 : {movie.likes}개</p>
-                </div>
+                <Poster src={movie.poster} alt={movie.title} />
+                <MovieInfo>
+                  <Review>
+                    <ReviewIcon alt="Review Icon" />
+                    <Count>{movie.reviews}</Count>
+                  </Review>
+                  <Like>
+                    <LikeIcon alt="Review Icon" />
+                    <Count>{movie.likes}</Count>
+                  </Like>
+                </MovieInfo>
               </div>
-            ))
-          ) : (
-            <p>해당하는 장르 영화가 없어요🥲</p>
-          )}
+            ))}
+          </div>
+          <button
+            className="next"
+            onClick={handleNext}
+            disabled={currentIndex === totalPages}
+          >
+            &gt;
+          </button>
         </div>
       </GenreMovieList>
     </>
@@ -203,3 +165,149 @@ function GenreMovie({ categorydata }) {
 }
 
 export default GenreMovie;
+
+const GenreMovieList = styled.div`
+  position: relative;
+  overflow: hidden;
+  .genreBtn__contianer {
+    margin-bottom: 0.8rem;
+  }
+
+  .genr__movie--wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .genre__movie {
+    display: flex;
+    transition: transform 1s ease;
+    align-items: start;
+  }
+  .prev,
+  .next {
+    position: absolute;
+    top: 69%;
+    width: 50px;
+    height: 50px;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+  }
+
+  .prev {
+    left: -15px;
+  }
+
+  .next {
+    right: -15px;
+  }
+
+  .prev:disabled,
+  .next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const Title = styled.h2`
+  color: var(--text-wh);
+  padding: 2rem 0 0.7rem 0.375rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+`;
+
+const Poster = styled.img`
+  transition: transform 0.3s ease;
+  border-radius: 0.65rem;
+  width: 8.75rem;
+  height: 12.0625rem;
+  padding: 0.4rem 0.375rem;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.3rem;
+    width: 7rem;
+    height: 10rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.4rem 0.3rem;
+    width: 6.4rem;
+    height: 9.5rem;
+  }
+`;
+
+const GenreBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0 0.4rem 0.3rem 0;
+  padding: 0 0 0 0.375rem;
+  font-size: 1rem;
+  color: ${(props) => (props.$isSelected ? "#82DCFF" : "#afafaf")};
+  font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
+
+  @media (max-width: 768px) {
+    margin: 0 0.7rem 0.5rem 0;
+    font-size: 0.9rem;
+  }
+`;
+
+const MoreViewText = styled.p`
+  color: #ffffff;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+  font-size: 0.8rem;
+`;
+
+const Review = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.375rem;
+`;
+
+const ReviewIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url("/assets/images/main/review.svg");
+`;
+
+const Count = styled.p`
+  font-size: 0.8rem;
+  color: #ffffff;
+`;
+
+const Like = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.375rem;
+`;
+
+const LikeIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  background: no-repeat center/cover url("/assets/images/main/like.svg");
+`;
+
+const MovieInfo = styled.div`
+  display: flex;
+`;
