@@ -25,7 +25,7 @@ const PushContainer = styled.div`
   overflow: hidden;
   background-color: white;
   border: 2px solid black;
-  box-shadow:;
+  box-shadow: none;
 `;
 
 const PushItem = styled.div`
@@ -41,13 +41,12 @@ const PushItem = styled.div`
   }
 
   &:hover {
-    background-color: #00d6e8;
   }
 `;
 
 const PushText = styled.span`
   font-size: 1rem;
-  color: #black;
+  color: black;
   font-weight: bold;
 `;
 
@@ -73,27 +72,17 @@ const ToggleSwitch = styled.div`
   }
 `;
 
-const PushNotificationToggle = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
+const PushNotificationToggle = ({ pushEnabled }) => {
+  const [isEnabled, setIsEnabled] = useState(pushEnabled);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("accessToken"); // 엑세스 토큰 확인
-    if (!token) return; // 엑세스토큰 없으면 요청하지 않음
+    setIsEnabled(pushEnabled);
+  }, [pushEnabled]);
 
-    const fetchNotificationStatus = async () => {
-      try {
-        const response = await axiosInstance.post("/api/notification/settings");
-        setIsEnabled(response.data.response.enabled);
-      } catch (error) {
-        console.error("알림 상태 로드 실패:", error);
-      }
-    };
-
-    fetchNotificationStatus();
-  }, []);
+  console.log("부모에서 전달된 pushEnabled:", pushEnabled);
 
   const handleToggle = async () => {
-    const token = sessionStorage.getItem("accessToken"); // 엑세스 토큰 확인
+    const token = sessionStorage.getItem("accessToken");
     if (!token) {
       toast.error("로그인 상태에서만 알림 설정을 변경할 수 있습니다.");
       return;

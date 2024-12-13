@@ -77,6 +77,7 @@ const MyPage = () => {
   const openLoginModal = useAuthStore((state) => state.openLoginModal);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState(false);
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -100,10 +101,15 @@ const MyPage = () => {
           badgePoint,
           genreScores,
           reviews,
+          pushEnabled,
         } = response.data.response;
+
+        console.log("푸시 알림 상태:", pushEnabled);
+        console.log("닉네임:", nickname);
 
         setUserData({ nickname, profileImage });
         setBadgePoint(badgePoint || 0);
+        setPushEnabled(pushEnabled);
 
         setBadgeData(
           badge?.map((b) => ({
@@ -248,7 +254,7 @@ const MyPage = () => {
           />
 
           <FavoriteList title="좋아요" items={favoriteItems} />
-          <PushNotificationToggle />
+          <PushNotificationToggle pushEnabled={pushEnabled} />
           <ReviewHeader>
             <ReviewTitle>{`${userData.nickname}의 리뷰`}</ReviewTitle>
             <MoreLink onClick={handleMoreClick}>{" 더보기"}</MoreLink>
