@@ -242,10 +242,6 @@ const SearchForReview = () => {
     const movieId = movie.id || movie.movieId; // id 또는 movieId
     const movieTitle = movie.title || movie.movieTitle; // title 또는 movieTitle
     const posterUrl = movie.poster;
-
-    console.log("movieId:", movieId);
-    console.log("movieTitle:", movieTitle);
-    console.log("posterUrl:", posterUrl);
   
     // 유효성 검사
     if (!movieId || !movieTitle || !posterUrl) {
@@ -260,6 +256,21 @@ const SearchForReview = () => {
         movieTitle,
         posterUrl,
       },
+    });
+  };
+
+  const handleDefaultMovieClick = (movie) => {
+    console.log("Received default movie in handleDefaultMovieClick:", movie);
+    if (!movie.movieId || !movie.movieTitle || !movie.poster) {
+      console.error("기본 영화 정보가 올바르지 않습니다:", movie);
+      return;
+    }
+    navigate("/reviews/write", {
+      state: {
+        movieId: movie.movieId,
+        movieTitle: movie.movieTitle,
+        posterUrl: movie.poster,
+       },
     });
   };
 
@@ -309,6 +320,7 @@ const SearchForReview = () => {
         <SearchResults
           results={results || []}
           onMovieClick={handleMovieClick}
+          onDefaultMovieClick={handleDefaultMovieClick}
           isLoading={isLoading}
           activeTab={activeTab}
           defaultResults={defaultResults || []}

@@ -92,9 +92,10 @@ const EndMessage = styled.p`
   position: relative; /* For better layout stability */
 `;
 
-const SearchResults = ({
+const SearchResultsForReview = ({
   results,
   onMovieClick,
+  onDefaultMovieClick,
   isLoading,
   activeTab,
   defaultResults,
@@ -119,9 +120,13 @@ const SearchResults = ({
       <ResultsContainer>
         {displayResults.map((result) => (
           <ResultItem
-            key={result.id || result.movieId}
-            onClick={() => onMovieClick(result)}
-          >
+          key={result.id || result.movieId}
+          onClick={() =>
+            results.length > 0
+              ? onMovieClick(result) // 검색된 영화 클릭 시
+              : onDefaultMovieClick(result) // 디폴트 영화 클릭 시
+          }
+        >
             <PosterSkeleton isLoading={isLoading} />
             <Poster
               src={result.poster || result.profileImage}
@@ -138,10 +143,11 @@ const SearchResults = ({
   );
 };
 
-SearchResults.propTypes = {
+SearchResultsForReview.propTypes = {
   results: PropTypes.array.isRequired, // 검색 결과 배열
   defaultResults: PropTypes.array.isRequired, // 기본 검색 결과 배열
   onMovieClick: PropTypes.func.isRequired, // 영화 클릭 핸들러
+  onDefaultMovieClick: PropTypes.func.isRequired, // 디폴트 영
   isLoading: PropTypes.bool.isRequired, // 로딩 상태
   activeTab: PropTypes.string.isRequired, // 현재 활성화된 탭
   searchTerm: PropTypes.string.isRequired, // 검색어
@@ -149,4 +155,4 @@ SearchResults.propTypes = {
   fetchMoreResults: PropTypes.func.isRequired, // 더 많은 결과를 불러오는 함수
 };
 
-export default SearchResults;
+export default SearchResultsForReview;
