@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Title = styled.h2`
   margin-top: 50px;
+  color: white;
 `;
 
 const ReviewWrapper = styled.div`
@@ -13,6 +14,7 @@ const ReviewWrapper = styled.div`
     font-size: 18px;
     font-weight: bold;
     display: flex;
+    
     color: white;
     align-items: center;
 
@@ -56,7 +58,7 @@ const ReviewWrapper = styled.div`
 
     .review-item {
       position: relative;
-      background-image: url("/images/reviewticket.svg"); 
+    background-image: url("/images/review/reviewticket.svg");
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -72,7 +74,7 @@ const ReviewWrapper = styled.div`
       .review-user {
         font-size: 14px;
         font-weight: bold;
-        color: #333;
+         color: white;
       }
 
       .review-comment {
@@ -122,6 +124,7 @@ const ReviewWrapper = styled.div`
 const ReviewUserProfile = styled.div`
   display: flex;
   flex-direction: column;
+  color: white;
   align-items: center;
   justify-content: center;
 `;
@@ -129,6 +132,7 @@ const ReviewUserProfile = styled.div`
 const ReviewDetail = styled.div`
   display: flex;
   flex-direction: column;
+  color: white;
   justify-content: space-between;
 `;
 

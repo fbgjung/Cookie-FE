@@ -9,9 +9,16 @@ const ReviewFeedWrapper = styled.div`
   margin: 0 auto;
   max-width: 100%;
   background-color: black;
-
   padding: 20px;
   height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 20px 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 10px;
+  }
 `;
 
 const FilterButtons = styled.div`
@@ -31,7 +38,7 @@ const FilterButtons = styled.div`
 
     &.active {
       background-color: #00d6e8;
-      color: #black;
+      color: black;
     }
 
     &.inactive {
@@ -43,13 +50,27 @@ const FilterButtons = styled.div`
       background-color: #00b3c6;
       color: white;
     }
+
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+      padding: 8px 16px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+      padding: 6px 14px;
+    }
   }
 `;
 
 const MovieInfoWrapper = styled.div`
   display: flex;
-
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const MoviePoster = styled.div`
@@ -57,11 +78,22 @@ const MoviePoster = styled.div`
   height: 300px;
   margin-left: 30px;
   margin-right: 30px;
+
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 225px;
+  }
+
+  @media (max-width: 480px) {
+    width: 120px;
+    height: 180px;
   }
 `;
 
@@ -85,6 +117,19 @@ const MovieDetails = styled.div`
       margin-bottom: 5px;
     }
   }
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .movie-title {
+      font-size: 1.5rem;
+    }
+    .movie-info {
+      font-size: 0.9rem;
+    }
+  }
 `;
 
 const ReviewContainer = styled.div`
@@ -98,6 +143,10 @@ const NoReviewsMessage = styled.div`
   font-size: 1.2rem;
   color: #888;
   margin-top: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const ReviewTicket = styled.div`
@@ -113,6 +162,17 @@ const ReviewTicket = styled.div`
   cursor: pointer;
   width: 90%;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 20px;
+    min-height: 150px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+    min-height: 130px;
+  }
 `;
 
 const ReviewLeft = styled.div`
@@ -154,6 +214,28 @@ const ReviewCenter = styled.div`
     font-size: 0.9rem;
     line-height: 1.5;
   }
+
+  @media (max-width: 768px) {
+    .profile img {
+      width: 35px;
+      height: 35px;
+    }
+
+    .comment {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .profile img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .comment {
+      font-size: 0.7rem;
+    }
+  }
 `;
 
 const ReviewRight = styled.div`
@@ -168,6 +250,20 @@ const ReviewRight = styled.div`
     img {
       width: 20px;
       height: 20px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .score img {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .score img {
+      width: 16px;
+      height: 16px;
     }
   }
 `;

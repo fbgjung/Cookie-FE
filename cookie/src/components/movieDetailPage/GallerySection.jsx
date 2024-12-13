@@ -16,7 +16,7 @@ const GalleryWrapper = styled.div`
 
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
 
     img {
@@ -29,6 +29,27 @@ const GalleryWrapper = styled.div`
         transform: scale(1.05);
         transition: transform 0.2s;
       }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    img {
+      height: 180px;
     }
   }
 `;
@@ -89,9 +110,8 @@ const GallerySection = ({ images = [] }) => {
   );
 };
 
-// PropTypes로 유효성 검사 추가
 GallerySection.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string).isRequired, // 이미지 배열 (필수)
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default GallerySection;

@@ -8,11 +8,7 @@ import serverBaseUrl from "../../config/apiConfig";
 const CastInfo = styled.div`
   padding: 1.25rem;
   background-color: black;
-
-  .info__title {
-    color: white;
-    margin-bottom: 1rem;
-  }
+  color: white;
 `;
 
 const BackBtn = styled.button`
@@ -27,28 +23,46 @@ const BackBtn = styled.button`
 `;
 
 const DirecrtorInfoContainer = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 
   .info__director {
     display: flex;
     gap: 0.8rem;
-    color: white;
-    margin-bottom: 6rem;
+    margin-bottom: 2rem;
+    align-items: center;
+
+    img {
+      border-radius: 0.75rem;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #ddd;
+    }
   }
 
-  .info__director--img {
-    border-radius: 0.75rem;
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    cursor: pointer;
-  }
+  @media (max-width: 768px) {
+    .info__director {
+      flex-direction: column;
+      align-items: center;
+    }
 
-  p {
-    color: white;
-    margin: 0.5rem 0;
+    img {
+      width: 120px;
+      height: 120px;
+    }
   }
 `;
 

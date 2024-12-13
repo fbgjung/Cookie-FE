@@ -12,12 +12,21 @@ const skeletonLoading = keyframes`
 
 const ResultsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* 항상 3열로 표시 */
   gap: 15px;
   width: 100%;
   padding: 20px;
   min-height: 300px;
   box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr); /* 태블릿에서도 3열로 유지 */
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr); /* 모바일에서도 3열로 유지 */
+    padding: 15px;
+  }
 `;
 
 const ResultItem = styled.div`
@@ -63,14 +72,14 @@ const Message = styled.p`
 
 const EndMessage = styled.p`
   font-size: 16px;
-  color: #aaaaaa; // Softer color for less visual disruption
+  color: #aaaaaa; /* Softer color for less visual disruption */
   text-align: center;
   margin-top: 20px;
   font-weight: bold;
-  width: 100%; // Ensure full width
+  width: 100%; /* Ensure full width */
   padding: 10px;
-  box-sizing: border-box; // Include padding in width calculation
-  position: relative; // For better layout stability
+  box-sizing: border-box; /* Include padding in width calculation */
+  position: relative; /* For better layout stability */
 `;
 
 const SearchResults = ({

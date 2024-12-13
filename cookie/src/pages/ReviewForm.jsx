@@ -15,6 +15,14 @@ const FormWrapper = styled.div`
   h1 {
     color: white;
   }
+
+  @media (max-width: 768px) {
+    padding: 20px 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 10px;
+  }
 `;
 
 const PosterWrapper = styled.div`
@@ -26,6 +34,20 @@ const PosterWrapper = styled.div`
     width: 200px;
     height: auto;
     border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    margin: 15px 0;
+    img {
+      width: 150px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    img {
+      width: 120px;
+    }
   }
 `;
 
@@ -54,6 +76,17 @@ const RatingWrapper = styled.div`
       filter: grayscale(100%);
     }
   }
+
+  @media (max-width: 768px) {
+    span {
+      font-size: 14px;
+    }
+
+    .rating-icons img {
+      width: 20px;
+      height: 20px;
+    }
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -71,6 +104,16 @@ const TextArea = styled.textarea`
   &:focus {
     outline: none;
     border-color: #007bff;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    height: 150px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    height: 120px;
   }
 `;
 
@@ -93,6 +136,10 @@ const SpoilerWrapper = styled.div`
     font-size: 12px;
     color: #666;
     margin-left: 10px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `;
 
@@ -127,6 +174,25 @@ const ButtonWrapper = styled.div`
       &:hover {
         background-color: #00a8b5;
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    button {
+      width: 45%;
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    button {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .cancel {
+      margin-bottom: 10px;
     }
   }
 `;

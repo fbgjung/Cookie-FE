@@ -22,6 +22,14 @@ const HeaderWrapper = styled.div`
   align-items: center;
   justify-content: center;
 
+  @media (max-width: 768px) {
+    min-height: 200px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 150px;
+  }
+
   .skeleton {
     position: absolute;
     width: 100%;
@@ -60,23 +68,54 @@ const HeaderWrapper = styled.div`
     bottom: 10px;
     left: 10px;
     color: white;
-    background: white;
+    background: rgba(0, 0, 0, 0.6);
     padding: 10px;
     border-radius: 8px;
     opacity: ${(props) => (props.isLoading ? 0 : 1)};
     transition: opacity 0.3s ease;
+    max-width: 90%;
+    width: 100%;
 
     h1 {
       font-size: 20px;
       font-weight: bold;
-      color: black;
+      color: white;
       margin: 0;
+      word-wrap: break-word;
     }
 
     p {
       font-size: 14px;
       margin: 5px 0 0 0;
-      color: black;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      bottom: 15px;
+      left: 15px;
+      padding: 8px;
+
+      h1 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      bottom: 10px;
+      left: 10px;
+      padding: 5px;
+
+      h1 {
+        font-size: 16px;
+      }
+
+      p {
+        font-size: 10px;
+      }
     }
   }
 

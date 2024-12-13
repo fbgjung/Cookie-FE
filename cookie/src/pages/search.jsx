@@ -7,6 +7,7 @@ import SearchBar from "../components/searchpage/SearchBar";
 import SearchResults from "../components/searchpage/SearchResults";
 import TopButton from "../components/searchpage/TopButton";
 import serverBaseUrl from "../config/apiConfig";
+import GlobalStyle from "../styles/global";
 
 const Container = styled.div`
   flex: 1;
@@ -244,6 +245,7 @@ const Search = () => {
 
   return (
     <Container>
+      <GlobalStyle />
       <SearchInfoText>
         영화 제목, 배우/ 감독명을
         <br />

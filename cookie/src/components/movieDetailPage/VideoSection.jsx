@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 const Title = styled.h2`
   margin-top: 30px;
+  color: white;
 `;
 
 const VideoWrapper = styled.div`
@@ -16,9 +17,10 @@ const VideoWrapper = styled.div`
   .video-grid {
     display: flex;
     gap: 15px;
+    flex-wrap: wrap;
 
     .video-item {
-      flex: 1;
+      flex: 1 1 30%;
       position: relative;
       cursor: pointer;
 
@@ -61,8 +63,25 @@ const VideoWrapper = styled.div`
       }
     }
   }
-`;
 
+  @media (max-width: 1024px) {
+    .video-grid {
+      gap: 10px;
+      .video-item {
+        flex: 1 1 45%;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .video-grid {
+      gap: 10px;
+      .video-item {
+        flex: 1 1 100%;
+      }
+    }
+  }
+`;
 const VideoSection = ({ videoUrl }) => {
   if (!videoUrl) return null;
 

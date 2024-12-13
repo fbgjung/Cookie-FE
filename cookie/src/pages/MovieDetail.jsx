@@ -19,6 +19,14 @@ const ContentWrapper = styled.div`
   background-color: black;
   box-sizing: border-box;
   overflow-x: hidden;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 5px;
+  }
 `;
 
 const MovieDetail = () => {
