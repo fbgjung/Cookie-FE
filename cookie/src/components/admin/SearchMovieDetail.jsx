@@ -16,7 +16,7 @@ const flexRowCenter = `
 
 const AddMovieDetail = styled.div`
   margin: 1rem;
-  height: 970px;
+  min-height: 1200px;
   border: 1px solid var(--sub);
   border-radius: 12px;
   position: relative;
@@ -109,7 +109,7 @@ export const ActorProfile = styled.img`
 
 export const ButtonWrapper = styled.div`
   ${flexRowCenter}
-  margin:13.7rem 1rem;
+  margin:3rem 1rem 0 0;
   display: flex;
   justify-content: end;
 `;
@@ -213,6 +213,11 @@ const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
   };
   return (
     <AddMovieDetail>
+      <ButtonWrapper>
+        <SubmitBtn $isSelected={isSelected} onClick={handleSelect}>
+          등록하기
+        </SubmitBtn>
+      </ButtonWrapper>
       <TitleContainer>
         <button onClick={handleGoBack}>
           <img src={back} alt="back" />
@@ -268,11 +273,6 @@ const SearchMovieDetail = ({ selectedMovie, handleGoBack }) => {
           />
         </MovieContainer>
       </MovieDetail>
-      <ButtonWrapper>
-        <SubmitBtn $isSelected={isSelected} onClick={handleSelect}>
-          등록하기
-        </SubmitBtn>
-      </ButtonWrapper>
     </AddMovieDetail>
   );
 };

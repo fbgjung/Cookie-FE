@@ -7,7 +7,7 @@ import serverBaseUrl from "../../config/apiConfig";
 
 export const DefalutContainer = styled.div`
   width: 1239px;
-  height: 1030px;
+  min-height: 1130px;
   border: none;
   padding: 1rem;
   border-radius: 12px;
@@ -156,9 +156,11 @@ function AddMovie() {
           ? response.data.response
           : [];
         setMovies(movieData);
+        setIsSearching(false);
       })
       .catch((error) => {
         console.error("API Error:", error);
+        setIsSearching(false);
       });
   };
   const handleKeyPress = (e) => {

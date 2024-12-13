@@ -166,25 +166,38 @@ const CookieMovieList = () => {
   const [recommendList, setRecommendList] = useState([]);
   const [addMovieIds, setAddMovieIds] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState(""); // 검색 키워드 상태
+  const [searchResults, setSearchResults] = useState([]); // 검색 결과 저장
+
   const handleSearchChange = (e) => {
     setSearchKeyword(e.target.value);
   };
-
+  const isValidSearchKeyword = (text) => {
+    const validRegex = /[가-힣a-zA-Z]/;
+    return validRegex.test(text);
+  };
   const handleSearchSubmit = async () => {
-    if (!searchKeyword.trim()) {
+    const validSearchKeyword = searchKeyword.trim();
+    if (!validSearchKeyword || !isValidSearchKeyword(validSearchKeyword)) {
       return;
     }
     try {
       const response = await axiosInstance.get(
-        `/api/admin/movies/${searchKeyword}/1`
+        `/api/admin/movies/${searchKeyword}/${currentPage}`
       );
-      console.log("검색된영화", response.data.response.results);
-      setRegisteredMovies(response.data.response.results);
+      console.log("검색된 정보", response.data.response);
+      console.log("검색된 영화", response.data.response.results);
+      setSearchResults(response.data.response.results);
+      setTotalPages(response.data.response.totalPages);
     } catch (error) {
       console.error("영화 검색 실패", error);
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSearchSubmit();
+    }
+  };
   //등록된 영화목록
   useEffect(() => {
     const fetchMovies = async () => {
@@ -203,8 +216,12 @@ const CookieMovieList = () => {
       }
     };
 
-    fetchMovies();
-  }, [currentPage]);
+    if (searchKeyword.trim()) {
+      handleSearchSubmit();
+    } else {
+      fetchMovies();
+    }
+  }, [currentPage, searchKeyword]);
 
   const handleCheckboxChange = (movieId) => {
     setSelectedMovieId((prevSelectedIds) =>
@@ -268,13 +285,11 @@ const CookieMovieList = () => {
   };
 
   const handleUpdateCategories = (updatedCategories) => {
-    // selectedMovie의 categories를 수정된 카테고리로 업데이트
     setSelectedMovie((prevMovie) => ({
       ...prevMovie,
       categories: updatedCategories,
     }));
 
-    // 등록된 영화 목록에서 카테고리 반영
     setRegisteredMovies((prevMovies) =>
       prevMovies.map((movie) =>
         movie.movieId === selectedMovie.movieId
@@ -369,7 +384,7 @@ const CookieMovieList = () => {
   useEffect(() => {
     fetchRecommendList();
   }, []);
-
+  const displayedMovies = searchKeyword ? searchResults : registeredMovies;
   return (
     <>
       <AddMovieContainer>
@@ -378,6 +393,7 @@ const CookieMovieList = () => {
             placeholder="영화 제목을 입력하세요"
             value={searchKeyword}
             onChange={handleSearchChange}
+            onKeyDown={handleKeyDown}
           />
           <SearchIconButton
             type="button"
@@ -400,8 +416,8 @@ const CookieMovieList = () => {
         <MovieListContainer>
           {loading ? (
             <p></p>
-          ) : Array.isArray(registeredMovies) && registeredMovies.length > 0 ? (
-            registeredMovies.map((movie) => (
+          ) : Array.isArray(displayedMovies) && displayedMovies.length > 0 ? (
+            displayedMovies.map((movie) => (
               <React.Fragment key={movie.movieId}>
                 <DeleteCheckBox
                   type="checkbox"

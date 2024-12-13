@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import useAdminMovieStore from "../../stores/useAdminMovieStore";
 import deleteBtn from "../../assets/images/signUp/close_icon.svg";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
@@ -108,7 +107,7 @@ function AddLinkStillCut({ selectedMovie, stillCuts, onUpdateStillCuts }) {
     return <p>영화 정보를 불러오는 중입니다...</p>;
   }
 
-  const displayedStillCuts = stillCuts.slice(0, 5);
+  const displayedStillCuts = stillCuts;
   const allStillCuts = [...displayedStillCuts, ...additionalCuts];
 
   /*유튜브 링크 추가*/
@@ -134,8 +133,8 @@ function AddLinkStillCut({ selectedMovie, stillCuts, onUpdateStillCuts }) {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    if (allStillCuts.length + files.length > 10) {
-      alert("최대 10개까지 업로드 가능합니다.");
+    if (allStillCuts.length + files.length > 12) {
+      alert("최대 12개까지 업로드 가능합니다.");
       return;
     }
     const fileURLs = files.map((file) => URL.createObjectURL(file));
@@ -151,6 +150,7 @@ function AddLinkStillCut({ selectedMovie, stillCuts, onUpdateStillCuts }) {
   useEffect(() => {
     onUpdateStillCuts(additionalCuts);
   }, [additionalCuts, onUpdateStillCuts]);
+
   return (
     <YoutubeAndStillCutContainer>
       <MovieInfoSection label="유튜브">
@@ -181,9 +181,8 @@ function AddLinkStillCut({ selectedMovie, stillCuts, onUpdateStillCuts }) {
       </MovieInfoSection>
 
       <MovieInfoSection label="스틸컷">
-        {/* 기존 스틸컷 5개 렌더링 */}
-        {displayedStillCuts.length > 0 &&
-          displayedStillCuts.map((image, index) => (
+        {stillCuts.length > 0 &&
+          stillCuts.map((image, index) => (
             <StillCutContainer key={index}>
               <SitllCut src={image} alt={`Still cut ${index + 1}`} />
             </StillCutContainer>
