@@ -110,20 +110,8 @@ const Modal = ({
           <p>새로운 리뷰가 등록되면 빠르게 알려드릴게요!</p>
 
           <ButtonContainer>
-            <ModalButton
-              onClick={() => {
-                onPushNotification();
-              }}
-            >
-              🔔 푸쉬알림
-            </ModalButton>
-            <ModalButton
-              onClick={() => {
-                onEmailNotification();
-              }}
-            >
-              💌 이메일
-            </ModalButton>
+            <ModalButton onClick={onPushNotification}>🔔 푸쉬알림</ModalButton>
+            <ModalButton onClick={onEmailNotification}>💌 이메일</ModalButton>
           </ButtonContainer>
           <CloseBtn onClick={onNoNotification}>알림을 원하지 않습니다</CloseBtn>
         </ModalContainer>
