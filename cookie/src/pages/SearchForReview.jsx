@@ -4,7 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import debounce from "lodash.debounce";
 import SearchBar from "../components/searchpage/SearchBar";
-import SearchResults from "../components/searchpage/SearchResultsForReview";
+import SearchResultsForReview from "../components/searchpage/SearchResultsForReview";
 import TopButton from "../components/searchpage/TopButton";
 import serverBaseUrl from "../config/apiConfig";
 import GlobalStyle from "../styles/global";
@@ -317,7 +317,7 @@ const SearchForReview = () => {
         {!searchTerm.trim() && (
           <DefaultResultsHeader>박스오피스 TOP 10</DefaultResultsHeader>
         )}
-        <SearchResults
+        <SearchResultsForReview
           results={results || []}
           onMovieClick={handleMovieClick}
           onDefaultMovieClick={handleDefaultMovieClick}
