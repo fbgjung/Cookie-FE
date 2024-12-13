@@ -152,17 +152,26 @@ function SignUpGenre() {
     setShowModal(true);
   };
 
-  const handleFormDataSubmission = async (pushValue, emailValue) => {
+  const handleFormDataSubmission = async (
+    pushValue,
+    emailValue,
+    requestFcmToken
+  ) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
     setShowSpinner(true);
 
     try {
-      const fcmToken = await requestNotificationPermission();
-      if (!fcmToken) {
-        toast.error("FCM 토큰을 가져올 수 없습니다.");
-        setShowSpinner(false);
-        return;
+      let fcmToken = null;
+
+      if (requestFcmToken) {
+        fcmToken = await requestNotificationPermission();
+        if (!fcmToken) {
+          toast.error("FCM 토큰을 가져올 수 없습니다.");
+          setShowSpinner(false);
+          setIsSubmitting(false);
+          return;
+        }
       }
 
       const formData = new FormData();
@@ -192,14 +201,17 @@ function SignUpGenre() {
           "accessToken",
           response.data.response.token.accessToken
         );
+
         const userResponse = response.data.response.user;
         const setUserInfo = useUserStore.getState().setUserInfo;
+
         const userInfo = {
           userId: userResponse.userId,
           nickname: userResponse.nickname,
           profileImage: userResponse.profileImage,
           genreId: userResponse.genreId,
         };
+
         setUserInfo(userInfo);
         console.log("저장된 유저 정보:", userInfo);
 
@@ -248,11 +260,12 @@ function SignUpGenre() {
         {showModal && (
           <Modal
             onClose={() => setShowModal(false)}
-            onPushNotification={() => handleFormDataSubmission("true", "false")}
-            onEmailNotification={() =>
-              handleFormDataSubmission("false", "true")
+            onPushNotification={() =>
+              handleFormDataSubmission("true", "false", true)
             }
-            onNoNotification={() => handleFormDataSubmission("false", "false")}
+            onNoNotification={() =>
+              handleFormDataSubmission("false", "false", false)
+            }
           />
         )}
       </MainContainer>
