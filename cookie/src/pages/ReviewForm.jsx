@@ -57,7 +57,8 @@ const RatingWrapper = styled.div`
   margin-bottom: 20px;
 
   span {
-    font-size: 16px;
+    color: white;
+    font-size: 20px;
     font-weight: bold;
     margin-right: 10px;
   }
@@ -201,6 +202,7 @@ const ReviewForm = () => {
   const [movieScore, setMovieScore] = useState(0);
   const [content, setContent] = useState("");
   const [isSpoiler, setIsSpoiler] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -232,8 +234,14 @@ const ReviewForm = () => {
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return; // 이미 요청 중이라면 함수 종료
+    setIsSubmitting(true); // 요청 시작
+
     const userId = getUserIdFromToken();
-    if (!userId) return;
+    if (!userId) {
+      setIsSubmitting(false); // 요청 실패 시 플래그 초기화
+      return;
+    }
 
     const payload = {
       movieId,
@@ -242,8 +250,13 @@ const ReviewForm = () => {
       isSpoiler,
     };
 
+    console.log("서버로 보낼 데이터:", payload);
+
     try {
       const response = await axiosInstance.post(`/api/reviews`, payload);
+
+      console.log("Axios 요청 정보:", response.config);
+
       if (response.status === 200) {
         toast.success("리뷰가 성공적으로 등록되었습니다.");
         console.log("리뷰 등록 성공:", response.data.response);
@@ -260,6 +273,8 @@ const ReviewForm = () => {
       } else {
         toast.error("리뷰 등록 중 오류가 발생했습니다.");
       }
+    } finally {
+      setIsSubmitting(false); // 요청 완료 후 플래그 초기화
     }
   };
 

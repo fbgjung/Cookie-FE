@@ -6,7 +6,6 @@ import { toast } from "react-hot-toast";
 import { stepLabelClasses } from "@mui/material";
 import axiosInstance from "../../api/auth/axiosInstance";
 
-// 스타일 컴포넌트 정의
 const ReviewContentContainer = styled.div`
   display: flex;
   margin: 0 2rem;
@@ -47,12 +46,13 @@ const ReviewContentContainer = styled.div`
 
         .name {
           font-size: 0.9rem;
+          color: white;
           font-weight: bold;
         }
 
         .date {
           font-size: 0.8rem;
-          color: #666;
+          color: #f9f9f9;
         }
       }
     }
@@ -63,7 +63,7 @@ const ReviewContentContainer = styled.div`
       .movie-title {
         font-size: 1rem;
         font-weight: bold;
-        color: #04012d;
+        color: white;
       }
     }
   }
@@ -83,7 +83,7 @@ const ReviewContentContainer = styled.div`
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: 40px;
+  top: 20px;
   right: 20px;
   background: white;
   border: 1px solid #ddd;
@@ -113,6 +113,8 @@ const EditForm = styled.div`
   textarea {
     padding: 10px;
     font-size: 0.85rem;
+    color: white;
+
     border: 1px solid #ddd;
     border-radius: 8px;
     resize: none;
@@ -284,8 +286,7 @@ const ReviewContentSection = ({
 
   return (
     <ReviewContentContainer>
-      <img className="poster" src={posterSrc} alt="Movie Poster" onClick={onPosterClick} />
-      
+      <img className="poster" src={posterSrc} alt="Movie Poster" onClick={onPosterClick} />      
       <ScoreSection>
         <ScoreIcon></ScoreIcon>
         <ScoreText>{newMovieScore}</ScoreText>

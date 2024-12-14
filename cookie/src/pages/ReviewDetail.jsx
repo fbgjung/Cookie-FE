@@ -17,8 +17,7 @@ const Container = styled.div`
   min-height: 100vh; 
   overflow-y: auto; 
   background-color: #ffffff;
-  `
-;
+`;
 
 const CommentsSectionContainer = styled.div`
   padding: 2rem;
@@ -218,9 +217,7 @@ const ReviewDetail = () => {
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/api/reviews/${reviewId}`
-        );
+        const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
         console.log("API 응답 데이터:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
@@ -283,13 +280,10 @@ const ReviewDetail = () => {
     }
 
     try {
-      await axiosInstance.put(
-        `/api/reviews/comments/${editingComment.id}`,
-        {
-          reviewId,
-          comment: editingComment.text,
-        }
-      );
+      await axiosInstance.put(`/api/reviews/comments/${editingComment.id}`, {
+        reviewId,
+        comment: editingComment.text,
+      });
 
       setReviewData((prevData) => ({
         ...prevData,
@@ -386,7 +380,7 @@ const ReviewDetail = () => {
       console.error("Error during comment submission:", error);
       openLoginModal();
     } finally {
-      setIsSubmitting(false); // 플래그 해제
+      setIsSubmitting(false);
     }
   };
 

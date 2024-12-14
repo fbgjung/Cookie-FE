@@ -14,6 +14,8 @@ import useAuthStore from "../stores/useAuthStore";
 import Spinner from "../components/common/Spinner";
 import PointHistory from "../components/matchup/PointSection";
 import PushNotificationToggle from "../components/mypage/PushNotificationToggle";
+import LogoutModal from "../components/mypage/LogoutModal";
+import WithdrawModal from "../components/mypage/WithdrawModal";
 
 const MypageContainer = styled.div`
   display: flex;
@@ -57,12 +59,12 @@ const MoreLink = styled.span`
   font-weight: bold;
   margin-top: 1.5rem;
 
-  color: #ffffff;
+  color: black;
   cursor: pointer;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #00d6e8;
+    color: #f84b99;
   }
 `;
 
@@ -78,6 +80,8 @@ const MyPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [pushEnabled, setPushEnabled] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -164,45 +168,41 @@ const MyPage = () => {
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
   const handleLogout = async () => {
-    if (window.confirm("로그아웃 하시겠습니까?")) {
-      setIsLoading(true);
-      try {
-        await axiosInstance.delete("/api/notification/fcm-token");
-        console.log("FCM 토큰 삭제 성공");
+    setIsLoading(true);
+    try {
+      await axiosInstance.delete("/api/notification/fcm-token");
+      console.log("FCM 토큰 삭제 성공");
 
-        logOut();
-        sessionStorage.clear();
-        localStorage.clear();
+      logOut();
+      sessionStorage.clear();
+      localStorage.clear();
 
-        toast.success("로그아웃 되었습니다.");
-        navigate("/login");
-      } catch (error) {
-        console.error("FCM 토큰 삭제 실패:", error);
-        toast.error("로그아웃 중 문제가 발생했습니다. 다시 시도해주세요.");
-      } finally {
-        setIsLoading(false);
-      }
+      toast.success("로그아웃 되었습니다.");
+      navigate("/login");
+    } catch (error) {
+      console.error("FCM 토큰 삭제 실패:", error);
+      toast.error("로그아웃 중 문제가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsLoading(false);
+      setShowLogoutModal(false);
     }
   };
 
   const handleWithdraw = async () => {
-    if (window.confirm("정말로 탈퇴하시겠습니까?")) {
-      setIsLoading(true);
-      try {
-        await axiosInstance.delete("/api/users");
-
-        logOut();
-        sessionStorage.clear();
-        localStorage.clear();
-
-        toast.success("탈퇴가 완료되었습니다.");
-        window.location.href = "/login";
-      } catch (error) {
-        console.error("탈퇴 요청 실패:", error);
-        toast.error("탈퇴 중 문제가 발생했습니다.\n다시 시도해주세요.");
-      } finally {
-        setIsLoading(false);
-      }
+    setIsLoading(true);
+    try {
+      await axiosInstance.delete("/api/users");
+      logOut();
+      sessionStorage.clear();
+      localStorage.clear();
+      toast.success("탈퇴가 완료되었습니다.");
+      navigate("/login");
+    } catch (error) {
+      console.error("탈퇴 요청 실패:", error);
+      toast.error("탈퇴 중 문제가 발생했습니다.\n다시 시도해주세요.");
+    } finally {
+      setIsLoading(false);
+      setShowWithdrawModal(false);
     }
   };
 
@@ -226,6 +226,18 @@ const MyPage = () => {
       <LoginModal />
 
       {isLoading && <Spinner />}
+      {showLogoutModal && (
+        <LogoutModal
+          onConfirm={handleLogout}
+          onCancel={() => setShowLogoutModal(false)}
+        />
+      )}
+      {showWithdrawModal && (
+        <WithdrawModal
+          onConfirm={handleWithdraw}
+          onCancel={() => setShowWithdrawModal(false)}
+        />
+      )}
       <MypageContainer>
         <div
           style={{
@@ -262,8 +274,8 @@ const MyPage = () => {
           <ReviewList reviews={reviewData} onReviewClick={handleReviewClick} />
           {isLogined() && (
             <LogoutAndWithdraw
-              onLogout={handleLogout}
-              onWithdraw={handleWithdraw}
+              onLogout={() => setShowLogoutModal(true)}
+              onWithdraw={() => setShowWithdrawModal(true)}
             />
           )}
         </MypageContent>

@@ -4,24 +4,42 @@ import userDefaultImg from "../assets/images/signUp/user_img.svg";
 import deleteBtn from "../assets/images/signUp/close_icon.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
+import { FaArrowLeft } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 const MainContainer = styled.div`
-  background-color: #fff4b9;
-  height: 100vh;
-  padding: 4.375rem 0 0 0;
+  background-color: white;
+  min-height: 100vh;
+  padding-top: 6rem;
 `;
+
+const BackButton = styled.button`
+  position: absolute;
+  top: 2rem;
+  left: 1.5rem;
+  background: none;
+  border: none;
+  color: #f84b99;
+  font-size: 1.8rem;
+  cursor: pointer;
+  &:hover {
+    color: #ffb88c;
+  }
+`;
+
 const MainTitle = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 0 0 2.5rem;
+  margin: 0.1rem 0 0 2.5rem;
   line-height: 0.5rem;
 
   h2 {
     margin: 0.8rem;
-    color: #724b2e;
+    color: #f84b99;
   }
+
   @media (max-width: 768px) {
+    margin: 1.5rem 0 0 2rem;
     h2 {
       font-size: 1.4rem;
     }
@@ -69,7 +87,7 @@ const UserInfo = styled.div`
 
   p {
     margin: 1.5rem 0 0.5rem 0;
-    color: #724b2e;
+    color: #f84b99;
     font-weight: 500;
   }
 
@@ -83,21 +101,22 @@ const UserInfo = styled.div`
     justify-content: center;
   }
   .nickName__valid--text {
-    color: var(--notice);
+    color: #4a4a4a;
     padding: 0 5px;
     font-size: 1rem;
+
     margin: -5px 0 0 0;
   }
   .nickName__valid--btn {
     margin: 8px 0 0 0;
-    background-color: ${(props) => (props.$isSelected ? "#724b2e" : "#aad6e7")};
-    color: ${(props) => (props.$isSelected ? "white" : "#724b2e")};
+    background-color: ${(props) => (props.$isSelected ? "#724b2e" : "#f84b99")};
+    color: ${(props) => (props.$isSelected ? "#fdf8fa" : "white")};
     border-radius: 0.75rem;
     padding: 0.5rem 1rem;
     border: none;
     cursor: pointer;
     &:hover {
-      background-color: #724b2e;
+      background-color: #c33677;
       color: white;
     }
   }
@@ -105,7 +124,7 @@ const UserInfo = styled.div`
     display: block;
     font-size: 1rem;
     margin-bottom: 1rem;
-    color: #724b2e;
+    color: #f84b99;
     font-weight: 700;
   }
 
@@ -114,16 +133,16 @@ const UserInfo = styled.div`
     width: 22.6rem;
     height: 3rem;
     border-radius: 0.75rem;
-    border: none;
-    box-shadow: 0.5rem 0.625rem 12rem 5rem #ffeb7d;
+    border: 1px solid black;
+
     font-size: 1rem;
     padding: 0.5rem;
     margin-top: 0.5rem;
     background-color: white;
-    color: var(--text);
+    color: black;
   }
   input:focus {
-    outline: 1px solid #724b2e;
+    border: 2px solid #c33677;
   }
   @media (max-width: 768px) {
     input {
@@ -138,11 +157,11 @@ const UserInfo = styled.div`
 const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 14.5rem;
+  margin-top: 6rem;
 
   button {
-    background-color: #aad6e7;
-    color: #724b2e;
+    background-color: #f84b99;
+    color: #fdf8fa;
     width: 29rem;
     height: 4rem;
     border-radius: 0.75rem;
@@ -151,7 +170,13 @@ const SubmitBtn = styled.div`
     font-weight: 700;
     outline: none;
     cursor: pointer;
+
+    &:hover {
+      background-color: #c33677;
+      color: white;
+    }
   }
+
   @media (max-width: 768px) {
     button {
       width: 20rem;
@@ -269,6 +294,9 @@ function SignUpProfile() {
   return (
     <>
       <MainContainer>
+        <BackButton onClick={() => navigate(-1)}>
+          <FaArrowLeft />
+        </BackButton>
         <MainTitle>
           <h2>회원 정보를</h2>
           <h2>입력해주세요</h2>

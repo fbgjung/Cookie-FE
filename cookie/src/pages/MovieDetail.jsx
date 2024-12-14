@@ -19,6 +19,7 @@ const ContentWrapper = styled.div`
   background-color: black;
   box-sizing: border-box;
   overflow-x: hidden;
+  min-height: 100vh;
 
   @media (max-width: 768px) {
     padding: 10px;
@@ -43,6 +44,7 @@ const MovieDetail = () => {
       setIsLoading(true);
       try {
         const response = await axiosInstance.get(`/api/movies/${id}`);
+        console.log("영화 데이터 로드 성공:", response.data.response);
         setMovieData(response.data.response);
       } catch (error) {
         console.error("영화 데이터 로드 실패:", error);
@@ -74,14 +76,16 @@ const MovieDetail = () => {
   return (
     <ContentWrapper>
       <DetailHeader onBack={() => navigate(-1)} />
-      <HeaderSection
-        title={movieData.title}
-        releasedAt={movieData.releasedAt}
-        country={movieData.country}
-        runtime={runtimeString}
-        certification={movieData.certification}
-        mainImage={movieData.images ? movieData.images[0] : ""}
-      />
+      {movieData.images && movieData.images.length > 0 && (
+        <HeaderSection
+          title={movieData.title}
+          releasedAt={movieData.releasedAt}
+          country={movieData.country}
+          runtime={runtimeString}
+          certification={movieData.certification}
+          mainImage={movieData.images[0]}
+        />
+      )}
       <DetailsSection
         posterUrl={movieData.poster}
         categories={movieData.categories}
@@ -92,11 +96,13 @@ const MovieDetail = () => {
         liked={movieData.liked}
       />
       <CastSection director={movieData.director} actors={movieData.actors} />
-      <VideoSection videoUrl={movieData.video} />
-      <GallerySection
-        images={movieData.images}
-        onImageClick={handleImageClick}
-      />
+      {movieData.video !== "N/A" && <VideoSection videoUrl={movieData.video} />}
+      {movieData.images && movieData.images.length > 0 && (
+        <GallerySection
+          images={movieData.images}
+          onImageClick={handleImageClick}
+        />
+      )}
       {movieData.reviews && (
         <ReviewSection
           reviews={movieData.reviews}

@@ -21,7 +21,7 @@ const SubTitle = styled.div`
   margin: 1rem 1rem 1.5rem;
 
   h3 {
-    color: #00d6e8;
+    color: #f84b99;
     margin: 0;
     font-size: 1.2rem;
     text-align: center;
@@ -36,7 +36,7 @@ const SubTitle = styled.div`
   }
 
   p {
-    color: black;
+    color: #707070;
     margin: 0;
     font-size: 1rem;
     text-align: center;
@@ -73,16 +73,16 @@ const ThemeContainer = styled.div`
 `;
 
 const ThemeBtn = styled.button`
-  background-color: ${(props) => (props.$isSelected ? "#00D6E8" : "white")};
-  color: ${(props) => (props.$isSelected ? "#02172a" : "#02172a")};
+  background-color: ${(props) => (props.$isSelected ? "#f84b99" : "white")};
+  color: ${(props) => (props.$isSelected ? "#fdf8fa" : "#02172a")};
   border-radius: 12px;
   padding: 0.8rem 1rem;
-  border: 1px solid #aad6e7;
+  border: 1px solid #f84b99;
   cursor: pointer;
 
   &:hover {
-    background-color: #33efff;
-    color: #02172a;
+    background-color: #f84b99;
+    color: #fdf8fa;
   }
 
   @media (max-width: 768px) {

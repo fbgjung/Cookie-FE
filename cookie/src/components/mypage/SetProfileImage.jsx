@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState, useRef } from "react";
+import { FaArrowLeft } from "react-icons/fa";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -18,13 +19,17 @@ const ProfileContainer = styled.div`
   }
 `;
 
-const BackButton = styled.img`
+const BackButton = styled(FaArrowLeft)`
   position: absolute;
   top: 30px;
   left: 20px;
-  width: 24px;
-  height: 24px;
+  font-size: 1.8rem;
+  color: #f84b99;
   cursor: pointer;
+
+  &:hover {
+    color: #c33677;
+  }
 `;
 
 const ImageWrapper = styled.div`
@@ -142,11 +147,7 @@ const SetProfileImage = ({ profileImage, onChange }) => {
 
   return (
     <ProfileContainer>
-      <BackButton
-        src="/assets/images/mypage/ic_back.svg"
-        alt="Back"
-        onClick={handleBackClick}
-      />
+      <BackButton onClick={handleBackClick} />
       <ImageWrapper onClick={() => setShowModal(true)}>
         <ProfileImage
           src={
@@ -165,7 +166,6 @@ const SetProfileImage = ({ profileImage, onChange }) => {
           <ModalContainer onClick={(e) => e.stopPropagation()}>
             <CloseButton onClick={() => setShowModal(false)}>×</CloseButton>
 
-            {/* 파일 선택 버튼 */}
             <ModalButton onClick={handleFileSelect}>
               앨범에서 파일 선택
             </ModalButton>
@@ -176,7 +176,6 @@ const SetProfileImage = ({ profileImage, onChange }) => {
               onChange={handleImageChange}
             />
 
-            {/* 기본 이미지 변경 버튼 */}
             <ModalButton onClick={handleResetImage}>
               기본 이미지로 변경
             </ModalButton>

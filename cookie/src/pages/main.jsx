@@ -1,5 +1,5 @@
 import styled from "styled-components";
-// import MatchUp from "../components/main/MatchUp";
+
 import MatchUpSection from "../components/main/MatchUpSection";
 import AdminRecommend from "../components/main/AdminRecommend";
 import CookieMovies from "../components/main/CookieMovies";
@@ -9,7 +9,7 @@ import TopButton from "../components/searchpage/TopButton";
 import { useEffect, useState } from "react";
 import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
-import Question from "../components/main/Question"
+import Question from "../components/main/Question";
 
 const Main = () => {
   const [showTopButton, setShowTopButton] = useState(false);
@@ -32,7 +32,6 @@ const Main = () => {
 
   return (
     <>
-      {/* <HeaderWrapper></HeaderWrapper> */}
       <MainContainer>
         <Content>
           <MatchUpSection />
@@ -41,7 +40,7 @@ const Main = () => {
           <SpecialMovie categorydata={categoryData} />
           <GenreMovie categorydata={categoryData} />
           <Question />
-          </Content>
+        </Content>
         <LoginModal />
         <WriteReviewButton onClick={() => isLogined("/searchmov")}>
           리뷰 작성하기
@@ -54,7 +53,6 @@ const Main = () => {
 };
 
 export default Main;
-
 
 const CommonContainer = styled.div`
   width: 100%;
@@ -109,10 +107,9 @@ const NavbarWrapper = styled(CommonContainer)`
 const WriteReviewButton = styled.button`
   position: fixed;
   bottom: 9.375rem;
-  right: calc(50% - 20.88rem);
-  transform: translateX(-50%);
-  background-color: #AAD6E7;
-  color: var(--text);
+  right: 28rem;
+  background-color: #f84b99;
+  color: #fdf8fa;
   font-size: 1rem;
   font-weight: 700;
   padding: 0.625rem 1.25rem;
@@ -123,19 +120,21 @@ const WriteReviewButton = styled.button`
   z-index: 1000;
 
   &:hover {
-    background-color: #82DCFF;
-    @media (max-width: 600px) {
-      font-size: 0.8rem;
-      padding: 0.5rem 0.8125rem;
-      right: calc(50% - 15.5rem);
-      bottom: 8rem;
-    }
-    @media (max-width: 390px) {
-      font-size: 0.75rem;
-      padding: 0.5rem 0.6875rem;
-      right: calc(50% - 14.1rem);
-      bottom: 6rem;
-    }
+    background-color: #c33677;
+  }
+
+  @media (max-width: 600px) {
+    right: 1.5rem;
+    bottom: 8rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  @media (max-width: 390px) {
+    right: 1rem;
+    bottom: 6rem;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.9rem;
   }
 `;
 

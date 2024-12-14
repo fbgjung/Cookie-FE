@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { FaTimes } from "react-icons/fa";
 
 const ModalBackground = styled.div`
   position: fixed;
@@ -14,39 +15,50 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background: #fff4b9;
-  padding: 1.875rem;
+  position: relative;
+  background: white;
+  padding: 2.5rem;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 2rem; /* 요소 간격 */
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
-  width: 29.375rem;
+  width: 30rem;
+
   @media (max-width: 768px) {
     width: 22rem;
-    height: 17rem;
-    padding: 1rem;
+    height: auto;
+    padding: 1.5rem;
+    gap: 1.5rem; /* 모바일 간격 */
   }
+
   h2 {
-    margin: 0 0 2rem 0;
-    color: #724b2e;
+    margin: 0;
+    color: #f84b99;
+    font-size: 1.8rem;
+    text-align: center;
   }
+
   h3 {
-    margin: 0 0 0.3rem 0;
-    color: #724b2e;
+    margin: 0;
+    color: #f84b99;
+    font-size: 1.2rem;
+    text-align: center;
   }
-  div {
-    display: flex;
-    margin: 2rem 0 2rem 0;
-  }
+
   p {
-    color: #724b2e;
+    color: #707070;
+    font-size: 1rem;
+    text-align: center;
   }
+
   @media (max-width: 768px) {
     h2 {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
     }
     h3 {
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
     p {
       font-size: 0.85rem;
@@ -54,22 +66,41 @@ const ModalContainer = styled.div`
   }
 `;
 
+const CloseIcon = styled(FaTimes)`
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  font-size: 1.8rem;
+  color: #707070;
+  cursor: pointer;
+
+  &:hover {
+    color: #f84b99;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+`;
+
 const ModalButton = styled.button`
   background-color: ${(props) => (props.$isSelected ? "#aad6e7" : "white")};
   color: ${(props) => (props.$isSelected ? "#724b2e" : "#724b2e")};
   border-radius: 5rem;
-  padding: 0.8rem 1rem;
-  border: 1px solid #aad6e7;
+  padding: 0.8rem 1.5rem;
+  border: 1px solid #f84b99;
   cursor: pointer;
   font-size: 1rem;
-  width: 8.5rem;
+  width: 9rem;
+
   &:hover {
-    background-color: #aad6e7;
-    color: "#724b2e";
+    background-color: #f84b99;
+    color: #fdf8fa;
   }
+
   @media (max-width: 768px) {
-    width: 7.5rem;
-    height: 3.2rem;
+    width: 8rem;
+    height: 3.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,7 +109,7 @@ const ModalButton = styled.button`
 
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem; /* 버튼 간격 */
   justify-content: center;
 `;
 
@@ -90,40 +121,27 @@ const CloseBtn = styled.button`
   text-decoration: underline;
   text-underline-offset: 0.375rem;
   font-size: 1rem;
+
   @media (max-width: 768px) {
     font-size: 0.8rem;
     text-underline-offset: 0.25rem;
   }
 `;
-const Modal = ({
-  onClose,
-  onPushNotification,
-  onEmailNotification,
-  onNoNotification,
-}) => {
+
+const Modal = ({ onClose, onPushNotification, onNoNotification }) => {
   return (
     <>
       <ModalBackground onClick={onClose}>
         <ModalContainer onClick={(e) => e.stopPropagation()}>
+          <CloseIcon onClick={onClose} />
           <h2>알림 수신 동의(선택)</h2>
-          <h3>좋아하는 장르에 새로운 리뷰가 등록될 때 알려드릴까요?</h3>
+          <h3>
+            좋아하는 장르에 새로운 리뷰가 <br></br>등록될 때 알려드릴까요?
+          </h3>
           <p>새로운 리뷰가 등록되면 빠르게 알려드릴게요!</p>
 
           <ButtonContainer>
-            <ModalButton
-              onClick={() => {
-                onPushNotification();
-              }}
-            >
-              🔔 푸쉬알림
-            </ModalButton>
-            <ModalButton
-              onClick={() => {
-                onEmailNotification();
-              }}
-            >
-              💌 이메일
-            </ModalButton>
+            <ModalButton onClick={onPushNotification}>🔔 푸쉬알림</ModalButton>
           </ButtonContainer>
           <CloseBtn onClick={onNoNotification}>알림을 원하지 않습니다</CloseBtn>
         </ModalContainer>

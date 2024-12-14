@@ -8,8 +8,8 @@ const SaveButtonWrapper = styled.div`
 `;
 
 const SaveButton = styled.button`
-  background-color: #00d6e8;
-  color: #02172a;
+  background-color: #f84b99;
+  color: #fdf8fa;
   font-size: 1rem;
   font-weight: bold;
   padding: 15px 30px;
@@ -21,7 +21,7 @@ const SaveButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #33efff;
+    background-color: #c33677;
   }
 
   &:disabled {

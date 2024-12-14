@@ -1,82 +1,107 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
-import useAuthStore from "../stores/useAuthStore"; // useAuthStore import
-import LoginModal from "../components/common/LoginModal"; // LoginModal import
+import useAuthStore from "../stores/useAuthStore";
+import LoginModal from "../components/common/LoginModal";
 
 const Container = styled.div`
   padding: 2rem;
-  background-color: white;
+  background-color: #f4f4f4;
   min-height: 100vh;
-  color: black;
+  color: #333;
   position: relative;
 `;
 
 const Title = styled.h2`
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 2rem;
+  font-weight: bold;
+  color: #333;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
 
-const HistoryList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0 auto;
-  max-width: 800px;
-`;
-
-const BackButton = styled.img`
+const BackButton = styled(FaArrowLeft)`
   position: absolute;
   top: 20px;
   left: 4%;
-  width: 24px;
-  height: 24px;
+  font-size: 1.8rem;
+  color: #f84b99;
   cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    color 0.2s ease;
 
   &:hover {
     transform: scale(1.2);
+    color: #c33677;
   }
 `;
 
-const HistoryItem = styled.li`
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem 2rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  border: 2px solid black;
+const HistoryTable = styled.table`
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1000px;
+  border-collapse: collapse;
+  background-color: #fdf8fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
 `;
 
-const MovieName = styled.h3`
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #333;
-  margin: 0 0 0.5rem;
+const TableHeader = styled.thead`
+  background-color: #f84b99;
+  color: white;
+
+  th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    th {
+      font-size: 0.9rem;
+    }
+  }
 `;
 
-const HistoryDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+const TableRow = styled.tr`
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 
-  .action-name {
-    font-size: 1rem;
-    color: #00d6e8;
+  &:hover {
+    background-color: #f1f1f1;
   }
+`;
 
-  .points {
-    font-size: 1rem;
-    color: #00ff00;
-  }
+const TableData = styled.td`
+  padding: 1.2rem;
+  font-size: 1rem;
+  color: #555;
 
-  .date {
+  @media (max-width: 768px) {
     font-size: 0.9rem;
-    color: #999;
+    padding: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 0.8rem;
   }
 `;
 
@@ -114,7 +139,6 @@ const BadgeHistory = () => {
   };
 
   useEffect(() => {
-    // 로그인 상태일 때만 데이터 요청
     if (isLogined()) {
       fetchBadgeHistory();
     }
@@ -123,34 +147,36 @@ const BadgeHistory = () => {
   const handleHistoryItemClick = () => {
     if (!isLogined()) {
       openLoginModal();
-    } else {
-      // 로그인 상태라면 기존 동작을 계속 유지
     }
   };
 
   return (
     <Container>
+      <BackButton onClick={handleBackClick} />
       <Title>뱃지 포인트 내역</Title>
-      <BackButton
-        src="/assets/images/mypage/ic_back.svg"
-        alt="뒤로가기"
-        onClick={handleBackClick}
-      />
       {badgeHistory.length > 0 ? (
-        <HistoryList>
-          {badgeHistory.map((item, index) => (
-            <HistoryItem key={index} onClick={handleHistoryItemClick}>
-              <MovieName>영화제목: {item.movieName}</MovieName>
-              <HistoryDetails>
-                <p className="action-name">액션: {item.actionName}</p>
-                <p className="points">포인트: +{item.point}P</p>
-                <p className="date">
-                  날짜: {new Date(item.createdAt).toLocaleDateString()}
-                </p>
-              </HistoryDetails>
-            </HistoryItem>
-          ))}
-        </HistoryList>
+        <HistoryTable>
+          <TableHeader>
+            <tr>
+              <th>영화 제목</th>
+              <th>획득 출처 </th>
+              <th>포인트</th>
+              <th>날짜</th>
+            </tr>
+          </TableHeader>
+          <tbody>
+            {badgeHistory.map((item, index) => (
+              <TableRow key={index} onClick={handleHistoryItemClick}>
+                <TableData>{item.movieName}</TableData>
+                <TableData>{item.actionName}</TableData>
+                <TableData>+{item.point}P</TableData>
+                <TableData>
+                  {new Date(item.createdAt).toLocaleDateString()}
+                </TableData>
+              </TableRow>
+            ))}
+          </tbody>
+        </HistoryTable>
       ) : (
         <EmptyMessage>뱃지 포인트를 획득한 내역이 없습니다.</EmptyMessage>
       )}

@@ -8,7 +8,7 @@ const StyledButton = styled.button`
   display: ${({ visible }) => (visible ? "flex" : "none")};
   align-items: center;
   justify-content: center;
-  background: #04012d;
+  background: #ffffff;
   border: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 50%;
@@ -16,25 +16,49 @@ const StyledButton = styled.button`
   height: 50px;
   cursor: pointer;
   z-index: 1000;
+
   &::after {
     content: "↑";
     font-size: 18px;
-    color: #ffffff;
+    color: black;
     font-weight: bold;
   }
+
   &:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-    background-color: #333;
+    background-color: #ffe6f2;
+  }
+
+  /* 반응형 수정 */
+  @media (max-width: 600px) {
+    right: 1.5rem;
+    bottom: 70px;
+    width: 45px;
+    height: 45px;
+
+    &::after {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 390px) {
+    right: 1rem;
+    bottom: 60px;
+    width: 40px;
+    height: 40px;
+
+    &::after {
+      font-size: 14px;
+    }
   }
 `;
-
 const TopButton = ({ visible, onClick }) => {
   return <StyledButton visible={visible} onClick={onClick} />;
 };
 
 TopButton.propTypes = {
-  visible: PropTypes.bool.isRequired, // visible을 boolean으로 정의
-  onClick: PropTypes.func.isRequired, // 클릭 이벤트 핸들러 정의
+  visible: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default TopButton;

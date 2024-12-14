@@ -1,3 +1,4 @@
+import { FaArrowLeft } from "react-icons/fa";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -18,15 +19,19 @@ const Container = styled.div`
   min-height: 80vh;
 `;
 
-const BackButton = styled.img`
+const BackButton = styled(FaArrowLeft)`
   position: absolute;
   top: 20px;
   left: 5%;
-  width: 24px;
-  height: 24px;
+  font-size: 1.5rem;
+  color: #f84b99;
   cursor: pointer;
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
 
   &:hover {
+    color: #c33677;
     transform: scale(1.2);
   }
 `;
@@ -81,8 +86,8 @@ const LikedReviews = () => {
       const newReviews = reviews.map((review) => ({
         reviewId: review.reviewId,
         content: review.content,
-        score: review.movieScore,
-        likes: review.reviewLike,
+        movieScore: review.movieScore,
+        reviewLike: review.reviewLike,
         createdAt: new Date(review.createdAt).toLocaleDateString(),
         updatedAt: new Date(review.updatedAt).toLocaleDateString(),
         movie: {
@@ -93,7 +98,7 @@ const LikedReviews = () => {
         user: {
           nickname: review.user.nickname,
           profileImage: review.user.profileImage,
-          badgeImage: review.user.mainBadgeImage,
+          mainBadgeImage: review.user.mainBadgeImage,
         },
       }));
 
@@ -135,11 +140,7 @@ const LikedReviews = () => {
 
   return (
     <Container>
-      <BackButton
-        src="/assets/images/mypage/ic_back.svg"
-        alt="Back"
-        onClick={handleBackClick}
-      />
+      <BackButton onClick={handleBackClick} />
       <Title>좋아하는 리뷰</Title>
       <HeartIcon src="/assets/images/mypage/red-heart.svg" alt="하트" />
       {reviews.length > 0 ? (

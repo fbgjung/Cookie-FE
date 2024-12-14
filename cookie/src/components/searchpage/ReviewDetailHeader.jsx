@@ -5,7 +5,6 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   margin: 1rem;
-  
 
   .title {
     font-size: 1.2rem;

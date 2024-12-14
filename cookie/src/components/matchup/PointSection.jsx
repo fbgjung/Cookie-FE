@@ -23,9 +23,15 @@ const PointItem = styled.div`
   align-items: flex-start;
   padding: 15px 20px;
   cursor: pointer;
+  color: #000;
 
   &:hover {
-    background-color: #00d6e8;
+    background-color: #f84b99;
+    color: #fdf8fa;
+
+    * {
+      color: #fdf8fa !important;
+    }
   }
 `;
 

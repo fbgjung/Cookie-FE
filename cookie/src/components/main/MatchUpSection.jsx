@@ -4,7 +4,6 @@ import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 const MatchUpSection = () => {
   const navigate = useNavigate();
 
@@ -42,8 +41,8 @@ const MatchUpSection = () => {
   };
 
   const handleMatchUpVotePage = (matchUpId) => {
-    navigate(`/matchup/${matchUpId}`);  // 페이지 이동
-  }
+    navigate(`/matchup/${matchUpId}`); // 페이지 이동
+  };
 
   return (
     <Wrapper>
@@ -54,11 +53,19 @@ const MatchUpSection = () => {
             <Overlay>
               <MatchUpInfo>
                 <VsImage></VsImage>
-                <VoteButton onClick={() => handleMatchUpVotePage(matchUps[currentIndex].matchUpId)}>
+                <VoteButton
+                  onClick={() =>
+                    handleMatchUpVotePage(matchUps[currentIndex].matchUpId)
+                  }
+                >
                   {matchUps[currentIndex].matchUpTitle}
                 </VoteButton>
-                <MatchUpDescription>쿠키에서 여운을 더 즐겨보세요!</MatchUpDescription>
-                <MatchUpDescription>좋아하는 영화에 투표하고 이야기 나누는 중</MatchUpDescription>
+                <MatchUpDescription>
+                  쿠키에서 여운을 더 즐겨보세요!
+                </MatchUpDescription>
+                <MatchUpDescription>
+                  좋아하는 영화에 투표하고 이야기 나누는 중
+                </MatchUpDescription>
               </MatchUpInfo>
             </Overlay>
             <PrevButton onClick={handlePrev} disabled={currentIndex === 0}>
@@ -91,7 +98,6 @@ const MatchUpSection = () => {
 
 export default MatchUpSection;
 
-
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
@@ -104,7 +110,7 @@ const Title = styled.h2`
   color: #ffffff;
   padding: 2rem 0 0.4rem 0.375rem;
   display: flex;
-`
+`;
 
 const MatchUpContainer = styled.div`
   position: relative;
@@ -180,27 +186,30 @@ const VoteButton = styled.button`
   border-radius: 0.32rem;
   border: none;
   background-color: #f84b99;
-  // 00D6E8
   cursor:pointer;
   margin-bottom: 8px;
-`
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
 
 const MatchUpInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-`
+`;
 
 const MatchUpDescription = styled.p`
   margin: 0;
   color: #fff;
   font-weight: bold;
   font-size: 1.5rem;
-`
+`;
 
 const VsImage = styled.div`
-  background: no-repeat center/cover url('/assets/images/main/christmas-vs.png');
+  background: no-repeat center/cover url("/assets/images/main/christmas-vs.png");
   width: 100px;
   height: 100px;
-`
+`;
