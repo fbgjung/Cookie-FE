@@ -11,8 +11,8 @@ import Spinner from "../../components/common/Spinner";
 const ReTokenPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const setUserInfo = useUserStore.getState().setUserInfo;
-  const logIn = useAuthStore.getState().logIn;
+  const setUserInfo = useUserStore((state) => state.setUserInfo);
+  const logIn = useAuthStore((state) => state.logIn);
 
   useEffect(() => {
     const retrieveToken = async () => {
@@ -36,6 +36,7 @@ const ReTokenPage = () => {
 
         logIn();
 
+        // 사용자 정보 가져오기
         const userInfoResponse = await axios.get(
           `${serverBaseUrl}/api/users/info`,
           {
@@ -44,12 +45,21 @@ const ReTokenPage = () => {
             },
           }
         );
+
         const userInfo = userInfoResponse.data.response;
         console.log("유저 정보:", userInfo);
-        setUserInfo({ nickname: userInfo.nickname });
 
+        // 전역 상태 업데이트
+        setUserInfo({
+          userId: userInfo.userId,
+          nickname: userInfo.nickname,
+          profileImage: userInfo.profileImage,
+          genreId: userInfo.genreId,
+        });
+
+        // FCM 토큰 등록
         const fcmToken = await requestNotificationPermission();
-        console.log("token값", fcmToken);
+        console.log("FCM 토큰:", fcmToken);
 
         if (fcmToken) {
           await axiosInstance.post("/api/notification/fcm-token", {
@@ -62,7 +72,6 @@ const ReTokenPage = () => {
         navigate("/");
       } catch (error) {
         console.error("토큰 발급 실패:", error);
-
         navigate("/login");
       } finally {
         setIsLoading(false);

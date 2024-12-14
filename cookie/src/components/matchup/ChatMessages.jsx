@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const MessageWrapper = styled.div`
@@ -84,6 +85,19 @@ const ChatMessagesContainer = styled.div`
 `;
 
 const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    if (isInitialLoad && messages.length > 0) {
+      setIsInitialLoad(false);
+      return;
+    }
+
+    if (!isInitialLoad) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isInitialLoad, messagesEndRef]);
+
   return (
     <ChatMessagesContainer>
       {messages.map((message, index) => {
