@@ -6,57 +6,23 @@ import axiosInstance from "../api/auth/axiosInstance";
 import DetailHeader from "../components/searchpage/ReviewDetailHeader";
 import ReviewContentSection from "../components/searchpage/ReviewContentSection";
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
-import { FaHeart, FaComment, FaPaperPlane } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
 import useAuthStore from "../stores/useAuthStore";
 
 const Container = styled.div`
-  padding: 20px;
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
-  font-family: "Arial", sans-serif;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh; 
+  overflow-y: auto; 
   background-color: #ffffff;
-`;
-
-const FooterSectionStyled = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  margin-top: 0px;
-  align-items: center;
-
-  .icon-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    svg {
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      transition: fill 0.2s ease;
-    }
-
-    .liked {
-      fill: #ff4d4d;
-    }
-
-    .hovered {
-      fill: #ff9999;
-    }
-
-    span {
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-  }
-`;
+  `
+;
 
 const CommentsSectionContainer = styled.div`
-  margin-top: 20px;
-
+  padding: 2rem;
+  
   h3 {
     font-size: 1.2rem;
     font-weight: bold;
@@ -72,7 +38,7 @@ const CommentsSectionContainer = styled.div`
       flex: 1;
       padding: 10px;
       border: 1px solid #ddd;
-      border-radius: 20px;
+      border-radius: 0.4rem;
       font-size: 1rem;
       outline: none;
       margin-right: 10px;
@@ -80,7 +46,7 @@ const CommentsSectionContainer = styled.div`
     }
 
     button {
-      background-color: #66beff;
+      background-color: #F84B99;
       color: white;
       border: none;
       border-radius: 50%;
@@ -105,9 +71,6 @@ const CommentsSectionContainer = styled.div`
   }
 
   .comment {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin-bottom: 15px;
 
     .comment-left {
@@ -126,23 +89,30 @@ const CommentsSectionContainer = styled.div`
         border-radius: 8px;
         padding: 10px;
         font-size: 0.9rem;
-        width: 100%; /* 부모 요소의 전체 너비를 채움 */
-        box-sizing: border-box; /* 패딩 포함 */
+        box-sizing: border-box;
         position: relative;
+        flex: 1;
+
+
+        .comment-user-info {
+          display: flex;
+          align-items: center;
+        }
 
         .nickname {
-          font-weight: bold;
-          margin-bottom: 5px;
+          margin-right: 0.5rem;
+          font-size: 0.7rem;
         }
 
         .text {
+          font-size: 0.9rem;
+          font-weight: 500;
           color: #333;
         }
 
         .date {
-          font-size: 0.8rem;
+          font-size: 0.6rem;
           color: #666;
-          margin-top: 5px;
         }
       }
     }
@@ -155,7 +125,7 @@ const CommentsSectionContainer = styled.div`
       button {
         background: none;
         border: none;
-        color: #c99d66;
+        color: #F84B99;
         cursor: pointer;
         &:hover {
           color: #9b7a4c;
@@ -266,29 +236,6 @@ const ReviewDetail = () => {
     fetchReviewData();
   }, [reviewId]);
 
-  const handleLikeClick = async () => {
-    const previousLiked = likedByUser;
-    const previousLikeCount = reviewData.reviewLike;
-
-    setLikedByUser(!previousLiked);
-    setReviewData((prevData) => ({
-      ...prevData,
-      reviewLike: previousLiked ? previousLikeCount - 1 : previousLikeCount + 1,
-    }));
-
-    try {
-      await axiosInstance.post(`/api/users/review-like/${reviewId}`);
-    } catch (error) {
-      console.error("Failed to toggle like:", error);
-      openLoginModal();
-      // 오류 발생 시 이전 상태로 복구
-      setLikedByUser(previousLiked);
-      setReviewData((prevData) => ({
-        ...prevData,
-        reviewLike: previousLikeCount,
-      }));
-    }
-  };
   /*
   const toggleLike = async () => {
     const userId = getUserIdFromToken();
@@ -423,6 +370,8 @@ const ReviewDetail = () => {
         }
       );
 
+      console.log(response.data.response)
+
       const updatedComment = response.data.response;
 
       setReviewData((prevData) => ({
@@ -466,39 +415,39 @@ const ReviewDetail = () => {
 
   return (
     <Container>
-      <DetailHeader onBack={() => navigate(-1)} />
+      <DetailHeader onBack={() => navigate(-1)} movieTitle={reviewData.movie?.title || "Untitled Movie"}/>
       <ReviewContentSection
         posterSrc={reviewData.movie?.poster || "/default-poster.png"}
         profileSrc={reviewData.user?.profileImage || "/default-profile.png"}
         name={reviewData.user?.nickname || "Unknown User"}
-        date={new Date(reviewData.createdAt).toLocaleDateString()}
-        movieTitle={reviewData.movie?.title || "Untitled Movie"}
-        cookieScoreCount={reviewData.movieScore || 0}
+        date={`${new Date(reviewData.createdAt)
+          .toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          })
+          .replace(/\./g, "-")
+          .replace(/-$/, "")
+          .replace(/-\s/g, "-")} ${new Date(reviewData.createdAt)
+          .toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}`}
+        reviewLikeCount = {reviewData.reviewLike || 0}
+        cookieScoreCount={(reviewData.movie.score || 0).toFixed(1)}
         handleDelete={handleDeleteReview}
         handleUpdateReview={handleUpdateReview}
         isMenuOpen={isMenuOpen && !fromLikedReviews}
         toggleMenu={fromLikedReviews ? undefined : toggleMenu}
         onPosterClick={() => handlePosterClick(reviewData.movie?.movieId)}
+        reviewId={reviewId} 
+        openLoginModal={openLoginModal}
       />
       <ReviewTextSection reviewText={reviewData.content} />
-      <FooterSectionStyled>
-        <div className="icon-container">
-          <FaHeart
-            className={likedByUser ? "liked" : isHovered ? "hovered" : ""}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={handleLikeClick}
-          />
-          <span>{reviewData.reviewLike}</span>
-        </div>
-        <div className="icon-container">
-          <FaComment />
-          <span>{reviewData.comments.length}</span>
-        </div>
-      </FooterSectionStyled>
+
       <CommentsSectionContainer>
-        <h3>Comment</h3>
-        <div className="comment-input">
+      <h3>{reviewData.comments.length > 0 ? `${reviewData.comments.length}개의 댓글` : '댓글'}</h3>
+      <div className="comment-input">
           <input
             type="text"
             placeholder="댓글을 입력하세요..."
@@ -526,20 +475,25 @@ const ReviewDetail = () => {
                 src={comment.user.profileImage}
                 alt={`${comment.user.nickname} 프로필`}
               />
+
               <div className="comment-content">
-                <div className="nickname">{comment.user.nickname}</div>
-                {editingCommentId === comment.commentId ? (
-                  <input
-                    type="text"
-                    value={editingCommentText}
-                    onChange={(e) => setEditingCommentText(e.target.value)}
-                  />
-                ) : (
-                  <div className="text">{comment.comment}</div>
-                )}
-                <div className="date">
-                  {new Date(comment.createdAt).toLocaleString()}
+                <div className="comment-user-info">
+                  <div className="nickname">{comment.user.nickname}</div>
+                  <div className="date">
+                  {new Date(comment.createdAt)
+                          .toLocaleDateString('ko-KR', {
+                            year: '2-digit',
+                            month: '2-digit',
+                            day: '2-digit',
+                          })
+                          .replace(/\./g, "-")
+                          .replace(/-$/, "")
+                          .replace(/-\s/g, "-")}
+                      
+                  </div>
                 </div>
+                <div className="text">{comment.comment}</div>
+
                 {(() => {
                   const userId = getUserIdFromToken();
                   return (
@@ -558,9 +512,11 @@ const ReviewDetail = () => {
                   );
                 })()}
               </div>
+
             </div>
           </div>
         ))}
+
         {editingComment && (
           <ModalWrapper>
             <ModalContent>

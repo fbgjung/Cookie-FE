@@ -1,31 +1,33 @@
 import styled from "styled-components";
-import { FaChevronLeft } from "react-icons/fa";
 import PropTypes from "prop-types";
 
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-
-  .back-icon {
-    cursor: pointer;
-    font-size: 1.5rem;
-    margin-right: 10px;
-    color: #333;
-  }
+  margin: 1rem;
+  
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: #333;
+    margin-left: 0.4rem;
+    color: #f84b99;
   }
 `;
 
-const ReviewDetailHeader = ({ onBack }) => {
+const PrevIcon = styled.svg`
+  width: 32px;
+  height: 32px;
+  background: no-repeat center/cover url("/assets/images/prev-button.svg");
+  cursor: pointer;
+`
+
+const ReviewDetailHeader = ({ onBack, movieTitle }) => {
   return (
     <HeaderContainer>
-      <FaChevronLeft className="back-icon" onClick={onBack} />
-      <span className="title">리뷰 상세보기</span>
+      <PrevIcon onClick={onBack}></PrevIcon>
+      <span className="title">{movieTitle} 리뷰</span>
     </HeaderContainer>
   );
 };

@@ -68,7 +68,7 @@ const HeaderContainer = styled.header`
   max-width: 600px;
   align-items: center;
   justify-content: space-between;
-  background-color: black;
+  background-color: #fdf8fa;
   padding: 15px 20px;
   height: 70px;
   box-sizing: border-box;
