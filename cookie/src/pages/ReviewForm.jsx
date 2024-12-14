@@ -57,7 +57,8 @@ const RatingWrapper = styled.div`
   margin-bottom: 20px;
 
   span {
-    font-size: 16px;
+    color: white;
+    font-size: 20px;
     font-weight: bold;
     margin-right: 10px;
   }
