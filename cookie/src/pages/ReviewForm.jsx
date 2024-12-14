@@ -201,6 +201,7 @@ const ReviewForm = () => {
   const [movieScore, setMovieScore] = useState(0);
   const [content, setContent] = useState("");
   const [isSpoiler, setIsSpoiler] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -232,8 +233,14 @@ const ReviewForm = () => {
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return; // 이미 요청 중이라면 함수 종료
+    setIsSubmitting(true); // 요청 시작
+
     const userId = getUserIdFromToken();
-    if (!userId) return;
+    if (!userId) {
+      setIsSubmitting(false); // 요청 실패 시 플래그 초기화
+      return;
+    }
 
     const payload = {
       movieId,
@@ -265,6 +272,8 @@ const ReviewForm = () => {
       } else {
         toast.error("리뷰 등록 중 오류가 발생했습니다.");
       }
+    } finally {
+      setIsSubmitting(false); // 요청 완료 후 플래그 초기화
     }
   };
 
