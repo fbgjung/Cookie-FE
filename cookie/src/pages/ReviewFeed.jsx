@@ -8,7 +8,7 @@ const ReviewFeedWrapper = styled.div`
   width: 100%;
   background-color: #000000;
   padding: 20px;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const SearchInfoText = styled.p`
