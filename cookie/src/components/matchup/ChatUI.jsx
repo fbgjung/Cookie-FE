@@ -4,6 +4,7 @@ import ChatContainer from "./ChatContainer";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 import axiosInstance from "../../api/auth/axiosInstance";
+import useUserStore from "../../stores/useUserStore";
 
 const ChatWrapper = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ const ChatWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 80vh;
+  height: 100vh; /* 전체 화면 높이 */
   max-width: 600px;
   margin: 0 auto;
   background-color: #ffffff;
@@ -23,9 +24,11 @@ const ChatWrapper = styled.div`
 const ChatUI = ({ stompClient }) => {
   const [messages, setMessages] = useState([]);
   const [isInputTriggered, setIsInputTriggered] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // 초기 로딩 상태 관리
   const matchUpId = 1;
-
   const messagesEndRef = useRef(null);
+
+  const currentUserId = useUserStore((state) => state.userInfo.userId);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -48,6 +51,7 @@ const ChatUI = ({ stompClient }) => {
             profile: message.senderProfileImage,
           }))
         );
+        setIsInitialLoad(false); // 첫 로딩 완료
       } catch (error) {
         console.error("채팅 기록 로드 실패:", error);
       }
@@ -63,6 +67,8 @@ const ChatUI = ({ stompClient }) => {
       `/topic/chat/${matchUpId}`,
       (message) => {
         const newMessage = JSON.parse(message.body);
+
+        console.log("서버 응답 메시지:", newMessage);
         setMessages((prev) => [
           ...prev,
           {
@@ -73,27 +79,29 @@ const ChatUI = ({ stompClient }) => {
             profile: newMessage.senderProfileImage,
           },
         ]);
+
+        // 새 메시지를 수신할 때만 스크롤 이동
+        if (!isInitialLoad) {
+          scrollToBottom();
+        }
       }
     );
 
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, [stompClient, matchUpId]);
-
-  useEffect(() => {
-    if (isInputTriggered) {
-      scrollToBottom();
-      setIsInputTriggered(false);
-    }
-  }, [messages, isInputTriggered]);
+  }, [stompClient, matchUpId, isInitialLoad]);
 
   const handleSend = (content) => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
         destination: `/app/chat/${matchUpId}/messages`,
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({
+          senderUserId: currentUserId,
+          content,
+        }),
       });
+      console.log("이때의 유저값", currentUserId);
       setIsInputTriggered(true);
     } else {
       console.error("STOMP 연결이 활성화되지 않았습니다.");
@@ -105,7 +113,7 @@ const ChatUI = ({ stompClient }) => {
       <ChatContainer>
         <ChatMessages
           messages={messages}
-          currentUserId={1}
+          currentUserId={currentUserId}
           messagesEndRef={messagesEndRef}
         />
         <ChatInput onSend={handleSend} />

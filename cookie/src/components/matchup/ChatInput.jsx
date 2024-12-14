@@ -60,15 +60,18 @@ const InputContainer = styled.div`
 const ChatInput = ({ onSend }) => {
   const [inputValue, setInputValue] = useState("");
 
-  const handleSendMessage = (e) => {
-    if (
-      (e.type === "keydown" && e.key !== "Enter") ||
-      inputValue.trim() === ""
-    ) {
-      return;
+  const handleSendMessage = () => {
+    if (inputValue.trim() !== "") {
+      onSend(inputValue);
+      setInputValue("");
     }
-    onSend(inputValue);
-    setInputValue("");
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+      e.preventDefault();
+      handleSendMessage();
+    }
   };
 
   return (
@@ -78,7 +81,7 @@ const ChatInput = ({ onSend }) => {
         placeholder="매치업에 대한 의견을 자유롭게 나눠보세요! (욕설, 비방, 어쩌구 .. x)"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleSendMessage}
+        onKeyDown={handleKeyDown}
       />
       <img src={ChatSendButtonIcon} alt="Send" onClick={handleSendMessage} />
     </InputContainer>
