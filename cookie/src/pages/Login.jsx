@@ -8,7 +8,7 @@ import useAuthStore from "../stores/useAuthStore";
 
 export const LoginContainer = styled.div`
   background-color: #000000;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,11 +16,13 @@ export const LoginContainer = styled.div`
   position: relative;
 
   h2 {
-    color: #ffff;
+    margin-top: 2rem;
+    color: #f84b99;
+    font-weight: bold;
   }
 
   .login__img {
-    margin: 1rem 0;
+    margin: 0.5rem 0;
   }
 
   @media (max-width: 768px) {
@@ -28,13 +30,13 @@ export const LoginContainer = styled.div`
       font-size: 1.25rem;
     }
     .login__img {
-      margin: 0.3rem 0;
-      width: 15rem;
-      height: 15rem;
+      margin: 1.5rem 0;
+      width: 10rem;
+      height: auto;
     }
     .logo {
       width: 10rem;
-      height: 6rem;
+      height: auto;
       padding: 0;
     }
   }
@@ -45,29 +47,33 @@ export const LoginBtn = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 3rem;
+  margin-top: 1rem;
 
   button {
     background: none;
     border: none;
   }
+
   img {
+    width: 20rem;
+    height: auto;
     margin: 0.5rem 0;
     cursor: pointer;
   }
 
   @media (max-width: 768px) {
     button img {
+      margin-top: 1rem;
       width: 20rem;
-      height: 4rem;
-      margin: 0;
+      height: auto;
+      margin: 1;
     }
   }
 `;
 
 const GuestLink = styled.div`
   position: absolute;
-  top: 5rem;
+  top: 10rem;
   right: 1rem;
   font-size: 1rem;
   color: #ffff;
@@ -101,7 +107,7 @@ function Login() {
     <>
       <GlobalStyle />
       <LoginContainer>
-        <GuestLink onClick={handleGuestAccess}>비회원으로 이용하기</GuestLink>
+        <GuestLink onClick={handleGuestAccess}>게스트로 이용하기</GuestLink>
         <h2 className="regular">“영화 리뷰와 투표, 영화 vs 영화 토론까지!</h2>
         <h2 className="regular">영화 팬들을 위한 종합 커뮤니티”</h2>
         <img className="login__img logo" src={CookieLogo} alt="logo" />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const ModalBackground = styled.div`
@@ -25,7 +25,8 @@ const ModalContainer = styled.div`
 const WarningMessage = styled.p`
   font-size: 1rem;
   color: #e74c3c;
-  margin-bottom: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 `;
 
 const InputField = styled.input`
@@ -36,33 +37,53 @@ const InputField = styled.input`
   border: 1px solid #ddd;
   border-radius: 5px;
   text-align: center;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #f84b99;
+  }
 `;
 
 const ButtonContainer = styled.div`
   margin-top: 2rem;
   display: flex;
   justify-content: center;
-  gap: 2.5rem;
+  gap: 2rem; /* Reduced gap for better alignment */
 `;
 
-const ConfirmButton = styled.button`
+const ButtonBase = styled.button`
+  width: 8rem; /* Fixed width for uniform size */
+  height: 3rem; /* Fixed height for uniform size */
+  font-size: 1rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+`;
+
+const ConfirmButton = styled(ButtonBase)`
   background: ${(props) => (props.disabled ? "#ccc" : "#e74c3c")};
   color: white;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 5px;
-  font-size: 1rem;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+
+  &:hover {
+    background: ${(props) => (props.disabled ? "#ccc" : "#c0392b")};
+  }
 `;
 
-const CancelButton = styled.button`
+const CancelButton = styled(ButtonBase)`
   background: #ddd;
   color: black;
-  border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
+
+  &:hover {
+    background: #bbb;
+  }
+`;
+
+const WarningText = styled.strong`
+  color: #e74c3c;
+  font-weight: bold;
 `;
 
 function WithdrawModal({ onConfirm, onCancel }) {
@@ -79,7 +100,7 @@ function WithdrawModal({ onConfirm, onCancel }) {
         </WarningMessage>
         <p>
           탈퇴하려면 아래 입력란에 <br />
-          <strong>탈퇴하겠습니다</strong>를 입력하세요.
+          <WarningText>탈퇴하겠습니다</WarningText>를 입력하세요.
         </p>
         <InputField
           type="text"

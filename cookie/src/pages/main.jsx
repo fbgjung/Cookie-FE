@@ -1,5 +1,5 @@
 import styled from "styled-components";
-// import MatchUp from "../components/main/MatchUp";
+
 import MatchUpSection from "../components/main/MatchUpSection";
 import AdminRecommend from "../components/main/AdminRecommend";
 import CookieMovies from "../components/main/CookieMovies";
@@ -32,7 +32,7 @@ const Main = () => {
 
   return (
     <>
-      {/* <HeaderWrapper></HeaderWrapper> */}
+   
       <MainContainer>
         <Content>
           <MatchUpSection />

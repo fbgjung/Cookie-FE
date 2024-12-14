@@ -1,5 +1,6 @@
-import React from "react";
 import styled from "styled-components";
+import { FaTimes } from "react-icons/fa";
+import PropTypes from "prop-types";
 
 const ModalBackground = styled.div`
   position: fixed;
@@ -20,22 +21,30 @@ const ModalContainer = styled.div`
   border-radius: 8px;
   width: 400px;
   text-align: center;
+  position: relative;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
 
   h2 {
-    margin-bottom: 1.5rem;
+    margin-top: 1rem;
     color: #333;
   }
 `;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
+const CloseIcon = styled(FaTimes)`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+
+  &:hover {
+    color: #f84b99;
+  }
 `;
 
 const ConfirmButton = styled.button`
-  background: #00d6e8;
+  background: #f84b99;
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -43,23 +52,10 @@ const ConfirmButton = styled.button`
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
+  margin- top : 1.5rem;
 
   &:hover {
-    background: #00bcd4;
-  }
-`;
-
-const CancelButton = styled.button`
-  background: #ccc;
-  color: #333;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-
-  &:hover {
-    background: #bbb;
+    background: #c33677;
   }
 `;
 
@@ -67,14 +63,17 @@ const LogoutModal = ({ onConfirm, onCancel }) => {
   return (
     <ModalBackground>
       <ModalContainer>
+        <CloseIcon onClick={onCancel} />
         <h2>로그아웃 하시겠습니까?</h2>
-        <ButtonGroup>
-          <ConfirmButton onClick={onConfirm}>확인</ConfirmButton>
-          <CancelButton onClick={onCancel}>취소</CancelButton>
-        </ButtonGroup>
+        <ConfirmButton onClick={onConfirm}>확인</ConfirmButton>
       </ModalContainer>
     </ModalBackground>
   );
 };
 
 export default LogoutModal;
+
+LogoutModal.propTypes = {
+  onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+};

@@ -15,7 +15,7 @@ const PushTitle = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 10px;
   margin-left: 5px;
-  color: black;
+  color: #f84b99;
   font-weight: bold;
 `;
 
@@ -54,7 +54,7 @@ const ToggleSwitch = styled.div`
   position: relative;
   width: 50px;
   height: 24px;
-  background: ${(props) => (props.enabled ? "#00d6e8" : "#ccc")};
+  background: ${(props) => (props.enabled ? "#f84b99" : "#ccc")};
   border-radius: 12px;
   cursor: pointer;
   transition: background 0.3s ease;

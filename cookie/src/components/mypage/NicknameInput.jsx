@@ -23,7 +23,7 @@ const Label = styled.label`
   margin-top: 30px;
   margin-bottom: 8px;
   margin-left: 40px;
-  color: black;
+  color: #f84b99;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -67,7 +67,7 @@ const Input = styled.input`
   outline: none;
 
   &:focus {
-    border-color: black;
+    border-color: #f84b99;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* 블랙 섀도우 */
   }
 
@@ -86,8 +86,8 @@ const Input = styled.input`
 const CheckButton = styled.button`
   padding: 10px 15px;
   font-size: 1rem;
-  background-color: #00d6e8;
-  color: #02172a;
+  background-color: #f84b99;
+  color: #fdf8fa;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -96,7 +96,7 @@ const CheckButton = styled.button`
   margin-left: 2%;
 
   &:hover {
-    background-color: #33efff;
+    background-color: #c33677;
   }
 
   &:disabled {
