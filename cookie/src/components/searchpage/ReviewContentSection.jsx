@@ -43,16 +43,29 @@ const ReviewContentContainer = styled.div`
       .user-info {
         display: flex;
         flex-direction: column;
+        width: 100%;
 
         .name {
           font-size: 0.9rem;
-          color: white;
+          color: #000000;
           font-weight: bold;
         }
 
         .date {
           font-size: 0.8rem;
-          color: #f9f9f9;
+          color: #000000;
+        }
+      }
+
+      .edit-or-delete {
+        cursor: pointer;
+        width:100%;
+        display: flex;
+        justify-content: flex-end;
+        svg {
+          width: 24px;
+          height: 24px;
+          background: no-repeat center/cover url("/assets/images/more-view.svg");
         }
       }
     }
@@ -69,9 +82,9 @@ const ReviewContentContainer = styled.div`
   }
 
   .options {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    /* position: absolute; */
+    /* top: 20px;
+    right: 20px; */
     cursor: pointer;
 
     img {
@@ -83,8 +96,8 @@ const ReviewContentContainer = styled.div`
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 450px;
+  right: 40px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -101,6 +114,7 @@ const DropdownMenu = styled.div`
 
     &:hover {
       background: #f9f9f9;
+      color: #F84B99;
     }
   }
 `;
@@ -185,6 +199,8 @@ const ReviewLikeIcon = styled.svg`
 
 const ReviewLikeText = styled.p`
 `
+
+
 
 // 메인 컴포넌트
 const ReviewContentSection = ({
@@ -305,6 +321,11 @@ const ReviewContentSection = ({
                 <span className="name">{name}</span>
                 <span className="date">{date}</span>
               </div>
+              <div className="edit-or-delete" onClick={toggleMenu}>
+                <svg></svg>
+                {isMenuOpen && renderMenuOptions()}
+              </div>
+
             </div>
           </>
         ) : (
@@ -324,14 +345,14 @@ const ReviewContentSection = ({
         )}
       </div>
 
-      <div className="options" onClick={toggleMenu}>
-        {!fromReviewFeed && (
+      {/* <div className="options" onClick={toggleMenu}>
+        {fromMyPage && (
           <>
             <img src="/images/more.svg" alt="More Options" />
             {isMenuOpen && renderMenuOptions()}
           </>
         )}
-      </div>
+      </div> */}
     </ReviewContentContainer>
   );
 };
