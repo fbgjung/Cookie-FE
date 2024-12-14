@@ -133,9 +133,7 @@ const SearchResultsForReview = ({
               alt={result.title || result.name}
               isLoading={isLoading}
             />
-            <Content>
-              <Title>{result.title || result.name}</Title>
-            </Content>
+            <Title>{result.title || result.name}</Title>
           </ResultItem>
         ))}
       </ResultsContainer>

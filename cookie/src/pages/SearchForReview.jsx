@@ -239,8 +239,8 @@ const SearchForReview = () => {
     console.log("Received movie in handleMovieClick:", movie);
   
     // 데이터 형식에 따라 분기 처리
-    const movieId = movie.id || movie.movieId; // id 또는 movieId
-    const movieTitle = movie.title || movie.movieTitle; // title 또는 movieTitle
+    const movieId = movie.id;
+    const movieTitle = movie.title;
     const posterUrl = movie.poster;
   
     // 유효성 검사
@@ -262,10 +262,10 @@ const SearchForReview = () => {
   const handleDefaultMovieClick = (movie) => {
     console.log("Received default movie in handleDefaultMovieClick:", movie);
 
-    const movieId = movie.id || movie.movieId; // id 또는 movieId
-    const movieTitle = movie.title || movie.movieTitle; // title 또는 movieTitle
+    const movieId = movie.movieId;
+    const movieTitle = movie.movieTitle;
     const posterUrl = movie.poster;
-    
+
     if (!movie.movieId || !movie.movieTitle || !movie.poster) {
       console.error("기본 영화 정보가 올바르지 않습니다:", movie);
       return;
