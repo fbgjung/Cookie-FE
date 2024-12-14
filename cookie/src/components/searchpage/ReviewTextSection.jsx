@@ -3,12 +3,12 @@ import styled from "styled-components";
 const ReviewText = styled.div`
   font-size: 0.9rem;
   color: #333;
-  margin-bottom: 20px;
+  margin: 0.7rem 2rem;
   line-height: 1.5;
 
   p {
     margin-bottom: 10px;
-    color: white;
+    font-weight: 500;
   }
 `;
 

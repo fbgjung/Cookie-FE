@@ -1,17 +1,20 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { stepLabelClasses } from "@mui/material";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const ReviewContentContainer = styled.div`
   display: flex;
-  margin-bottom: 20px;
-  position: relative;
+  margin: 0 2rem;
+  flex-direction: column;
+  align-items: center;
 
   .poster {
-    width: 120px;
-    height: 180px;
+    width: 7.75rem;
+    height: 11rem;
     object-fit: cover;
     border-radius: 8px;
     margin-right: 15px;
@@ -19,14 +22,16 @@ const ReviewContentContainer = styled.div`
   }
 
   .details {
-    flex: 1;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    align-items: center;
 
     .profile {
       display: flex;
       align-items: center;
-      margin-bottom: 10px;
+      margin-top: 40px;
+      width: 100%;
 
       img {
         width: 40px;
@@ -59,19 +64,6 @@ const ReviewContentContainer = styled.div`
         font-size: 1rem;
         font-weight: bold;
         color: white;
-      }
-    }
-
-    .cookie-score {
-      display: flex;
-      align-items: center;
-      margin-top: 10px;
-
-      .cookie {
-        width: 25px;
-        height: 25px;
-        margin-right: 5px;
-        cursor: pointer;
       }
     }
   }
@@ -158,22 +150,59 @@ const EditForm = styled.div`
   }
 `;
 
+const ScoreSection = styled.div`
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  background-color: #fdf8fa;
+  border: 1px solid #F84B99;
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  max-width: max-content; // 가로 길이 컨텐츠에 맞춤!
+  margin-top: 0.4rem;
+`
+const ScoreIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url("/assets/images/review/score-macarong.png");
+`
+
+const ScoreText = styled.p`
+  font-weight: 500;
+  color: #F84B99; 
+`
+
+const ReviewLike = styled.div`
+  display: flex;
+
+`
+
+const ReviewLikeIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url("/assets/images/review/heart-review-feed.svg");
+`
+
+const ReviewLikeText = styled.p`
+`
+
 // 메인 컴포넌트
 const ReviewContentSection = ({
   posterSrc,
   profileSrc,
   name,
   date,
-  movieTitle,
+  reviewLikeCount,
   cookieScoreCount,
   isMenuOpen,
   toggleMenu,
   handleDelete,
   handleUpdateReview,
   onPosterClick,
+  reviewId,
+  openLoginModal,
 }) => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const fromReviewFeed = location.state?.fromReviewFeed || false;
   const fromLikedReviews = location.state?.fromLikedReviews || false;
@@ -183,6 +212,29 @@ const ReviewContentSection = ({
   const [isEditing, setIsEditing] = useState(false);
   const [newContent, setNewContent] = useState("");
   const [newMovieScore, setNewMovieScore] = useState(cookieScoreCount);
+
+  const [likedByUser, setLikedByUser] = useState(false); 
+  const [currentLikeCount, setCurrentLikeCount] = useState(reviewLikeCount);
+
+  const handleLikeClick = async () => {
+    const previousLiked = likedByUser;
+    const previousLikeCount = currentLikeCount;
+    setLikedByUser(!previousLiked);
+    setCurrentLikeCount(previousLiked ? previousLikeCount - 1 : previousLikeCount + 1);
+
+    try {
+      await axiosInstance.post(`/api/users/review-like/${reviewId}`);
+    } catch (error) {
+      console.error("Failed to toggle like:", error);
+    if (error.response?.data?.message === "자신의 리뷰에는 좋아요를 누를 수 없습니다.") { // 예외 처리 추가
+      toast.error("자신의 리뷰에는 좋아요를 누를 수 없습니다.");
+    } else {
+      openLoginModal?.();
+    }
+    setLikedByUser(previousLiked);
+    setCurrentLikeCount(previousLikeCount);
+    }
+  };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -215,21 +267,9 @@ const ReviewContentSection = ({
     }
   };
 
-  const handleCookieClick = (index) => {
-    setNewMovieScore(index + 1);
-  };
-
   const renderMenuOptions = () => {
     if (fromLikedReviews) {
       return null;
-    }
-
-    if (fromReviewFeed) {
-      return (
-        <DropdownMenu>
-          <div onClick={() => navigate("/mypage")}>내 정보 관리하기</div>
-        </DropdownMenu>
-      );
     }
 
     if ((fromMyPage || fromMyAllReviewList) && !fromLikedReviews) {
@@ -246,12 +286,15 @@ const ReviewContentSection = ({
 
   return (
     <ReviewContentContainer>
-      <img
-        className="poster"
-        src={posterSrc}
-        alt="Movie Poster"
-        onClick={onPosterClick}
-      />
+      <img className="poster" src={posterSrc} alt="Movie Poster" onClick={onPosterClick} />      
+      <ScoreSection>
+        <ScoreIcon></ScoreIcon>
+        <ScoreText>{newMovieScore}</ScoreText>
+      </ScoreSection>
+      <ReviewLike>
+        <ReviewLikeIcon onClick={handleLikeClick}></ReviewLikeIcon>
+        <ReviewLikeText>{currentLikeCount}</ReviewLikeText>
+      </ReviewLike>
 
       <div className="details">
         {!isEditing ? (
@@ -262,22 +305,6 @@ const ReviewContentSection = ({
                 <span className="name">{name}</span>
                 <span className="date">{date}</span>
               </div>
-            </div>
-
-            <div className="movie-info">
-              <span className="movie-title">{movieTitle}</span>
-            </div>
-
-            <div className="cookie-score">
-              {/* 동적으로 쿠키 점수에 맞는 수만큼 아이콘을 표시 */}
-              {Array.from({ length: cookieScoreCount }).map((_, i) => (
-                <img
-                  key={i}
-                  className="cookie selected"
-                  src="/assets/images/review/cookiescore.svg"
-                  alt="Cookie Score"
-                />
-              ))}
             </div>
           </>
         ) : (
@@ -298,8 +325,12 @@ const ReviewContentSection = ({
       </div>
 
       <div className="options" onClick={toggleMenu}>
-        <img src="/images/more.svg" alt="More Options" />
-        {isMenuOpen && renderMenuOptions()}
+        {!fromReviewFeed && (
+          <>
+            <img src="/images/more.svg" alt="More Options" />
+            {isMenuOpen && renderMenuOptions()}
+          </>
+        )}
       </div>
     </ReviewContentContainer>
   );
@@ -311,12 +342,15 @@ ReviewContentSection.propTypes = {
   name: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   movieTitle: PropTypes.string.isRequired,
+  reviewLikeCount: PropTypes.number.isRequired,
   cookieScoreCount: PropTypes.number.isRequired,
   isMenuOpen: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdateReview: PropTypes.func.isRequired,
   onPosterClick: PropTypes.func.isRequired,
+  reviewId: PropTypes.string.isRequired,
+  openLoginModal: PropTypes.func.isRequired,
 };
 
 export default ReviewContentSection;

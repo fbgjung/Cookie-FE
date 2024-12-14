@@ -310,4 +310,5 @@ const LikeIcon = styled.svg`
 
 const MovieInfo = styled.div`
   display: flex;
-`;
+`
+
