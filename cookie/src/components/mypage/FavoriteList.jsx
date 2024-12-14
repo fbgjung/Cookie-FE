@@ -14,7 +14,7 @@ const FavoriteTitle = styled.h3`
   font-size: 1.2rem;
   margin-bottom: 10px;
   margin-left: 5px;
-  color: black;
+  color: #f84b99;
   font-weight: bold;
 `;
 
@@ -40,7 +40,8 @@ const FavoriteItem = styled.div`
   }
 
   &:hover {
-    background-color: #00d6e8;
+    background-color: #f84b99;
+    color: #fdf8fa;
   }
 `;
 

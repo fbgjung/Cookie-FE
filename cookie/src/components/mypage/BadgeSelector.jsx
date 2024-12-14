@@ -13,7 +13,7 @@ const BadgeTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 10px;
-  color: black;
+  color: #f84b99;
   margin-left: 40px;
   text-align: left;
   width: 100%;

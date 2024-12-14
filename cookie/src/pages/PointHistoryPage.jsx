@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
-import useAuthStore from "../stores/useAuthStore"; // useAuthStore import
-import LoginModal from "../components/common/LoginModal"; // LoginModal import
+import useAuthStore from "../stores/useAuthStore";
+import LoginModal from "../components/common/LoginModal";
 
 const Container = styled.div`
   padding: 2rem;
@@ -29,17 +30,20 @@ const Title = styled.h2`
   }
 `;
 
-const BackButton = styled.img`
+const BackButton = styled(FaArrowLeft)`
   position: absolute;
   top: 20px;
   left: 4%;
-  width: 24px;
-  height: 24px;
+  font-size: 1.8rem;
+  color: #f84b99;
   cursor: pointer;
-  z-index: 10;
+  transition:
+    transform 0.3s ease,
+    color 0.2s ease;
 
   &:hover {
     transform: scale(1.2);
+    color: #c33677;
   }
 `;
 
@@ -48,7 +52,7 @@ const HistoryTable = styled.table`
   margin: 0 auto;
   max-width: 1000px;
   border-collapse: collapse;
-  background-color: white;
+  background-color: #fdf8fa;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
@@ -58,7 +62,7 @@ const HistoryTable = styled.table`
 `;
 
 const TableHeader = styled.thead`
-  background-color: #333;
+  background-color: #f84b99;
   color: white;
 
   th {
@@ -77,6 +81,8 @@ const TableHeader = styled.thead`
 const TableRow = styled.tr`
   background-color: #f9f9f9;
   border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 
   &:hover {
     background-color: #f1f1f1;
@@ -146,12 +152,8 @@ const BadgeHistory = () => {
 
   return (
     <Container>
+      <BackButton onClick={handleBackClick} />
       <Title>뱃지 포인트 내역</Title>
-      <BackButton
-        src="/assets/images/mypage/ic_back.svg"
-        alt="뒤로가기"
-        onClick={handleBackClick}
-      />
       {badgeHistory.length > 0 ? (
         <HistoryTable>
           <TableHeader>

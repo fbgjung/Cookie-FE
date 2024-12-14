@@ -8,31 +8,41 @@ import useUserStore from "../stores/useUserStore";
 import axios from "axios";
 import useAuthStore from "../stores/useAuthStore";
 import Spinner from "../components/common/Spinner";
-import goBack from "../assets/images/admin/goBack_br.svg";
+
+import { FaArrowLeft } from "react-icons/fa";
 
 const MainContainer = styled.div`
-  background-color: #fff4b9;
-  height: 100vh;
-  padding: 2rem 0 0 0;
+  background-color: white;
+  min-height: 100vh;
+  padding: 4rem 0 0 0;
   margin: 0 auto;
 `;
-const GoBackBtn = styled.button`
-  padding: 0 2rem;
+
+const BackButton = styled.button`
+  position: absolute;
+  top: 2.5rem;
+  left: 2rem;
   background: none;
   border: none;
-  margin-bottom: 2rem;
+  color: #f84b99;
+  font-size: 2rem;
   cursor: pointer;
+
+  &:hover {
+    color: #c33677;
+  }
 `;
 
 const MainTitle = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 0 0 2.5rem;
+  margin: 2rem 0 0 2.5rem;
+
   line-height: 0.5rem;
 
   h2 {
     margin: 0.8rem;
-    color: #724b2e;
+    color: #f84b99;
   }
   @media (max-width: 768px) {
     h2 {
@@ -42,22 +52,22 @@ const MainTitle = styled.div`
 `;
 
 const SubTitle = styled.div`
-  margin: 2.5rem 3.3rem;
+  margin: 2rem 3.3rem;
 
   h3 {
-    color: #724b2e;
+    color: #f84b99;
     margin: 0;
   }
 
   p {
-    color: #235b97;
+    color: #707070;
     margin: 0;
     font-size: 0.9rem;
   }
 `;
 
 const GenreContainer = styled.div`
-  margin: 2.5rem 3.3rem;
+  margin: 2rem 3.3rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
@@ -65,38 +75,47 @@ const GenreContainer = styled.div`
 `;
 
 const GenreBtn = styled.button`
-  background-color: ${(props) => (props.$isSelected ? "#aad6e7" : "white")};
-  color: ${(props) => (props.$isSelected ? "#724b2e" : "#724b2e")};
+  background-color: ${(props) => (props.$isSelected ? "#f84b99" : "white")};
+  color: ${(props) => (props.$isSelected ? "#fdf8fa" : "#724b2e")};
   border-radius: 12px;
   padding: 0.8rem 1rem;
-  border: 1px solid #aad6e7;
+  border: 0.3px solid #f84b99;
   cursor: pointer;
+
   &:hover {
-    background-color: #aad6e7;
-    color: #724b2e;
+    background-color: #f84b99;
+    color: #fdf8fa;
   }
 `;
 
 const SubmitBtn = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 15rem;
+  margin-top: 6rem;
+
   @media (max-width: 768px) {
-    margin-top: 10rem;
+    margin-top: 6em;
   }
+
   button {
-    background-color: #aad6e7;
-    color: #724b2e;
+    background-color: #f84b99;
+    color: #fdf8fa;
     width: 29rem;
     height: 4rem;
     border-radius: 0.75rem;
     border: none;
-    box-shadow: 0.5rem 0.625rem 12rem 3rem #ffeb7d;
+
     font-size: 1.2rem;
     font-weight: 700;
     outline: none;
     cursor: pointer;
+
+    &:hover {
+      background-color: #c33677;
+      color: white;
+    }
   }
+
   @media (max-width: 768px) {
     button {
       width: 20rem;
@@ -196,7 +215,13 @@ function SignUpGenre() {
       );
 
       if (response.status === 200) {
-        toast.success("회원등록이 완료되었어요! 메인으로 이동할게요");
+        toast.success(
+          <span>
+            회원등록이 완료되었어요!
+            <br />
+            메인으로 이동할게요
+          </span>
+        );
         sessionStorage.setItem(
           "accessToken",
           response.data.response.token.accessToken
@@ -230,9 +255,9 @@ function SignUpGenre() {
     <>
       {showSpinner && <Spinner />}
       <MainContainer>
-        <GoBackBtn onClick={() => navigate(-1)}>
-          <img src={goBack} />
-        </GoBackBtn>
+        <BackButton onClick={() => navigate(-1)}>
+          <FaArrowLeft />
+        </BackButton>
         <MainTitle>
           <h2>선호하는 장르를</h2>
           <h2>알려주세요</h2>

@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
@@ -16,15 +17,19 @@ const Container = styled.div`
   position: relative;
 `;
 
-const BackButton = styled.img`
+const BackButton = styled(FaArrowLeft)`
   position: absolute;
   top: 20px;
   left: 5%;
-  width: 24px;
-  height: 24px;
+  font-size: 1.8rem;
+  color: #f84b99;
   cursor: pointer;
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
 
   &:hover {
+    color: #c33677;
     transform: scale(1.2);
   }
 `;
@@ -57,7 +62,7 @@ const HeartIcon = styled.img`
 
 const MoviesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
   width: 100%;
   padding: 0 20px 30px;
@@ -76,15 +81,14 @@ const MovieCard = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
-    border-color: #33efff;
+    border: 2px solid #f84b99;
     transform: scale(1.05);
-    border: 2px solid black;
-    border-radius: 10px;
-    transition: all 0.3s ease;
   }
 `;
+
 const Poster = styled.img`
   width: 100%;
   height: 200px;
@@ -138,7 +142,6 @@ const LikedMovies = () => {
     try {
       const response = await axiosInstance.get("/api/users/likedMovieList");
       const fetchedMovies = response.data.response.movies || [];
-      console.log("좋아한 영화", response.data.movies);
       setMovies(fetchedMovies);
     } catch (error) {
       console.error("좋아하는 영화 목록 불러오기 실패:", error);
@@ -150,17 +153,12 @@ const LikedMovies = () => {
   }, []);
 
   const handleMovieClick = (movieId) => {
-    // 영화 클릭 시 디테일 페이지로 이동
     navigate(`/movie/${movieId}`);
   };
 
   return (
     <Container>
-      <BackButton
-        src="/assets/images/mypage/ic_back.svg"
-        alt="뒤로가기"
-        onClick={handleBackClick}
-      />
+      <BackButton onClick={handleBackClick} />
       <Title>좋아하는 영화</Title>
       <HeartIcon src="/assets/images/mypage/red-heart.svg" alt="하트" />
 

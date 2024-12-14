@@ -8,8 +8,8 @@ const LogoutSection = styled.div`
 `;
 
 const LogoutButton = styled.button`
-  background-color: #00d6e8;
-  color: #02172a;
+  background-color: #f84b99;
+  color: #fdf8fa;
   font-size: 1rem;
   font-weight: bold;
   border: none;
@@ -20,7 +20,7 @@ const LogoutButton = styled.button`
   max-width: 300px;
 
   &:hover {
-    background-color: #33efff;
+    background-color: #c33677;
   }
 `;
 
