@@ -412,9 +412,6 @@ const ReviewFeed = () => {
           </ReviewTicket>
         ))}
       </ReviewContainer>
-
-
-      {isLoading && <p>Loading more reviews...</p>}
     </ReviewFeedWrapper>
   );
 };

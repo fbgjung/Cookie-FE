@@ -8,6 +8,7 @@ import ReviewContentSection from "../components/searchpage/ReviewContentSection"
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaPaperPlane } from "react-icons/fa";
 import useAuthStore from "../stores/useAuthStore";
+import LoginModal from "../components/common/LoginModal";
 
 const Container = styled.div`
   width: 100%;
@@ -260,7 +261,6 @@ const ReviewDetail = () => {
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("refreshToken");
     if (!token) {
-      openLoginModal();
       return null;
     }
     try {
@@ -352,7 +352,11 @@ const ReviewDetail = () => {
     if (isSubmitting) return;
 
     const userId = getUserIdFromToken();
-    if (!userId || !newComment.trim()) return;
+    if (!userId) {
+      openLoginModal(); 
+      return;
+    }
+    if (!newComment.trim()) return;
 
     try {
       setIsSubmitting(true);

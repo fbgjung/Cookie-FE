@@ -14,7 +14,6 @@ const ReviewWrapper = styled.div`
     font-size: 18px;
     font-weight: bold;
     display: flex;
-    
     color: white;
     align-items: center;
 
@@ -24,7 +23,7 @@ const ReviewWrapper = styled.div`
       margin-left: 10px;
     }
 
-      .more-review-button {
+    .more-review-button {
       margin-left: auto;
       font-size: 14px;
       color: #fff;
@@ -35,19 +34,19 @@ const ReviewWrapper = styled.div`
       transition: color 0.3s ease;
 
       &:hover {
-        color: #00d6e8; 
+        color: #00d6e8;
       }
 
       &::after {
-        content: " >"; 
+        content: " >";
         font-size: 14px;
         margin-left: 5px;
       }
     }
+  }
 
   .review-grid {
     display: grid;
-    /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     margin-top: 20px;
@@ -58,28 +57,26 @@ const ReviewWrapper = styled.div`
 
     .review-item {
       position: relative;
-    background-image: url("/images/review/reviewticket.svg");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      width: 100%;
+      background-color: #ffffff; /* 배경색을 흰색으로 설정 */
+      border: 1px solid #ddd; /* 테두리 설정 */
+      border-radius: 8px; /* 모서리 둥글게 */
       padding: 20px;
-      border-radius: 8px;
       display: flex;
       justify-content: flex-start;
       flex-direction: row;
       cursor: pointer;
       gap: 20px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
 
       .review-user {
         font-size: 14px;
         font-weight: bold;
-         color: white;
+        color: #333; /* 텍스트 색상 변경 */
       }
 
       .review-comment {
         font-size: 12px;
-        color: #666;
+        color: black;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -124,7 +121,7 @@ const ReviewWrapper = styled.div`
 const ReviewUserProfile = styled.div`
   display: flex;
   flex-direction: column;
-  color: white;
+  color: #333; /* 사용자 이름 색상 변경 */
   align-items: center;
   justify-content: center;
 `;
@@ -132,7 +129,7 @@ const ReviewUserProfile = styled.div`
 const ReviewDetail = styled.div`
   display: flex;
   flex-direction: column;
-  color: white;
+  color: #333; /* 리뷰 텍스트 색상 변경 */
   justify-content: space-between;
 `;
 
@@ -140,10 +137,8 @@ const ReviewSection = ({
   reviews = [],
   reviewCount,
   onViewAllReviews,
-  movie,
 }) => {
   const navigate = useNavigate();
-  console.log(reviews);
 
   const handleReviewClick = (reviewId) => {
     navigate(`/reviews/${reviewId}`);
@@ -167,8 +162,8 @@ const ReviewSection = ({
           >
             <ReviewUserProfile>
               <img
-                src={review.user.profileImage}
-                alt={review.user.nickname}
+                src={review?.user?.profileImage || "/default-profile.png"}
+                alt={review?.user?.nickname || "Anonymous"}
                 style={{
                   width: "40px",
                   height: "40px",
@@ -176,13 +171,17 @@ const ReviewSection = ({
                   marginBottom: "5px",
                 }}
               />
-              <div className="review-user">{review.user.nickname}</div>
+              <div className="review-user">
+                {review?.user?.nickname || "Anonymous"}
+              </div>
             </ReviewUserProfile>
 
             <ReviewDetail>
-              <div className="review-comment">{review.content}</div>
+              <div className="review-comment">
+                {review?.content || "리뷰 내용이 없습니다."}
+              </div>
               <div className="review-footer">
-                <div className="likes">❤️ {review.reviewLike}</div>
+                <div className="likes">❤️ {review?.reviewLike || 0}</div>
               </div>
             </ReviewDetail>
           </div>
@@ -196,14 +195,16 @@ ReviewSection.propTypes = {
   reviews: PropTypes.arrayOf(
     PropTypes.shape({
       reviewId: PropTypes.number.isRequired,
-      userName: PropTypes.string.isRequired,
-      comment: PropTypes.string.isRequired,
-      likes: PropTypes.number.isRequired,
+      user: PropTypes.shape({
+        profileImage: PropTypes.string,
+        nickname: PropTypes.string,
+      }).isRequired,
+      content: PropTypes.string.isRequired,
+      reviewLike: PropTypes.number.isRequired,
     })
   ).isRequired,
   reviewCount: PropTypes.number.isRequired,
   onViewAllReviews: PropTypes.func.isRequired,
-  movie: PropTypes.object.isRequired,
 };
 
 export default ReviewSection;
