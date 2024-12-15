@@ -7,13 +7,13 @@ import axiosInstance from "../api/auth/axiosInstance";
 
 const FormWrapper = styled.div`
   width: 100%;
-  padding: 20px;
-  background-color: black;
+  padding: 2rem;
+  background-color: #ffffff;
   min-height: 100vh;
   overflow-y: auto;
 
   h1 {
-    color: white;
+    color: #ffffff;
   }
 
   @media (max-width: 768px) {
@@ -25,39 +25,13 @@ const FormWrapper = styled.div`
   }
 `;
 
-const PosterWrapper = styled.div`
-  display: flex;
-  justify-content: left;
-  margin: 20px 0;
-
-  img {
-    width: 200px;
-    height: auto;
-    border-radius: 8px;
-  }
-
-  @media (max-width: 768px) {
-    justify-content: center;
-    margin: 15px 0;
-    img {
-      width: 150px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    img {
-      width: 120px;
-    }
-  }
-`;
-
 const RatingWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 2rem 0 1rem 0;
 
   span {
-    color: white;
+    color: #444444;
     font-size: 20px;
     font-weight: bold;
     margin-right: 10px;
@@ -92,7 +66,7 @@ const RatingWrapper = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 200px;
+  height: 300px;
   min-height: 100px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -101,10 +75,11 @@ const TextArea = styled.textarea`
   box-sizing: border-box;
   margin-bottom: 20px;
   resize: none;
+  font-size: 1rem;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #FF0777;
   }
 
   @media (max-width: 768px) {
@@ -130,7 +105,8 @@ const SpoilerWrapper = styled.div`
 
   label {
     font-size: 14px;
-    color: #d67a00;
+    color: #FF0777;
+    font-weight: 500;
   }
 
   .description {
@@ -148,35 +124,25 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 
-  button {
-    width: 48%;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  justify-content: center;
 
-    &.cancel {
-      background-color: #f5f5f5;
-      border: 1px solid #ddd;
-      color: #666;
+  &.submit {
+    background-color: #F84B99;
+    color: #fff;
+    border: none;
 
-      &:hover {
-        background-color: #ddd;
-      }
-    }
-
-    &.submit {
-      background-color: #00d6e8;
-      color: #fff;
-      border: none;
-
-      &:hover {
-        background-color: #00a8b5;
-      }
+    &:hover {
+      background-color: #FF0777;
     }
   }
+  
 
   @media (max-width: 768px) {
     button {
@@ -274,19 +240,13 @@ const ReviewForm = () => {
         toast.error("리뷰 등록 중 오류가 발생했습니다.");
       }
     } finally {
-      setIsSubmitting(false); // 요청 완료 후 플래그 초기화
+      setIsSubmitting(false);
     }
   };
 
   return (
     <FormWrapper>
-      <ReviewHeader onBack={() => navigate(-1)} />
-      <h1>{movieTitle} 리뷰 남기기</h1>
-      {posterUrl && (
-        <PosterWrapper>
-          <img src={posterUrl} alt={`${movieTitle} 포스터`} />
-        </PosterWrapper>
-      )}
+      <ReviewHeader movieTitle={movieTitle} onBack={() => navigate(-1)} />
       <RatingWrapper>
         <span>평점</span>
         <div className="rating-icons">
@@ -308,7 +268,7 @@ const ReviewForm = () => {
         </div>
       </RatingWrapper>
       <TextArea
-        placeholder="리뷰를 작성해주세요..."
+        placeholder="이 작품에 대한 생각을 자유롭게 표현해주세요"
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
@@ -324,13 +284,8 @@ const ReviewForm = () => {
           스포일러가 포함된 리뷰는 따로 표시됩니다.
         </span>
       </SpoilerWrapper>
-      <ButtonWrapper>
-        <button className="cancel" onClick={() => navigate(-1)}>
-          취소
-        </button>
-        <button className="submit" onClick={handleSubmit}>
+      <ButtonWrapper className="submit" onClick={handleSubmit}>
           등록
-        </button>
       </ButtonWrapper>
     </FormWrapper>
   );
