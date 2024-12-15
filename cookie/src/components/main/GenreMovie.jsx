@@ -13,13 +13,11 @@ function GenreMovie({ categorydata }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalPages, setTotalPages] = useState();
   const [selectedPage, setSelectedPage] = useState(1);
-
   const navigate = useNavigate();
 
   const fetchMoviesByGenre = async (genre) => {
     const cacheKey = `movies_${genre}_${currentPage}`;
     const cachedData = localStorage.getItem(cacheKey);
-
     if (cachedData) {
       const parsedData = JSON.parse(cachedData);
       setGenreMovies(parsedData.movies);
@@ -250,6 +248,11 @@ const Poster = styled.img`
     padding: 0.4rem 0.3rem;
     width: 6.4rem;
     height: 9.5rem;
+  }
+  @media (max-width: 390px) {
+    padding: 0.4rem 0.3rem;
+    width: 5.6rem;
+    height: 8.7rem;
   }
 `;
 

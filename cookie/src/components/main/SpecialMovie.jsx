@@ -14,6 +14,8 @@ function SpecialMovie({ categorydata }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalPages, setTotalPages] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+
   const moviesPerSlide = 4;
   const navigate = useNavigate();
 
@@ -29,7 +31,7 @@ function SpecialMovie({ categorydata }) {
     if (!mainCategory || !subCategory) return;
     const cacheKey = `${mainCategory}_${subCategory}`;
     const cachedMovies = localStorage.getItem(cacheKey);
-
+    setIsLoading(true);
     if (cachedMovies) {
       setMovies(JSON.parse(cachedMovies));
     } else {
@@ -50,6 +52,8 @@ function SpecialMovie({ categorydata }) {
         localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
       } catch (error) {
         console.error("영화 불러오기 실패:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -170,6 +174,7 @@ function SpecialMovie({ categorydata }) {
                   onClick={() => handleMovieClick(movie.id)}
                 >
                   <Poster src={movie.poster} alt={movie.title} />
+
                   <MovieInfo>
                     <Review>
                       <ReviewIcon alt="Review Icon" />
@@ -359,8 +364,13 @@ const Poster = styled.img`
 
   @media (max-width: 480px) {
     padding: 0.4rem 0.3rem;
-    width: 6.4rem;
-    height: 9.5rem;
+    width: 6.2rem;
+    height: 9.3rem;
+  }
+  @media (max-width: 390px) {
+    padding: 0.4rem 0.3rem;
+    width: 5.6rem;
+    height: 8.7rem;
   }
 `;
 

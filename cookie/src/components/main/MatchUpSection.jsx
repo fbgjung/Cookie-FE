@@ -9,6 +9,7 @@ const MatchUpSection = () => {
 
   const [matchUps, setMatchUps] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const isLoading = matchUps.length === 0;
 
   useEffect(() => {
     const fetchMainPageMovies = async () => {
@@ -28,25 +29,26 @@ const MatchUpSection = () => {
     fetchMainPageMovies();
   }, []);
 
-  const handleNext = () => {
-    if (currentIndex < matchUps.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
+  // const handleNext = () => {
+  //   if (currentIndex < matchUps.length - 1) {
+  //     setCurrentIndex(currentIndex + 1);
+  //   }
+  // };
 
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
+  // const handlePrev = () => {
+  //   if (currentIndex > 0) {
+  //     setCurrentIndex(currentIndex - 1);
+  //   }
+  // };
 
   const handleMatchUpVotePage = (matchUpId) => {
     navigate(`/matchup/${matchUpId}`); // 페이지 이동
   };
-
   return (
     <Wrapper>
-      {matchUps.length > 0 && (
+      {isLoading ? (
+        <SkeletonOverlay />
+      ) : (
         <>
           <Title>이번주 쿠키의 매치업</Title>
           <MatchUpContainer>
@@ -68,9 +70,6 @@ const MatchUpSection = () => {
                 </MatchUpDescription>
               </MatchUpInfo>
             </Overlay>
-            <PrevButton onClick={handlePrev} disabled={currentIndex === 0}>
-              &lt;
-            </PrevButton>
             <Movie>
               <Image
                 src={matchUps[currentIndex].movie1.moviePoster}
@@ -83,12 +82,6 @@ const MatchUpSection = () => {
                 alt={matchUps[currentIndex].movie2.movieTitle}
               />
             </Movie>
-            <NextButton
-              onClick={handleNext}
-              disabled={currentIndex === matchUps.length - 1}
-            >
-              &gt;
-            </NextButton>
           </MatchUpContainer>
         </>
       )}
@@ -172,13 +165,13 @@ const Button = styled.button`
   }
 `;
 
-const PrevButton = styled(Button)`
-  left: 5px;
-`;
+// const PrevButton = styled(Button)`
+//   left: 5px;
+// `;
 
-const NextButton = styled(Button)`
-  right: 5px;
-`;
+// const NextButton = styled(Button)`
+//   right: 5px;
+// `;
 
 const VoteButton = styled.button`
   width: 300px;
@@ -188,11 +181,6 @@ const VoteButton = styled.button`
   background-color: #00d6e8;
   cursor: pointer;
   margin-bottom: 8px;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 const MatchUpInfo = styled.div`
@@ -212,4 +200,30 @@ const VsImage = styled.div`
   background: no-repeat center/cover url("/assets/images/main/christmas-vs.png");
   width: 100px;
   height: 100px;
+`;
+const SkeletonOverlay = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 560px;
+  height: 404px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.9);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.07) 25%,
+    rgba(255, 255, 255, 0.159) 50%,
+    rgba(255, 255, 255, 0.07) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
 `;

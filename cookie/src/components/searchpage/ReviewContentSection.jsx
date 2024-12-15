@@ -1,53 +1,92 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
+// import { stepLabelClasses } from "@mui/material";
+import axiosInstance from "../../api/auth/axiosInstance";
 
 const ReviewContentContainer = styled.div`
   display: flex;
-  margin-bottom: 20px;
-  position: relative;
+  margin: 1rem 2rem;
+  flex-direction: column;
+`;
+
+const MovieSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .poster {
-    width: 120px;
-    height: 180px;
+    width: 6rem;
+    height: auto;
     object-fit: cover;
-    border-radius: 8px;
-    margin-right: 15px;
+    border-radius: 0.2rem;
     cursor: pointer;
+    box-shadow: 0 0 200px 55px rgba(248, 75, 153, 0.2);
   }
+`
 
+const ScoreSection = styled.div`
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  background-color: #fdf8fa;
+  border: 1px solid #F84B99;
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  margin-top: 0.4rem;
+`
+const ScoreIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url("/assets/images/review/score-macarong.png");
+`
+
+const ScoreText = styled.p`
+  font-weight: 500;
+  color: #F84B99; 
+  font-size: 0.9rem;
+`
+
+const ReviewSection = styled.div`
   .details {
-    flex: 1;
     display: flex;
     flex-direction: column;
 
     .profile {
       display: flex;
+      width: 100%;
+      justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-
       img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
+        
       }
 
       .user-info {
         display: flex;
         flex-direction: column;
+        justify-content: center;
 
         .name {
           font-size: 0.9rem;
-          color: white;
+          color: #000000;
           font-weight: bold;
         }
 
         .date {
           font-size: 0.8rem;
-          color: #f9f9f9;
+          color: #000000;
+        }
+      }
+
+      .edit-or-delete {
+        cursor: pointer;
+        position: relative;
+        svg {
+          width: 24px;
+          height: 24px;
+          background: no-repeat center/cover url("/assets/images/more-view.svg");
         }
       }
     }
@@ -61,38 +100,35 @@ const ReviewContentContainer = styled.div`
         color: white;
       }
     }
-
-    .cookie-score {
-      display: flex;
-      align-items: center;
-      margin-top: 10px;
-
-      .cookie {
-        width: 25px;
-        height: 25px;
-        margin-right: 5px;
-        cursor: pointer;
-      }
-    }
   }
+`
 
-  .options {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
+const Left = styled.div`
+  display: flex;
+`
 
-    img {
-      width: 24px;
-      height: 24px;
-    }
-  }
-`;
+const Right = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const Profile = styled.img`
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 1.5px solid #b8b5b5;
+`
+const ReviewScore = styled.img`
+  width: 1.2rem;
+  height: 1.2rem;
+ 
+`
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 100%;
+  right: 0;
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -109,6 +145,7 @@ const DropdownMenu = styled.div`
 
     &:hover {
       background: #f9f9f9;
+      color: #F84B99;
     }
   }
 `;
@@ -121,12 +158,13 @@ const EditForm = styled.div`
   textarea {
     padding: 10px;
     font-size: 0.85rem;
-    color: white;
+    color: #222222;
 
     border: 1px solid #ddd;
     border-radius: 8px;
     resize: none;
     height: 120px;
+    outline: none;
   }
 
   .action-buttons {
@@ -137,14 +175,14 @@ const EditForm = styled.div`
     button {
       padding: 8px 14px;
       font-size: 0.8rem;
-      background-color: #2589e7;
+      background-color: #ff0777;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
 
       &:hover {
-        background-color: #1b6bbf;
+        background-color: #ff0777;
       }
 
       &.cancel {
@@ -158,22 +196,73 @@ const EditForm = styled.div`
   }
 `;
 
-// 메인 컴포넌트
+const ReviewLikeSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0 0 0;
+  flex-direction: column;
+
+  p {
+    color: #F84B99;
+  }
+`
+
+const ReviewLikeIcon = styled.svg`
+  width: 42px;
+  height: 42px;
+  background: no-repeat center/cover
+    url(${({ $likedByUser }) =>
+      $likedByUser
+        ? "/assets/images/review/full-heart-review-feed.svg"
+        : "/assets/images/review/heart-review-feed.svg"});
+  cursor: pointer;
+`;
+
+
+const ReviewLikeText = styled.p`
+  font-size: 1.5rem;
+`
+
+const ReviewText = styled.div`
+  font-size: 1rem;
+  color: #0f0c0c;
+  line-height: 1.5;
+  margin: 1rem 1rem 0 0;
+
+  p {
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+`;
+
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+  margin: 2rem 0;
+`;
+
+
 const ReviewContentSection = ({
   posterSrc,
   profileSrc,
   name,
   date,
-  movieTitle,
+  reviewLikeCount,
   cookieScoreCount,
   isMenuOpen,
   toggleMenu,
   handleDelete,
   handleUpdateReview,
   onPosterClick,
+  reviewId,
+  reviewContent,
+  reviewScore,
+  openLoginModal,
+  likedByUser,
 }) => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const fromReviewFeed = location.state?.fromReviewFeed || false;
   const fromLikedReviews = location.state?.fromLikedReviews || false;
@@ -184,10 +273,35 @@ const ReviewContentSection = ({
   const [newContent, setNewContent] = useState("");
   const [newMovieScore, setNewMovieScore] = useState(cookieScoreCount);
 
+  const [liked, setLiked] = useState(likedByUser); 
+  const [currentLikeCount, setCurrentLikeCount] = useState(reviewLikeCount);
+
+
+
+  const handleLikeClick = async () => {
+    const previousLiked = liked; // 버튼을 누르기 전 상태
+    const previousLikeCount = currentLikeCount; // 버튼을 누르기 전 좋아요 수
+    setLiked(!previousLiked);
+    setCurrentLikeCount(previousLiked ? previousLikeCount - 1 : previousLikeCount + 1);
+
+    try {
+      await axiosInstance.post(`/api/users/review-like/${reviewId}`);
+    } catch (error) {
+      console.error("Failed to toggle like:", error);
+    if (error.response?.data?.message === "자신의 리뷰에는 좋아요를 누를 수 없습니다.") { // 예외 처리 추가
+      toast.error("자신의 리뷰에는 좋아요를 누를 수 없습니다.");
+    } else {
+      openLoginModal?.();
+    }
+    setLiked(previousLikeCount);
+    setCurrentLikeCount(previousLikeCount);
+    }
+  };
+  
   const handleEditClick = () => {
     setIsEditing(true);
     setNewContent("");
-    setNewMovieScore(cookieScoreCount);
+    setNewMovieScore(reviewScore);
   };
 
   const handleCancelEdit = () => {
@@ -215,21 +329,9 @@ const ReviewContentSection = ({
     }
   };
 
-  const handleCookieClick = (index) => {
-    setNewMovieScore(index + 1);
-  };
-
   const renderMenuOptions = () => {
     if (fromLikedReviews) {
       return null;
-    }
-
-    if (fromReviewFeed) {
-      return (
-        <DropdownMenu>
-          <div onClick={() => navigate("/mypage")}>내 정보 관리하기</div>
-        </DropdownMenu>
-      );
     }
 
     if ((fromMyPage || fromMyAllReviewList) && !fromLikedReviews) {
@@ -246,61 +348,76 @@ const ReviewContentSection = ({
 
   return (
     <ReviewContentContainer>
-      <img
-        className="poster"
-        src={posterSrc}
-        alt="Movie Poster"
-        onClick={onPosterClick}
-      />
-
-      <div className="details">
-        {!isEditing ? (
-          <>
-            <div className="profile">
-              <img src={profileSrc} alt="Profile" />
-              <div className="user-info">
-                <span className="name">{name}</span>
-                <span className="date">{date}</span>
+      
+      <MovieSection>
+        <img className="poster" src={posterSrc} alt="Movie Poster" onClick={onPosterClick} /> 
+        <ScoreSection>
+          <ScoreIcon></ScoreIcon>
+          <ScoreText>평점 {newMovieScore}</ScoreText>
+        </ScoreSection>    
+        
+      </MovieSection>
+      <Divider />
+      <ReviewSection>
+        <div className="details">
+          {!isEditing ? (
+            <>
+              <div className="profile">
+                <Left>
+                  <Profile src={profileSrc} alt="Profile" />
+                  
+                  <div className="user-info">
+                    <span className="name">{name}</span>
+                    <span className="date">{date}</span>
+                  </div>
+                </Left>
+                <Right>
+                {[...Array(reviewScore)].map((_, index) => (
+                  <ReviewScore
+                    key={index}
+                    src="/assets/images/review/score-macarong.png"
+                    alt="score"
+                  />
+                ))}
+                {! fromReviewFeed && (
+                  <div className="edit-or-delete" onClick={toggleMenu}>
+                    <svg></svg>
+                    {isMenuOpen && renderMenuOptions()}
+                  </div>)
+                }
+                </Right>
               </div>
-            </div>
-
-            <div className="movie-info">
-              <span className="movie-title">{movieTitle}</span>
-            </div>
-
-            <div className="cookie-score">
-              {/* 동적으로 쿠키 점수에 맞는 수만큼 아이콘을 표시 */}
-              {Array.from({ length: cookieScoreCount }).map((_, i) => (
-                <img
-                  key={i}
-                  className="cookie selected"
-                  src="/assets/images/review/cookiescore.svg"
-                  alt="Cookie Score"
-                />
-              ))}
-            </div>
-          </>
-        ) : (
-          <EditForm>
-            <textarea
-              placeholder="수정할 리뷰 내용을 입력하세요"
-              value={newContent}
-              onChange={(e) => setNewContent(e.target.value)}
-            />
-            <div className="action-buttons">
-              <button onClick={handleSaveEdit}>저장</button>
-              <button className="cancel" onClick={handleCancelEdit}>
-                취소
-              </button>
-            </div>
-          </EditForm>
-        )}
-      </div>
-
-      <div className="options" onClick={toggleMenu}>
-        <img src="/images/more.svg" alt="More Options" />
-        {isMenuOpen && renderMenuOptions()}
-      </div>
+            
+            </>
+          ) : (
+            <EditForm>
+              <textarea
+                placeholder="수정할 리뷰 내용을 입력하세요"
+                value={newContent}
+                onChange={(e) => setNewContent(e.target.value)}
+              />
+              <div className="action-buttons">
+                <button onClick={handleSaveEdit}>저장</button>
+                <button className="cancel" onClick={handleCancelEdit}>
+                  취소
+                </button>
+              </div>
+            </EditForm>
+          )}
+        </div>
+        
+      </ReviewSection>
+      <ReviewText>
+        <p>{reviewContent}</p>
+      </ReviewText>
+      
+      <ReviewLikeSection>
+        {/* <p>리뷰가 마음에 들어요</p> */}
+        <ReviewLikeIcon $likedByUser={liked} onClick={handleLikeClick}></ReviewLikeIcon>
+        <ReviewLikeText>{currentLikeCount}</ReviewLikeText>
+      </ReviewLikeSection> 
+      <Divider />
+    
     </ReviewContentContainer>
   );
 };
@@ -311,12 +428,24 @@ ReviewContentSection.propTypes = {
   name: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   movieTitle: PropTypes.string.isRequired,
+  reviewLikeCount: PropTypes.number.isRequired,
   cookieScoreCount: PropTypes.number.isRequired,
   isMenuOpen: PropTypes.bool.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleUpdateReview: PropTypes.func.isRequired,
   onPosterClick: PropTypes.func.isRequired,
+  reviewId: PropTypes.string.isRequired,
+  reviewContent: PropTypes.string.isRequired,
+  reviewScore: PropTypes.number.isRequired,
+  openLoginModal: PropTypes.func.isRequired,
+  $likedByUser: PropTypes.bool.isRequired,
+  likedByUser: PropTypes.bool.isRequired,
+
 };
 
+
+
 export default ReviewContentSection;
+
+

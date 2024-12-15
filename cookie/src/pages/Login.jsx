@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../stores/useAuthStore";
 
 export const LoginContainer = styled.div`
-  background-color: #000000;
+  /* background-color: #fdf8fa; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -15,14 +15,20 @@ export const LoginContainer = styled.div`
   align-items: center;
   position: relative;
 
-  h2 {
-    margin-top: 2rem;
+  .regular {
+    margin-bottom: 0.2rem;
+    
+  }
+
+  .bold {
     color: #f84b99;
-    font-weight: bold;
+    font-weight: 900;
   }
 
   .login__img {
     margin: 0.5rem 0;
+    width: 400px;
+
   }
 
   @media (max-width: 768px) {
@@ -44,10 +50,12 @@ export const LoginContainer = styled.div`
 
 export const LoginBtn = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
+  gap: 1rem;
+  cursor: pointer;
 
   button {
     background: none;
@@ -55,7 +63,7 @@ export const LoginBtn = styled.div`
   }
 
   img {
-    width: 20rem;
+    width: 3rem;
     height: auto;
     margin: 0.5rem 0;
     cursor: pointer;
@@ -64,7 +72,7 @@ export const LoginBtn = styled.div`
   @media (max-width: 768px) {
     button img {
       margin-top: 1rem;
-      width: 20rem;
+      width: 2.5rem;
       height: auto;
       margin: 1;
     }
@@ -72,21 +80,38 @@ export const LoginBtn = styled.div`
 `;
 
 const GuestLink = styled.div`
-  position: absolute;
-  top: 10rem;
-  right: 1rem;
-  font-size: 1rem;
-  color: #ffff;
-  text-decoration: underline;
+  font-size: 0.7rem;
+  color: #f84b99;
   cursor: pointer;
+  padding: 0.5rem 0.6rem;
+  text-decoration: underline;
 
   &:hover {
-    color: #909090;
+    transform: scale(1.1);
   }
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
     top: 2rem;
+  }
+`;
+
+
+const DividerText = styled.p`
+  display: flex;
+  align-items: center;
+  width: 90%;
+  color: #000;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 2;
+    border-bottom: 1px solid #d9d9d9;
+    margin: 0 2rem;
   }
 `;
 
@@ -107,11 +132,11 @@ function Login() {
     <>
       <GlobalStyle />
       <LoginContainer>
-        <GuestLink onClick={handleGuestAccess}>게스트로 이용하기</GuestLink>
-        <h2 className="regular">“영화 리뷰와 투표, 영화 vs 영화 토론까지!</h2>
-        <h2 className="regular">영화 팬들을 위한 종합 커뮤니티”</h2>
-        <img className="login__img logo" src={CookieLogo} alt="logo" />
-        <img className="login__img" src={CookieImg} alt="logoImg" />
+        
+        <p className="regular">영화 리뷰 커뮤니티 1등 앱</p>
+        <h2 className="bold">쿠키에서 여운 즐기기</h2>
+        <img className="login__img" src="/assets/images/cookie-logo.png" alt="logoImg" />
+        <DividerText>SNS 계정으로 로그인</DividerText>
         <LoginBtn>
           {Object.entries(OAuth_LOGIN_PROVIDER).map(([key, { img, url }]) => (
             <button key={key} onClick={() => handleLoginClick(url)}>
@@ -119,6 +144,7 @@ function Login() {
             </button>
           ))}
         </LoginBtn>
+        <GuestLink onClick={handleGuestAccess}>게스트 로그인</GuestLink>
       </LoginContainer>
     </>
   );
