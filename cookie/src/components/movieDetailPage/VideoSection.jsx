@@ -7,17 +7,13 @@ const Title = styled.h2`
 `;
 
 const VideoWrapper = styled.div`
-  margin-top: 20px;
+  margin-top: 50px;
 
   h2 {
-    margin-bottom: 10px;
     color: white;
   }
 
   .video-grid {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
 
     .video-item {
       flex: 1 1 30%;

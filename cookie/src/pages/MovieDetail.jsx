@@ -36,9 +36,9 @@ const MovieDetail = () => {
 
   const [movieData, setMovieData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-  const [selectedImage, setSelectedImage] = useState(""); // 클릭된 이미지
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+  
   useEffect(() => {
     const fetchMovieData = async () => {
       setIsLoading(true);

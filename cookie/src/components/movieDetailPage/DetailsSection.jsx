@@ -11,8 +11,9 @@ const DetailsWrapper = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
   gap: 20px;
-  align-items: flex-start;
-  flex-wrap: wrap; /* Ensures it wraps on smaller screens */
+  /* align-items: flex-start; */
+  /* flex-wrap: wrap; */
+  flex-direction: row;
 
   img {
     width: 120px;
@@ -26,6 +27,7 @@ const DetailsWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    
 
     .categories {
       display: flex;
@@ -34,11 +36,12 @@ const DetailsWrapper = styled.div`
       flex-wrap: wrap;
 
       span {
-        background: #aad6e7;
-        padding: 5px 10px;
+        background: #313131;
+        padding: 5px 12px;
         border-radius: 8px;
-        font-size: 12px;
-        color: black;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #ffffff;
       }
     }
 
@@ -59,6 +62,10 @@ const DetailsWrapper = styled.div`
   }
 `;
 
+const MovieDetailLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 const PosterImage = styled.img`
   width: 120px;
   height: auto;
@@ -85,48 +92,6 @@ const MovieDetailRight = styled.div`
   flex-direction: column;
 `;
 
-const MovieEvaluationFunction = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  .write-review-button {
-    cursor: pointer;
-  }
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-  }
-`;
-
-const MovieScore = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #ffffff;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 10px;
-  }
-`;
-
-const HeartIcon = styled(FaHeart)`
-  color: ${(props) => (props.liked ? "#ff4d4d" : "#ffffff")};
-  font-size: 16px;
-  cursor: pointer;
-
-  &:hover {
-    color: #ff4d4d;
-  }
-`;
-
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -146,25 +111,68 @@ const ModalImage = styled.img`
   border-radius: 8px;
 `;
 
-const ReviewButton = styled.button`
-  background: #00d6e8;
-  color: black;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
 
-  &:hover {
-    background: #00c4d3;
-    transform: scale(1.05);
+const ScoreSection = styled.div`
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  background-color: #fdf8fa;
+  border: 1px solid #F84B99;
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  margin-top: 0.4rem;
+  justify-content: center;
+`
+const ScoreIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: no-repeat center/cover url("/assets/images/review/score-macarong.png");
+`
+
+const ScoreText = styled.p`
+  font-weight: 500;
+  color: #F84B99; 
+  font-size: 0.9rem;
+`
+
+
+const ReviewAndLike = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  p {
+    color: #ffffff;
+    font-size: 0.8rem;
   }
+`
+const Review = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 
-  &:active {
-    background: #00aabf;
-    transform: scale(0.95);
+  svg {
+    width: 40px;
+    height: 40px;
+    background: no-repeat center/cover url("/assets/images/movie/pencil.svg");
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+  }
+ `
+
+const Like = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  flex-direction: column;
+  color: #ffffff;
+  p {
+    color: #ffffff;
+    font-size: 0.8rem;
   }
 
   @media (max-width: 768px) {
@@ -173,6 +181,16 @@ const ReviewButton = styled.button`
 
   @media (max-width: 480px) {
     font-size: 10px;
+  }
+`;
+
+const HeartIcon = styled(FaHeart)`
+  color: ${(props) => (props.liked ? "#ff4d4d" : "#ffffff")};
+  font-size: 40px;
+  cursor: pointer;
+
+  &:hover {
+    color: #ff4d4d;
   }
 `;
 
@@ -185,6 +203,7 @@ const DetailsSection = ({
   movie,
   liked,
 }) => {
+  console.log(likes);
   const navigate = useNavigate();
   const { openLoginModal } = useAuthStore();
 
@@ -224,28 +243,6 @@ const DetailsSection = ({
     }
   };
 
-  const ReviewButton = styled.button`
-    background: #00d6e8;
-    color: black;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background: #00c4d3;
-      transform: scale(1.05);
-    }
-
-    &:active {
-      background: #00aabf;
-      transform: scale(0.95);
-    }
-  `;
-
   const handleWriteReviewClick = () => {
     if (!checkLogin()) return;
 
@@ -266,13 +263,19 @@ const DetailsSection = ({
     setIsModalOpen(false);
   };
 
-  const roundedScore = Math.round(score * 100) / 100;
+  const roundedScore = Math.round(score * 10) / 10;
 
   return (
     <>
       <DetailsWrapper>
-        <PosterImage src={posterUrl} alt="포스터" onClick={handlePosterClick} />
-
+        <MovieDetailLeft>
+          <PosterImage src={posterUrl} alt="포스터" onClick={handlePosterClick} />
+          <ScoreSection>
+            <ScoreIcon></ScoreIcon>
+            <ScoreText>평점 {roundedScore}</ScoreText>
+          </ScoreSection>   
+        </MovieDetailLeft>
+        
         <MovieDetailRight>
           <div className="details">
             <div className="categories">
@@ -282,19 +285,20 @@ const DetailsSection = ({
             </div>
             <p>{description}</p>
           </div>
-
-          <MovieEvaluationFunction>
-            <ReviewButton onClick={handleWriteReviewClick}>
-              리뷰 작성
-            </ReviewButton>
-            <MovieScore>
-              <HeartIcon liked={likeValid} onClick={handleLikeClick} />{" "}
-              {likeCount} | 평점: {roundedScore}
-            </MovieScore>
-          </MovieEvaluationFunction>
         </MovieDetailRight>
       </DetailsWrapper>
 
+
+      <ReviewAndLike>
+        <Review>
+          <svg onClick={handleWriteReviewClick}/>
+          <p>리뷰</p>
+        </Review>
+        <Like>
+          <HeartIcon liked={likeValid} onClick={handleLikeClick} />
+          <p>좋아요 {likeCount > 999 ? "999+" : likeCount}</p>
+        </Like>
+      </ReviewAndLike>
       {isModalOpen && (
         <ModalOverlay onClick={handleModalClose}>
           <ModalImage src={posterUrl} alt="확대된 포스터" />
@@ -315,3 +319,4 @@ DetailsSection.propTypes = {
 };
 
 export default DetailsSection;
+
