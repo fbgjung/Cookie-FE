@@ -12,7 +12,7 @@ const ChatWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 100vh; /* 전체 화면 높이 */
+  height: 50vh; /* 전체 화면 높이 */
   max-width: 600px;
   margin: 0 auto;
   background-color: #ffffff;
