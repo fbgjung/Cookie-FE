@@ -9,6 +9,9 @@ const Title = styled.h2`
 
 const ReviewWrapper = styled.div`
   margin-top: 3%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 
   h2 {
     font-size: 18px;
@@ -34,7 +37,7 @@ const ReviewWrapper = styled.div`
       transition: color 0.3s ease;
 
       &:hover {
-        color: #00d6e8;
+        color: #F84B99;
       }
 
       &::after {
@@ -48,72 +51,28 @@ const ReviewWrapper = styled.div`
   .review-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 0.8rem;
     margin-top: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
 
     @media (max-width: 600px) {
       grid-template-columns: repeat(1, 1fr);
     }
 
     .review-item {
-      position: relative;
-      background-color: #ffffff; /* 배경색을 흰색으로 설정 */
-      border: 1px solid #ddd; /* 테두리 설정 */
-      border-radius: 8px; /* 모서리 둥글게 */
-      padding: 20px;
+      background-color: #FDF8FA;
+      border-radius: 0.2rem;
+      padding: 1rem;
       display: flex;
-      justify-content: flex-start;
-      flex-direction: row;
+      align-items: flex-start;
+      gap: 15px;
       cursor: pointer;
-      gap: 20px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
-
-      .review-user {
-        font-size: 14px;
-        font-weight: bold;
-        color: #333; /* 텍스트 색상 변경 */
-      }
-
-      .review-comment {
-        font-size: 12px;
-        color: black;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .review-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .likes {
-          font-size: 12px;
-          color: #cc5283;
-        }
-      }
-    }
-  }
-
-  .more-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-
-    button {
-      font-size: 14px;
-      color: #fff;
-      background-color: #007bff;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #0056b3;
-      }
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      box-sizing: border-box; 
+      overflow: hidden;
     }
   }
 `;
@@ -121,16 +80,63 @@ const ReviewWrapper = styled.div`
 const ReviewUserProfile = styled.div`
   display: flex;
   flex-direction: column;
-  color: #333; /* 사용자 이름 색상 변경 */
   align-items: center;
-  justify-content: center;
+  min-width: 60px;
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+    border: solid 1.5px #b3afb1;
+  }
+
+  .review-user {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    word-break: break-word;
+    max-width: 100%;
+  }
 `;
 
 const ReviewDetail = styled.div`
   display: flex;
   flex-direction: column;
-  color: #333; /* 리뷰 텍스트 색상 변경 */
-  justify-content: space-between;
+  flex-grow: 1;
+  overflow: hidden; 
+  gap: 10px;
+`;
+
+const ReviewComment = styled.div`
+  font-size: 12px;
+  color: black;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  max-height: 3em;
+  line-height: 1.5em;
+`;
+
+const ReviewFooter = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    background: no-repeat center/cover url("/assets/images/review/full-heart-review-feed.svg");
+  }
+
+  .likes {
+    font-size: 12px;
+    color: #cc5283;
+  }
 `;
 
 const ReviewSection = ({
@@ -164,12 +170,6 @@ const ReviewSection = ({
               <img
                 src={review?.user?.profileImage || "/default-profile.png"}
                 alt={review?.user?.nickname || "Anonymous"}
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  marginBottom: "5px",
-                }}
               />
               <div className="review-user">
                 {review?.user?.nickname || "Anonymous"}
@@ -177,12 +177,13 @@ const ReviewSection = ({
             </ReviewUserProfile>
 
             <ReviewDetail>
-              <div className="review-comment">
+              <ReviewComment>
                 {review?.content || "리뷰 내용이 없습니다."}
-              </div>
-              <div className="review-footer">
-                <div className="likes">❤️ {review?.reviewLike || 0}</div>
-              </div>
+              </ReviewComment>
+              <ReviewFooter>
+                <svg/>
+                <div className="likes">{review?.reviewLike || 0}</div>
+              </ReviewFooter>
             </ReviewDetail>
           </div>
         ))}

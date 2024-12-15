@@ -10,15 +10,15 @@ const Title = styled.h2`
 const CastGrid = styled.div`
   margin-top: 20px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3열로 고정 */
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr); /* 태블릿에서도 3열로 고정 */
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr); /* 모바일에서도 3열로 고정 */
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .cast-item {
@@ -29,9 +29,9 @@ const CastGrid = styled.div`
     cursor: pointer;
 
     img {
-      width: 100%;
-      max-width: 100px; /* 이미지의 최대 너비 */
-      height: 100px;
+      width: 90px;
+      max-width: 100px;
+      height: 90px;
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 5px;
@@ -40,7 +40,7 @@ const CastGrid = styled.div`
         box-shadow 0.3s ease;
 
       &:hover {
-        transform: scale(1.2);
+        transform: scale(1.1);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
       }
     }
