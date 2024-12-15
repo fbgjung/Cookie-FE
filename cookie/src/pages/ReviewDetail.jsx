@@ -20,7 +20,7 @@ const Container = styled.div`
 `;
 
 const CommentsSectionContainer = styled.div`
-  padding: 2rem;
+  padding: 0 2rem;
   
   h3 {
     font-size: 1.2rem;
@@ -58,7 +58,7 @@ const CommentsSectionContainer = styled.div`
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: #005faa;
+        background-color: #ff0777;
       }
 
       svg {
@@ -74,7 +74,6 @@ const CommentsSectionContainer = styled.div`
 
     .comment-left {
       display: flex;
-      align-items: center;
 
       img {
         width: 40px;
@@ -86,7 +85,7 @@ const CommentsSectionContainer = styled.div`
       .comment-content {
         background-color: #f8f8f8;
         border-radius: 8px;
-        padding: 10px;
+        padding: 0.8rem;
         font-size: 0.9rem;
         box-sizing: border-box;
         position: relative;
@@ -107,6 +106,8 @@ const CommentsSectionContainer = styled.div`
           font-size: 0.9rem;
           font-weight: 500;
           color: #333;
+          margin-top: 0.4rem;
+          
         }
 
         .date {
@@ -115,9 +116,10 @@ const CommentsSectionContainer = styled.div`
         }
       }
     }
+
     .comment-actions {
-      position: absolute; /* 우측 상단에 고정 */
-      top: 10px; /* 위에서 간격 */
+      position: absolute;
+      top: 10px;
       right: 10px;
       display: flex;
       gap: 10px;
@@ -429,15 +431,18 @@ const ReviewDetail = () => {
           })}`}
         reviewLikeCount = {reviewData.reviewLike || 0}
         cookieScoreCount={(reviewData.movie.score || 0).toFixed(1)}
+        reviewScore={reviewData.movieScore}
         handleDelete={handleDeleteReview}
         handleUpdateReview={handleUpdateReview}
         isMenuOpen={isMenuOpen && !fromLikedReviews}
         toggleMenu={fromLikedReviews ? undefined : toggleMenu}
         onPosterClick={() => handlePosterClick(reviewData.movie?.movieId)}
         reviewId={reviewId} 
+        reviewContent={reviewData.content}
         openLoginModal={openLoginModal}
+        likedByUser={likedByUser}
       />
-      <ReviewTextSection reviewText={reviewData.content} />
+      {/* <ReviewTextSection reviewText={reviewData.content} /> */}
 
       <CommentsSectionContainer>
       <h3>{reviewData.comments.length > 0 ? `${reviewData.comments.length}개의 댓글` : '댓글'}</h3>
