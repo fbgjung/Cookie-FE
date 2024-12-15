@@ -64,7 +64,7 @@ const MoreLink = styled.span`
   transition: color 0.3s ease;
 
   &:hover {
-    color: #f84b99;
+    color: #00d6e8;
   }
 `;
 
@@ -184,7 +184,7 @@ const MyPage = () => {
       toast.error("로그아웃 중 문제가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
-      setShowLogoutModal(false);
+      setShowLogoutModal(false); // 모달 닫기
     }
   };
 

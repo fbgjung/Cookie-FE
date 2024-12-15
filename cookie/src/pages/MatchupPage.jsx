@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
@@ -22,19 +22,11 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  background: linear-gradient(
-    to bottom,
-    #000000,
-    #0a0a0a,
-    #141414,
-    #1f1f1f,
-    #292929
-  );
+  background: linear-gradient(to bottom, #000000, #292929);
   color: #ffffff;
   padding-top: 10px;
   font-family: "Arial", sans-serif;
-
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-x: hidden;
 `;
 
@@ -44,66 +36,46 @@ const MatchupPage = () => {
   const [matchUpData, setMatchUpData] = useState(null);
   const [isVoteEnded, setIsVoteEnded] = useState(false);
   const [stompClient, setStompClient] = useState(null);
-  const [isConnected, setIsConnected] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchMatchUpData = async () => {
+  const fetchMatchUpData = useCallback(async () => {
     setIsLoading(true);
     try {
       const endpoint = `/api/matchups/${matchUpId || 1}`;
       const response = await axiosInstance.get(endpoint);
       setMatchUpData(response.data.response || {});
-      console.log(response.data.response);
     } catch (error) {
       console.error("API 요청 실패:", error);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [matchUpId]);
+
+  useEffect(() => {
+    fetchMatchUpData();
+  }, [fetchMatchUpData, location.pathname]);
 
   useEffect(() => {
     const token = sessionStorage.getItem("accessToken");
-
-    if (!token) {
-      console.error("인증 토큰이 없습니다.");
-      return;
-    }
+    if (!token) return;
 
     const socket = new SockJS(`${serverBaseUrl}/ws`);
     const client = new Client({
       webSocketFactory: () => socket,
-      connectHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+      connectHeaders: { Authorization: `Bearer ${token}` },
       debug: (str) => console.log(str),
-      onConnect: () => {
-        console.log("WebSocket 연결 성공");
-        setIsConnected(true);
-      },
-      onDisconnect: () => {
-        console.log("WebSocket 연결 종료");
-        setIsConnected(false);
-      },
-      onStompError: (frame) => {
-        console.error("STOMP 오류:", frame.headers["message"], frame.body);
-      },
+      onConnect: () => setIsConnected(true),
+      onDisconnect: () => setIsConnected(false),
     });
 
     client.activate();
     setStompClient(client);
 
-    return () => {
-      client.deactivate();
-    };
+    return () => client.deactivate();
   }, []);
 
-  useEffect(() => {
-    fetchMatchUpData();
-  }, [matchUpId, location.pathname]);
-
-  const handleVoteEnd = () => {
-    setIsVoteEnded(true);
-  };
+  const handleVoteEnd = () => setIsVoteEnded(true);
 
   if (isLoading || !matchUpData) {
     return (
@@ -148,9 +120,8 @@ const MatchupPage = () => {
         movie2Likes={matchUpData.movie2.movieLike}
       />
       <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
-      {isConnected && (
-        <ChatUI matchUpId={matchUpId} stompClient={stompClient} />
-      )}
+
+      <ChatUI matchUpId={matchUpId} stompClient={stompClient} />
     </Container>
   );
 };
