@@ -240,7 +240,14 @@ const MovieReviewFeed = () => {
         params: { page, size: 10 },
       });
 
-      const newReviews = response.data.response.reviews;
+      const { poster } = response.data.response; // 상단 포스터 정보 가져오기
+      const newReviews = response.data.response.reviews.map((review) => ({
+        ...review,
+        movie: {
+          ...review.movie,
+          poster, // 포스터 정보 추가
+        },
+      }));
 
       setReviews((prevReviews) =>
         page === 0 ? newReviews : [...prevReviews, ...newReviews]
