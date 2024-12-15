@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useLayoutEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 const MessageWrapper = styled.div`
@@ -75,6 +75,7 @@ const MessageBubble = styled.p`
 `;
 
 const ChatMessagesContainer = styled.div`
+  position: relative;
   height: 100%;
   overflow-y: auto;
   padding: 15px;
@@ -85,19 +86,20 @@ const ChatMessagesContainer = styled.div`
 `;
 
 const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
-  const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
   const containerRef = useRef();
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
 
-  // 스크롤 위치 확인
+  // 스크롤 위치 관리
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
     const nearBottom = scrollHeight - scrollTop <= clientHeight + 100;
     setIsScrolledToBottom(nearBottom);
   };
 
-  useEffect(() => {
-    if (isScrolledToBottom) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // 메시지 변화 시 즉시 스크롤
+  useLayoutEffect(() => {
+    if (isScrolledToBottom && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isScrolledToBottom, messagesEndRef]);
 
@@ -106,7 +108,7 @@ const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
       {messages.map((message, index) => {
         const isUser = message.id === currentUserId;
         return (
-          <MessageWrapper key={index} isUser={isUser}>
+          <MessageWrapper key={`${message.id}-${index}`} isUser={isUser}>
             {!isUser && (
               <ProfileImage
                 src={message.profile || "/default-profile.png"}

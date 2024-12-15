@@ -60,6 +60,7 @@ const InputContainer = styled.div`
 const ChatInput = ({ onSend }) => {
   const [inputValue, setInputValue] = useState("");
 
+  // 메시지 전송 로직
   const handleSendMessage = () => {
     if (inputValue.trim() !== "") {
       onSend(inputValue);
@@ -67,6 +68,7 @@ const ChatInput = ({ onSend }) => {
     }
   };
 
+  // 엔터 키 입력 처리
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.nativeEvent.isComposing) {
       e.preventDefault();
