@@ -43,22 +43,27 @@ const Nickname = styled.span`
   }
 `;
 
-const MessageBubble = styled.p`
+const MessageBubble = styled.div`
   background-color: ${(props) => (props.isUser ? "#04012D" : "#e5e5e5")};
   color: ${(props) => (props.isUser ? "#fff" : "#000")};
-  padding: 10px 15px;
+  padding: 8px 12px;
   border-radius: 15px;
-  max-width: 70%;
-  word-wrap: break-word;
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+  line-height: 1.2;
+  font-size: 1rem;
+  font-family: "Arial", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; /* 폰트 추가 */
   position: relative;
 
   &::after {
     content: "";
     position: absolute;
     top: 50%;
-    ${(props) => (props.isUser ? "right: -15px" : "left: -15px")};
+    ${(props) => (props.isUser ? "right: -8px" : "left: -8px")};
     transform: translateY(-50%);
-    border-width: 10px;
+    border-width: 8px;
     border-style: solid;
     border-color: transparent;
     ${(props) =>
@@ -69,11 +74,10 @@ const MessageBubble = styled.p`
 
   @media (max-width: 480px) {
     font-size: 0.9rem;
-    padding: 8px 12px;
+    padding: 6px 10px;
     max-width: 90%;
   }
 `;
-
 const ChatMessagesContainer = styled.div`
   position: relative;
   height: 100%;
@@ -89,19 +93,17 @@ const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
   const containerRef = useRef();
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
 
-  // 스크롤 위치 관리
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-    const nearBottom = scrollHeight - scrollTop <= clientHeight + 100;
+    const nearBottom = scrollHeight - scrollTop <= clientHeight + 30;
     setIsScrolledToBottom(nearBottom);
   };
 
-  // 메시지 변화 시 즉시 스크롤
   useLayoutEffect(() => {
-    if (isScrolledToBottom && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [messages, isScrolledToBottom, messagesEndRef]);
+  }, [messages]);
 
   return (
     <ChatMessagesContainer ref={containerRef} onScroll={handleScroll}>
