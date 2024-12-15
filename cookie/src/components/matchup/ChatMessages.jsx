@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 const MessageWrapper = styled.div`
@@ -44,13 +44,13 @@ const Nickname = styled.span`
 `;
 
 const MessageBubble = styled.p`
-  position: relative;
   background-color: ${(props) => (props.isUser ? "#04012D" : "#e5e5e5")};
   color: ${(props) => (props.isUser ? "#fff" : "#000")};
   padding: 10px 15px;
   border-radius: 15px;
   max-width: 70%;
   word-wrap: break-word;
+  position: relative;
 
   &::after {
     content: "";
@@ -75,6 +75,7 @@ const MessageBubble = styled.p`
 `;
 
 const ChatMessagesContainer = styled.div`
+  position: relative;
   height: 100%;
   overflow-y: auto;
   padding: 15px;
@@ -85,25 +86,29 @@ const ChatMessagesContainer = styled.div`
 `;
 
 const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const containerRef = useRef();
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
 
-  useEffect(() => {
-    if (isInitialLoad && messages.length > 0) {
-      setIsInitialLoad(false);
-      return;
-    }
+  // 스크롤 위치 관리
+  const handleScroll = () => {
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    const nearBottom = scrollHeight - scrollTop <= clientHeight + 100;
+    setIsScrolledToBottom(nearBottom);
+  };
 
-    if (!isInitialLoad) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // 메시지 변화 시 즉시 스크롤
+  useLayoutEffect(() => {
+    if (isScrolledToBottom && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isInitialLoad, messagesEndRef]);
+  }, [messages, isScrolledToBottom, messagesEndRef]);
 
   return (
-    <ChatMessagesContainer>
+    <ChatMessagesContainer ref={containerRef} onScroll={handleScroll}>
       {messages.map((message, index) => {
         const isUser = message.id === currentUserId;
         return (
-          <MessageWrapper key={index} isUser={isUser}>
+          <MessageWrapper key={`${message.id}-${index}`} isUser={isUser}>
             {!isUser && (
               <ProfileImage
                 src={message.profile || "/default-profile.png"}

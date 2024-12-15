@@ -34,7 +34,7 @@ const Container = styled.div`
   padding-top: 10px;
   font-family: "Arial", sans-serif;
 
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
 `;
 
@@ -68,7 +68,7 @@ const MatchupPage = () => {
       console.error("인증 토큰이 없습니다.");
       return;
     }
-    
+
     const socket = new SockJS(`${serverBaseUrl}/ws`);
     const client = new Client({
       webSocketFactory: () => socket,
