@@ -1,20 +1,17 @@
+import { useState } from "react";
 import styled from "styled-components";
-
 import toast from "react-hot-toast";
 import axiosInstance from "../../api/auth/axiosInstance";
+
+const nicknameRegex =
+  /^(?=.*[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9])[가-힣A-Za-z0-9]{2,10}$/;
 
 const NicknameContainer = styled.div`
   display: flex;
   flex-direction: column;
-
   width: 100%;
   max-width: 600px;
-
-  @media (max-width: 768px) {
-    margin: 0 auto;
-    max-width: 100%;
-    padding: 0 10px;
-  }
+  margin: 0 auto;
 `;
 
 const Label = styled.label`
@@ -24,18 +21,6 @@ const Label = styled.label`
   margin-bottom: 8px;
   margin-left: 40px;
   color: #f84b99;
-
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    margin-top: 10px;
-    margin-left: 30px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-    margin-top: 10px;
-    margin-left: 30px;
-  }
 `;
 
 const InputWrapper = styled.div`
@@ -44,42 +29,19 @@ const InputWrapper = styled.div`
   justify-content: space-between;
   width: 85%;
   margin-left: 40px;
-
-  @media (max-width: 768px) {
-    margin-left: 30px;
-    width: 90%;
-  }
-
-  @media (max-width: 480px) {
-    flex-direction: row;
-    gap: 10px;
-    width: 82%;
-    margin-left: 30px;
-  }
 `;
 
 const Input = styled.input`
   flex: 1;
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid ${(props) => (props.isValid ? "#ccc" : "#f84b99")};
   border-radius: 8px;
   outline: none;
 
   &:focus {
     border-color: #f84b99;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* 블랙 섀도우 */
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 8px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.8rem;
-    padding: 10px;
-    width: calc(100% - 120px);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
   }
 `;
 
@@ -91,8 +53,6 @@ const CheckButton = styled.button`
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
   margin-left: 2%;
 
   &:hover {
@@ -103,46 +63,49 @@ const CheckButton = styled.button`
     background-color: #ccc;
     cursor: not-allowed;
   }
+`;
 
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 8px 12px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.8rem;
-    padding: 7px;
-    margin-right: 15px;
-    width: 60px;
-  }
+const ErrorMessage = styled.div`
+  color: #f84b99;
+  font-size: 0.9rem;
+  margin-left: 40px;
+  margin-top: 5px;
 `;
 
 const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
+  const [isValid, setIsValid] = useState(true);
+
   const handleCheckNickname = async () => {
+    if (!nicknameRegex.test(nickname)) {
+      toast.error("닉네임은 2~10자의 한글, 영문, 숫자만 가능합니다.");
+      setIsValid(false);
+      onResetCheck(false);
+      return;
+    }
+
     try {
       const response = await axiosInstance.get(
         `/api/users/setting/check-nickname`,
-        {
-          params: { nickname },
-        }
+        { params: { nickname } }
       );
 
       if (response.data.response === "SUCCESS") {
         toast.success("사용 가능한 닉네임입니다.");
         onResetCheck(true);
-      } else if (response.data.response === "DUPLICATED_NICKNAME") {
+      } else {
         toast.error("이미 사용 중인 닉네임입니다.");
         onResetCheck(false);
       }
     } catch (error) {
       toast.error("서버 오류가 발생했습니다. 다시 시도해주세요.");
-      console.error("중복 확인 실패:", error);
       onResetCheck(false);
     }
   };
 
   const handleInputChange = (e) => {
-    onChange(e.target.value);
+    const value = e.target.value;
+    setIsValid(nicknameRegex.test(value));
+    onChange(value);
     onResetCheck(false);
   };
 
@@ -156,11 +119,20 @@ const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
           placeholder="닉네임을 입력하세요"
           value={nickname}
           onChange={handleInputChange}
+          isValid={isValid}
         />
-        <CheckButton onClick={handleCheckNickname} disabled={!nickname}>
+        <CheckButton
+          onClick={handleCheckNickname}
+          disabled={!nickname || !isValid}
+        >
           중복확인
         </CheckButton>
       </InputWrapper>
+      {!isValid && (
+        <ErrorMessage>
+          닉네임은 2~10자의 한글, 영문, 숫자만 가능합니다.
+        </ErrorMessage>
+      )}
     </NicknameContainer>
   );
 };

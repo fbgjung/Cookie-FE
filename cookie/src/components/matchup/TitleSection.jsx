@@ -34,13 +34,13 @@ const TitleImage = styled.img`
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: #006400;
   text-align: center;
 
   @media (max-width: 768px) {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   @media (max-width: 480px) {
