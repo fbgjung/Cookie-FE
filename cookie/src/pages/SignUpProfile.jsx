@@ -199,7 +199,7 @@ function SignUpProfile() {
   const socialProvider = searchParams.get("socialProvider");
   const email = searchParams.get("email");
   const socialId = searchParams.get("socialId");
-  const regex = /^[A-Za-z0-9ㄱ-ㅎㅏ-ㅣ가-힣]{2,10}$/;
+  const regex = /^(?=.*[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z0-9])[가-힣A-Za-z0-9]{2,10}$/;
   const isNicknameInvalid = userNickname.length <= 1 || !nicknameValid;
   const isNicknameNotChecked = userNickname.length >= 2 && !isCheckedNickname;
 
@@ -372,11 +372,13 @@ function SignUpProfile() {
                   사용 가능한 닉네임입니다.
                 </p>
               )}
-              {isNicknameNotChecked && (
-                <p className="nickName__valid--text">
-                  중복확인 버튼을 눌러주세요!
-                </p>
-              )}
+              {nicknameValid &&
+                !isCheckedNickname &&
+                isDuplicateNickname === null && (
+                  <p className="nickName__valid--text">
+                    중복확인 버튼을 눌러주세요!
+                  </p>
+                )}
             </div>
           </UserInfo>
           <SubmitBtn>

@@ -8,7 +8,7 @@ import LoginModal from "../components/common/LoginModal";
 
 const Container = styled.div`
   padding: 2rem;
-  background-color: #f4f4f4;
+  background-color: #ffffff;
   min-height: 100vh;
   color: #333;
   position: relative;

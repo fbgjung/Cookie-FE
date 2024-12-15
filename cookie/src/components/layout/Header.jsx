@@ -1,7 +1,27 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Notification from "../common/Notification";
 import useUserStore from "../../stores/useUserStore";
+import CookieLogo from "../../assets/images/login/cookie_lg.svg";
+
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  img {
+    width: 40px; /* 로고 이미지 크기 */
+    height: 40px;
+    object-fit: cover;
+  }
+
+  span {
+    font-size: 24px;
+    font-weight: bold;
+    color: inherit;
+    margin-left: 10px;
+  }
+`;
 
 const HeaderContainer = styled.header`
   width: 100vw;
@@ -9,11 +29,11 @@ const HeaderContainer = styled.header`
   max-width: 600px;
   align-items: center;
   justify-content: space-between;
-  background-color: black;
+  background-color: ${(props) => (props.isWhiteHeader ? "#ffffff" : "black")};
+  color: ${(props) => (props.isWhiteHeader ? "#000000" : "#ffffff")};
   padding: 15px 20px;
   height: 70px;
   box-sizing: border-box;
-  /* border-bottom: 1px solid rgba(255, 255, 255, 0.1); */
   position: fixed;
   top: 0;
   z-index: 100;
@@ -29,33 +49,35 @@ const HeaderContainer = styled.header`
     border-radius: 0.7rem;
     padding: 0.4rem 1rem;
     border: none;
-  }
-`;
-
-const Logo = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  span {
-    font-size: 24px;
-    font-weight: bold;
-    color: #ffffff;
-    margin-left: 10px;
+    background-color: ${(props) => (props.isWhiteHeader ? "#f5f5f5" : "#333")};
+    color: ${(props) => (props.isWhiteHeader ? "#000" : "#fff")};
   }
 `;
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const userInfo = useUserStore((state) => state.getUserInfo());
+
+  const isReviewDetailPage = location.pathname.match(/^\/reviews\/\d+$/);
+
+  const isWhiteHeader =
+    location.pathname === "/mypage" ||
+    location.pathname == "/myAllReviewList" ||
+    location.pathname === "/point-history" ||
+    location.pathname === "/likemovies" ||
+    location.pathname === "/likereviews" ||
+    location.pathname === "/manageprofile" ||
+    isReviewDetailPage;
 
   const handleLogoClick = () => {
     navigate("/");
   };
 
   return (
-    <HeaderContainer>
+    <HeaderContainer isWhiteHeader={isWhiteHeader}>
       <Logo onClick={handleLogoClick}>
-        <span>로고</span>
+        <img src={CookieLogo} alt="로고 이미지" />
       </Logo>
       <div className="header-right">
         {userInfo.nickname ? <Notification /> : <button>로그인</button>}
