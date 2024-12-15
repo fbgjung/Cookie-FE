@@ -68,6 +68,7 @@ const Header = () => {
     location.pathname === "/likemovies" ||
     location.pathname === "/likereviews" ||
     location.pathname === "/manageprofile" ||
+    location.pathname === "/reviews/write" ||
     isReviewDetailPage;
 
   const handleLogoClick = () => {
