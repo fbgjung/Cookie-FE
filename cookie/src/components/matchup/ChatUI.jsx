@@ -23,11 +23,9 @@ const ChatWrapper = styled.div`
 
 const ChatUI = ({ stompClient }) => {
   const [messages, setMessages] = useState([]);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const matchUpId = 1;
   const messagesEndRef = useRef(null);
 
-  const currentUserId = useUserStore((state) => state.userInfo.userId);
+  const { userId, matchUpId } = useUserStore((state) => state.userInfo);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -50,7 +48,7 @@ const ChatUI = ({ stompClient }) => {
         }));
 
         setMessages(loadedMessages);
-        setIsInitialLoad(false);
+        scrollToBottom();
       } catch (error) {
         console.error("채팅 기록 로드 실패:", error);
       }
@@ -77,6 +75,7 @@ const ChatUI = ({ stompClient }) => {
             profile: newMessage.senderProfileImage,
           },
         ]);
+        scrollToBottom();
       }
     );
 
@@ -90,7 +89,7 @@ const ChatUI = ({ stompClient }) => {
       stompClient.publish({
         destination: `/app/chat/${matchUpId}/messages`,
         body: JSON.stringify({
-          senderUserId: currentUserId,
+          senderUserId: userId,
           content,
         }),
       });
@@ -104,7 +103,7 @@ const ChatUI = ({ stompClient }) => {
       <ChatContainer>
         <ChatMessages
           messages={messages}
-          currentUserId={currentUserId}
+          currentUserId={userId}
           messagesEndRef={messagesEndRef}
         />
         <ChatInput onSend={handleSend} />
