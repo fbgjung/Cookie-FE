@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import ReviewHeader from "../components/searchpage/ReviewHeader";
 import axiosInstance from "../api/auth/axiosInstance";
+import useAuthStore from "../stores/useAuthStore";
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -171,6 +172,7 @@ const ReviewForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { openLoginModal } = useAuthStore();
 
   const movieTitle = state?.movieTitle || "영화 제목 없음";
   const movieId = state?.movieId;
@@ -183,12 +185,17 @@ const ReviewForm = () => {
   }
 
   const getUserIdFromToken = () => {
-    const token = localStorage.getItem("refreshToken");
+    let token = sessionStorage.getItem("accessToken");
+
     if (!token) {
-      toast.error("로그인이 필요한 서비스입니다.");
-      navigate("/login");
+      token = localStorage.getItem("refreshToken");
+    }
+
+    if (!token) {
+      openLoginModal(); 
       return null;
     }
+
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
       return payload.id;
