@@ -24,7 +24,6 @@ function CookieMovies() {
       try {
         const response = await axiosInstance.get(`/api/movies/recommendations`);
         const movies = response.data.response || [];
-        console.log(response);
         setRecommendedMovies(movies);
       } catch (error) {
         console.error("영화 추천 목록을 가져오는 데 실패했습니다.", error);

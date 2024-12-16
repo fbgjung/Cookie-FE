@@ -20,7 +20,7 @@ function AdminRecommend() {
         const recommendMovies = response.data.response;
         setRecommendMovies(recommendMovies);
       } catch (error) {
-        console.error("API 호출 오류 발생:", error);
+        console.error("추천영화를 불러오는 데 실패했습니다.:", error);
       } finally {
         setIsLoading(false);
       }

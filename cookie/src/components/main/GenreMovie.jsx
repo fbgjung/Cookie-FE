@@ -35,8 +35,6 @@ function GenreMovie({ categorydata }) {
             },
           }
         );
-        console.log(response.data);
-
         localStorage.setItem(
           cacheKey,
           JSON.stringify({
@@ -48,7 +46,7 @@ function GenreMovie({ categorydata }) {
         setGenreMovies(response.data.movies);
         setTotalPages(response.data.totalPages || 1);
       } catch (error) {
-        console.error("영화 불러오기 실패:", error);
+        console.error("장르별 영화 불러오는 데 실패했습니다:", error);
       }
     }
   };
@@ -95,7 +93,7 @@ function GenreMovie({ categorydata }) {
   return (
     <>
       <GenreMovieList>
-        <Title>장르로 영화 찾기</Title>
+        <Title>장르별 영화 찾기</Title>
         <div className="genreBtn__contianer">
           {genres
             .filter((genre) => genre !== "N/A")
