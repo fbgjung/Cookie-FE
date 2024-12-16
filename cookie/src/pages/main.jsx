@@ -11,6 +11,7 @@ import LoginModal from "../components/common/LoginModal";
 import useAuthStore from "../stores/useAuthStore";
 import Question from "../components/main/Question";
 import Footer from "../components/main/Footer";
+import Popup from "../components/common/Popup";
 
 const Main = () => {
   const [showTopButton, setShowTopButton] = useState(false);
@@ -34,6 +35,7 @@ const Main = () => {
   return (
     <>
       <MainContainer>
+        <Popup />
         <Content>
           <MatchUpSection />
           <AdminRecommend />

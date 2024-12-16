@@ -89,12 +89,13 @@ const ChatUI = ({ stompClient }) => {
   const handleSend = (content) => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: `/app/chat/3/messages`,
+        destination: `/app/chat/${matchUpId}/messages`,
         body: JSON.stringify({
           senderUserId: userId,
           content,
         }),
       });
+      console.log("이떄 매치업 아디뭐임?", matchUpId);
     } else {
       console.error("STOMP 연결이 활성화되지 않았습니다.");
     }
