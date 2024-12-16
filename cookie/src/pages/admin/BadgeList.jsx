@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DefalutContainer } from "../../components/admin/Likes";
 import axiosInstance from "../../api/auth/axiosInstance";
 import deleteBtn from "../../assets/images/admin/delete_btn.svg";
-// import Edit from "../../assets/images/admin/edit.svg";
+import Edit from "../../assets/images/admin/Edit.svg";
 import styled from "styled-components";
 import EditBadgeModal from "../../components/admin/EditBadgeModal";
 import Addcookie from "../../assets/images/admin/empty_cookie.svg";
