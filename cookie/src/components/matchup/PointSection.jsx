@@ -11,7 +11,7 @@ const PointSection = styled.div`
 `;
 
 const PointListContainer = styled.div`
-  border: 2px solid #000;
+  border: 1px solid #000;
   border-radius: 8px;
   overflow: hidden;
   background-color: #ffffff;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 const BadgeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   margin-top: 20px;
   width: 100%;
 `;
@@ -15,8 +15,8 @@ const BadgeTitle = styled.h3`
   color: #f84b99;
   text-align: left;
   width: 100%;
-  max-width: 450px;
-  margin: 3rem 0 1rem 2rem;
+  /* max-width: 450px; */
+  margin: 3rem 0 1rem 4.6rem;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -32,10 +32,12 @@ const BadgeTitle = styled.h3`
 const BadgeList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")};
-  align-items: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")};
+  /* justify-content: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")}; */
+  /* align-items: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")}; */
   /* margin-left: ${({ isEmpty }) => (isEmpty ? "0" : "0")}; */
-  margin-left: 2rem;
+  align-items: center;
+  justify-content: center;
+  /* margin-left: 2rem; */
   background-color: white;
   border: 1px solid #F84B99;
   border-radius: 12px;
