@@ -58,15 +58,13 @@ const ChatUI = ({ stompClient }) => {
   }, [matchUpId]);
 
   useEffect(() => {
-    if (!stompClient) return;
-
-    console.log("STOMP 상태:", stompClient.connected);
+    if (!stompClient || !stompClient.connected) return;
 
     const subscription = stompClient.subscribe(
       `/topic/chat/${matchUpId}`,
       (message) => {
         const newMessage = JSON.parse(message.body);
-        console.log("Received message:", newMessage);
+        console.log("Received message:", newMessage); // 메시지 콘솔에 출력
 
         setMessages((prev) => [
           ...prev,
@@ -84,7 +82,7 @@ const ChatUI = ({ stompClient }) => {
     );
 
     return () => {
-      subscription.unsubscribe();
+      if (subscription) subscription.unsubscribe();
     };
   }, [stompClient, matchUpId]);
 
