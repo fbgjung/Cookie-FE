@@ -97,8 +97,8 @@ const NavbarWrapper = styled(CommonContainer)`
 
 const WriteReviewButton = styled.button`
   position: fixed;
-  bottom: 9.375rem;
-  right: 28rem;
+  bottom: 5.3rem;
+  right: calc(50% - 280px);
   background-color: #f84b99;
   color: #fdf8fa;
   font-size: 1rem;
@@ -110,14 +110,14 @@ const WriteReviewButton = styled.button`
   border: none;
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  z-index: 1000;
+  z-index: 100;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   &:hover {
-    background-color: #ff0777;
+    background-color: #ff73b2;
   }
 
   .icon {
@@ -125,8 +125,7 @@ const WriteReviewButton = styled.button`
   }
 
   @media (max-width: 600px) {
-    right: 1.5rem;
-    bottom: 8rem;
+    right: calc(50% - 200px);
     width: 4rem;
     height: 4rem;
     font-size: 0.9rem;
@@ -134,10 +133,10 @@ const WriteReviewButton = styled.button`
   }
 
   @media (max-width: 390px) {
-    right: 1rem;
-    bottom: 6rem;
-    width: 3.8rem;
-    height: 3.8rem;
+    right: calc(50% - 175px);
+    bottom: 5rem;
+    width: 3.5rem;
+    height: 3.5rem;
     font-size: 0.8rem;
     padding: 0.6rem;
   }
