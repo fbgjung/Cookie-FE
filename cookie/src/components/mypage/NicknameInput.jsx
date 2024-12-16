@@ -19,7 +19,7 @@ const Label = styled.label`
   font-weight: bold;
   margin-top: 30px;
   margin-bottom: 8px;
-  margin-left: 40px;
+  margin-left: 2rem;
   color: #f84b99;
 `;
 
@@ -28,7 +28,7 @@ const InputWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 85%;
-  margin-left: 40px;
+  margin-left: 2rem;
 `;
 
 const Input = styled.input`
