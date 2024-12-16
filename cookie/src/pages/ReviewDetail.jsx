@@ -8,7 +8,6 @@ import ReviewContentSection from "../components/searchpage/ReviewContentSection"
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaPaperPlane } from "react-icons/fa";
 import useAuthStore from "../stores/useAuthStore";
-import jwtDecode from "jwt-decode/build/esm/index.js";
 
 const Container = styled.div`
   width: 100%;
