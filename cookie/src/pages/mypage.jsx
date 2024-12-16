@@ -195,7 +195,6 @@ const MyPage = () => {
   return (
     <>
       <LoginModal />
-
       {isLoading && <Spinner />}
       {showLogoutModal && (
         <LogoutModal
@@ -213,7 +212,6 @@ const MyPage = () => {
         <div
           style={{
             position: "absolute",
-            // top: "50px",
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 2,
@@ -241,7 +239,6 @@ const MyPage = () => {
             <p>내가 작성한 리뷰</p>
             <FaChevronRight />
           </MyReviewList>  
-
 
           {isLogined() && (
             <LogoutAndWithdraw

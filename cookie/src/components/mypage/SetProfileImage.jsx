@@ -109,10 +109,10 @@ const ModalButton = styled.button`
 
 const CameraIcon = styled.img`
   position: absolute;
-  right: -5px;
+  right: -10px;
   bottom: -8px;
-  width: 35px;
-  height: 35px;
+  width: 44px;
+  height: 44px;
 `;
 
 const SetProfileImage = ({ profileImage, onChange }) => {
@@ -156,7 +156,7 @@ const SetProfileImage = ({ profileImage, onChange }) => {
           alt="Profile"
         />
         <CameraIcon
-          src="/assets/images/mypage/ic_camera.svg"
+          src="/assets/images/camera.svg"
           alt="Camera Icon"
         />
       </ImageWrapper>
