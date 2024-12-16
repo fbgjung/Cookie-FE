@@ -14,7 +14,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
+  padding: 0px;
   background-color: black;
   min-height: 100vh;
   box-sizing: border-box;
@@ -24,7 +24,7 @@ const Container = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 40px 10px;
+    padding: 0px 0px;
   }
 `;
 
@@ -47,7 +47,7 @@ const ContentWrapper = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 10px;
+    padding: 0px;
   }
 `;
 
@@ -56,8 +56,8 @@ const Tabs = styled.div`
   justify-content: space-between;
   width: 100%;
   max-width: 600px;
-  background: #333;
-  border-radius: 25px;
+  background: #4d4c4c;
+  border-radius: 1.4rem;
   position: relative;
   overflow: hidden;
 
@@ -68,7 +68,7 @@ const Tabs = styled.div`
 
   @media (max-width: 480px) {
     border-radius: 15px;
-    margin-top: -20px;
+    margin-top: -40px;
   }
 `;
 
@@ -86,7 +86,7 @@ const TabButton = styled.button`
   transition: all 0.3s ease;
 
   &:hover {
-    color: ${({ isActive }) => (isActive ? "white" : "#00C4D3")};
+    color: ${({ isActive }) => (isActive ? "white" : "#f84b99")};
   }
 
   @media (max-width: 768px) {
@@ -106,7 +106,7 @@ const Slider = styled.div`
   left: ${({ activeIndex }) => `${activeIndex * 33.33}%`};
   width: 33.33%;
   height: 5px;
-  background: #00d6e8;
+  background: #f84b99;
   transition: left 0.3s ease;
 
   @media (max-width: 480px) {
@@ -115,7 +115,7 @@ const Slider = styled.div`
 `;
 
 const SearchInfoText = styled.p`
-  color: white;
+  color: #f84b99;
   font-size: 2rem;
   font-weight: bold;
   text-align: left;
@@ -133,12 +133,12 @@ const SearchInfoText = styled.p`
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
-    padding-left: 10px;
+    padding-left: 0px;
   }
 `;
 
 const DefaultResultsHeader = styled.div`
-  color: #00c4d3;
+  color: #f84b99;
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
