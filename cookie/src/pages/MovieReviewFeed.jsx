@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
-// import { symbol } from "prop-types";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
@@ -11,36 +10,40 @@ const ReviewFeedWrapper = styled.div`
   min-height: 100vh;
 `;
 
-const SearchInfoText = styled.p`
-  color: #f84b99;
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: left;
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 10px;
-  line-height: 1.5;
-  padding-left: 1rem;
+const HeaderSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
 
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-    padding-left: 15px;
-    max-width: 90%;
+  img {
+    width: 150px;
+    height: auto;
+    border-radius: 8px;
   }
 
-  @media (max-width: 480px) {
-    font-size: 1.2rem;
-    padding-left: 10px;
+  p {
+    color: #f84b99;
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1.5;
+    max-width: 600px;
+
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.2rem;
+    }
   }
 `;
-
 
 const FilterButtons = styled.div`
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
   width: 100%;
-  padding-left: 1rem;
 
   button {
     font-size: 1rem;
@@ -52,7 +55,7 @@ const FilterButtons = styled.div`
 
     &.active {
       background-color: #000000;
-      color: #F84B99;
+      color: #f84b99;
     }
 
     &.inactive {
@@ -65,71 +68,32 @@ const FilterButtons = styled.div`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 0 1rem;
-  
+  gap: 15px;
 `;
 
 const ReviewTicket = styled.div`
   display: flex;
-  padding: 1rem 0.8rem;
-  border-radius: 0.4rem;
-  box-sizing: border-box;
-  cursor: pointer;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 8px;
   background-color: #fdf8fa;
-  margin: 0.4rem 0;
-
-  @media (max-width: 768px) {
-    padding: 10px;
-  }
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const ReviewLeft = styled.div`
-  img {
-    width: 7.75rem;
-    height: 100%;
-    object-fit: cover;
-  }
-  .title {
-    font-size: 0.6rem;
-    margin: 0;
-    font-weight: normal;
-    color: #434141;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;
-
-const ReviewInfoSection = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-
-`
-
-const ReviewInfoFirst = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`
-
-const ReviewCenter = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 0 0 1.5rem;
-  width: 18rem;
+  gap: 10px;
 
   .profile {
     display: flex;
     align-items: center;
+    gap: 10px;
 
     img {
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      margin-right: 10px;
       border: solid 1.5px #b3afb1;
     }
 
@@ -138,6 +102,7 @@ const ReviewCenter = styled.div`
         font-size: 0.9rem;
         font-weight: bold;
       }
+
       .date {
         font-size: 0.8rem;
         color: #888;
@@ -146,184 +111,112 @@ const ReviewCenter = styled.div`
   }
 
   .comment {
-    margin-top: 0.5rem;
     font-size: 0.8rem;
     line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    &.blurred {
-      filter: blur(5px);
-      pointer-events: none; 
-      user-select: none;
-    }
-  }
-
-  .movie-title {
-    margin-top: 0.5rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #F84B99;
+    color: #333;
   }
 `;
 
 const ReviewRight = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
+  text-align: right;
+
   .score {
-    
-    img {
-      width: 16px;
-      height: 16px;
-      margin-right: 0.1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #f84b99;
+  }
+
+  .interactions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .likes {
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .comments {
+      font-size: 0.9rem;
     }
   }
-
-  .score-text {
-    font-size: 0.8rem;
-    color: #888;
-    margin-right: 0.5rem;
-  }
 `;
-
-
-const ReviewInfoSecond = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`
-
-const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/heart-review-feed.svg");
-`
-
-const ReviewLike = styled.p`
-  font-size: 0.9rem;
-`
-
-const CommentIcon = styled.svg`
-  margin-left: 0.5rem;
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/comment-review-feed.svg");
-`
-
-const ReviewComment = styled.p`
-  font-size: 0.9rem;
-`
 
 const MovieReviewFeed = () => {
   const navigate = useNavigate();
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
+  const [poster, setPoster] = useState("");
+  const [title, setTitle] = useState("");
   const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
-  const [page, setPage] = useState(0); // 현재 페이지
-  const [hasMore, setHasMore] = useState(true); // 추가 로딩 가능 여부
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
-  const [initialLoad, setInitialLoad] = useState(true); // 초기 로딩 여부
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // 초기 데이터 로드 및 페이지네이션
   const fetchReviews = useCallback(async () => {
     if (isLoading || !hasMore) return;
 
     try {
-      setIsLoading(true); // 로딩 시작
+      setIsLoading(true);
+
       const endpoint = showSpoilerOnly
         ? `/api/movies/${movieId}/reviews/spoiler`
         : `/api/movies/${movieId}/reviews`;
-
-      console.log(`Fetching page ${page}...`);
 
       const response = await axiosInstance.get(endpoint, {
         params: { page, size: 10 },
       });
 
-      const { poster } = response.data.response; // 상단 포스터 정보 가져오기
-      const newReviews = response.data.response.reviews.map((review) => ({
-        ...review,
-        movie: {
-          ...review.movie,
-          poster, // 포스터 정보 추가
-        },
-      }));
+      const { poster: moviePoster, title: movieTitle } = response.data.response;
+
+      setPoster(moviePoster);
+      setTitle(movieTitle);
+
+      const newReviews = response.data.response.reviews;
 
       setReviews((prevReviews) =>
         page === 0 ? newReviews : [...prevReviews, ...newReviews]
-      ); // 초기 페이지일 경우 덮어쓰기, 아닐 경우 추가
+      );
 
-      // 더 이상 데이터가 없는지 확인
       if (
         newReviews.length < 10 ||
         page + 1 === response.data.response.totalReviewPages
       ) {
-        setHasMore(false); // 더 이상 로딩하지 않음
+        setHasMore(false);
       }
     } catch (error) {
       console.error("Failed to fetch reviews:", error);
     } finally {
-      setIsLoading(false); // 로딩 종료
+      setIsLoading(false);
     }
-  }, [page, showSpoilerOnly, isLoading, hasMore]);
+  }, [movieId, showSpoilerOnly, page, isLoading, hasMore]);
 
-  // 초기 로드
   useEffect(() => {
-    if (initialLoad) {
-      fetchReviews();
-      setInitialLoad(false); // 초기 로딩 완료
-    }
-  }, [initialLoad, fetchReviews]);
+    fetchReviews();
+  }, [fetchReviews]);
 
-  // 페이지 변경 시 추가 로드
-  useEffect(() => {
-    if (!initialLoad) {
-      fetchReviews();
-    }
-  }, [page]);
-
-  // 리뷰 클릭 시 상세 페이지로 이동
   const handleReviewClick = (reviewId) => {
     navigate(`/reviews/${reviewId}`);
   };
 
-  // 스크롤 이벤트 핸들러
-  const handleScroll = useCallback(() => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
-    ) {
-      if (hasMore && !isLoading) {
-        console.log("Triggering next page load...");
-        setPage((prevPage) => prevPage + 1);
-      }
-    }
-  }, [hasMore, isLoading]);
-
-  // 스크롤 이벤트 등록
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll]);
-
-  // 필터링 핸들러
   const filterReviews = (showSpoilers) => {
-    setShowSpoilerOnly(showSpoilers); // 스포일러 필터 설정
-    setPage(0); // 페이지 초기화
-    setReviews([]); // 기존 데이터 초기화
-    setHasMore(true); // 추가 로딩 가능
-    setInitialLoad(true); // 초기 로드 트리거
+    setShowSpoilerOnly(showSpoilers);
+    setPage(0);
+    setReviews([]);
+    setHasMore(true);
+    fetchReviews();
   };
 
   return (
     <ReviewFeedWrapper>
-      <SearchInfoText>
-        영화 리뷰
-        <br />
-        한눈에 보기
-      </SearchInfoText>
+      <HeaderSection>
+        <img src={poster || "/default-poster.png"} alt={title} />
+        <p>{title} 영화 리뷰 한눈에 보기</p>
+      </HeaderSection>
+
       <FilterButtons>
         <button
           className={!showSpoilerOnly ? "active" : "inactive"}
@@ -339,87 +232,39 @@ const MovieReviewFeed = () => {
         </button>
       </FilterButtons>
 
-
       <ReviewContainer>
-  {reviews.map((review, index) => {
-    // movie 객체와 poster 값을 안전하게 확인
-    const movie = review.movie || {}; // movie가 없으면 빈 객체로 대체
-    const poster = movie.poster || "/default-poster.png"; // poster가 없으면 기본 이미지 사용
-
-    return (
-      <ReviewTicket
-        key={`${review.reviewId}-${index}`} // 고유 키 생성
-        onClick={() => handleReviewClick(review.reviewId)}
-      >
-        <ReviewLeft>
-          <img src={poster} alt={movie.title || "No title"} />
-        </ReviewLeft>
-        <ReviewInfoSection>
-          <ReviewInfoFirst>
-            <ReviewCenter>
+        {reviews.map((review) => (
+          <ReviewTicket key={review.reviewId}>
+            <ReviewLeft>
               <div className="profile">
                 <img
-                  src={review.user?.profileImage || "/default-profile.png"} // 기본 프로필 이미지
+                  src={review.user?.profileImage || "/default-profile.png"}
                   alt={review.user?.nickname || "Anonymous"}
                 />
                 <div className="user-info">
                   <div className="name">{review.user?.nickname || "Anonymous"}</div>
                   <div className="date">
-                    {new Date(review.createdAt)
-                      .toLocaleDateString("ko-KR", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                      })
-                      .replace(/\./g, "-")
-                      .replace(/-$/, "")
-                      .replace(/-\s/g, "-")}
-                    {" "}
-                    {new Date(review.createdAt)
-                      .toLocaleTimeString("ko-KR", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                    {new Date(review.createdAt).toLocaleDateString("ko-KR")}
                   </div>
                 </div>
               </div>
-              <div
-                className={`comment ${
-                  !showSpoilerOnly && review.spoiler ? "blurred" : ""
-                }`}
-              >
-                {review.content?.length > 100
-                  ? `${review.content.slice(0, 105)}...`
-                  : review.content || "No content available"}
+              <div className="comment">
+                {review.content.length > 100
+                  ? `${review.content.slice(0, 100)}...`
+                  : review.content}
               </div>
-            </ReviewCenter>
+            </ReviewLeft>
 
             <ReviewRight>
-              <div className="score">
-                {Array.from({ length: Math.round(review.movieScore) || 0 }).map(
-                  (_, i) => (
-                    <img
-                      key={`${review.reviewId}-score-${i}`}
-                      src="/assets/images/review/score-macarong.png"
-                      alt="score"
-                    />
-                  )
-                )}
+              <div className="score">평점: {review.movieScore.toFixed(1)}</div>
+              <div className="interactions">
+                <div className="likes">❤️ {review.reviewLike} likes</div>
+                <div className="comments">💬 {review.comments || 0} comments</div>
               </div>
             </ReviewRight>
-          </ReviewInfoFirst>
-
-          <ReviewInfoSecond>
-            <LikeIcon />
-            <ReviewLike>{review.reviewLike || 0}</ReviewLike>
-            <CommentIcon />
-            <ReviewComment>{review.comments || 0}</ReviewComment>
-          </ReviewInfoSecond>
-        </ReviewInfoSection>
-      </ReviewTicket>
-    );
-  })}
-</ReviewContainer>
+          </ReviewTicket>
+        ))}
+      </ReviewContainer>
     </ReviewFeedWrapper>
   );
 };
