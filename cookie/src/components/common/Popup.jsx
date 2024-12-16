@@ -104,8 +104,13 @@ const Popup = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const hidePopup = localStorage.getItem("hidePopupToday");
-    if (hidePopup === "true") setVisible(false);
+    const hidePopupUntil = localStorage.getItem("hidePopupUntil");
+    if (
+      hidePopupUntil &&
+      new Date().getTime() < new Date(hidePopupUntil).getTime()
+    ) {
+      setVisible(false);
+    }
   }, []);
 
   const handleImageClick = () => {
@@ -115,12 +120,14 @@ const Popup = () => {
 
   const handleClose = (e) => {
     e.stopPropagation();
+    const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000); // 1시간 후
+    localStorage.setItem("hidePopupUntil", oneHourLater.toISOString());
     setVisible(false);
   };
 
   const handleHideToday = (e) => {
     e.stopPropagation();
-    localStorage.setItem("hidePopupToday", "true");
+    localStorage.setItem("hidePopupUntil", new Date().toISOString());
     setVisible(false);
   };
 
