@@ -15,14 +15,14 @@ const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; 
-  overflow-y: auto; 
+  min-height: 100vh;
+  overflow-y: auto;
   background-color: #ffffff;
 `;
 
 const CommentsSectionContainer = styled.div`
   padding: 0 2rem;
-  
+
   h3 {
     font-size: 1.2rem;
     font-weight: bold;
@@ -46,7 +46,7 @@ const CommentsSectionContainer = styled.div`
     }
 
     button {
-      background-color: #F84B99;
+      background-color: #f84b99;
       color: white;
       border: none;
       border-radius: 50%;
@@ -92,7 +92,6 @@ const CommentsSectionContainer = styled.div`
         position: relative;
         flex: 1;
 
-
         .comment-user-info {
           display: flex;
           align-items: center;
@@ -108,7 +107,6 @@ const CommentsSectionContainer = styled.div`
           font-weight: 500;
           color: #333;
           margin-top: 0.4rem;
-          
         }
 
         .date {
@@ -127,7 +125,7 @@ const CommentsSectionContainer = styled.div`
       button {
         background: none;
         border: none;
-        color: #F84B99;
+        color: #f84b99;
         cursor: pointer;
         &:hover {
           color: #9b7a4c;
@@ -221,7 +219,7 @@ const ReviewDetail = () => {
     const fetchReviewData = async () => {
       try {
         const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
-        console.log("API 응답 데이터:", response.data.response);
+        console.log("API 응답 데이터11:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
         setLikedByUser(review.likedByUser);
@@ -319,7 +317,7 @@ const ReviewDetail = () => {
   };
 
   const handleDeleteComment = async (commentId) => {
-    console.log("삭제 요청 - commentId:", commentId); // 전달된 commentId 확인
+    console.log("삭제 요청 - commentId:", commentId);
 
     if (!commentId) {
       toast.error("삭제할 댓글 ID가 존재하지 않습니다.");
@@ -361,7 +359,7 @@ const ReviewDetail = () => {
 
     const userId = getUserIdFromToken();
     if (!userId) {
-      openLoginModal(); 
+      openLoginModal();
       return;
     }
     if (!newComment.trim()) return;
@@ -376,7 +374,7 @@ const ReviewDetail = () => {
         }
       );
 
-      console.log(response.data.response)
+      console.log(response.data.response);
 
       const updatedComment = response.data.response;
 
@@ -421,25 +419,29 @@ const ReviewDetail = () => {
 
   return (
     <Container>
-      <DetailHeader onBack={() => navigate(-1)} movieTitle={reviewData.movie?.title || "Untitled Movie"}/>
+      <DetailHeader
+        onBack={() => navigate(-1)}
+        movieTitle={reviewData.movie?.title || "Untitled Movie"}
+      />
       <ReviewContentSection
         posterSrc={reviewData.movie?.poster || "/default-poster.png"}
         profileSrc={reviewData.user?.profileImage || "/default-profile.png"}
         name={reviewData.user?.nickname || "Unknown User"}
         date={`${new Date(reviewData.createdAt)
-          .toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
+          .toLocaleDateString("ko-KR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
           })
           .replace(/\./g, "-")
           .replace(/-$/, "")
-          .replace(/-\s/g, "-")} ${new Date(reviewData.createdAt)
-          .toLocaleTimeString('ko-KR', {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}`}
-        reviewLikeCount = {reviewData.reviewLike || 0}
+          .replace(/-\s/g, "-")} ${new Date(
+          reviewData.createdAt
+        ).toLocaleTimeString("ko-KR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`}
+        reviewLikeCount={reviewData.reviewLike || 0}
         cookieScoreCount={(reviewData.movie.score || 0).toFixed(1)}
         reviewScore={reviewData.movieScore}
         handleDelete={handleDeleteReview}
@@ -447,16 +449,20 @@ const ReviewDetail = () => {
         isMenuOpen={isMenuOpen && !fromLikedReviews}
         toggleMenu={fromLikedReviews ? undefined : toggleMenu}
         onPosterClick={() => handlePosterClick(reviewData.movie?.movieId)}
-        reviewId={reviewId} 
+        reviewId={reviewId}
         reviewContent={reviewData.content}
         openLoginModal={openLoginModal}
         likedByUser={likedByUser}
+        userId={reviewData.user?.userId || null}
       />
-      {/* <ReviewTextSection reviewText={reviewData.content} /> */}
 
       <CommentsSectionContainer>
-      <h3>{reviewData.comments.length > 0 ? `${reviewData.comments.length}개의 댓글` : '댓글'}</h3>
-      <div className="comment-input">
+        <h3>
+          {reviewData.comments.length > 0
+            ? `${reviewData.comments.length}개의 댓글`
+            : "댓글"}
+        </h3>
+        <div className="comment-input">
           <input
             type="text"
             placeholder="댓글을 입력하세요..."
@@ -465,13 +471,13 @@ const ReviewDetail = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                handleAddComment(); // 댓글 추가 함수 호출
+                handleAddComment();
               }
             }}
           />
           <button
             onClick={() => {
-              handleAddComment(); // 댓글 추가 함수 호출
+              handleAddComment();
             }}
           >
             <FaPaperPlane />
@@ -489,16 +495,15 @@ const ReviewDetail = () => {
                 <div className="comment-user-info">
                   <div className="nickname">{comment.user.nickname}</div>
                   <div className="date">
-                  {new Date(comment.createdAt)
-                          .toLocaleDateString('ko-KR', {
-                            year: '2-digit',
-                            month: '2-digit',
-                            day: '2-digit',
-                          })
-                          .replace(/\./g, "-")
-                          .replace(/-$/, "")
-                          .replace(/-\s/g, "-")}
-                      
+                    {new Date(comment.createdAt)
+                      .toLocaleDateString("ko-KR", {
+                        year: "2-digit",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })
+                      .replace(/\./g, "-")
+                      .replace(/-$/, "")
+                      .replace(/-\s/g, "-")}
                   </div>
                 </div>
                 <div className="text">{comment.comment}</div>
@@ -521,7 +526,6 @@ const ReviewDetail = () => {
                   );
                 })()}
               </div>
-
             </div>
           </div>
         ))}
