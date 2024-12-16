@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
 import useAuthStore from "../../stores/useAuthStore";
 import { SkeletonOverlay } from "./AdminRecommend";
+import likeHeart from "../../assets/images/main/like-heart2.svg";
+import reivew from "../../assets/images/main/reviews.svg";
 
 function CookieMovies() {
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ function CookieMovies() {
     <>
       <CookieMovieList>
         <Title>
-          <span>{userInfo.nickname}</span>님의 쿠키리즘
+          <span>{userInfo.nickname}</span>님의 맞춤 영화
         </Title>
         <div className="cookie__movie--wrapper">
           <button
@@ -79,14 +81,14 @@ function CookieMovies() {
                     <Poster src={movie.poster} alt={movie.title} />
                   )}
                   <MovieInfo>
-                    <Review>
-                      <ReviewIcon alt="Review Icon" />
-                      <Count>{movie.reviews}</Count>
-                    </Review>
                     <Like>
                       <LikeIcon alt="Review Icon" />
                       <Count>{movie.likes}</Count>
                     </Like>
+                    <Review>
+                      <ReviewIcon alt="Review Icon" />
+                      <Count>{movie.reviews}</Count>
+                    </Review>
                   </MovieInfo>
                 </div>
               </div>
@@ -175,9 +177,10 @@ const Review = styled.div`
 `;
 
 const ReviewIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover url("/assets/images/main/review.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${reivew});
 `;
 
 const Count = styled.p`
@@ -192,14 +195,16 @@ const Like = styled.div`
 `;
 
 const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  background: no-repeat center/cover url("/assets/images/main/like.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${likeHeart});
 `;
 
 const MovieInfo = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: end;
 `;
 
 const Poster = styled.img`

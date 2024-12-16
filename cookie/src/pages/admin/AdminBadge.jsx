@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AddBadge from "../../components/admin/AddBadge";
-import BadgeList from "./BadgeList";
+import BadgeList from "../../components/admin/BadgeList";
 import SideBar from "../../components/admin/SideBar";
 import { TabBtn, TabBtnContainer, Viewport } from "./AdminMovie";
 import Addcookie from "../../assets/images/admin/empty_cookie.svg";

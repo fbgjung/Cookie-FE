@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { FaPencilAlt } from "react-icons/fa";
+// import { FaPencilAlt } from "react-icons/fa";
+import Pencil from "../assets/images/main/edit-pencil.svg";
 import MatchUpSection from "../components/main/MatchUpSection";
 import AdminRecommend from "../components/main/AdminRecommend";
 import CookieMovies from "../components/main/CookieMovies";
@@ -45,7 +46,8 @@ const Main = () => {
         </Content>
         <LoginModal />
         <WriteReviewButton onClick={() => isLogined("/searchmov")}>
-          <FaPencilAlt className="icon" />
+          {/* <FaPencilAlt className="icon" /> */}
+          <img src={Pencil} className="icon" />
         </WriteReviewButton>
         <TopButton visible={showTopButton} onClick={scrollToTop} />
       </MainContainer>

@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
+import likeHeart from "../../assets/images/main/like-heart2.svg";
+import reivew from "../../assets/images/main/reviews.svg";
 
 function GenreMovie({ categorydata }) {
   const [selectedMainCategory] = useState("장르");
@@ -135,14 +137,14 @@ function GenreMovie({ categorydata }) {
               >
                 <Poster src={movie.poster} alt={movie.title} />
                 <MovieInfo>
-                  <Review>
-                    <ReviewIcon alt="Review Icon" />
-                    <Count>{movie.reviews}</Count>
-                  </Review>
                   <Like>
                     <LikeIcon alt="Review Icon" />
                     <Count>{movie.likes}</Count>
                   </Like>
+                  <Review>
+                    <ReviewIcon alt="Review Icon" />
+                    <Count>{movie.reviews}</Count>
+                  </Review>
                 </MovieInfo>
               </div>
             ))}
@@ -261,12 +263,12 @@ const GenreBtn = styled.button`
   margin: 0 0.4rem 0.3rem 0;
   padding: 0 0 0 0.375rem;
   font-size: 1rem;
-  color: ${(props) => (props.$isSelected ? "#f84b99" : "#afafaf")};
+  color: ${(props) => (props.$isSelected ? "#FF92BC" : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
   transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: #ff0777;
+    color: #ffff;
   }
 
   @media (max-width: 768px) {
@@ -291,9 +293,10 @@ const Review = styled.div`
 `;
 
 const ReviewIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover url("/assets/images/main/review.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${reivew});
 `;
 
 const Count = styled.p`
@@ -308,12 +311,14 @@ const Like = styled.div`
 `;
 
 const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  background: no-repeat center/cover url("/assets/images/main/like.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${likeHeart});
 `;
 
 const MovieInfo = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: end;
 `;

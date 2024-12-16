@@ -140,6 +140,7 @@ const VoteButton = styled.button`
   cursor: pointer;
   margin-bottom: 8px;
   transition: transform 0.2s ease-in-out;
+  font-size: 18px;
 
   &:hover {
     transform: scale(1.05);

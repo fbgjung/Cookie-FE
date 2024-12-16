@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
+import likeHeart from "../../assets/images/main/like-heart2.svg";
+import reivew from "../../assets/images/main/reviews.svg";
 
 function AdminRecommend() {
   const navigate = useNavigate();
@@ -45,7 +47,7 @@ function AdminRecommend() {
   return (
     <>
       <MovieRecommendList>
-        <Title>쿠키 추천 영화</Title>
+        <Title>쿠키가 직접 추천해요</Title>
         <div className="recommend__movie--wrapper">
           <button
             className="prev"
@@ -74,14 +76,14 @@ function AdminRecommend() {
                     <Poster src={movie.poster} alt={movie.title} />
                   )}
                   <MovieInfo>
-                    <Review>
-                      <ReviewIcon alt="Review Icon" />
-                      <Count>{movie.reviews}</Count>
-                    </Review>
                     <Like>
                       <LikeIcon alt="Like Icon" />
                       <Count>{movie.likes}</Count>
                     </Like>
+                    <Review>
+                      <ReviewIcon alt="Review Icon" />
+                      <Count>{movie.reviews}</Count>
+                    </Review>
                   </MovieInfo>
                 </div>
               </div>
@@ -170,9 +172,10 @@ const Review = styled.div`
 `;
 
 const ReviewIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover url("/assets/images/main/review.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${reivew});
 `;
 
 const Count = styled.p`
@@ -187,14 +190,16 @@ const Like = styled.div`
 `;
 
 const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  background: no-repeat center/cover url("/assets/images/main/like.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${likeHeart});
 `;
 
 const MovieInfo = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: end;
 `;
 
 const Poster = styled.img`
