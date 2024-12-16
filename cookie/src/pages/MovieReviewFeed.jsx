@@ -214,7 +214,7 @@ const MovieReviewFeed = () => {
     <ReviewFeedWrapper>
       <HeaderSection>
         <img src={poster || "/default-poster.png"} alt={title} />
-        <p>{title} 영화 리뷰 한눈에 보기</p>
+        <p>{title} <br />리뷰 모아보기</p>
       </HeaderSection>
 
       <FilterButtons>
