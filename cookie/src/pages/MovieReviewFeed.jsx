@@ -112,10 +112,17 @@ const ReviewLeft = styled.div`
   }
 
   .comment {
+    margin-top: 0.5rem;
     font-size: 0.8rem;
     line-height: 1.5;
-    color: #333;
-  }
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+  &.blurred {
+      filter: blur(5px);
+      pointer-events: none; 
+      user-select: none;
+    }
 `;
 
 const ReviewRight = styled.div`
@@ -249,7 +256,10 @@ const MovieReviewFeed = () => {
                   </div>
                 </div>
               </div>
-              <div className="comment">
+              <div className={`comment ${
+                  !showSpoilerOnly && review.spoiler ? "blurred" : ""
+                }`}
+              >
                 {review.content.length > 100
                   ? `${review.content.slice(0, 100)}...`
                   : review.content}
