@@ -95,7 +95,7 @@ function SideBar() {
     {
       image: award,
       title: "Match Up",
-      link: "/admin/matchUp",
+      link: "/admin/matchup",
     },
     {
       image: cookie,

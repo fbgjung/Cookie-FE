@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import axiosInstance from "../../api/auth/axiosInstance";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import useUserStore from "../../stores/useUserStore";
+import { jwtDecode } from "jwt-decode";
 
 const ReviewContentContainer = styled.div`
   display: flex;
@@ -307,7 +308,7 @@ const ReviewContentSection = ({
     }
 
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
+      const payload = jwtDecode(token);
       return payload.id;
     } catch (error) {
       console.error("Invalid token:", error);
@@ -321,7 +322,12 @@ const ReviewContentSection = ({
     const previousLikeCount = currentLikeCount;
 
     const userId = getUserIdFromToken();
-    if (!userId) return;
+
+    if (!userId) {
+      openLoginModal(); 
+      return;
+    }
+
 
     setLiked(!previousLiked);
     setCurrentLikeCount(

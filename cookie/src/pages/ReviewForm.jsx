@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import ReviewHeader from "../components/searchpage/ReviewHeader";
 import axiosInstance from "../api/auth/axiosInstance";
 import useAuthStore from "../stores/useAuthStore";
+import { jwtDecode } from "jwt-decode";
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -197,7 +198,7 @@ const ReviewForm = () => {
     }
 
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
+      const payload = jwtDecode(token);
       return payload.id;
     } catch (error) {
       console.error("Invalid token:", error);
