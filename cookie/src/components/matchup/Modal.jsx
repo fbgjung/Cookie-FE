@@ -233,7 +233,7 @@ const Modal = ({
       emotionPoint,
     };
 
-    console.log("투표 데이터:", {
+    console.log("투표 데이터122:", {
       matchUpId,
       movieId,
       payload,

@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 import TopicImage from "/src/assets/images/matchup/topic_image.svg";
-import { FiChevronDown } from "react-icons/fi";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
+import Spinner from "../common/Spinner";
 
 Modal.setAppElement("#root");
 
@@ -186,14 +186,13 @@ const MatchUpHistory = styled.div`
   cursor: pointer;
   padding: 5px;
 
- @media (max-width: 480px) {
+  @media (max-width: 480px) {
     right: 5px;
     top: 200px;
-   position: fixed;
+    position: fixed;
     right: 0;
-    z-index : 1;
+    z-index: 1;
     width: 70px;
-  }
   }
 `;
 
@@ -224,6 +223,7 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
     try {
       const response = await axiosInstance.get("/api/matchups/history");
       setHistoryData(response.data.response);
+      console.log("히스토리 데이터", response);
     } catch (error) {
       console.error("히스토리 데이터 요청 실패:", error);
     } finally {
@@ -278,15 +278,16 @@ const TitleSection = ({ matchUpTitle, endAt }) => {
         <ModalHeader>히스토리 목록</ModalHeader>
         <ModalList>
           {isLoading ? (
-            <ModalListItem>로딩 중...</ModalListItem>
+            <Spinner />
           ) : historyData.length > 0 ? (
             historyData.map((item) => (
               <ModalListItem
                 key={item.matchUpId}
                 onClick={() => handleNavigate(item.matchUpId)}
               >
-                {item.matchUpId}. {item.matchUpTitle} <br />({item.startAt} ~{" "}
-                {item.endAt})
+                {item.matchUpId}. {item.matchUpTitle} (
+                {new Date(item.startAt).toISOString().split("T")[0]} ~{" "}
+                {new Date(item.endAt).toISOString().split("T")[0]})
               </ModalListItem>
             ))
           ) : (

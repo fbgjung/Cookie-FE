@@ -9,6 +9,7 @@ const useUserStore = create(
         nickname: "",
         profileImage: "",
         genreId: null,
+        matchUpId: null,
       },
       setUserInfo: (info) =>
         set((state) => ({
@@ -21,6 +22,7 @@ const useUserStore = create(
             nickname: "",
             profileImage: "",
             genreId: null,
+            matchUpId: null,
           },
         })),
       getUserInfo: () => get().userInfo,
@@ -35,6 +37,7 @@ const useUserStore = create(
             nickname: state.userInfo.nickname,
             profileImage: state.userInfo.profileImage,
             genreId: state.userInfo.genreId,
+            matchUpId: state.userInfo.matchUpId,
           },
         });
       },
@@ -46,6 +49,7 @@ const useUserStore = create(
             nickname: parsed.userInfo.nickname || "",
             profileImage: parsed.userInfo.profileImage || "",
             genreId: parsed.userInfo.genreId || null,
+            matchUpId: parsed.userInfo.matchUpId || null,
           },
         };
       },

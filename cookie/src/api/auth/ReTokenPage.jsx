@@ -36,7 +36,6 @@ const ReTokenPage = () => {
 
         logIn();
 
-        // 사용자 정보 가져오기
         const userInfoResponse = await axios.get(
           `${serverBaseUrl}/api/users/info`,
           {
@@ -49,15 +48,14 @@ const ReTokenPage = () => {
         const userInfo = userInfoResponse.data.response;
         console.log("유저 정보:", userInfo);
 
-        // 전역 상태 업데이트
         setUserInfo({
           userId: userInfo.userId,
           nickname: userInfo.nickname,
           profileImage: userInfo.profileImage,
           genreId: userInfo.genreId,
+          matchUpId: userInfo.matchUpId,
         });
 
-        // FCM 토큰 등록
         const fcmToken = await requestNotificationPermission();
         console.log("FCM 토큰:", fcmToken);
 

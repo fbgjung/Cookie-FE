@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
 import useAuthStore from "../../stores/useAuthStore";
@@ -22,8 +22,16 @@ const PosterWrapper = styled.div`
   height: 350px;
   border-radius: 5px;
   overflow: hidden;
-  transition: transform 0.3s ease;
   animation: ${fadeInUp} 0.8s ease-out;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+
+  ${({ isGray }) =>
+    isGray &&
+    css`
+      filter: grayscale(100%);
+    `}
 
   &:hover {
     transform: scale(1.05);
@@ -93,6 +101,7 @@ const Poster = ({
   isVoteEnded,
   matchUpId,
   userVote,
+  isGray,
 }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const { isLogined, openLoginModal } = useAuthStore();
@@ -100,20 +109,20 @@ const Poster = ({
   const handleVoteClick = () => {
     if (userVote) {
       toast.error("이미 참여하신 매치업입니다.");
-      return; 
+      return;
     }
 
     if (isVoteEnded) {
       toast.error("투표가 종료되었습니다.");
-      return; 
+      return;
     }
 
     if (!isLogined()) {
       openLoginModal();
-      return; 
+      return;
     }
 
-    setModalOpen(true); 
+    setModalOpen(true);
   };
 
   const handleCloseModal = () => {
@@ -122,7 +131,7 @@ const Poster = ({
 
   return (
     <>
-      <PosterWrapper>
+      <PosterWrapper isGray={isGray}>
         <PosterImage src={src} alt={`${movieTitle} 포스터`} />
         <Overlay className="overlay">
           <VoteButton onClick={handleVoteClick}>투표하기</VoteButton>
@@ -134,6 +143,7 @@ const Poster = ({
         movieTitle={movieTitle}
         imageUrl={src}
         movieId={movieId}
+        
         matchUpId={matchUpId}
       />
     </>
@@ -147,6 +157,7 @@ Poster.propTypes = {
   isVoteEnded: PropTypes.bool.isRequired,
   matchUpId: PropTypes.number.isRequired,
   userVote: PropTypes.bool.isRequired,
+  isGray: PropTypes.bool.isRequired,
 };
 
 export default Poster;

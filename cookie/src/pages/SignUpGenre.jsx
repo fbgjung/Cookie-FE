@@ -230,11 +230,14 @@ function SignUpGenre() {
         const userResponse = response.data.response.user;
         const setUserInfo = useUserStore.getState().setUserInfo;
 
+        console.log("userResponse", userResponse);
+
         const userInfo = {
           userId: userResponse.userId,
           nickname: userResponse.nickname,
           profileImage: userResponse.profileImage,
           genreId: userResponse.genreId,
+          matchUpId: userResponse.matchUpId || null,
         };
 
         setUserInfo(userInfo);

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
+import useUserStore from "../../stores/useUserStore";
 
 import HomeIcon from "/src/assets/images/navbar_home.svg";
 import SearchIcon from "/src/assets/images/navbar_search.svg";
@@ -51,6 +52,7 @@ const NavIcon = styled.img`
 const Footer = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { matchUpId } = useUserStore((state) => state.getUserInfo());
 
   return (
     <NavContainer>
@@ -75,7 +77,7 @@ const Footer = () => {
           selected={currentPath === "/review"}
         />
       </Link>
-      <Link to="/matchup/1">
+      <Link to={`/matchup/${matchUpId || 1}`}>
         <NavIcon
           src={
             currentPath.startsWith("/matchup")

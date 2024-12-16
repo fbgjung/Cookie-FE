@@ -16,6 +16,14 @@ const BottomModalContainer = styled.div`
   z-index: 9998;
 `;
 
+const ModalDescription = styled.p`
+  color: #333; /* 원하는 기본 색상 */
+  font-size: 1rem;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+`;
+
 const ModalContent = styled.div`
   border: none;
   padding: 1rem 2rem 2rem 2rem;
@@ -41,7 +49,7 @@ const ModalContent = styled.div`
   }
 
   .modal__title {
-    color: var(--text);
+    color: #f84b99;
     font-size: 1.5rem;
     text-align: center;
   }
@@ -107,6 +115,7 @@ const ModalContent = styled.div`
 
     .modal__title {
       font-size: 1.3rem;
+      color: #f84b99;
     }
 
     .modal__loginBtn {
@@ -127,11 +136,13 @@ const ModalContent = styled.div`
 
     .modal__infoContainer {
       font-size: 0.8rem;
+
       gap: 0.5rem;
     }
 
     .modal__title {
       font-size: 1.1rem;
+      color: #f84b99;
     }
 
     .modal__loginBtn {
@@ -176,7 +187,7 @@ const LoginModal = () => {
           </div>
           <div className="modal__infoContainer">
             <h2 className="modal__title">로그인이 필요해요 🍪</h2>
-            <p>로그인 한번 하카롱? 🍭</p>
+            <ModalDescription>로그인 한번 하카롱? 🍭</ModalDescription>
           </div>
           <button className="modal__loginBtn bold" onClick={handleModalLogin}>
             로그인 하기
