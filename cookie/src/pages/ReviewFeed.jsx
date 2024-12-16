@@ -7,8 +7,12 @@ import axiosInstance from "../api/auth/axiosInstance";
 const ReviewFeedWrapper = styled.div`
   width: 100%;
   background-color: #000000;
-  padding: 20px;
+  padding: 40px;
   min-height: 100vh;
+
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
 `;
 
 const SearchInfoText = styled.p`
@@ -20,27 +24,26 @@ const SearchInfoText = styled.p`
   max-width: 600px;
   margin-bottom: 10px;
   line-height: 1.5;
-  padding-left: 1rem;
+  padding-left: 0rem;
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
-    padding-left: 15px;
+    padding-left: 0px;
     max-width: 90%;
   }
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
-    padding-left: 10px;
+    padding-left: 0px;
   }
 `;
-
 
 const FilterButtons = styled.div`
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
   width: 100%;
-  padding-left: 1rem;
+  padding-left: 0rem;
 
   button {
     font-size: 1rem;
@@ -52,7 +55,7 @@ const FilterButtons = styled.div`
 
     &.active {
       background-color: #000000;
-      color: #F84B99;
+      color: #f84b99;
     }
 
     &.inactive {
@@ -66,38 +69,45 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 1rem;
-  
+  padding: 0rem;
 `;
 
 const ReviewTicket = styled.div`
   display: flex;
-  padding: 1rem 0.8rem;
-  border-radius: 0.4rem;
-  box-sizing: border-box;
-  cursor: pointer;
+  align-items: flex-start;
   background-color: #fdf8fa;
+  border-radius: 8px;
   margin: 0.4rem 0;
+  padding: 0.8rem;
+  height: auto;
 
   @media (max-width: 768px) {
-    padding: 10px;
+    padding: 0.6rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.4rem;
   }
 `;
 
 const ReviewLeft = styled.div`
+  display: flex;
+  align-items: center;
+
   img {
-    width: 7.75rem;
-    height: 100%;
-    object-fit: cover;
-  }
-  .title {
-    font-size: 0.6rem;
-    margin: 0;
-    font-weight: normal;
-    color: #434141;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 100%; /* 부모 컨테이너에 맞춤 */
+    max-width: 120px; /* 데스크톱 최대 크기 */
+    height: auto; /* 비율 유지 */
+    object-fit: contain; /* 원본 비율 유지 */
+    border-radius: 5px;
+
+    @media (max-width: 768px) {
+      max-width: 90px; /* 태블릿에서는 이미지 크기 축소 */
+    }
+
+    @media (max-width: 480px) {
+      max-width: 70px; /* 모바일에서는 이미지 크기 축소 */
+    }
   }
 `;
 
@@ -106,20 +116,29 @@ const ReviewInfoSection = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-
-`
+`;
 
 const ReviewInfoFirst = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-`
+`;
 
 const ReviewCenter = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 0 0 1.5rem;
-  width: 18rem;
+  justify-content: flex-start;
+  padding-left: 1.2rem; /* 왼쪽 여백 줄이기 */
+  width: 19rem;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    width: 14rem; /* 태블릿에서는 너비를 더 줄임 */
+  }
+
+  @media (max-width: 480px) {
+    width: 14rem; /* 모바일에서는 너비를 더욱 줄임 */
+  }
 
   .profile {
     display: flex;
@@ -129,41 +148,52 @@ const ReviewCenter = styled.div`
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      margin-right: 10px;
-      border: solid 1.5px #b3afb1;
+      margin-right: 8px;
+
+      @media (max-width: 480px) {
+        width: 30px;
+        height: 30px;
+      }
     }
 
     .user-info {
       .name {
         font-size: 0.9rem;
-        font-weight: bold;
+
+        @media (max-width: 480px) {
+          font-size: 0.7rem;
+        }
       }
       .date {
         font-size: 0.8rem;
         color: #888;
+
+        @media (max-width: 480px) {
+          font-size: 0.6rem;
+        }
       }
     }
   }
 
   .comment {
-    margin-top: 0.5rem;
     font-size: 0.8rem;
+    margin-top: 0.5rem;
     line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
 
-    &.blurred {
-      filter: blur(5px);
-      pointer-events: none; 
-      user-select: none;
+    @media (max-width: 480px) {
+      font-size: 0.6rem;
+      margin-top: 0.3rem;
     }
   }
 
   .movie-title {
-    margin-top: 0.5rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #F84B99;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    color: #f84b99;
+
+    @media (max-width: 480px) {
+      font-size: 0.5rem;
+    }
   }
 `;
 
@@ -171,12 +201,17 @@ const ReviewRight = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  .score {
-    
-    img {
-      width: 16px;
-      height: 16px;
-      margin-right: 0.1rem;
+  height: 100%;
+
+  .score img {
+    width: 16px;
+    height: 16px;
+    margin-top: 0.5rem;
+    margin-right: 0.1rem;
+
+    @media (max-width: 480px) {
+      width: 10px;
+      height: 10px;
     }
   }
 
@@ -187,32 +222,56 @@ const ReviewRight = styled.div`
   }
 `;
 
-
 const ReviewInfoSecond = styled.div`
   display: flex;
   justify-content: flex-end;
-`
+`;
 
 const LikeIcon = styled.svg`
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/heart-review-feed.svg");
-`
+  margin-right: 0.3rem;
+  background: no-repeat center/cover
+    url("/assets/images/review/heart-review-feed.svg");
+
+  @media (max-width: 480px) {
+    width: 10px;
+    height: 10px;
+  }
+`;
 
 const ReviewLike = styled.p`
   font-size: 0.9rem;
-`
+  font-weight: normal;
+
+  @media (max-width: 480px) {
+    font-size: 0.6rem;
+  }
+`;
 
 const CommentIcon = styled.svg`
   margin-left: 0.5rem;
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/comment-review-feed.svg");
-`
+  margin-right: 0.3rem;
+  background: no-repeat center/cover
+    url("/assets/images/review/comment-review-feed.svg");
+
+  @media (max-width: 480px) {
+    margin-left: 0.3rem;
+    width: 10px;
+    height: 10px;
+  }
+`;
 
 const ReviewComment = styled.p`
   font-size: 0.9rem;
-`
+  font-weight: normal;
+
+  @media (max-width: 480px) {
+    font-size: 0.6rem;
+  }
+`;
 
 const ReviewFeed = () => {
   const navigate = useNavigate();
@@ -233,7 +292,7 @@ const ReviewFeed = () => {
         ? "/api/reviews/spoiler"
         : "/api/reviews";
 
-      console.log(`Fetching page ${page}...`);
+      console.log(`Fetching page ${page}…`);
 
       const response = await axiosInstance.get(endpoint, {
         params: { page, size: 10 },
@@ -288,7 +347,7 @@ const ReviewFeed = () => {
       document.documentElement.scrollHeight
     ) {
       if (hasMore && !isLoading) {
-        console.log("Triggering next page load...");
+        console.log("Triggering next page load…");
         setPage((prevPage) => prevPage + 1);
       }
     }
@@ -333,7 +392,6 @@ const ReviewFeed = () => {
         </button>
       </FilterButtons>
 
-
       <ReviewContainer>
         {reviews.map((review, index) => (
           <ReviewTicket
@@ -355,21 +413,21 @@ const ReviewFeed = () => {
                       <div className="name">{review.user.nickname}</div>
                       <div className="date">
                         {new Date(review.createdAt)
-                          .toLocaleDateString('ko-KR', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
+                          .toLocaleDateString("ko-KR", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
                           })
                           .replace(/\./g, "-")
                           .replace(/-$/, "")
-                          .replace(/-\s/g, "-")}
-                        {' '}
-                        {new Date(review.createdAt)
-                          .toLocaleTimeString('ko-KR', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                        }
+                          .replace(/-\s/g, "-")}{" "}
+                        {new Date(review.createdAt).toLocaleTimeString(
+                          "ko-KR",
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
                       </div>
                     </div>
                   </div>
@@ -379,13 +437,12 @@ const ReviewFeed = () => {
                       !showSpoilerOnly && review.spoiler ? "blurred" : ""
                     }`}
                   >
-                    {review.content.length > 100
-                      ? `${review.content.slice(0, 105)}...`
+                    {review.content.length > 90
+                      ? `${review.content.slice(0, 92)}…`
                       : review.content}
                   </div>
-                  
                 </ReviewCenter>
-                
+
                 <ReviewRight>
                   <div className="score">
                     {Array.from({ length: Math.round(review.movieScore) }).map(
@@ -398,7 +455,7 @@ const ReviewFeed = () => {
                       )
                     )}
                   </div>
-                </ReviewRight>  
+                </ReviewRight>
               </ReviewInfoFirst>
 
               <ReviewInfoSecond>
@@ -407,7 +464,6 @@ const ReviewFeed = () => {
                 <CommentIcon />
                 <ReviewComment>{review.comments}</ReviewComment>
               </ReviewInfoSecond>
-
             </ReviewInfoSection>
           </ReviewTicket>
         ))}
