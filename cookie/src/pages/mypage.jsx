@@ -5,7 +5,7 @@ import ProfileImage from "../components/mypage/ProfileImage";
 import BadgeList from "../components/mypage/BadgeList";
 
 import FavoriteList from "../components/mypage/FavoriteList";
-import ReviewList from "../components/mypage/ReviewList";
+// import ReviewList from "../components/mypage/ReviewList";
 import LogoutAndWithdraw from "../components/mypage/LogoutAndWithdraw";
 import LoginModal from "../components/common/LoginModal";
 import axiosInstance from "../api/auth/axiosInstance";
@@ -16,6 +16,9 @@ import PointHistory from "../components/matchup/PointSection";
 import PushNotificationToggle from "../components/mypage/PushNotificationToggle";
 import LogoutModal from "../components/mypage/LogoutModal";
 import WithdrawModal from "../components/mypage/WithdrawModal";
+
+import { FaChevronRight } from "react-icons/fa";
+
 
 const MypageContainer = styled.div`
   display: flex;
@@ -39,34 +42,6 @@ const MypageContent = styled.div`
   border: 4px solid transparent;
 `;
 
-const ReviewHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-`;
-
-const ReviewTitle = styled.h3`
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-top: 1.5rem;
-
-  color: #ffffff;
-`;
-
-const MoreLink = styled.span`
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 1.5rem;
-
-  color: black;
-  cursor: pointer;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: #00d6e8;
-  }
-`;
 
 const MyPage = () => {
   const [userData, setUserData] = useState({ nickname: "", profileImage: "" });
@@ -206,7 +181,7 @@ const MyPage = () => {
     }
   };
 
-  const handleMoreClick = () => {
+  const handleMyAllReviewClick = () => {
     navigate("/myAllReviewList");
   };
 
@@ -238,7 +213,7 @@ const MyPage = () => {
         <div
           style={{
             position: "absolute",
-            top: "50px",
+            // top: "50px",
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 2,
@@ -254,20 +229,20 @@ const MyPage = () => {
           />
         </div>
         <MypageContent>
-          <BadgeList title={`${userData.nickname}의 배지`} badges={badgeData} />
-          {/* <GenreChart data={genreScores} /> */}
+          <BadgeList badges={badgeData} />
           <PointHistory
             badgePoint={badgePoint}
             onClick={handlePointHistoryClick}
           />
-
           <FavoriteList title="좋아요" items={favoriteItems} />
           <PushNotificationToggle pushEnabled={pushEnabled} />
-          <ReviewHeader>
-            <ReviewTitle>{`${userData.nickname}의 리뷰`}</ReviewTitle>
-            <MoreLink onClick={handleMoreClick}>{" 더보기"}</MoreLink>
-          </ReviewHeader>
-          <ReviewList reviews={reviewData} onReviewClick={handleReviewClick} />
+          
+          <MyReviewList onClick={handleMyAllReviewClick}>
+            <p>내가 쓴 리뷰</p>
+            <FaChevronRight />
+          </MyReviewList>  
+
+
           {isLogined() && (
             <LogoutAndWithdraw
               onLogout={() => setShowLogoutModal(true)}
@@ -281,3 +256,22 @@ const MyPage = () => {
 };
 
 export default MyPage;
+
+const MyReviewList = styled.div`
+  border: 2px solid #000;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: black;
+  font-weight: bold;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    background-color: #f84b99;
+  }
+`
