@@ -39,12 +39,15 @@ const MatchupPage = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const isHistoryPage = location.pathname.includes("/history");
+
   const fetchMatchUpData = useCallback(async () => {
     setIsLoading(true);
     try {
       const endpoint = `/api/matchups/${matchUpId || 1}`;
       const response = await axiosInstance.get(endpoint);
       setMatchUpData(response.data.response || {});
+      console.log("이떄 데이타", response);
     } catch (error) {
       console.error("API 요청 실패:", error);
     } finally {
@@ -102,6 +105,7 @@ const MatchupPage = () => {
               matchUpData.movie1.moviePoster ||
               "/assets/images/main/cookie_icon.svg",
             title: matchUpData.movie1.movieTitle,
+            win: matchUpData.movie1.win,
           },
           {
             movieId: matchUpData.movie2.movieId,
@@ -109,6 +113,7 @@ const MatchupPage = () => {
               matchUpData.movie2.moviePoster ||
               "/assets/images/main/cookie_icon.svg",
             title: matchUpData.movie2.movieTitle,
+            win: matchUpData.movie2.win,
           },
         ]}
         matchUpId={matchUpData.matchUpId}
@@ -121,7 +126,9 @@ const MatchupPage = () => {
       />
       <ChartSection movie1={matchUpData.movie1} movie2={matchUpData.movie2} />
 
-      <ChatUI matchUpId={matchUpId} stompClient={stompClient} />
+      {!isHistoryPage && (
+        <ChatUI matchUpId={matchUpId} stompClient={stompClient} />
+      )}
     </Container>
   );
 };

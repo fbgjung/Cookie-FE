@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
+import { useLocation } from "react-router-dom";
 
 const TimerContainer = styled.div`
   display: flex;
@@ -101,8 +102,8 @@ const ModalContent = styled.div`
 `;
 
 const CloseButton = styled.button`
-  background-color: #aad6e7;
-  color: #724b2e;
+  background-color: ${(props) => (props.isHistoryPage ? "#006400" : "#f84b99")};
+  color: ${(props) => (props.isHistoryPage ? "#ffffff" : "#fdf8fa")};
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -112,7 +113,8 @@ const CloseButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #85b2c8;
+    background-color: ${(props) =>
+      props.isHistoryPage ? "#004d00" : "#ff0777"};
     color: #fff;
   }
 `;
@@ -128,19 +130,30 @@ const Timer = ({ endAt, onVoteEnd }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
 
+  const location = useLocation();
+  const isHistoryPage = location.pathname.includes("/history");
+
+  const timerRef = useRef(null);
+  const hasEndedRef = useRef(false);
+
   useEffect(() => {
     const targetDate = new Date(endAt);
-    const interval = setInterval(() => {
+
+    if (timerRef.current) clearInterval(timerRef.current);
+
+    timerRef.current = setInterval(() => {
       const now = new Date();
       const difference = targetDate - now;
 
-      if (difference <= 0) {
-        clearInterval(interval);
+      if (difference <= 0 && !hasEndedRef.current) {
+        hasEndedRef.current = true;
+        clearInterval(timerRef.current);
         setIsEnded(true);
-        openModal();
         setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+
+        if (!isHistoryPage) openModal();
         onVoteEnd();
-      } else {
+      } else if (difference > 0) {
         const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((difference / (1000 * 60)) % 60);
         const seconds = Math.floor((difference / 1000) % 60);
@@ -153,18 +166,19 @@ const Timer = ({ endAt, onVoteEnd }) => {
       }
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [endAt, onVoteEnd]);
+    return () => clearInterval(timerRef.current);
+  }, [endAt, onVoteEnd, isHistoryPage]);
 
   const splitDigits = (value) => value.toString().padStart(2, "0").split("");
-
   const [h1, h2] = splitDigits(timeLeft.hours);
   const [m1, m2] = splitDigits(timeLeft.minutes);
   const [s1, s2] = splitDigits(timeLeft.seconds);
 
   const openModal = () => {
-    document.body.style.overflow = "hidden";
-    setIsModalOpen(true);
+    if (!isModalOpen) {
+      document.body.style.overflow = "hidden";
+      setIsModalOpen(true);
+    }
   };
 
   const closeModal = () => {
