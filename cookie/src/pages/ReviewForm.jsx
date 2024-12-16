@@ -201,6 +201,12 @@ const ReviewForm = () => {
 
   const handleSubmit = async () => {
     if (isSubmitting) return; // 이미 요청 중이라면 함수 종료
+
+    if (movieScore === 0) {
+      toast.error("평점은 최소 1점 이상이어야 합니다!");
+      return;
+    }
+
     setIsSubmitting(true); // 요청 시작
 
     const userId = getUserIdFromToken();
@@ -216,7 +222,7 @@ const ReviewForm = () => {
       isSpoiler,
     };
 
-    console.log("서버로 보낼 데이터:", payload);
+    // console.log("서버로 보낼 데이터:", payload);
 
     try {
       const response = await axiosInstance.post(`/api/reviews`, payload);
