@@ -4,7 +4,7 @@ import styled from "styled-components";
 const BadgeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   margin-top: 20px;
   width: 100%;
 `;
@@ -12,12 +12,11 @@ const BadgeContainer = styled.div`
 const BadgeTitle = styled.h3`
   font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 10px;
   color: #f84b99;
-  margin-left: 40px;
   text-align: left;
   width: 100%;
-  max-width: 450px;
+  /* max-width: 450px; */
+  margin: 3rem 0 1rem 4.6rem;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -33,13 +32,16 @@ const BadgeTitle = styled.h3`
 const BadgeList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")};
-  align-items: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")};
-  margin-left: ${({ isEmpty }) => (isEmpty ? "0" : "40px")};
+  /* justify-content: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")}; */
+  /* align-items: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")}; */
+  /* margin-left: ${({ isEmpty }) => (isEmpty ? "0" : "0")}; */
+  align-items: center;
+  justify-content: center;
+  /* margin-left: 2rem; */
   background-color: white;
-  border: 2px solid black;
+  border: 1px solid #F84B99;
   border-radius: 12px;
-  padding: ${({ isEmpty }) => (isEmpty ? "40px" : "80px")};
+  padding: ${({ isEmpty }) => (isEmpty ? "60px" : "60px")};
   width: 100%;
   max-width: 480px;
   gap: 20px;

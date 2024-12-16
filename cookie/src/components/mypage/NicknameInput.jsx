@@ -11,6 +11,7 @@ const NicknameContainer = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 600px;
+  align-items: center;
   margin: 0 auto;
 `;
 
@@ -19,8 +20,20 @@ const Label = styled.label`
   font-weight: bold;
   margin-top: 30px;
   margin-bottom: 8px;
-  margin-left: 40px;
+  /* margin-left: 2rem; */
   color: #f84b99;
+  width: 100%;
+  margin-left: 4.6rem;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
 `;
 
 const InputWrapper = styled.div`
@@ -28,7 +41,7 @@ const InputWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 85%;
-  margin-left: 40px;
+  /* margin-left: 2rem; */
 `;
 
 const Input = styled.input`
@@ -40,8 +53,7 @@ const Input = styled.input`
   outline: none;
 
   &:focus {
-    border-color: #f84b99;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    border: 2px solid #f84b99;
   }
 `;
 

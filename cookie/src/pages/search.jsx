@@ -14,7 +14,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
+  padding: 0px;
   background-color: black;
   min-height: 100vh;
   box-sizing: border-box;
@@ -24,7 +24,7 @@ const Container = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 40px 10px;
+    padding: 0px 0px;
   }
 `;
 
@@ -47,7 +47,7 @@ const ContentWrapper = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 10px;
+    padding: 0px;
   }
 `;
 
@@ -68,7 +68,7 @@ const Tabs = styled.div`
 
   @media (max-width: 480px) {
     border-radius: 15px;
-    margin-top: -20px;
+    margin-top: -40px;
   }
 `;
 
@@ -133,7 +133,7 @@ const SearchInfoText = styled.p`
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
-    padding-left: 10px;
+    padding-left: 0px;
   }
 `;
 
