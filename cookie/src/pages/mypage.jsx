@@ -238,7 +238,7 @@ const MyPage = () => {
           <PushNotificationToggle pushEnabled={pushEnabled} />
           
           <MyReviewList onClick={handleMyAllReviewClick}>
-            <p>내가 쓴 리뷰</p>
+            <p>내가 작성한 리뷰</p>
             <FaChevronRight />
           </MyReviewList>  
 

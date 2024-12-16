@@ -256,7 +256,7 @@ const MyAllReviewList = () => {
     <ReviewSection>
       <HeaderContainer>
         <PrevIcon ></PrevIcon>
-        <span className="title">내가 쓴 리뷰</span>
+        <span className="title">내가 작성한 리뷰</span>
       </HeaderContainer>
       <ReviewContainer>
         {reviews.map((review, index) => (
