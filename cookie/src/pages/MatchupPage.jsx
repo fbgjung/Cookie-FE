@@ -67,15 +67,24 @@ const MatchupPage = () => {
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: { Authorization: `Bearer ${token}` },
-      debug: (str) => console.log(str),
-      onConnect: () => setIsConnected(true),
-      onDisconnect: () => setIsConnected(false),
+      debug: (str) => console.log("디버깅:", str),
+      onConnect: () => {
+        console.log("STOMP 연결 성공");
+        setStompClient(client); // 연결 성공 후 클라이언트 설정
+        setIsConnected(true);
+      },
+      onStompError: (frame) => {
+        console.error("STOMP 오류 발생:", frame);
+      },
+      onDisconnect: () => {
+        console.log("STOMP 연결 끊김");
+        setIsConnected(false);
+      },
     });
 
-    client.activate();
-    setStompClient(client);
+    client.activate(); // STOMP 활성화
 
-    return () => client.deactivate();
+    return () => client.deactivate(); // 컴포넌트 언마운트 시 연결 해제
   }, []);
 
   const handleVoteEnd = () => setIsVoteEnded(true);

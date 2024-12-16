@@ -34,6 +34,40 @@ const ChatUI = ({ stompClient }) => {
   };
 
   useEffect(() => {
+    if (!stompClient || !stompClient.connected) {
+      console.error("STOMP 연결이 설정되지 않았습니다.");
+      return;
+    }
+
+    console.log("STOMP 연결 성공:", stompClient.connected);
+
+    const subscription = stompClient.subscribe(
+      `/topic/chat/${matchUpId}`,
+      (message) => {
+        const newMessage = JSON.parse(message.body);
+        console.log("수신된 메시지:", newMessage);
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: newMessage.senderUserId,
+            nickname: newMessage.senderNickname,
+            content: newMessage.content,
+            timestamp: new Date(newMessage.sentAt).toLocaleTimeString(),
+            profile: newMessage.senderProfileImage,
+          },
+        ]);
+
+        scrollToBottom();
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [stompClient, stompClient?.connected, matchUpId]);
+
+  useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await axiosInstance.get(
@@ -56,35 +90,6 @@ const ChatUI = ({ stompClient }) => {
 
     fetchMessages();
   }, [matchUpId]);
-
-  useEffect(() => {
-    if (!stompClient || !stompClient.connected) return;
-
-    const subscription = stompClient.subscribe(
-      `/topic/chat/${matchUpId}`,
-      (message) => {
-        const newMessage = JSON.parse(message.body);
-        console.log("Received message:", newMessage); // 메시지 콘솔에 출력
-
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: newMessage.senderUserId,
-            nickname: newMessage.senderNickname,
-            content: newMessage.content,
-            timestamp: new Date(newMessage.sentAt).toLocaleTimeString(),
-            profile: newMessage.senderProfileImage,
-          },
-        ]);
-
-        scrollToBottom();
-      }
-    );
-
-    return () => {
-      if (subscription) subscription.unsubscribe();
-    };
-  }, [stompClient, matchUpId]);
 
   const handleSend = (content) => {
     if (stompClient && stompClient.connected) {
