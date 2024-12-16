@@ -266,7 +266,6 @@ const ReviewContentSection = ({
 
   const fromReviewFeed = location.state?.fromReviewFeed || false;
   const fromLikedReviews = location.state?.fromLikedReviews || false;
-  const fromMyPage = location.state?.fromMyPage || false;
   const fromMyAllReviewList = location.state?.fromMyAllReviewList || false;
 
   const [isEditing, setIsEditing] = useState(false);
@@ -334,7 +333,7 @@ const ReviewContentSection = ({
       return null;
     }
 
-    if ((fromMyPage || fromMyAllReviewList) && !fromLikedReviews) {
+    if ((fromMyAllReviewList) && !fromLikedReviews) {
       return (
         <DropdownMenu>
           <div onClick={handleEditClick}>수정하기</div>
@@ -379,7 +378,7 @@ const ReviewContentSection = ({
                     alt="score"
                   />
                 ))}
-                {! fromReviewFeed && (
+                {fromMyAllReviewList && (
                   <div className="edit-or-delete" onClick={toggleMenu}>
                     <svg></svg>
                     {isMenuOpen && renderMenuOptions()}

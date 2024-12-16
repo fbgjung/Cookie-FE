@@ -5,6 +5,7 @@ const LogoutSection = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 30px;
+  width: 100%;
 `;
 
 const LogoutButton = styled.button`
@@ -16,8 +17,7 @@ const LogoutButton = styled.button`
   border-radius: 12px;
   padding: 15px 30px;
   cursor: pointer;
-  width: 90%;
-  max-width: 300px;
+  width: 100%;
 
   &:hover {
     background-color: #c33677;

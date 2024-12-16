@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback } from "react";
 
-import ReviewList from "../components/mypage/ReviewList";
+import MyAllReviewList from "../pages/MyAllReviewList"
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
@@ -144,12 +144,13 @@ const LikedReviews = () => {
       <Title>좋아하는 리뷰</Title>
       <HeartIcon src="/assets/images/mypage/red-heart.svg" alt="하트" />
       {reviews.length > 0 ? (
-        <ReviewList
-          title=""
-          reviews={reviews}
-          lastReviewRef={lastReviewRef}
-          onReviewClick={handleReviewClick}
-        />
+        // <MyAllReviewList
+        //   title=""
+        //   reviews={reviews}
+        //   lastReviewRef={lastReviewRef}
+        //   onReviewClick={handleReviewClick}
+        // />
+        <h2>내가 좋아요한 리뷰 리스트들</h2>
       ) : (
         <EmptyMessage>좋아하는 리뷰를 선택해보세요!</EmptyMessage>
       )}
