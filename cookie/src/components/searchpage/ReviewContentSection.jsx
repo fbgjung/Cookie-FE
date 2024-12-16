@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../api/auth/axiosInstance";
-import jwtDecode from "jwt-decode";
+import jwtDecode from "jwt-decode/build/esm/index.js";
 
 const ReviewContentContainer = styled.div`
   display: flex;
