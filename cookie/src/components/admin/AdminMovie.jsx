@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import SideBar from "../../components/admin/SideBar";
+import SideBar from "./SideBar";
 import { useState } from "react";
-import Addmovie from "../../components/admin/Addmovie";
+import Addmovie from "./Addmovie";
 import movie from "../../assets/images/admin/cookieMovie.svg";
 import cookieSm from "../../assets/images/admin/cookie_sm.svg";
-import CookieMovieList from "../../components/admin/CookieMovieList";
+import CookieMovieList from "./CookieMovieList";
 
 export const Viewport = styled.div`
   width: 100%;
@@ -23,7 +23,7 @@ export const TabBtn = styled.button`
   padding: 0.5rem 1.25rem;
   border: none;
   border-radius: 8px;
-  width: 165px;
+  width: 170px;
   height: 75px;
   font-size: 20px;
   font-weight: 700;

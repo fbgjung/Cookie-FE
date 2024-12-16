@@ -4,9 +4,9 @@ import { SearchBarContainer, SearchIconButton, SearchInput } from "./Addmovie";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
-import Like from "../../assets/images/admin/like.svg";
+import Like from "../../assets/images/admin/like3.svg";
 import Edit from "../../assets/images/admin/Edit.svg";
-import More from "../../assets/images/admin/more.svg";
+import More from "../../assets/images/admin/more2.svg";
 import MovieInfoModal from "./MovieInfoModal";
 import EditCategory from "./EditCategory";
 import axiosInstance from "../../api/auth/axiosInstance";
@@ -70,7 +70,7 @@ export const MovieListContainer = styled.div`
   }
 `;
 
-const IconContainer = styled.div`
+export const IconContainer = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
@@ -82,11 +82,17 @@ const IconButton = styled.button`
   cursor: pointer;
   width: 24px;
   height: 24px;
+  img {
+    transition: transform 0.2s ease;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 `;
 export const UnderlinedButton = styled.button`
   padding: 3px 33px;
   background: none;
-  color: var(--text);
+  color: #ffff;
   border: none;
   border-radius: 5px;
   font-size: 20px;
@@ -99,9 +105,9 @@ export const UnderlinedButton = styled.button`
       position: absolute;
       bottom: 0;
       left: 30px;
-      width: 57%;
+      width: 45%;
       height: 1px;
-      background-color: var(--text);
+      background-color: #ffff;
     }
   }
 `;

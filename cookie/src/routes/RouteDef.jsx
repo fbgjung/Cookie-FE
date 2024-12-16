@@ -31,6 +31,8 @@ import PointHistoryPage from "../pages/PointHistoryPage";
 import AdminReviewLike from "../pages/admin/AdminReviewLike";
 import Terms from "../components/main/terms";
 import Privacy from "../components/main/Privacy";
+import AdminMatchUp from "../pages/admin/AdminMatchUp";
+import AdminBadge from "../pages/admin/AdminBadge";
 
 export const AppRouteDef = {
   Main: {
@@ -303,6 +305,22 @@ export const AppRouteDef = {
     element: (
       <PrivateRoute>
         <AdminReviewLike />
+      </PrivateRoute>
+    ),
+  },
+  AdminMatchUp: {
+    path: "/admin/matchup",
+    element: (
+      <PrivateRoute>
+        <AdminMatchUp />
+      </PrivateRoute>
+    ),
+  },
+  AdminBadge: {
+    path: "/admin/badge",
+    element: (
+      <PrivateRoute>
+        <AdminBadge />
       </PrivateRoute>
     ),
   },

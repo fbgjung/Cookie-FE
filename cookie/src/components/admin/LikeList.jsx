@@ -10,18 +10,31 @@ const MovieInfoContainer = styled.div`
   border-radius: 12px;
   gap: 30px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 0.9;
-  img {
-    width: 263px;
-    height: 365px;
-    border-radius: 12px;
+  .movieInfo__card {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding-bottom: 20px;
   }
 
+  .movieInfo__card--poster {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
   h3 {
-    font-size: 24px;
+    margin-top: 10px;
+    font-size: 20px;
   }
 
   div {
@@ -32,15 +45,13 @@ const MovieInfoContainer = styled.div`
   }
   p {
     font-size: 30px;
-    font-weight: 700;
   }
 `;
 const LikeListContainer = styled.div`
   height: 800px;
   max-height: 1000px;
   padding: 0 10px;
-  border-radius: 12px;
-  gap: 20px;
+  gap: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,6 +68,7 @@ const LikeItem = styled.div`
   padding-bottom: 10px;
   div {
     font-size: 20px;
+    margin-top: 7px;
   }
 `;
 
@@ -65,6 +77,7 @@ export const UserProfile = styled.img`
   height: 60px;
   border-radius: 50%;
   margin-right: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 `;
 
 const SelectFilter = styled.select`
@@ -116,11 +129,17 @@ function LikeList({ movieId }) {
   return (
     <DefaultReviewContainer>
       <MovieInfoContainer>
-        <img src={movieInfo ? movieInfo.posterPath : ""} alt="Movie Poster" />
-        <h3>{movieInfo ? movieInfo.title : "영화 제목"}</h3>
-        <div>
-          <img src={likeIcon} style={{ height: "40px", width: "40px" }} />
-          <p>{movieInfo ? movieInfo.likeAmount : ""}</p>
+        <div className="movieInfo__card">
+          <img
+            className="movieInfo__card--poster"
+            src={movieInfo ? movieInfo.posterPath : ""}
+            alt="Movie Poster"
+          />
+          <h3>{movieInfo ? movieInfo.title : "영화 제목"}</h3>
+          <div>
+            <img src={likeIcon} style={{ height: "35px", width: "35px" }} />
+            <p>{movieInfo ? movieInfo.likeAmount : ""}</p>
+          </div>
         </div>
       </MovieInfoContainer>
       <LikeListContainer>
@@ -142,7 +161,7 @@ function LikeList({ movieId }) {
               </div>
               <img
                 src={likeIcon}
-                style={{ height: "31px", width: "31px", margin: "0 20px" }}
+                style={{ height: "31px", width: "31px", marginLeft: "150px" }}
               />
             </LikeItem>
           ))
