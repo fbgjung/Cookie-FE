@@ -8,7 +8,6 @@ import ReviewContentSection from "../components/searchpage/ReviewContentSection"
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaPaperPlane } from "react-icons/fa";
 import useAuthStore from "../stores/useAuthStore";
-import LoginModal from "../components/common/LoginModal";
 
 const Container = styled.div`
   width: 100%;
@@ -261,8 +260,14 @@ const ReviewDetail = () => {
   */
 
   const getUserIdFromToken = () => {
-    const token = localStorage.getItem("refreshToken");
+    let token = sessionStorage.getItem("accessToken");
+
     if (!token) {
+      token = localStorage.getItem("refreshToken");
+    }
+
+    if (!token) {
+      openLoginModal();
       return null;
     }
     try {
