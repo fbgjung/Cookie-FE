@@ -275,11 +275,37 @@ const ReviewContentSection = ({
   const [liked, setLiked] = useState(likedByUser); 
   const [currentLikeCount, setCurrentLikeCount] = useState(reviewLikeCount);
 
+  const getUserIdFromToken = () => {
+    let token = sessionStorage.getItem("accessToken");
 
+    if (!token) {
+      token = localStorage.getItem("refreshToken");
+    }
+
+    if (!token) {
+      openLoginModal();
+      return null;
+    }
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.id;
+    } catch (error) {
+      console.error("Invalid token:", error);
+      toast.error("로그인 정보가 유효하지 않습니다.");
+      return null;
+    }
+  };
 
   const handleLikeClick = async () => {
     const previousLiked = liked; // 버튼을 누르기 전 상태
     const previousLikeCount = currentLikeCount; // 버튼을 누르기 전 좋아요 수
+
+    const userId = getUserIdFromToken();
+    if (!userId) {
+      openLoginModal(); 
+      return;
+    }
+    
     setLiked(!previousLiked);
     setCurrentLikeCount(previousLiked ? previousLikeCount - 1 : previousLikeCount + 1);
 
@@ -290,7 +316,7 @@ const ReviewContentSection = ({
     if (error.response?.data?.message === "자신의 리뷰에는 좋아요를 누를 수 없습니다.") { // 예외 처리 추가
       toast.error("자신의 리뷰에는 좋아요를 누를 수 없습니다.");
     } else {
-      openLoginModal?.();
+      openLoginModal();
     }
     setLiked(previousLikeCount);
     setCurrentLikeCount(previousLikeCount);
