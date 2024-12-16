@@ -8,6 +8,7 @@ import ReviewContentSection from "../components/searchpage/ReviewContentSection"
 import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaPaperPlane } from "react-icons/fa";
 import useAuthStore from "../stores/useAuthStore";
+import jwtDecode from "jwt-decode";
 
 const Container = styled.div`
   width: 100%;
@@ -271,7 +272,7 @@ const ReviewDetail = () => {
       return null;
     }
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
+      const payload = jwtDecode(token);
       return payload.id;
     } catch (error) {
       console.error("Invalid token:", error);

@@ -3,8 +3,8 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
-// import { stepLabelClasses } from "@mui/material";
 import axiosInstance from "../../api/auth/axiosInstance";
+import jwtDecode from "jwt-decode";
 
 const ReviewContentContainer = styled.div`
   display: flex;
@@ -287,7 +287,7 @@ const ReviewContentSection = ({
       return null;
     }
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
+      const payload = jwtDecode(token);
       return payload.id;
     } catch (error) {
       console.error("Invalid token:", error);
@@ -305,7 +305,7 @@ const ReviewContentSection = ({
       openLoginModal(); 
       return;
     }
-    
+
     setLiked(!previousLiked);
     setCurrentLikeCount(previousLiked ? previousLikeCount - 1 : previousLikeCount + 1);
 
