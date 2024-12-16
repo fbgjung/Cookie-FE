@@ -217,7 +217,12 @@ const DetailsSection = ({
   }, [liked, likes]);
 
   const checkLogin = () => {
-    const token = localStorage.getItem("refreshToken");
+    let token = sessionStorage.getItem("accessToken");
+
+    if (!token) {
+      token = localStorage.getItem("refreshToken");
+    }
+
     if (!token) {
       openLoginModal();
       return false;
