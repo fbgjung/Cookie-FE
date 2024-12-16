@@ -64,7 +64,7 @@ const ChatUI = ({ stompClient }) => {
       `/topic/chat/${matchUpId}`,
       (message) => {
         const newMessage = JSON.parse(message.body);
-        console.log("Received message:", newMessage);  // 메시지 콘솔에 출력
+        console.log("Received message:", newMessage); // 메시지 콘솔에 출력
 
         setMessages((prev) => [
           ...prev,
@@ -76,7 +76,7 @@ const ChatUI = ({ stompClient }) => {
             profile: newMessage.senderProfileImage,
           },
         ]);
-        
+
         scrollToBottom();
       }
     );
@@ -89,7 +89,7 @@ const ChatUI = ({ stompClient }) => {
   const handleSend = (content) => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
-        destination: `/app/chat/${matchUpId}/messages`,
+        destination: `/app/chat/3/messages`,
         body: JSON.stringify({
           senderUserId: userId,
           content,
