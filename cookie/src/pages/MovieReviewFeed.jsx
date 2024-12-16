@@ -78,6 +78,7 @@ const ReviewTicket = styled.div`
   border-radius: 8px;
   background-color: #fdf8fa;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 `;
 
 const ReviewLeft = styled.div`
@@ -234,7 +235,7 @@ const MovieReviewFeed = () => {
 
       <ReviewContainer>
         {reviews.map((review) => (
-          <ReviewTicket key={review.reviewId}>
+          <ReviewTicket key={review.reviewId} onClick={() => handleReviewClick(review.reviewId)}>
             <ReviewLeft>
               <div className="profile">
                 <img
