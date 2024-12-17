@@ -118,16 +118,18 @@ const ReviewCenter = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding-left: 1.2rem; /* 왼쪽 여백 줄이기 */
-  width: 14rem;
+  padding-left: 0.5rem; /* 왼쪽 여백 줄이기 */
+  width: 15rem;
   height: 100%;
 
   @media (max-width: 768px) {
-    width: 12rem; /* 태블릿에서는 너비를 더 줄임 */
+    padding-left: 0.3rem; /* 태블릿에서는 왼쪽 여백을 더 줄임 */
+    width: 13rem; /* 태블릿에서는 너비를 더 줄임 */
   }
 
   @media (max-width: 480px) {
-    width: 11rem; /* 모바일에서는 너비를 더욱 줄임 */
+    padding-left: 0.2rem; /* 모바일에서는 왼쪽 여백을 더욱 줄임 */
+    width: 12rem; /* 모바일에서는 너비를 더욱 줄임 */
   }
 
   .profile {
