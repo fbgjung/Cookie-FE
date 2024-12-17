@@ -142,7 +142,7 @@ const ReviewFooter = styled.div`
 
 const ReviewSection = ({
   reviews = [],
-  reviewCount,
+  totalReviews,
   onViewAllReviews,
 }) => {
   const navigate = useNavigate();
@@ -155,7 +155,7 @@ const ReviewSection = ({
     <ReviewWrapper>
       <Title>
         리뷰
-        <span className="review-count">{reviewCount}</span>
+        <span className="review-count">{totalReviews || 0}</span>
         <button className="more-review-button" onClick={onViewAllReviews}>
           더보기
         </button>
@@ -205,7 +205,7 @@ ReviewSection.propTypes = {
       reviewLike: PropTypes.number.isRequired,
     })
   ).isRequired,
-  reviewCount: PropTypes.number.isRequired,
+  totalReviews: PropTypes.number,
   onViewAllReviews: PropTypes.func.isRequired,
 };
 

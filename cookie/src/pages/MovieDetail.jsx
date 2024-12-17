@@ -107,7 +107,7 @@ const MovieDetail = () => {
       {movieData.reviews && (
         <ReviewSection
           reviews={movieData.reviews}
-          reviewCount={movieData.reviews.length}
+          totalReviews={movieData.totalReviews}
           onViewAllReviews={handleViewAllReviews}
           movie={movieData}
         />
