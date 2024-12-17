@@ -78,13 +78,13 @@ const ReviewSection = styled.div`
 
         .name {
           font-size: 0.9rem;
-          color: #000000;
+          color: var(--text-wh);
           font-weight: bold;
         }
 
         .date {
           font-size: 0.8rem;
-          color: #000000;
+          color: var(--text-wh);
         }
       }
 
@@ -236,7 +236,7 @@ const ReviewLikeIcon = styled.svg`
     url(${({ $likedByUser }) =>
       $likedByUser
         ? "/assets/images/review/full-heart-review-feed.svg"
-        : "/assets/images/review/heart-review-feed.svg"});
+        : "/assets/images/review/heart-review.svg"});
   cursor: pointer;
 `;
 
@@ -246,7 +246,7 @@ const ReviewLikeText = styled.p`
 
 const ReviewText = styled.div`
   font-size: 1rem;
-  color: #0f0c0c;
+  color: var(--text-wh);
   line-height: 1.5;
   margin: 1rem 1rem 0 0;
 

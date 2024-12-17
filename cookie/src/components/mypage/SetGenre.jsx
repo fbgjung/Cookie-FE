@@ -60,13 +60,13 @@ const ThemeContainer = styled.div`
   width: 85%;
 
   @media (max-width: 768px) {
-    gap: 0.8rem;
+    gap: 0.4rem;
     width: 75%;
   }
 
   @media (max-width: 480px) {
-    gap: 0.6rem;
-    width: 65%;
+    gap: 0.4rem;
+    width: 80%;
     margin: 1rem auto 0;
   }
 `;
