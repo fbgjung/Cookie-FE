@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import useUserStore from "../../stores/useUserStore";
 
 // Bottom-to-top animation
 const slideUp = keyframes`
@@ -30,11 +31,12 @@ const PopupContainer = styled.div`
 
 const PopupContent = styled.div`
   background: white;
-  width: 500px;
-  height: 600px;
+  width: 550px;
+  height: 500px;
   background-image: url("/assets/common/popup.png");
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
+  background-repeat: no-repeat;
   border-radius: 8px 8px 0 0;
   display: flex;
   flex-direction: column;
@@ -49,17 +51,16 @@ const PopupContent = styled.div`
   }
 
   @media (max-width: 480px) {
-    width: 85%;
+    width: 100%;
     height: 65vh;
-    background-size: contain;
-    margin-bottom: 7vh; 
+    margin-bottom: 7vh;
   }
 `;
 
 const PopupFooter = styled.div`
   background: white;
   width: 100%;
-  padding: 1rem 2rem;
+  padding: 0.2rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -143,6 +144,8 @@ const Popup = () => {
   const [hideChecked, setHideChecked] = useState(false);
   const navigate = useNavigate();
 
+  const matchUpId = useUserStore((state) => state.userInfo.matchUpId);
+
   useEffect(() => {
     const hidePopupUntil = localStorage.getItem("hidePopupUntil");
     if (
@@ -154,13 +157,13 @@ const Popup = () => {
   }, []);
 
   const handleImageClick = () => {
-    navigate("/search");
+    navigate(`/matchup/${matchUpId}`);
     setVisible(false);
   };
 
   const handleClose = (e) => {
     e.stopPropagation();
-    const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000); // 1시간 후
+    const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000);
     localStorage.setItem("hidePopupUntil", oneHourLater.toISOString());
     setVisible(false);
   };
@@ -169,7 +172,7 @@ const Popup = () => {
     e.stopPropagation();
     setHideChecked(true);
     const todayEnd = new Date();
-    todayEnd.setHours(23, 59, 59, 999); // 오늘 자정까지
+    todayEnd.setHours(23, 59, 59, 999);
     localStorage.setItem("hidePopupUntil", todayEnd.toISOString());
     setVisible(false);
   };

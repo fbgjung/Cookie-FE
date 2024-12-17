@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState, useRef } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -122,7 +123,28 @@ const SetProfileImage = ({ profileImage, onChange }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
+      const validFileTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/svg+xml",
+      ];
+
+      if (!validFileTypes.includes(file.type)) {
+        toast.error(
+          "지원하지 않는 파일 형식입니다. jpg, jpeg, png, svg 파일만 업로드 가능합니다."
+        );
+        return;
+      }
+
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast.error("파일 크기는 5MB 이하로 업로드 가능합니다.");
+        return;
+      }
+
       const imageUrl = URL.createObjectURL(file);
       onChange({ file, preview: imageUrl });
     }
