@@ -85,11 +85,11 @@ const ReviewTicket = styled.div`
   height: auto;
 
   @media (max-width: 768px) {
-    padding: 0.6rem;
+    padding: 1.0rem;
   }
 
   @media (max-width: 480px) {
-    padding: 0.4rem;
+    padding: 0.8rem;
   }
 `;
 
