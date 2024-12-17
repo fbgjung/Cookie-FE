@@ -129,6 +129,13 @@ const Image = styled.img`
   height: 400px;
   object-fit: cover;
   border-radius: 8px;
+
+  @media (max-width: 480px) {
+    height: 420px;
+  }
+  @media (max-width: 390px) {
+    height: 420px;
+  }
 `;
 
 const VoteButton = styled.button`
@@ -141,6 +148,16 @@ const VoteButton = styled.button`
   margin-bottom: 8px;
   transition: transform 0.2s ease-in-out;
   font-size: 18px;
+  font-weight: 600;
+
+  @media (max-width: 480px) {
+    color: #000000;
+    font-weight: 600;
+  }
+  @media (max-width: 390px) {
+    color: #000000;
+    font-weight: 600;
+  }
 
   &:hover {
     transform: scale(1.05);
@@ -160,12 +177,14 @@ const MatchUpDescription = styled.p`
   font-weight: bold;
   font-size: 1.5rem;
 
+
+  @media (max-width: 480px) {
+    font-size: 1.4rem;
+  }
   @media (max-width: 390px) {
-    font-size: 1.2rem;
-  }
-  @media (max-width: 430px) {
-    font-size: 1rem;
-  }
+    font-size: 1.3rem;
+}
+
 `;
 
 const VsImage = styled.div`

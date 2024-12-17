@@ -4,7 +4,7 @@ import styled from "styled-components";
 const StyledButton = styled.button`
   position: fixed;
   bottom: 95px;
-  right: calc(50% - 30px);
+  right: calc(50% - 34px);
   display: ${({ visible }) => (visible ? "flex" : "none")};
   align-items: center;
   justify-content: center;
@@ -32,10 +32,9 @@ const StyledButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    right: 10rem;
-    bottom: 70px;
-    width: 60px;
-    height: 45px;
+    right: 18rem;
+    bottom: 95px;
+    height: 30px;
 
     &::after {
       font-size: 16px;

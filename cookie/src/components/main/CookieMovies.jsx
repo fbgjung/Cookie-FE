@@ -241,7 +241,7 @@ const Poster = styled.img`
 
   @media (max-width: 768px) {
     padding: 0.4rem 0.3rem;
-    width: 7rem;
+    width: 6.8rem;
     height: 10rem;
   }
 

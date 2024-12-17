@@ -286,7 +286,7 @@ const CategoryBtn = styled.button`
   font-size: 13px;
   font-weight: ${(props) => (props.$isSelected ? "bold" : "500")};
   border-radius: 0.3rem;
-  /* border: 1px solid #f84b99; */
+  border: 0.1px solid #ff92bc;
   padding: 0.5rem 1rem;
   cursor: pointer;
   /* &:hover {
@@ -369,7 +369,7 @@ const Poster = styled.img`
 
   @media (max-width: 768px) {
     padding: 0.4rem 0.3rem;
-    width: 7rem;
+    width: 6.8rem;
     height: 10rem;
   }
 
