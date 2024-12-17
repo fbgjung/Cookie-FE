@@ -15,18 +15,19 @@ const ContentWrapper = styled.div`
   width: 100%;
   min-width: 320px;
   margin: 0 auto;
-  padding: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
   background-color: black;
   box-sizing: border-box;
   overflow-x: hidden;
   min-height: 100vh;
 
   @media (max-width: 768px) {
-    padding: 10px;
+    padding: 20px;
   }
 
   @media (max-width: 480px) {
-    padding: 10px;
+    padding: 20px;
   }
 `;
 
