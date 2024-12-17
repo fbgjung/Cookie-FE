@@ -90,9 +90,10 @@ const ReviewTicket = styled.div`
   background-color: #fdf8fa;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  flex-direction: row;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    padding: 0.8rem;
   }
 
   @media (max-width: 480px) {
