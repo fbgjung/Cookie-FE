@@ -5,7 +5,12 @@ const MessageWrapper = styled.div`
   display: flex;
   align-items: flex-start;
   margin: 10px 0;
+
   ${(props) => props.isUser && "flex-direction: row-reverse;"}
+
+  @media (max-width: 768px) {
+    margin: 8px 0;
+  }
 
   @media (max-width: 480px) {
     margin: 5px 0;
@@ -16,12 +21,12 @@ const ProfileImage = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin: 0 10px;
+  margin: 0px 10px 0;
 
   @media (max-width: 480px) {
     width: 30px;
     height: 30px;
-    margin: 0 5px;
+    margin: 5px 5px 0;
   }
 `;
 
@@ -32,9 +37,9 @@ const MessageContent = styled.div`
 `;
 
 const Nickname = styled.span`
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 5px;
   ${(props) => props.isUser && "text-align: right;"}
 
@@ -44,38 +49,45 @@ const Nickname = styled.span`
 `;
 
 const MessageBubble = styled.div`
-  background-color: ${(props) => (props.isUser ? "#04012D" : "#e5e5e5")};
-  color: ${(props) => (props.isUser ? "#fff" : "#000")};
+  background-color: ${(props) => (props.isUser ? "#D32F2F" : "#388E3C")};
+  color: #ffffff;
   padding: 8px 12px;
   border-radius: 15px;
   max-width: 100%;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  word-break: keep-all;
+  word-break: break-word;
   line-height: 1.2;
   font-size: 1rem;
-  font-family: "Arial", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; /* 폰트 추가 */
+  font-family: "Arial", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   position: relative;
 
   &::after {
     content: "";
     position: absolute;
-    top: 50%;
-    ${(props) => (props.isUser ? "right: -8px" : "left: -8px")};
+    top: 35%;
+    ${(props) => (props.isUser ? "right: -12px" : "left: -12px")};
     transform: translateY(-50%);
     border-width: 8px;
     border-style: solid;
     border-color: transparent;
     ${(props) =>
       props.isUser
-        ? "border-left-color: #04012D;"
-        : "border-right-color: #e5e5e5;"}
+        ? "border-left-color: #D32F2F;"
+        : "border-right-color: #388E3C;"}
+  }
+
+  /* 반응형 스타일 */
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 7px 10px;
+    max-width: 100%;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.9rem;
-    padding: 6px 10px;
-    max-width: 90%;
+    font-size: 0.8rem;
+    padding: 6px 8px;
+    max-width: 100%;
   }
 `;
 const ChatMessagesContainer = styled.div`
@@ -83,6 +95,10 @@ const ChatMessagesContainer = styled.div`
   height: 100%;
   overflow-y: auto;
   padding: 15px;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
 
   @media (max-width: 480px) {
     padding: 10px;
@@ -100,10 +116,10 @@ const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
   };
 
   useLayoutEffect(() => {
-    if (containerRef.current) {
+    if (containerRef.current && isScrolledToBottom) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, isScrolledToBottom]);
 
   return (
     <ChatMessagesContainer ref={containerRef} onScroll={handleScroll}>
@@ -120,7 +136,7 @@ const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
             <MessageContent isUser={isUser}>
               {!isUser && <Nickname>{message.nickname}</Nickname>}
               <MessageBubble isUser={isUser}>{message.content}</MessageBubble>
-              <span>{message.timestamp}</span>
+              {/* <span>{message.timestamp}</span> */}
             </MessageContent>
           </MessageWrapper>
         );

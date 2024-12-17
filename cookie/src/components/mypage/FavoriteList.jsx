@@ -24,7 +24,7 @@ const FavoriteListContainer = styled.div`
 
   border-radius: 12px;
   overflow: hidden;
-  background-color: #black;
+  background-color: #ffffff;
 `;
 
 const FavoriteItem = styled.div`

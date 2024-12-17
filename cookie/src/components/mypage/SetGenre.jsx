@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const MainContainer = styled.div`
-  background-color: white;
   min-height: 60vh;
   padding: 2rem 1rem 0 1rem;
 
@@ -55,19 +54,19 @@ const ThemeContainer = styled.div`
   margin: 1rem auto 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.5rem;
   justify-content: center;
   align-items: center;
   width: 85%;
 
   @media (max-width: 768px) {
-    gap: 0.8rem;
+    gap: 0.4rem;
     width: 75%;
   }
 
   @media (max-width: 480px) {
-    gap: 0.6rem;
-    width: 65%;
+    gap: 0.4rem;
+    width: 80%;
     margin: 1rem auto 0;
   }
 `;
@@ -76,7 +75,7 @@ const ThemeBtn = styled.button`
   background-color: ${(props) => (props.$isSelected ? "#f84b99" : "white")};
   color: ${(props) => (props.$isSelected ? "#fdf8fa" : "#02172a")};
   border-radius: 12px;
-  padding: 0.8rem 1rem;
+  padding: 0.6rem 1rem;
   border: 1px solid #f84b99;
   cursor: pointer;
 

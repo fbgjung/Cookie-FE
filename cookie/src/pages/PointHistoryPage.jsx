@@ -16,7 +16,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 2rem;
   font-weight: bold;
   color: #333;
@@ -100,7 +100,7 @@ const TableData = styled.td`
   }
 
   @media (max-width: 480px) {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     padding: 0.8rem;
   }
 `;
@@ -144,6 +144,17 @@ const BadgeHistory = () => {
     }
   }, [isLogined]);
 
+  const formatActionName = (actionName) => {
+    switch (actionName) {
+      case "review":
+        return "리뷰";
+      case "matchup":
+        return "매치업";
+      default:
+        return actionName;
+    }
+  };
+
   const handleHistoryItemClick = () => {
     if (!isLogined()) {
       openLoginModal();
@@ -159,7 +170,7 @@ const BadgeHistory = () => {
           <TableHeader>
             <tr>
               <th>영화 제목</th>
-              <th>획득 출처 </th>
+              <th>획득 출처</th>
               <th>포인트</th>
               <th>날짜</th>
             </tr>
@@ -168,7 +179,7 @@ const BadgeHistory = () => {
             {badgeHistory.map((item, index) => (
               <TableRow key={index} onClick={handleHistoryItemClick}>
                 <TableData>{item.movieName}</TableData>
-                <TableData>{item.actionName}</TableData>
+                <TableData>{formatActionName(item.actionName)}</TableData>
                 <TableData>+{item.point}P</TableData>
                 <TableData>
                   {new Date(item.createdAt).toLocaleDateString()}

@@ -12,20 +12,24 @@ const skeletonLoading = keyframes`
 
 const ResultsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 항상 3열로 표시 */
+  grid-template-columns: repeat(3, 1fr); /* 항상 3열 유지 */
   gap: 15px;
   width: 100%;
   padding: 20px;
-  min-height: 300px;
   box-sizing: border-box;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr); /* 태블릿에서도 3열로 유지 */
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr); /* 모바일에서도 3열로 유지 */
-    padding: 15px;
+    gap: 10px; /* 모바일 환경에서 간격 줄이기 */
+    padding: 10px; /* 여백 줄이기 */
+  }
+
+  @media (max-width: 480px) {
+    gap: 8px; /* 더 좁은 화면에서 간격 더 줄이기 */
+    padding: 8px; /* 여백도 최소화 */
   }
 `;
 
@@ -33,9 +37,12 @@ const ResultItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: transform 0.2s ease;
-  height: 100%;
+  height: auto; /* 자동 높이 */
+  aspect-ratio: 2/3; /* 포스터 비율 유지 */
+  overflow: hidden;
 
   &:hover {
     transform: scale(1.05);
@@ -54,12 +61,12 @@ const PosterSkeleton = styled.div`
 `;
 
 const Poster = styled.img`
-  width: 100%;
-  aspect-ratio: 2/3;
-  object-fit: cover;
+  width: 100%; /* 부모 컨테이너의 너비에 맞춤 */
+  height: 100%
+  aspect-ratio: 2/3; /* 가로 세로 비율 유지 */
+  object-fit: cover; /* 이미지가 비율에 맞게 잘리도록 설정 */
   border-radius: 8px;
-  min-height: 250px;
-  background-color: #2c2c2c;
+  background-color: #2c2c2c; /* 로딩 중일 때 배경 색상 */
   display: ${(props) => (props.isLoading ? "none" : "block")};
 `;
 

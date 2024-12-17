@@ -12,17 +12,17 @@ const ManageProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: white;
+  background-color: var(--dark-gray);
   position: relative;
   overflow-y: auto;
 `;
 
 const ManageProfileContent = styled.div`
-  background-color: white;
+  background-color: var(--dark-gray);
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  margin-top: 20px;
+  margin-top: 3rem;
   z-index: 1;
   box-sizing: border-box;
   padding: 20px;

@@ -7,7 +7,7 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 3rem;
 `;
 
 const ImageContainer = styled.div`
@@ -38,14 +38,6 @@ const BadgeIcon = styled.img`
   height: 50px;
 `;
 
-const Title = styled.h3`
-  font-size: 1.2rem;
-  margin: 0 0 10px 0;
-  text-align: center;
-  color: #ffffff;
-  font-weight: bold;
-`;
-
 const NameContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -57,7 +49,7 @@ const Name = styled.h2`
   font-size: 1.2rem;
   margin: 0;
   text-align: center;
-  color: black;
+  color: var(--text-wh);
 `;
 
 const ManageButton = styled.button`
@@ -93,7 +85,6 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
 
   return (
     <ProfileContainer>
-      {title && <Title>{title}</Title>}
       <ImageContainer>
         <Image image={image} />
         {badgeIcon && isBadgeVisible && (

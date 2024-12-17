@@ -17,18 +17,9 @@ const HeaderWrapper = styled.div`
   border-radius: 10px;
   overflow: hidden;
   background: #333;
-  min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media (max-width: 768px) {
-    min-height: 200px;
-  }
-
-  @media (max-width: 480px) {
-    min-height: 150px;
-  }
 
   .skeleton {
     position: absolute;
@@ -53,12 +44,9 @@ const HeaderWrapper = styled.div`
   }
 
   img {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     display: ${(props) => (props.isLoading ? "none" : "block")};
     z-index: 0;
   }

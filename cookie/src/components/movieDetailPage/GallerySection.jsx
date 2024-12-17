@@ -21,6 +21,7 @@ const GalleryWrapper = styled.div`
 
     img {
       width: 100%;
+      height: auto;
       object-fit: cover;
       cursor: pointer;
       border-radius: 8px;
@@ -40,16 +41,16 @@ const GalleryWrapper = styled.div`
 
   @media (max-width: 768px) {
     .gallery-grid {
-      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
     }
   }
 
   @media (max-width: 480px) {
     .gallery-grid {
-      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
     }
     img {
-      height: 180px;
+      height: auto;
     }
   }
 `;

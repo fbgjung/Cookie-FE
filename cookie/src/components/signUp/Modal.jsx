@@ -22,7 +22,7 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem; /* 요소 간격 */
+  gap: 2rem;
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
   width: 30rem;
 
@@ -30,7 +30,7 @@ const ModalContainer = styled.div`
     width: 22rem;
     height: auto;
     padding: 1.5rem;
-    gap: 1.5rem; /* 모바일 간격 */
+    gap: 1.5rem;
   }
 
   h2 {
@@ -63,6 +63,16 @@ const ModalContainer = styled.div`
     p {
       font-size: 0.85rem;
     }
+  }
+`;
+
+const GifImage = styled.img`
+  width: 300px;
+  height: auto;
+  margin-top: -1rem;
+
+  @media (max-width: 768px) {
+    width: 220px;
   }
 `;
 
@@ -109,7 +119,7 @@ const ModalButton = styled.button`
 
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 2rem; /* 버튼 간격 */
+  gap: 2rem;
   justify-content: center;
 `;
 
@@ -129,28 +139,41 @@ const CloseBtn = styled.button`
 `;
 
 const Modal = ({ onClose, onPushNotification, onNoNotification }) => {
+  const handlePushNotification = () => {
+    const isChrome =
+      /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+    if (!isChrome) {
+      alert("푸시 알림은 크롬 브라우저에서만 지원됩니다.");
+      return;
+    }
+
+    onPushNotification();
+  };
+
   return (
-    <>
-      <ModalBackground onClick={onClose}>
-        <ModalContainer onClick={(e) => e.stopPropagation()}>
-          <CloseIcon onClick={onClose} />
-          <h2>알림 수신 동의(선택)</h2>
-          <h3>
-            좋아하는 장르에 새로운 리뷰가 <br></br>등록될 때 알려드릴까요?
-          </h3>
+    <ModalBackground onClick={onClose}>
+      <ModalContainer onClick={(e) => e.stopPropagation()}>
+        <CloseIcon onClick={onClose} />
+        <h2>알림 수신 동의(선택)</h2>
+        <h3>
+          좋아하는 장르에 새로운 리뷰가 <br /> 등록될 때 알려드릴까요?
+        </h3>
+        <p>새로 온 리뷰가 등록되면 빠르게 알려드릴게요!</p>
 
-          <p>새로운 리뷰가 등록되면 빠르게 알려드릴게요!</p>
-
-          <ButtonContainer>
-            <ModalButton onClick={onPushNotification}>🔔 푸쉬알림</ModalButton>
-          </ButtonContainer>
-          <CloseBtn onClick={onNoNotification}>알림을 원하지 않습니다</CloseBtn>
-          <p style={{ fontSize: "12px" }}>
-            알림은 크롬브라우저에서만 지원됩니다
-          </p>
-        </ModalContainer>
-      </ModalBackground>
-    </>
+        <GifImage
+          src="/assets/gif/accessnotification.gif"
+          alt="알림 수신 안내"
+        />
+        <ButtonContainer>
+          <ModalButton onClick={handlePushNotification}>
+            🔔 푸쉬알림
+          </ModalButton>
+        </ButtonContainer>
+        <CloseBtn onClick={onNoNotification}>알림을 원하지 않습니다</CloseBtn>
+        <p>쿠키의 푸시알림은 크롬 브라우저에서만 지원합니다.</p>
+      </ModalContainer>
+    </ModalBackground>
   );
 };
 

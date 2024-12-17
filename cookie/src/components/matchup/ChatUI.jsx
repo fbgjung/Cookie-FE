@@ -13,7 +13,7 @@ const ChatWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 50vh;
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
   background-color: #ffffff;
   border-radius: 16px 16px 0 0;
@@ -32,6 +32,40 @@ const ChatUI = ({ stompClient }) => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  useEffect(() => {
+    if (!stompClient || !stompClient.connected) {
+      console.error("STOMP 연결이 설정되지 않았습니다.");
+      return;
+    }
+
+    console.log("STOMP 연결 성공:", stompClient.connected);
+
+    const subscription = stompClient.subscribe(
+      `/topic/chat/${matchUpId}`,
+      (message) => {
+        const newMessage = JSON.parse(message.body);
+        console.log("수신된 메시지:", newMessage);
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: newMessage.senderUserId,
+            nickname: newMessage.senderNickname,
+            content: newMessage.content,
+            timestamp: new Date(newMessage.sentAt).toLocaleTimeString(),
+            profile: newMessage.senderProfileImage,
+          },
+        ]);
+
+        scrollToBottom();
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [stompClient, stompClient?.connected, matchUpId]);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -57,35 +91,6 @@ const ChatUI = ({ stompClient }) => {
     fetchMessages();
   }, [matchUpId]);
 
-  useEffect(() => {
-    if (!stompClient || !stompClient.connected) return;
-
-    const subscription = stompClient.subscribe(
-      `/topic/chat/${matchUpId}`,
-      (message) => {
-        const newMessage = JSON.parse(message.body);
-        console.log("Received message:", newMessage);  // 메시지 콘솔에 출력
-
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: newMessage.senderUserId,
-            nickname: newMessage.senderNickname,
-            content: newMessage.content,
-            timestamp: new Date(newMessage.sentAt).toLocaleTimeString(),
-            profile: newMessage.senderProfileImage,
-          },
-        ]);
-        
-        scrollToBottom();
-      }
-    );
-
-    return () => {
-      if (subscription) subscription.unsubscribe();
-    };
-  }, [stompClient, matchUpId]);
-
   const handleSend = (content) => {
     if (stompClient && stompClient.connected) {
       stompClient.publish({
@@ -95,6 +100,7 @@ const ChatUI = ({ stompClient }) => {
           content,
         }),
       });
+      console.log("이떄 매치업 아디뭐임?", matchUpId);
     } else {
       console.error("STOMP 연결이 활성화되지 않았습니다.");
     }
