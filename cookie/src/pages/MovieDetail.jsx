@@ -20,7 +20,6 @@ const ContentWrapper = styled.div`
   box-sizing: border-box;
   overflow-x: hidden;
   min-height: 100vh;
-  margin-bottom: 40px;
 
   @media (max-width: 768px) {
     padding: 20px;
