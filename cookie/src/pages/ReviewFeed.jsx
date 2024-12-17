@@ -12,8 +12,8 @@ const ReviewFeedWrapper = styled.div`
   min-height: 100vh;
 
   @media (max-width: 480px) {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `;
 
@@ -139,7 +139,7 @@ const ReviewCenter = styled.div`
   }
 
   @media (max-width: 480px) {
-    width: 14rem; /* 모바일에서는 너비를 더욱 줄임 */
+    width: 13rem; /* 모바일에서는 너비를 더욱 줄임 */
   }
 
   .profile {
@@ -474,4 +474,4 @@ const ReviewFeed = () => {
   );
 };
 
-export default ReviewFeed;
+export default ReviewFeed;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           

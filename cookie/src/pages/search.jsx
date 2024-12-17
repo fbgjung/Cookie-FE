@@ -14,7 +14,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0px;
+  padding-left: 40px;
+  padding-right: 40px;
   background-color: black;
   min-height: 100vh;
   box-sizing: border-box;
@@ -38,7 +39,7 @@ const ContentWrapper = styled.div`
   overflow-y: auto;
   background: black;
   border-radius: 10px;
-  padding: 20px;
+  padding: 0px;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
@@ -123,7 +124,7 @@ const SearchInfoText = styled.p`
   max-width: 600px;
   margin-bottom: 10px;
   line-height: 1.5;
-  padding-left: 25px;
+  padding-left: 0px;
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
