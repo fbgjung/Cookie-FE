@@ -29,7 +29,7 @@ const HeaderContainer = styled.header`
   max-width: 600px;
   align-items: center;
   justify-content: space-between;
-  background-color: ${(props) => (props.isWhiteHeader ? "#ffffff" : "black")};
+  background-color: ${(props) => (props.isDarkGrayHeader ? "#1e1e1e" : "black")};
   color: ${(props) => (props.isWhiteHeader ? "#000000" : "#ffffff")};
   padding: 15px 20px;
   height: 70px;
@@ -61,13 +61,13 @@ const Header = () => {
 
   const isReviewDetailPage = location.pathname.match(/^\/reviews\/\d+$/);
 
-  const isWhiteHeader =
+  const isDarkGrayHeader =
     location.pathname === "/mypage" ||
-    location.pathname === "/myAllReviewList" ||
+    // location.pathname === "/myAllReviewList" ||
     location.pathname === "/point-history" ||
     location.pathname === "/notifications" ||
-    location.pathname === "/likemovies" ||
-    location.pathname === "/likereviews" ||
+    // location.pathname === "/likemovies" ||
+    // location.pathname === "/likereviews" ||
     location.pathname === "/manageprofile" ||
     location.pathname === "/reviews/write" ||
     isReviewDetailPage;
@@ -81,7 +81,7 @@ const Header = () => {
   };
 
   return (
-    <HeaderContainer isWhiteHeader={isWhiteHeader}>
+    <HeaderContainer isDarkGrayHeader={isDarkGrayHeader}>
       <Logo onClick={handleLogoClick}>
         <img src={CookieLogo} alt="로고 이미지" />
       </Logo>
