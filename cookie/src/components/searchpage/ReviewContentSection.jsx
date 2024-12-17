@@ -287,9 +287,6 @@ const ReviewContentSection = ({
   const { userInfo } = useUserStore(); // 전역 상태의 유저 정보 가져오기
   const loggedInUserId = userInfo?.userId; // 로그인된 유저 ID 추출
 
-  console.log("로그인된 사용자 ID:", loggedInUserId);
-  console.log("리뷰 작성자 ID:", userId);
-
   const [isEditing, setIsEditing] = useState(false);
   const [newContent, setNewContent] = useState("");
   const [newMovieScore, setNewMovieScore] = useState(cookieScoreCount);
@@ -306,27 +303,13 @@ const ReviewContentSection = ({
       openLoginModal();
       return null;
     }
-
-    try {
-      const payload = jwtDecode(token);
-      return payload.id;
-    } catch (error) {
-      console.error("Invalid token:", error);
-      toast.error("로그인 정보가 유효하지 않습니다.");
-      return null;
-    }
   };
 
   const handleLikeClick = async () => {
     const previousLiked = liked;
     const previousLikeCount = currentLikeCount;
 
-    const userId = getUserIdFromToken();
-
-    if (!userId) {
-      openLoginModal(); 
-      return;
-    }
+    getUserIdFromToken();
 
     if (userId === loggedInUserId) {
       toast.error("본인의 리뷰에는 좋아요를 누를 수 없습니다.");
