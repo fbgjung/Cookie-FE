@@ -9,6 +9,7 @@ import ReviewTextSection from "../components/searchpage/ReviewTextSection";
 import { FaPaperPlane } from "react-icons/fa";
 import useAuthStore from "../stores/useAuthStore";
 import { jwtDecode } from "jwt-decode";
+import Spinner from "../components/common/Spinner";
 
 const Container = styled.div`
   width: 100%;
@@ -222,7 +223,6 @@ const ReviewDetail = () => {
     const fetchReviewData = async () => {
       try {
         const response = await axiosInstance.get(`/api/reviews/${reviewId}`);
-        console.log("API 응답 데이터11:", response.data.response);
         const review = response.data.response;
         setReviewData(review);
         setLikedByUser(review.likedByUser);
@@ -364,7 +364,7 @@ const ReviewDetail = () => {
   };
 
   const handleAddComment = async () => {
-    if (isSubmitting) return;
+    if (isSubmitting || !newComment.trim()) return;
 
     const userId = getUserIdFromToken();
     if (!userId) {
@@ -404,7 +404,7 @@ const ReviewDetail = () => {
   };
 
   if (isLoading) {
-    return <Container>Loading...</Container>;
+    return <Spinner />; // 페이지 전체 로딩 시 스피너 표시
   }
 
   if (!reviewData) {
