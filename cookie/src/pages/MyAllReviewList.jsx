@@ -5,10 +5,10 @@ import axiosInstance from "../api/auth/axiosInstance";
 import toast from "react-hot-toast";
 
 const ReviewSection = styled.div`
-  margin-top: 0.3rem;
   width: 100%;
   box-sizing: border-box;
   padding: 0 2rem;
+  background-color: black;
 `;
 
 
@@ -33,9 +33,6 @@ const PrevIcon = styled.svg`
   cursor: pointer;
 `
 
-const Title = styled.h2`
-  width: 100%;
-`
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
