@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
-import likeHeart from "../../assets/images/main/like-heart2.svg";
-import reivew from "../../assets/images/main/reviews.svg";
+// import likeHeart from "../../assets/images/main/like-heart2.svg";
+// import reivew from "../../assets/images/main/reviews.svg";
+import likeHeart from "/assets/images/main/like-heart2.svg";
+import reivew from "/assets/images/main/reviews.svg";
 
 function SpecialMovie({ categorydata }) {
   const filteredCategoryData = categorydata.filter(
@@ -14,11 +16,10 @@ function SpecialMovie({ categorydata }) {
   const [selectedSubCategory, setSelectedSubCategory] = useState("설레는봄");
   const [movies, setMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [totalPages, setTotalPages] = useState();
+  const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
-  const moviesPerSlide = 4;
   const navigate = useNavigate();
 
   const handleMainCategoryClick = (mainCategory) => {
@@ -34,39 +35,22 @@ function SpecialMovie({ categorydata }) {
   const fetchMoviesByCategory = async (mainCategory, subCategory) => {
     if (!mainCategory || !subCategory) return;
 
-    const cacheKey = `${mainCategory}_${subCategory}`;
-    const cachedMovies = localStorage.getItem(cacheKey);
-    const cacheTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
-
-    const currentTime = new Date().getTime();
-    const cacheDuration = 60 * 60 * 1000;
-
-    if (
-      cachedMovies &&
-      cacheTimestamp &&
-      currentTime - cacheTimestamp < cacheDuration
-    ) {
-      setMovies(JSON.parse(cachedMovies));
-    } else {
-      try {
-        const response = await axios.get(
-          `${serverBaseUrl}/api/movies/categoryMovies`,
-          {
-            params: {
-              mainCategory: mainCategory,
-              subCategory: subCategory,
-              page: currentPage - 1,
-              size: 12,
-            },
-          }
-        );
-
-        setMovies(response.data.movies);
-        localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
-        localStorage.setItem(`${cacheKey}_timestamp`, currentTime.toString());
-      } catch (error) {
-        console.error("영화 불러오기 실패:", error);
-      }
+    try {
+      const response = await axios.get(
+        `${serverBaseUrl}/api/movies/categoryMovies`,
+        {
+          params: {
+            mainCategory: mainCategory,
+            subCategory: subCategory,
+            page: currentPage - 1,
+            size: 12,
+          },
+        }
+      );
+      console.log(response);
+      setMovies(response.data.movies);
+    } catch (error) {
+      console.error("영화 불러오기 실패:", error);
     }
   };
 
@@ -107,22 +91,25 @@ function SpecialMovie({ categorydata }) {
     navigate("/category/movies", { state: { mainCategory, subCategory } });
   };
 
-  const slides = Array.from(
-    { length: Math.ceil(movies.length / moviesPerSlide) },
-    (_, i) => movies.slice(i * moviesPerSlide, (i + 1) * moviesPerSlide)
-  );
-
   const handleNext = () => {
-    if (currentIndex < slides.length - 1) {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
+    if (currentIndex < Math.ceil(movies.length / 4) - 1) {
+      setCurrentIndex(currentIndex + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex((prevIndex) => prevIndex - 1);
+      setCurrentIndex(currentIndex - 1);
     }
   };
+
+  useEffect(() => {
+    console.log("currentIndex:", currentIndex);
+    console.log("movies.length:", movies.length);
+    const totalPages = Math.ceil(movies.length / 4);
+    console.log("전체 페이지:", totalPages);
+    console.log("슬라이드 이동 비율:", (currentIndex * 100) / (totalPages - 1));
+  }, [currentIndex, movies]);
 
   return (
     <>
@@ -175,7 +162,7 @@ function SpecialMovie({ categorydata }) {
           <div
             className="specialMovie__list"
             style={{
-              transform: `translateX(-${currentIndex * 66.7}%)`,
+              transform: `translateX(-${(currentIndex * 100) / Math.ceil(movies.length / 4)}%)`,
             }}
           >
             {movies &&
@@ -203,7 +190,7 @@ function SpecialMovie({ categorydata }) {
           <button
             className="next"
             onClick={handleNext}
-            disabled={currentIndex === slides.length - 1}
+            disabled={currentIndex >= Math.ceil(movies.length / 4) - 1}
           >
             &gt;
           </button>

@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
-import likeHeart from "../../assets/images/main/like-heart2.svg";
-import reivew from "../../assets/images/main/reviews.svg";
+// import likeHeart from "../../assets/images/main/like-heart2.svg";
+// import reivew from "../../assets/images/main/reviews.svg";
+import likeHeart from "/assets/images/main/like-heart2.svg";
+import reivew from "/assets/images/main/reviews.svg";
 
 function AdminRecommend() {
   const navigate = useNavigate();
@@ -47,29 +49,10 @@ function AdminRecommend() {
     }
   };
 
-  // 비율 계산
   const translateValue =
     recommendMovies.length > 0
       ? currentIndex * (100 / recommendMovies.length)
       : 0;
-
-  // const handleNext = () => {
-  //   if (currentIndex < recommendMovies.length - 4) {
-  //     setCurrentIndex((prev) => {
-  //       const newIndex = prev + 4;
-  //       return newIndex;
-  //     });
-  //   }
-  // };
-
-  // const handlePrev = () => {
-  //   if (currentIndex > 0) {
-  //     setCurrentIndex((prev) => {
-  //       const newIndex = Math.max(prev - 4, 0);
-  //       return newIndex;
-  //     });
-  //   }
-  // };
   return (
     <>
       <MovieRecommendList>

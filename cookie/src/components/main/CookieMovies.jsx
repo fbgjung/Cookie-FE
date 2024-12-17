@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
 import useAuthStore from "../../stores/useAuthStore";
 import { SkeletonOverlay } from "./AdminRecommend";
-import likeHeart from "../../assets/images/main/like-heart2.svg";
-import reivew from "../../assets/images/main/reviews.svg";
+// import likeHeart from "../../assets/images/main/like-heart2.svg";
+// import reivew from "../../assets/images/main/reviews.svg";
+import likeHeart from "/assets/images/main/like-heart2.svg";
+import reivew from "/assets/images/main/reviews.svg";
 
 function CookieMovies() {
   const navigate = useNavigate();
