@@ -64,11 +64,21 @@ const TableHeader = styled.thead`
     padding: 1rem;
     text-align: left;
     font-weight: bold;
+    white-space: nowrap;
   }
 
   @media (max-width: 768px) {
     th {
       font-size: 0.9rem;
+      padding: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    th {
+      font-size: 0.8rem;
+      padding: 0.6rem;
+      text-align: center;
     }
   }
 `;
@@ -83,6 +93,9 @@ const TableData = styled.td`
   padding: 1.2rem;
   font-size: 1rem;
   color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;

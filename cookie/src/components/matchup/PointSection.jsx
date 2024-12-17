@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const PointSection = styled.div`
-  margin-top: 20px;
+  margin-top: 60px;
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;

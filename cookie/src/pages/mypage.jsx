@@ -135,6 +135,7 @@ const MyPage = () => {
   }, [isLogined, openLoginModal]);
 
   const mainBadge = badgeData.find((badge) => badge.main) || {};
+  console.log("MainBadge:", mainBadge);
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
 
   const handleLogout = async () => {
@@ -154,7 +155,7 @@ const MyPage = () => {
       toast.error("로그아웃 중 문제가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
-      setShowLogoutModal(false); // 모달 닫기
+      setShowLogoutModal(false);
     }
   };
 
@@ -187,6 +188,7 @@ const MyPage = () => {
       navigate("/point-history");
     }
   };
+
   return (
     <>
       <LoginModal />
@@ -217,12 +219,13 @@ const MyPage = () => {
             name={userData.nickname}
             image={userData.profileImage}
             badgeIcon={
-              mainBadge.badgeImage || "/src/assets/images/defaultBadge.png"
+              mainBadge.badgeImage
+                ? mainBadge.badgeImage
+                : "/assets/images/defaultBadge.png"
             }
           />
         </div>
         <MypageContent>
-          <BadgeList badges={badgeData} />
           <PointHistory
             badgePoint={badgePoint}
             onClick={handlePointHistoryClick}

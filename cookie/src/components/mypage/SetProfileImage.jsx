@@ -19,17 +19,17 @@ const ProfileContainer = styled.div`
   }
 `;
 
-const BackButton = styled(FaArrowLeft)`
+const BackButton = styled.div`
+  width: 32px;
+  height: 32px;
+  background: no-repeat center/cover url("/assets/images/prev-button.svg");
+  cursor: pointer;
   position: absolute;
   top: 30px;
   left: 20px;
-  font-size: 1.8rem;
-  color: #f84b99;
-  cursor: pointer;
-
-  &:hover {
-    color: #c33677;
-  }
+  transition:
+    transform 0.3s ease,
+    opacity 0.2s ease;
 `;
 
 const ImageWrapper = styled.div`
@@ -155,10 +155,7 @@ const SetProfileImage = ({ profileImage, onChange }) => {
           }
           alt="Profile"
         />
-        <CameraIcon
-          src="/assets/images/camera.svg"
-          alt="Camera Icon"
-        />
+        <CameraIcon src="/assets/images/camera.svg" alt="Camera Icon" />
       </ImageWrapper>
 
       {showModal && (

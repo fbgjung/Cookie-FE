@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useAuthStore from "../../stores/useAuthStore";
 
 const ProfileContainer = styled.div`
@@ -32,10 +32,11 @@ const Image = styled.div`
 
 const BadgeIcon = styled.img`
   position: absolute;
-  bottom: -10px;
-  right: -10px;
-  width: 50px;
-  height: 50px;
+  bottom: -20px;
+  right: -20px;
+  width: 70px;
+
+  height: 70px;
 `;
 
 const NameContainer = styled.div`
@@ -68,12 +69,30 @@ const ManageButton = styled.button`
   }
 `;
 
-const ProfileImage = ({ title, name, image, badgeIcon }) => {
-  const navigate = useNavigate();
-  const [isBadgeVisible, setIsBadgeVisible] = useState(true);
+const getBadgeImage = (title) => {
+  const badgeImages = {
+    영화새싹: "/assets/images/mypage/lv1.svg",
+    나쵸쟁이: "/assets/images/mypage/lv2.svg",
+    영화매니아: "/assets/images/mypage/lv3.svg",
+  };
+  return badgeImages[title] || "/assets/images/defaultBadge.png";
+};
 
+const ProfileImage = ({ title, name, image }) => {
+  const navigate = useNavigate();
   const isLogined = useAuthStore((state) => state.isLogined);
   const openLoginModal = useAuthStore((state) => state.openLoginModal);
+
+  const getBadgeImage = (title) => {
+    const badgeImages = {
+      영화새싹: "/assets/images/mypage/lv1.svg",
+      나쵸쟁이: "/assets/images/mypage/lv2.svg",
+      영화매니아: "/assets/images/mypage/lv3.svg",
+    };
+    return badgeImages[title] || null; // "배지 없음"일 경우 null 반환
+  };
+
+  const badgeIcon = getBadgeImage(title);
 
   const handleManageClick = () => {
     if (!isLogined()) {
@@ -83,15 +102,17 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
     navigate("/manageprofile");
   };
 
+  console.log("제목", title);
+
   return (
     <ProfileContainer>
       <ImageContainer>
         <Image image={image} />
-        {badgeIcon && isBadgeVisible && (
+        {badgeIcon && (
           <BadgeIcon
             src={badgeIcon}
-            alt=""
-            onError={() => setIsBadgeVisible(false)}
+            alt={title}
+            onError={(e) => (e.target.style.display = "none")}
           />
         )}
       </ImageContainer>
@@ -104,5 +125,4 @@ const ProfileImage = ({ title, name, image, badgeIcon }) => {
     </ProfileContainer>
   );
 };
-
 export default ProfileImage;
