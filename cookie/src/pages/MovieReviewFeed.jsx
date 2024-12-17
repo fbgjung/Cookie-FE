@@ -186,7 +186,7 @@ const ReviewRight = styled.div`
       padding-top: 40px;
 
       @media (max-width: 480px) {
-        padding-top: 30px;
+        padding-top: 38px;
       }
 
       svg {
