@@ -115,6 +115,7 @@ const ReviewLeft = styled.div`
     border: 1.5px solid #b3afb1;
 
     @media (max-width: 480px) {
+      padding-top: 21px;
       width: 40px;
       height: 40px;
     }
