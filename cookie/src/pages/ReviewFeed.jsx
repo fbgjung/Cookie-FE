@@ -194,13 +194,14 @@ const ReviewRight = styled.div`
   gap: 5px;
 
   .score img {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
     margin-right: 0.1rem;
 
     @media (max-width: 480px) {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
     }
   }
 
@@ -214,10 +215,10 @@ const ReviewRight = styled.div`
       display: flex;
       align-items: center;
       gap: 4px;
-      padding-top: 80px;
+      padding-top: 100px;
 
       @media (max-width: 480px) {
-        padding-top: 40px;
+        padding-top: 80px;
       }
 
       svg {
