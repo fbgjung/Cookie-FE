@@ -282,6 +282,12 @@ const ReviewDetail = () => {
     }
   };
 
+  const toKST = (utcDate) => {
+    const date = new Date(utcDate);
+    date.setHours(date.getHours() + 9);
+    return date;
+  };
+
   const handleEditComment = async () => {
     if (!editingComment?.text.trim()) {
       toast.error("수정할 댓글 내용을 입력해주세요.");
@@ -430,7 +436,7 @@ const ReviewDetail = () => {
         posterSrc={reviewData.movie?.poster || "/default-poster.png"}
         profileSrc={reviewData.user?.profileImage || "/default-profile.png"}
         name={reviewData.user?.nickname || "Unknown User"}
-        date={`${new Date(reviewData.createdAt)
+        date={`${toKST(reviewData.createdAt)
           .toLocaleDateString("ko-KR", {
             year: "numeric",
             month: "2-digit",
@@ -438,7 +444,7 @@ const ReviewDetail = () => {
           })
           .replace(/\./g, "-")
           .replace(/-$/, "")
-          .replace(/-\s/g, "-")} ${new Date(
+          .replace(/-\s/g, "-")} ${toKST(
           reviewData.createdAt
         ).toLocaleTimeString("ko-KR", {
           hour: "2-digit",
@@ -498,7 +504,7 @@ const ReviewDetail = () => {
                 <div className="comment-user-info">
                   <div className="nickname">{comment.user.nickname}</div>
                   <div className="date">
-                    {new Date(comment.createdAt)
+                    {toKST(comment.createdAt)
                       .toLocaleDateString("ko-KR", {
                         year: "2-digit",
                         month: "2-digit",

@@ -317,6 +317,12 @@ const ReviewFeed = () => {
     }
   }, [page]);
 
+  const toKST = (utcDate) => {
+    const date = new Date(utcDate);
+    date.setHours(date.getHours() + 9);
+    return date;
+  };
+
   // 리뷰 클릭 시 상세 페이지로 이동
   const handleReviewClick = (reviewId) => {
     navigate(`/reviews/${reviewId}`, {
@@ -394,7 +400,7 @@ const ReviewFeed = () => {
                     <div className="user-info">
                       <div className="name">{review.user.nickname}</div>
                       <div className="date">
-                        {new Date(review.createdAt)
+                        {toKST(review.createdAt)
                           .toLocaleDateString("ko-KR", {
                             year: "numeric",
                             month: "2-digit",
@@ -403,7 +409,7 @@ const ReviewFeed = () => {
                           .replace(/\./g, "-")
                           .replace(/-$/, "")
                           .replace(/-\s/g, "-")}{" "}
-                        {new Date(review.createdAt).toLocaleTimeString(
+                        {toKST(review.createdAt).toLocaleTimeString(
                           "ko-KR",
                           {
                             hour: "2-digit",
