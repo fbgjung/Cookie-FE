@@ -240,7 +240,7 @@ const ReviewForm = () => {
       if (response.status === 200) {
         const newReviewId = response.data.response.reviewId;
         toast.success("리뷰가 성공적으로 등록되었습니다.");
-        console.log("리뷰 등록 성공:", response.data.response);
+        console.log("새로 등록된 리뷰 ID:", newReviewId);
         navigate(`/reviews/${newReviewId}`);
       } else {
         toast.error("리뷰 등록에 실패했습니다. 다시 시도해주세요.");
