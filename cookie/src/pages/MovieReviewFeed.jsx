@@ -103,7 +103,6 @@ const ReviewTicket = styled.div`
 
 const ReviewLeft = styled.div`
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
   gap: 10px;
@@ -115,7 +114,6 @@ const ReviewLeft = styled.div`
     border: 1.5px solid #b3afb1;
 
     @media (max-width: 480px) {
-      padding-top: 21px;
       width: 40px;
       height: 40px;
     }
@@ -187,7 +185,7 @@ const ReviewRight = styled.div`
       padding-top: 40px;
 
       @media (max-width: 480px) {
-        padding-top: 38px;
+        padding-top: 30px;
       }
 
       svg {
