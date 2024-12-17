@@ -62,6 +62,9 @@ const QuestionContainer = styled.div`
 const Title = styled.h2`
   color: #f84b99;
   padding: 2rem 0 0 0.375rem;
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const QuestionSection = styled.div`
@@ -93,6 +96,16 @@ const QuestionButton = styled.button`
 
   &:hover {
     background-color: #2d2c2c;
+  }
+
+  @media (max-width: 768px) {
+    height: 40px;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    height: 48px;
+    font-size: 0.9rem;
   }
 `;
 

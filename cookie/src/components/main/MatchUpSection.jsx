@@ -97,6 +97,9 @@ const Title = styled.h2`
   color: #f84b99;
   padding: 2rem 0 0.4rem 0.375rem;
   display: flex;
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const MatchUpContainer = styled.div`
@@ -177,14 +180,15 @@ const MatchUpDescription = styled.p`
   font-weight: bold;
   font-size: 1.5rem;
 
-
   @media (max-width: 480px) {
     font-size: 1.4rem;
   }
   @media (max-width: 390px) {
     font-size: 1.3rem;
-}
-
+  }
+  @media (max-width: 393px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const VsImage = styled.div`
@@ -218,12 +222,12 @@ const SkeletonOverlay = styled.div`
     }
   }
 
-  @media (max-width: 390px) {
-    width: 360px;
-    height: 404px;
-  }
   @media (max-width: 430px) {
     width: 400px;
+    height: 404px;
+  }
+  @media (max-width: 393px) {
+    width: 360px;
     height: 404px;
   }
 `;

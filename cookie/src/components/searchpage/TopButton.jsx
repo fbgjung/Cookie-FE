@@ -52,10 +52,10 @@ const StyledButton = styled.button`
     }
   }
   @media (max-width: 393px) {
-    right: 11rem;
-    bottom: 60px;
-    width: 40px;
-    height: 40px;
+    right: 9.8rem;
+    bottom: 82px;
+    width: 90px;
+    height: 35px;
 
     &::after {
       font-size: 14px;

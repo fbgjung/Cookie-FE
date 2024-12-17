@@ -224,11 +224,7 @@ const Title = styled.h2`
   padding: 2rem 0 0.7rem 0.375rem;
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 `;
 
@@ -285,11 +281,11 @@ const GenreBtn = styled.button`
 
   @media (max-width: 768px) {
     margin: 0 0.7rem 0.5rem 0;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   @media (max-width: 393px) {
-    margin: 0 0.4rem 0.5rem 0;
-    font-size: 0.88rem;
+    margin: 0 0.3rem 0.5rem 0;
+    font-size: 1rem;
   }
 `;
 

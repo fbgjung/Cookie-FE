@@ -182,11 +182,7 @@ const Title = styled.h2`
     color: #f84b99;
   }
   @media (max-width: 768px) {
-    font-size: 1.2rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 `;
 

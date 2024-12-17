@@ -120,7 +120,7 @@ const MovieRecommendList = styled.div`
     align-items: center;
     position: relative;
     overflow: hidden;
-    min-height: 212px;
+    /* min-height: 212px; */
   }
 
   .recommend__movie {
@@ -167,11 +167,7 @@ const Title = styled.h2`
   padding: 2rem 0 0 0.375rem;
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 `;
 
