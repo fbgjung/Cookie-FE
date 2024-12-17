@@ -32,9 +32,9 @@ const StyledButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    right: 14rem;
+    right: 10rem;
     bottom: 70px;
-    width: 45px;
+    width: 60px;
     height: 45px;
 
     &::after {
@@ -43,13 +43,24 @@ const StyledButton = styled.button`
   }
 
   @media (max-width: 480px) {
-    right: 12rem;
-    bottom: 60px;
-    width: 40px;
+    right: 11rem;
+    bottom: 92px;
+    width: 80px;
     height: 40px;
 
     &::after {
       font-size: 14px;
+    }
+  }
+
+  @media (max-width: 390px) {
+    right: 9.8rem;
+    bottom: 80px;
+    width: 90px;
+    height: 35px;
+
+    &::after {
+      font-size: 16px;
     }
   }
 `;

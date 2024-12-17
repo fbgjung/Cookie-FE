@@ -122,9 +122,11 @@ function CommentsModal({ comments, closeModal, reviewId }) {
   const deleteComment = async (commentId) => {
     try {
       await axiosInstance.delete(
-        `/api/admin/reviews/detail/${reviewId}/comments/${commentId}`
+        `/api/admin/reviews/detail/${commentId}/comments`
       );
+
       console.log("댓글 삭제 성공");
+      alert("해당 리뷰의 댓글이 삭제되었어요.");
       fetchComments(reviewId);
     } catch (err) {
       console.error("댓글 삭제 실패:", err);
