@@ -26,6 +26,18 @@ const PopupContainer = styled.div`
   justify-content: center;
   align-items: flex-end;
   z-index: 10000;
+
+  @media (max-width: 768px) {
+    padding: 0.4rem 0.3rem;
+    width: 100vw;
+    height: 80vh;
+  }
+
+  @media (max-width: 390px) {
+    padding: 0.4rem 0.3rem;
+    width: 100vw;
+    height: 80vh;
+  }
 `;
 
 const PopupContent = styled.div`

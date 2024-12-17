@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
-import likeHeart from "../../assets/images/main/like-heart2.svg";
-import reivew from "../../assets/images/main/reviews.svg";
+// import likeHeart from "../../assets/images/main/like-heart2.svg";
+// import reivew from "../../assets/images/main/reviews.svg";
+import likeHeart from "/assets/images/main/like-heart2.svg";
+import reivew from "/assets/images/main/reviews.svg";
 
 function GenreMovie({ categorydata }) {
   const [selectedMainCategory] = useState("장르");
