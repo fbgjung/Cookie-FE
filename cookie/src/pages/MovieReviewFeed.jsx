@@ -154,16 +154,25 @@ const ReviewRight = styled.div`
       display: flex;
       align-items: center;
       gap: 4px;
-      padding-top: 1.5rem;
+      padding-top: 40px;
 
       svg {
-        width: 14px;
-        height: 14px;
+        width: 20px;
+        height: 20px;
+
+        @media (max-width: 480px) {
+          width: 14px;
+          height: 14px;
+        }
       }
 
       span {
-        font-size: 0.8rem;
+        font-size: 1rem;
         color: #888;
+
+        @media (max-width: 480px) {
+          font-size: 0.8rem;
+        }
       }
     }
   }
