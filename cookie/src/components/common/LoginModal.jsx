@@ -103,7 +103,7 @@ const ModalContent = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 90%;
+    width: 100%;
     height: 14rem;
     padding: 1rem;
 
@@ -130,7 +130,7 @@ const ModalContent = styled.div`
   }
 
   @media (max-width: 480px) {
-    width: 95%;
+    width: 100%;
     height: 12rem;
     padding: 0.8rem;
 
