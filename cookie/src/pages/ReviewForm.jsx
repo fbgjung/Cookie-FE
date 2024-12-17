@@ -238,7 +238,8 @@ const ReviewForm = () => {
       console.log("Axios 요청 정보:", response.config);
 
       if (response.status === 200) {
-        const newReviewId = response.data.response.reviewId;
+        console.log("서버 응답 데이터:", response.data);
+        const newReviewId = response.data.response?.reviewId;
         toast.success("리뷰가 성공적으로 등록되었습니다.");
         console.log("새로 등록된 리뷰 ID:", newReviewId);
         navigate(`/reviews/${newReviewId}`);
