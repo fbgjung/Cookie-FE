@@ -7,68 +7,101 @@ import toast from "react-hot-toast";
 const ReviewSection = styled.div`
   width: 100%;
   box-sizing: border-box;
-  padding: 0 2rem;
+  padding: 2rem;
   background-color: black;
   min-height: 100vh;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  margin: 1rem 0;
+  margin-bottom: 1.5rem;
 
   .title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #333;
-    margin-left: 0.4rem;
     color: #f84b99;
+    margin-left: 0.8rem;
+
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.1rem;
+    }
   }
 `;
 
 const PrevIcon = styled.svg`
   width: 32px;
   height: 32px;
-  background: no-repeat center/cover url("/assets/images/prev-button.svg");
+  background: url("/assets/images/prev-button.svg") no-repeat center/cover;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 28px;
+    height: 28px;
+  }
+
+  @media (max-width: 480px) {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  /* padding: 0 1rem; */
+  gap: 1rem;
 `;
 
 const ReviewTicket = styled.div`
   display: flex;
-  padding: 1rem 0.8rem;
-  border-radius: 0.4rem;
-  box-sizing: border-box;
-  cursor: pointer;
+  padding: 1rem;
   background-color: #fdf8fa;
-  margin: 0.4rem 0;
+  border-radius: 0.5rem;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.98);
+  }
 
   @media (max-width: 768px) {
-    padding: 10px;
+    padding: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
   }
 `;
 
 const ReviewLeft = styled.div`
   img {
-    width: 7.75rem;
-    height: 100%;
+    width: 8rem;
+    height: 11rem;
     object-fit: cover;
-  }
-  .title {
-    font-size: 0.6rem;
-    margin: 0;
-    font-weight: normal;
-    color: #434141;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    border-radius: 0.4rem;
+
+    @media (max-width: 768px) {
+      width: 7rem;
+      height: 10rem;
+    }
+
+    @media (max-width: 480px) {
+      width: 6rem;
+      height: 9rem;
+    }
   }
 `;
 
@@ -77,105 +110,199 @@ const ReviewInfoSection = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  margin-left: 1.5rem;
+
+  @media (max-width: 768px) {
+    margin-left: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-left: 0.8rem;
+  }
 `;
 
 const ReviewInfoFirst = styled.div`
   display: flex;
-  width: 100%;
   justify-content: space-between;
+  align-items: flex-start; /* 수평으로 맞추기 */
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const ReviewCenter = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 0 0 1.5rem;
-  width: 18rem;
+  width: 100%;
 
   .profile {
     display: flex;
     align-items: center;
+    margin-bottom: 0.5rem;
 
     img {
       width: 44px;
       height: 44px;
       border-radius: 50%;
       margin-right: 10px;
-      border: solid 1.5px #b3afb1;
+      border: 1.5px solid #b3afb1;
+
+      @media (max-width: 768px) {
+        width: 40px;
+        height: 40px;
+      }
+
+      @media (max-width: 480px) {
+        width: 36px;
+        height: 36px;
+      }
     }
 
     .user-info {
       .name {
-        font-size: 0.9rem;
+        font-size: 1rem;
         font-weight: bold;
+
+        @media (max-width: 768px) {
+          font-size: 0.9rem;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 0.8rem;
+        }
       }
+
       .date {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         color: #888;
+
+        @media (max-width: 768px) {
+          font-size: 0.8rem;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 0.7rem;
+        }
       }
     }
   }
 
   .comment {
     margin-top: 0.5rem;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+    }
   }
 
   .movie-title {
-    margin-top: 0.5rem;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #f84b99;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+    }
   }
 `;
 
 const ReviewRight = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  align-self: flex-start;
+  margin-left: 1rem;
+
   .score {
+    display: flex;
+    gap: 0.2rem;
+
     img {
       width: 16px;
       height: 16px;
-      margin-right: 0.1rem;
+
+      @media (max-width: 768px) {
+        width: 14px;
+        height: 14px;
+      }
     }
   }
 
-  .score-text {
-    font-size: 0.8rem;
-    color: #888;
-    margin-right: 0.5rem;
+  @media (max-width: 768px) {
+    margin-left: 0.05rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-left: 0.05rem;
   }
 `;
 
 const ReviewInfoSecond = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+  }
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const LikeIcon = styled.svg`
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover
-    url("/assets/images/review/heart-review-feed.svg");
+  background: url("/assets/images/review/heart-review-feed.svg") no-repeat
+    center/cover;
+
+  @media (max-width: 768px) {
+    width: 12px;
+    height: 12px;
+  }
 `;
 
 const ReviewLike = styled.p`
   font-size: 0.9rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const CommentIcon = styled.svg`
-  margin-left: 0.5rem;
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover
-    url("/assets/images/review/comment-review-feed.svg");
+  background: url("/assets/images/review/comment-review-feed.svg") no-repeat
+    center/cover;
+
+  @media (max-width: 768px) {
+    width: 12px;
+    height: 12px;
+  }
 `;
 
 const ReviewComment = styled.p`
   font-size: 0.9rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const MyAllReviewList = () => {

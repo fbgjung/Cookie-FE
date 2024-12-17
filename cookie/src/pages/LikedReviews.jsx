@@ -1,52 +1,321 @@
-import { FaArrowLeft } from "react-icons/fa";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback } from "react";
-
-import MyAllReviewList from "../pages/MyAllReviewList";
+import styled from "styled-components";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 20px 15px;
   background-color: #000000;
   width: 100%;
-  /* max-width: 1000px; */
   margin: 0 auto;
-  position: relative;
   min-height: 80vh;
   overflow-x: hidden;
-`;
 
-const EmptyMessage = styled.div`
-  font-size: 1rem;
-  color: #999;
-  text-align: center;
-  margin: 30px 0;
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
 `;
 
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  margin: 1rem 0 1rem 3rem;
-  width: 100%;
+  justify-content: flex-start; /* 좌측 정렬 */
+  margin: 0;
+  padding: 1rem 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 
   .title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #333;
-    margin-left: 0.4rem;
     color: #f84b99;
+    margin-left: 0.5rem; /* 백버튼과 텍스트 사이 간격 */
+
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.1rem;
+    }
   }
 `;
 
 const PrevIcon = styled.svg`
   width: 32px;
   height: 32px;
-  background: no-repeat center/cover url("/assets/images/prev-button.svg");
+  background: url("/assets/images/prev-button.svg") no-repeat center/cover;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 28px;
+    height: 28px;
+  }
+
+  @media (max-width: 480px) {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
+const EmptyMessage = styled.div`
+  font-size: 1rem;
+  color: #999;
+  text-align: center;
+  margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
+`;
+
+const ReviewContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const ReviewTicket = styled.div`
+  display: flex;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #fdf8fa;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    padding: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: row;
+    padding: 0.6rem;
+  }
+`;
+
+const ReviewLeft = styled.div`
+  img {
+    width: 8rem;
+    height: 11rem;
+    object-fit: cover;
+    border-radius: 0.4rem;
+
+    @media (max-width: 768px) {
+      width: 7rem;
+      height: 10rem;
+    }
+
+    @media (max-width: 480px) {
+      width: 6rem;
+      height: 9rem;
+    }
+  }
+`;
+
+const ReviewInfoSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  margin-left: 1.5rem;
+
+  @media (max-width: 768px) {
+    margin-left: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-left: 0.8rem;
+  }
+`;
+const ReviewInfoFirst = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start; /* 상단 정렬로 변경 */
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const ReviewCenter = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      margin-right: 10px;
+      border: 1.5px solid #b3afb1;
+
+      @media (max-width: 768px) {
+        width: 40px;
+        height: 40px;
+      }
+
+      @media (max-width: 480px) {
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    .user-info {
+      .name {
+        font-size: 1rem;
+        font-weight: bold;
+
+        @media (max-width: 768px) {
+          font-size: 0.9rem;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 0.8rem;
+        }
+      }
+
+      .date {
+        font-size: 0.9rem;
+        color: #888;
+
+        @media (max-width: 768px) {
+          font-size: 0.8rem;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 0.7rem;
+        }
+      }
+    }
+  }
+
+  .comment {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+    }
+  }
+
+  .movie-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #f84b99;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+    }
+  }
+`;
+
+const ReviewRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .score {
+    display: flex;
+    gap: 0.2rem;
+
+    img {
+      width: 16px;
+      height: 16px;
+
+      @media (max-width: 768px) {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+`;
+
+const ReviewInfoSecond = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+  }
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const LikeIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: url("/assets/images/review/heart-review-feed.svg") no-repeat
+    center/cover;
+
+  @media (max-width: 768px) {
+    width: 12px;
+    height: 12px;
+  }
+`;
+
+const ReviewLike = styled.p`
+  font-size: 0.9rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+`;
+
+const CommentIcon = styled.svg`
+  width: 14px;
+  height: 14px;
+  background: url("/assets/images/review/comment-review-feed.svg") no-repeat
+    center/cover;
+
+  @media (max-width: 768px) {
+    width: 12px;
+    height: 12px;
+  }
+`;
+
+const ReviewComment = styled.p`
+  font-size: 0.9rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const LikedReviews = () => {
@@ -200,17 +469,20 @@ const LikedReviews = () => {
                 </ReviewInfoFirst>
 
                 <ReviewInfoSecond>
-                  <LikeIcon />
-                  <ReviewLike>{review.reviewLike}</ReviewLike>
-                  <CommentIcon />
-                  <ReviewComment>{review.comments}</ReviewComment>
+                  <IconWrapper>
+                    <LikeIcon />
+                    <ReviewLike>{review.reviewLike}</ReviewLike>
+                  </IconWrapper>
+                  <IconWrapper>
+                    <CommentIcon />
+                    <ReviewComment>{review.comments || 0}</ReviewComment>
+                  </IconWrapper>
                 </ReviewInfoSecond>
               </ReviewInfoSection>
             </ReviewTicket>
           ))}
         </ReviewContainer>
       ) : (
-        // <h2>내가 좋아요한 리뷰 리스트들</h2>
         <EmptyMessage>좋아하는 리뷰를 선택해보세요!</EmptyMessage>
       )}
     </Container>
@@ -218,147 +490,3 @@ const LikedReviews = () => {
 };
 
 export default LikedReviews;
-
-const ReviewContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* padding: 0 1rem; */
-`;
-
-const ReviewTicket = styled.div`
-  display: flex;
-  padding: 1rem 0.8rem;
-  border-radius: 0.4rem;
-  box-sizing: border-box;
-  cursor: pointer;
-  background-color: #fdf8fa;
-  margin: 0.4rem 0;
-
-  @media (max-width: 768px) {
-    padding: 10px;
-  }
-`;
-
-const ReviewLeft = styled.div`
-  img {
-    width: 7.75rem;
-    height: 100%;
-    object-fit: cover;
-  }
-  .title {
-    font-size: 0.6rem;
-    margin: 0;
-    font-weight: normal;
-    color: #434141;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;
-
-const ReviewInfoSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const ReviewInfoFirst = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const ReviewCenter = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 0 0 1.5rem;
-  width: 18rem;
-
-  .profile {
-    display: flex;
-    align-items: center;
-
-    img {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      margin-right: 10px;
-      border: solid 1.5px #b3afb1;
-    }
-
-    .user-info {
-      .name {
-        font-size: 0.9rem;
-        font-weight: bold;
-      }
-      .date {
-        font-size: 0.8rem;
-        color: #888;
-      }
-    }
-  }
-
-  .comment {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    line-height: 1.5;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .movie-title {
-    margin-top: 0.5rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #f84b99;
-  }
-`;
-
-const ReviewRight = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  .score {
-    img {
-      width: 16px;
-      height: 16px;
-      margin-right: 0.1rem;
-    }
-  }
-
-  .score-text {
-    font-size: 0.8rem;
-    color: #888;
-    margin-right: 0.5rem;
-  }
-`;
-
-const ReviewInfoSecond = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover
-    url("/assets/images/review/heart-review-feed.svg");
-`;
-
-const ReviewLike = styled.p`
-  font-size: 0.9rem;
-`;
-
-const CommentIcon = styled.svg`
-  margin-left: 0.5rem;
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover
-    url("/assets/images/review/comment-review-feed.svg");
-`;
-
-const ReviewComment = styled.p`
-  font-size: 0.9rem;
-`;
