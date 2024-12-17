@@ -118,15 +118,15 @@ const ReviewCenter = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   padding-left: 1.2rem; /* 왼쪽 여백 줄이기 */
-  width: 16rem;
+  width: 14rem;
   height: 100%;
 
   @media (max-width: 768px) {
-    width: 13rem; /* 태블릿에서는 너비를 더 줄임 */
+    width: 12rem; /* 태블릿에서는 너비를 더 줄임 */
   }
 
   @media (max-width: 480px) {
-    width: 12rem; /* 모바일에서는 너비를 더욱 줄임 */
+    width: 11rem; /* 모바일에서는 너비를 더욱 줄임 */
   }
 
   .profile {
@@ -196,7 +196,7 @@ const ReviewRight = styled.div`
   .score img {
     width: 20px;
     height: 20px;
-    margin-top: 1px;
+    margin-top: 3px;
     margin-right: 0.1rem;
 
     @media (max-width: 480px) {
@@ -215,10 +215,10 @@ const ReviewRight = styled.div`
       display: flex;
       align-items: center;
       gap: 4px;
-      padding-top: 100px;
+      padding-top: 120px;
 
       @media (max-width: 480px) {
-        padding-top: 80px;
+        padding-top: 60px;
       }
 
       svg {
