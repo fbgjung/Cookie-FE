@@ -5,11 +5,12 @@ const ChatContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  max-width: 100vw;
   flex: 1;
   background-color: #222222;
   border-radius: 16px 16px 0 0;
-  overflow: hidden;
   overflow-y: auto;
+  overflow-x: hidden;
 
   &::-webkit-scrollbar {
     width: 5px;
