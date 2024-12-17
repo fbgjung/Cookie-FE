@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback } from "react";
 
-import MyAllReviewList from "../pages/MyAllReviewList"
+import MyAllReviewList from "../pages/MyAllReviewList";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
@@ -17,6 +17,7 @@ const Container = styled.div`
   margin: 0 auto;
   position: relative;
   min-height: 80vh;
+  overflow-x: hidden;
 `;
 
 const EmptyMessage = styled.div`
@@ -46,7 +47,7 @@ const PrevIcon = styled.svg`
   height: 32px;
   background: no-repeat center/cover url("/assets/images/prev-button.svg");
   cursor: pointer;
-`
+`;
 
 const LikedReviews = () => {
   const navigate = useNavigate();
@@ -137,81 +138,79 @@ const LikedReviews = () => {
       </HeaderContainer>
       {reviews.length > 0 ? (
         <ReviewContainer>
-        {reviews.map((review, index) => (
-          <ReviewTicket
-            key={`${review.reviewId}-${index}`}
-            onClick={() => handleReviewClick(review.reviewId)}
-          >
-            <ReviewLeft>
-              <img src={review.movie.poster} alt={review.movie.title} />
-            </ReviewLeft>
-            <ReviewInfoSection>
-              <ReviewInfoFirst>
-                <ReviewCenter>
-                  <div className="profile">
-                    <img
-                      src={review.user.profileImage}
-                      alt={review.user.nickname}
-                    />
-                    <div className="user-info">
-                      <div className="name">{review.user.nickname}</div>
-                      <div className="date">
-                        {new Date(review.createdAt)
-                          .toLocaleDateString('ko-KR', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
-                          })
-                          .replace(/\./g, "-")
-                          .replace(/-$/, "")
-                          .replace(/-\s/g, "-")}
-                        {' '}
-                        {new Date(review.createdAt)
-                          .toLocaleTimeString('ko-KR', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                        }
+          {reviews.map((review, index) => (
+            <ReviewTicket
+              key={`${review.reviewId}-${index}`}
+              onClick={() => handleReviewClick(review.reviewId)}
+            >
+              <ReviewLeft>
+                <img src={review.movie.poster} alt={review.movie.title} />
+              </ReviewLeft>
+              <ReviewInfoSection>
+                <ReviewInfoFirst>
+                  <ReviewCenter>
+                    <div className="profile">
+                      <img
+                        src={review.user.profileImage}
+                        alt={review.user.nickname}
+                      />
+                      <div className="user-info">
+                        <div className="name">{review.user.nickname}</div>
+                        <div className="date">
+                          {new Date(review.createdAt)
+                            .toLocaleDateString("ko-KR", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            })
+                            .replace(/\./g, "-")
+                            .replace(/-$/, "")
+                            .replace(/-\s/g, "-")}{" "}
+                          {new Date(review.createdAt).toLocaleTimeString(
+                            "ko-KR",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <p className="movie-title">{review.movie.title}</p>
-                  <div className="comment">
-                    {review.content.length > 100
-                      ? `${review.content.slice(0, 105)}...`
-                      : review.content}
-                  </div>
-                  
-                </ReviewCenter>
-                
-                <ReviewRight>
-                  <div className="score">
-                    {Array.from({ length: Math.round(review.movieScore) }).map(
-                      (_, i) => (
+                    <p className="movie-title">{review.movie.title}</p>
+                    <div className="comment">
+                      {review.content.length > 100
+                        ? `${review.content.slice(0, 105)}...`
+                        : review.content}
+                    </div>
+                  </ReviewCenter>
+
+                  <ReviewRight>
+                    <div className="score">
+                      {Array.from({
+                        length: Math.round(review.movieScore),
+                      }).map((_, i) => (
                         <img
                           key={`${review.reviewId}-score-${i}`}
                           src="/assets/images/review/score-macarong.png"
                           alt="score"
                         />
-                      )
-                    )}
-                  </div>
-                </ReviewRight>  
-              </ReviewInfoFirst>
+                      ))}
+                    </div>
+                  </ReviewRight>
+                </ReviewInfoFirst>
 
-              <ReviewInfoSecond>
-                <LikeIcon />
-                <ReviewLike>{review.reviewLike}</ReviewLike>
-                <CommentIcon />
-                <ReviewComment>{review.comments}</ReviewComment>
-              </ReviewInfoSecond>
-
-            </ReviewInfoSection>
-          </ReviewTicket>
-        ))}
-      </ReviewContainer>
-        // <h2>내가 좋아요한 리뷰 리스트들</h2>
+                <ReviewInfoSecond>
+                  <LikeIcon />
+                  <ReviewLike>{review.reviewLike}</ReviewLike>
+                  <CommentIcon />
+                  <ReviewComment>{review.comments}</ReviewComment>
+                </ReviewInfoSecond>
+              </ReviewInfoSection>
+            </ReviewTicket>
+          ))}
+        </ReviewContainer>
       ) : (
+        // <h2>내가 좋아요한 리뷰 리스트들</h2>
         <EmptyMessage>좋아하는 리뷰를 선택해보세요!</EmptyMessage>
       )}
     </Container>
@@ -220,14 +219,11 @@ const LikedReviews = () => {
 
 export default LikedReviews;
 
-
-
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   /* padding: 0 1rem; */
-  
 `;
 
 const ReviewTicket = styled.div`
@@ -266,14 +262,13 @@ const ReviewInfoSection = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-
-`
+`;
 
 const ReviewInfoFirst = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-`
+`;
 
 const ReviewCenter = styled.div`
   display: flex;
@@ -311,14 +306,13 @@ const ReviewCenter = styled.div`
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
-
   }
 
   .movie-title {
     margin-top: 0.5rem;
     font-size: 0.7rem;
     font-weight: 600;
-    color: #F84B99;
+    color: #f84b99;
   }
 `;
 
@@ -327,7 +321,6 @@ const ReviewRight = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   .score {
-    
     img {
       width: 16px;
       height: 16px;
@@ -342,29 +335,30 @@ const ReviewRight = styled.div`
   }
 `;
 
-
 const ReviewInfoSecond = styled.div`
   display: flex;
   justify-content: flex-end;
-`
+`;
 
 const LikeIcon = styled.svg`
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/heart-review-feed.svg");
-`
+  background: no-repeat center/cover
+    url("/assets/images/review/heart-review-feed.svg");
+`;
 
 const ReviewLike = styled.p`
   font-size: 0.9rem;
-`
+`;
 
 const CommentIcon = styled.svg`
   margin-left: 0.5rem;
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/comment-review-feed.svg");
-`
+  background: no-repeat center/cover
+    url("/assets/images/review/comment-review-feed.svg");
+`;
 
 const ReviewComment = styled.p`
   font-size: 0.9rem;
-`
+`;

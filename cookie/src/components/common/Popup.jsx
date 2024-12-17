@@ -26,18 +26,6 @@ const PopupContainer = styled.div`
   justify-content: center;
   align-items: flex-end;
   z-index: 10000;
-
-  @media (max-width: 768px) {
-    padding: 0.4rem 0.3rem;
-    width: 100vw;
-    height: 80vh;
-  }
-
-  @media (max-width: 390px) {
-    padding: 0.4rem 0.3rem;
-    width: 100vw;
-    height: 80vh;
-  }
 `;
 
 const PopupContent = styled.div`
@@ -53,6 +41,19 @@ const PopupContent = styled.div`
   justify-content: flex-end;
   animation: ${slideUp} 0.5s ease-out;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    height: 70vh;
+    margin-bottom: 5vh; /* 팝업이 더 위로 올라오게 조정 */
+  }
+
+  @media (max-width: 480px) {
+    width: 85%;
+    height: 65vh;
+    background-size: contain;
+    margin-bottom: 7vh; /* 모바일 화면에서 더 위로 */
+  }
 `;
 
 const PopupFooter = styled.div`
@@ -65,6 +66,14 @@ const PopupFooter = styled.div`
   border-top: 1px solid #ddd;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+
+  @media (max-width: 768px) {
+    padding: 0.8rem 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem 1rem;
+  }
 `;
 
 const CloseButton = styled.button`
@@ -76,6 +85,16 @@ const CloseButton = styled.button`
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
 `;
 
 const CheckboxWrapper = styled.div`
@@ -83,6 +102,19 @@ const CheckboxWrapper = styled.div`
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+`;
+
+const CheckboxLabel = styled.span`
+  font-size: 0.9rem;
+  color: #333;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
 `;
 
 const CircleCheckbox = styled.input.attrs({ type: "checkbox" })`
@@ -104,11 +136,6 @@ const CircleCheckbox = styled.input.attrs({ type: "checkbox" })`
     background: #ff0077;
     border-radius: 50%;
   }
-`;
-
-const CheckboxLabel = styled.span`
-  font-size: 0.9rem;
-  color: #333;
 `;
 
 const Popup = () => {

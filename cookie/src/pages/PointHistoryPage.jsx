@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
 import useAuthStore from "../stores/useAuthStore";
@@ -8,9 +7,9 @@ import LoginModal from "../components/common/LoginModal";
 
 const Container = styled.div`
   padding: 2rem;
-  background-color: #ffffff;
+  background-color: #1e1e1e;
   min-height: 100vh;
-  color: #333;
+  color: #fff;
   position: relative;
 `;
 
@@ -19,10 +18,10 @@ const Title = styled.h2`
   font-size: 2rem;
   margin-bottom: 2rem;
   font-weight: bold;
-  color: #333;
+  color: #f84b99;
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   @media (max-width: 480px) {
@@ -30,21 +29,17 @@ const Title = styled.h2`
   }
 `;
 
-const BackButton = styled(FaArrowLeft)`
+const BackButton = styled.div`
+  width: 32px;
+  height: 32px;
+  background: no-repeat center/cover url("/assets/images/prev-button.svg");
+  cursor: pointer;
   position: absolute;
   top: 20px;
   left: 4%;
-  font-size: 1.8rem;
-  color: #f84b99;
-  cursor: pointer;
   transition:
     transform 0.3s ease,
-    color 0.2s ease;
-
-  &:hover {
-    transform: scale(1.2);
-    color: #c33677;
-  }
+    opacity 0.2s ease;
 `;
 
 const HistoryTable = styled.table`
@@ -52,9 +47,9 @@ const HistoryTable = styled.table`
   margin: 0 auto;
   max-width: 1000px;
   border-collapse: collapse;
-  background-color: #fdf8fa;
+  background-color: #222;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 
   @media (max-width: 768px) {
     max-width: 100%;
@@ -79,20 +74,15 @@ const TableHeader = styled.thead`
 `;
 
 const TableRow = styled.tr`
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
+  background-color: #fff;
+  border-bottom: 1px solid #555;
   cursor: pointer;
   transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: #f1f1f1;
-  }
 `;
-
 const TableData = styled.td`
   padding: 1.2rem;
   font-size: 1rem;
-  color: #555;
+  color: black;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
@@ -100,7 +90,7 @@ const TableData = styled.td`
   }
 
   @media (max-width: 480px) {
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     padding: 0.8rem;
   }
 `;
@@ -108,7 +98,7 @@ const TableData = styled.td`
 const EmptyMessage = styled.div`
   text-align: center;
   font-size: 1.2rem;
-  color: #999;
+  color: #888;
   margin-top: 2rem;
 `;
 

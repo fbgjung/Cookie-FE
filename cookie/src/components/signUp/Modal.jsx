@@ -101,7 +101,12 @@ const ModalButton = styled.button`
   border: 1px solid #f84b99;
   cursor: pointer;
   font-size: 1rem;
-  width: 9rem;
+  width: 10rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
 
   &:hover {
     background-color: #f84b99;
@@ -109,11 +114,15 @@ const ModalButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    width: 8rem;
+    width: 9rem;
     height: 3.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    width: 8rem;
+    height: 3rem;
+    font-size: 0.8rem;
   }
 `;
 
@@ -140,17 +149,18 @@ const CloseBtn = styled.button`
 
 const Modal = ({ onClose, onPushNotification, onNoNotification }) => {
   const handlePushNotification = () => {
-    const isChrome =
-      /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    const isSupportedBrowser =
+      (/Chrome/.test(navigator.userAgent) &&
+        /Google Inc/.test(navigator.vendor)) ||
+      /Edg/.test(navigator.userAgent);
 
-    if (!isChrome) {
-      alert("푸시 알림은 크롬 브라우저에서만 지원됩니다.");
+    if (!isSupportedBrowser) {
+      alert("푸시 알림은 크롬 및 엣지 브라우저에서만 지원됩니다.");
       return;
     }
 
     onPushNotification();
   };
-
   return (
     <ModalBackground onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
@@ -171,7 +181,13 @@ const Modal = ({ onClose, onPushNotification, onNoNotification }) => {
           </ModalButton>
         </ButtonContainer>
         <CloseBtn onClick={onNoNotification}>알림을 원하지 않습니다</CloseBtn>
-        <p>쿠키의 푸시알림은 크롬 브라우저에서만 지원합니다.</p>
+        <p>
+          쿠키의 푸시알림은 크롬,Edge 브라우저에서만 <br></br> 지원합니다.
+        </p>
+        <p style={{ fontSize: "0.75rem", color: "#888" }}>
+          • Chrome (iOS) 지원 안 함 (iOS 제한) <br />• Edge (모바일 앱 지원 안
+          함)
+        </p>
       </ModalContainer>
     </ModalBackground>
   );

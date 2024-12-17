@@ -11,6 +11,7 @@ const Container = styled.div`
   background-color: #000000;
   min-height: 100vh;
   width: 100%;
+  overflow-x: hidden;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -32,7 +33,7 @@ const MovieCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #FDF8FA;
+  background-color: #fdf8fa;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -106,7 +107,7 @@ const PrevIcon = styled.svg`
   height: 32px;
   background: no-repeat center/cover url("/assets/images/prev-button.svg");
   cursor: pointer;
-`
+`;
 
 const CommentSection = styled.div`
   display: flex;
@@ -114,13 +115,14 @@ const CommentSection = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.2rem;
-`
+`;
 const CommentIcon = styled.svg`
   margin-left: 0.5rem;
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/comment-review-feed.svg");
-`
+  background: no-repeat center/cover
+    url("/assets/images/review/comment-review-feed.svg");
+`;
 
 const LikedMovies = () => {
   const navigate = useNavigate();
@@ -143,10 +145,10 @@ const LikedMovies = () => {
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
   };
-  
+
   const onBack = () => {
     navigate(-1);
-  }
+  };
 
   return (
     <Container>
