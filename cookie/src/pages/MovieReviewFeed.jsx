@@ -6,8 +6,12 @@ import axiosInstance from "../api/auth/axiosInstance";
 const ReviewFeedWrapper = styled.div`
   width: 100%;
   background-color: #000000;
-  padding: 20px;
+  padding: 40px;
   min-height: 100vh;
+
+  @media (max-width: 480px) {
+    padding: 20px;
+  }
 `;
 
 const HeaderSection = styled.div`
@@ -150,6 +154,7 @@ const ReviewRight = styled.div`
       display: flex;
       align-items: center;
       gap: 4px;
+      padding-top: 1.5rem;
 
       svg {
         width: 14px;
