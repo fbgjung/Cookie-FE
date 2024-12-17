@@ -8,7 +8,7 @@ import GallerySection from "../components/movieDetailPage/GallerySection";
 import ReviewSection from "../components/movieDetailPage/ReviewSection";
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
-import DetailHeader from "../components/searchpage/MovieDetailHeader";
+import MovieDetailHeader from "../components/searchpage/MovieDetailHeader";
 import Spinner from "../components/common/Spinner";
 
 const ContentWrapper = styled.div`
@@ -76,7 +76,7 @@ const MovieDetail = () => {
 
   return (
     <ContentWrapper>
-      <DetailHeader onBack={() => navigate(-1)} />
+      <MovieDetailHeader onBack={() => navigate(-1)} />
       {movieData.images && movieData.images.length > 0 && (
         <HeaderSection
           title={movieData.title}
