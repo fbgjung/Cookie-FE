@@ -48,6 +48,11 @@ const GlobalStyle = createGlobalStyle`
     --sub-text: #a7a7a7;
     --notice: #235B97;
     --text-wh: #ffffff;
+    --black: #000000;
+    --main-pink: #F84B99;
+    --sub-pink: #FDF8FA;
+    --acc-pink: #FF0777;
+    --dark-gray: #1e1e1e;
   }
 
 

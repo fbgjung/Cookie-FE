@@ -17,7 +17,7 @@ const Container = styled.div`
   flex-direction: column;
   min-height: 100vh;
   overflow-y: auto;
-  background-color: #ffffff;
+  background-color: var(--dark-gray);
 `;
 
 const CommentsSectionContainer = styled.div`
@@ -27,6 +27,7 @@ const CommentsSectionContainer = styled.div`
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 10px;
+    color: var(--text-wh);
   }
 
   .comment-input {
@@ -37,16 +38,17 @@ const CommentsSectionContainer = styled.div`
     input {
       flex: 1;
       padding: 10px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--sub-pink);
       border-radius: 0.4rem;
       font-size: 1rem;
       outline: none;
       margin-right: 10px;
       height: 40px;
+      background-color: var(--sub-pink);
     }
 
     button {
-      background-color: #f84b99;
+      background-color: var(--main-pink);
       color: white;
       border: none;
       border-radius: 50%;
@@ -59,7 +61,7 @@ const CommentsSectionContainer = styled.div`
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: #ff0777;
+        background-color: var(--acc-pink);
       }
 
       svg {
@@ -84,7 +86,8 @@ const CommentsSectionContainer = styled.div`
       }
 
       .comment-content {
-        background-color: #f8f8f8;
+        background-color: #f8e9f5;
+        /* background-color: #f8f8f8; */
         border-radius: 8px;
         padding: 0.8rem;
         font-size: 0.9rem;
