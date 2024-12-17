@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 import toast from "react-hot-toast";
@@ -9,8 +9,9 @@ const ReviewSection = styled.div`
   box-sizing: border-box;
   padding: 0 2rem;
   background-color: black;
+  min-height: 100vh;
+  overflow: hidden;
 `;
-
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -31,14 +32,13 @@ const PrevIcon = styled.svg`
   height: 32px;
   background: no-repeat center/cover url("/assets/images/prev-button.svg");
   cursor: pointer;
-`
+`;
 
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   /* padding: 0 1rem; */
-  
 `;
 
 const ReviewTicket = styled.div`
@@ -77,14 +77,13 @@ const ReviewInfoSection = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-
-`
+`;
 
 const ReviewInfoFirst = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-`
+`;
 
 const ReviewCenter = styled.div`
   display: flex;
@@ -122,14 +121,13 @@ const ReviewCenter = styled.div`
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
-
   }
 
   .movie-title {
     margin-top: 0.5rem;
     font-size: 0.7rem;
     font-weight: 600;
-    color: #F84B99;
+    color: #f84b99;
   }
 `;
 
@@ -138,7 +136,6 @@ const ReviewRight = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   .score {
-    
     img {
       width: 16px;
       height: 16px;
@@ -153,32 +150,33 @@ const ReviewRight = styled.div`
   }
 `;
 
-
 const ReviewInfoSecond = styled.div`
   display: flex;
   justify-content: flex-end;
-`
+`;
 
 const LikeIcon = styled.svg`
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/heart-review-feed.svg");
-`
+  background: no-repeat center/cover
+    url("/assets/images/review/heart-review-feed.svg");
+`;
 
 const ReviewLike = styled.p`
   font-size: 0.9rem;
-`
+`;
 
 const CommentIcon = styled.svg`
   margin-left: 0.5rem;
   width: 14px;
   height: 14px;
-  background: no-repeat center/cover url("/assets/images/review/comment-review-feed.svg");
-`
+  background: no-repeat center/cover
+    url("/assets/images/review/comment-review-feed.svg");
+`;
 
 const ReviewComment = styled.p`
   font-size: 0.9rem;
-`
+`;
 
 const MyAllReviewList = () => {
   const [reviews, setReviews] = useState([]);
@@ -192,6 +190,9 @@ const MyAllReviewList = () => {
     fetchReviews();
   }, []);
 
+  const handleBack = () => {
+    navigate(-1); // 이전 페이지로 이동
+  };
 
   const fetchReviews = async () => {
     if (loading || page >= totalPages) return;
@@ -252,7 +253,7 @@ const MyAllReviewList = () => {
   return (
     <ReviewSection>
       <HeaderContainer>
-        <PrevIcon ></PrevIcon>
+        <PrevIcon onClick={handleBack} />
         <span className="title">내가 작성한 리뷰</span>
       </HeaderContainer>
       <ReviewContainer>
@@ -276,21 +277,21 @@ const MyAllReviewList = () => {
                       <div className="name">{review.user.nickname}</div>
                       <div className="date">
                         {new Date(review.createdAt)
-                          .toLocaleDateString('ko-KR', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
+                          .toLocaleDateString("ko-KR", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
                           })
                           .replace(/\./g, "-")
                           .replace(/-$/, "")
-                          .replace(/-\s/g, "-")}
-                        {' '}
-                        {new Date(review.createdAt)
-                          .toLocaleTimeString('ko-KR', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })
-                        }
+                          .replace(/-\s/g, "-")}{" "}
+                        {new Date(review.createdAt).toLocaleTimeString(
+                          "ko-KR",
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
                       </div>
                     </div>
                   </div>
@@ -300,9 +301,8 @@ const MyAllReviewList = () => {
                       ? `${review.content.slice(0, 105)}...`
                       : review.content}
                   </div>
-                  
                 </ReviewCenter>
-                
+
                 <ReviewRight>
                   <div className="score">
                     {Array.from({ length: Math.round(review.movieScore) }).map(
@@ -315,7 +315,7 @@ const MyAllReviewList = () => {
                       )
                     )}
                   </div>
-                </ReviewRight>  
+                </ReviewRight>
               </ReviewInfoFirst>
 
               <ReviewInfoSecond>
@@ -324,7 +324,6 @@ const MyAllReviewList = () => {
                 <CommentIcon />
                 <ReviewComment>{review.comments}</ReviewComment>
               </ReviewInfoSecond>
-
             </ReviewInfoSection>
           </ReviewTicket>
         ))}

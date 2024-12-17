@@ -30,20 +30,21 @@ const Title = styled.h2`
   }
 `;
 
-const BackButton = styled(FaArrowLeft)`
+const BackButton = styled.div`
+  width: 32px;
+  height: 32px;
+  background: no-repeat center/cover url("/assets/images/prev-button.svg");
+  cursor: pointer;
   position: absolute;
   top: 20px;
   left: 4%;
-  font-size: 1.8rem;
-  color: #f84b99;
-  cursor: pointer;
   transition:
     transform 0.3s ease,
-    color 0.2s ease;
+    opacity 0.2s ease;
 
   &:hover {
     transform: scale(1.2);
-    color: #c33677;
+    opacity: 0.8;
   }
 `;
 
