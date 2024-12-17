@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { FiChevronLeft } from "react-icons/fi";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
+
 
 const CastInfo = styled.div`
   padding: 1.25rem;
@@ -17,161 +17,287 @@ const CastInfo = styled.div`
   }
 `;
 
-const BackBtn = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin: 0 0 1.2rem 0;
-  color: white;
-  font-size: 2rem;
+const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
+  margin: 1rem;
 
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
+  .title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-left: 0.4rem;
+    color: #f84b99;
   }
 `;
 
-const DirecrtorInfoContainer = styled.div`
+const PrevIcon = styled.svg`
+  width: 32px;
+  height: 32px;
+  background: no-repeat center/cover url("/assets/images/prev-button.svg");
+  cursor: pointer;
+`
+const CastProfile = styled.div`
+  margin: 1rem;
+  h2 {
+    margin: 2rem 0 0.8rem 0;
+  }
+`;
+
+const DirectorInfoContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4rem;
 
-  .info__director {
-    display: flex;
-    gap: 0.8rem;
-    margin-bottom: 2rem;
-    align-items: center;
+  img {
+    border-radius: 0.2rem;
+    width: 10rem;
+    height: auto;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 180px 50px rgba(248, 75, 153, 0.2);
 
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 768px) {
     img {
-      border-radius: 0.75rem;
-      width: 150px;
-      height: 150px;
+      border-radius: 0.2rem;
+      width: 10rem;
+      height: auto;
       object-fit: cover;
       cursor: pointer;
       transition: transform 0.3s ease;
-    }
+      box-shadow: 0 0 180px 50px rgba(248, 75, 153, 0.2);
 
-    h3 {
-      font-size: 1.2rem;
-      margin: 0;
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    img {
+      border-radius: 0.2rem;
+      width: 8rem;
+      height: auto;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 180px 50px rgba(248, 75, 153, 0.2);
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+`;
+
+const CastFilmography = styled.div`
+  margin: 1rem;
+  h2 {
+    margin: 2rem 0 0.8rem 0;
+  }
+`
+
+const TimelineContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+`;
+
+const ScoreSection = styled.div`
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  background-color: #fdf8fa;
+  border: 1px solid #f84b99;
+  border-radius: 0.4rem;
+  padding: 0.3rem 0.5rem;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    background: no-repeat center/cover url("/assets/images/review/score-macarong.png");
+  }
+
+  p {
+    font-weight: 500;
+    color: #f84b99;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.2rem 0.4rem;
+    svg {
+      width: 10px;
+      height: 10px;
+      background: no-repeat center/cover url("/assets/images/review/score-macarong.png");
     }
 
     p {
-      font-size: 1rem;
-      color: #ddd;
+      font-weight: 500;
+      color: #f84b99;
+      font-size: 0.4rem;
     }
   }
+`;
 
-  @media (max-width: 768px) {
-    .info__director {
-      flex-direction: column;
-      align-items: center;
-    }
+
+const TimelineItem = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: 1rem 0;
+
+  .date {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #f84b99;
+    justify-content: flex-end;
+    display: flex;
+    width: 4rem;
+  
+  }
+
+  .card {
+    background-color: #222;
+    border-radius: 0.7rem;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    cursor: pointer;
 
     img {
-      width: 120px;
-      height: 120px;
+      width: 6.5rem;
+      height: auto;
+      border-radius: 0.2rem;
+      object-fit: cover;
+    }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
+
+      h4 {
+        margin: 0;
+        font-size: 1.3rem;
+        cursor: pointer;
+
+        &:hover {
+          color: #f84b99;
+        }
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+
+      .first-details {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
     }
   }
-`;
-
-const DirectorMovieInfo = styled.div`
-  width: 100%;
-  color: white;
-  display: flex;
-  flex-direction: column;
-`;
-
-const TitleGrid = styled.div`
-  display: grid;
-  grid-template-columns: 6rem 2.5fr 0.7fr 0.9fr 0.9fr;
-  gap: 0.625rem;
-  font-weight: 500;
-  text-align: center;
-  margin-bottom: 1.25rem;
-  background: none;
-  padding: 0.625rem 0;
-  position: relative;
-
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 0.5px;
-    background-color: #e6e6e6;
-  }
-
-  &::before {
-    top: 0;
-  }
-
-  &::after {
-    bottom: 0;
-  }
-
   @media (max-width: 768px) {
-    grid-template-columns: 2fr 4fr 2fr 2fr 2fr;
+    .date {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #f84b99;
+      justify-content: flex-end;
+      display: flex;
+      width: 4rem;
+    }
+    .card {
+      background-color: #222;
+      border-radius: 0.7rem;
+      padding: 0.7rem;
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      cursor: pointer;
+
+      img {
+        width: 5rem;
+        height: auto;
+        border-radius: 0.2rem;
+        object-fit: cover;
+      }
+
+      .details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+
+        h4 {
+          margin: 0;
+          font-size: 1rem;
+          cursor: pointer;
+
+          &:hover {
+            color: #f84b99;
+          }
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.9rem;
+        }
+
+        .first-details {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
   }
 `;
 
-const TitleItem = styled.div`
-  font-size: 1rem;
+const LikeAndReviewCount = styled.div`
   display: flex;
-  color: white;
-  align-items: start;
-`;
-
-const MovieContentGrid = styled.div`
-  display: grid;
-  grid-template-columns: 6rem 2.5fr 0.7fr 0.9fr 0.9fr;
-  gap: 0.625rem;
   align-items: center;
-  justify-content: start;
-  color: white;
-  margin-bottom: 0.625rem;
-  padding: 0.625rem 0;
-  border-bottom: 0.0625rem solid var(--ticket-bg);
+  gap: 0.5rem;
 
-  .movieContent__poster {
-    width: 85px;
-    height: 122px;
-    border-radius: 0.7rem;
-    cursor: pointer;
-    display: block;
-    object-fit: cover;
+  .likes, .reviews {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
   }
+  
+`
 
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    border-radius: 0.7rem;
-    width: 85px;
-    height: 122px;
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: 3fr 5fr 2fr 2fr 2fr;
-    padding: 1rem 0;
-  }
+const LikeIcon = styled.svg`
+  background: url("/assets/images/review/heart-review.svg") no-repeat
+    center;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
 `;
 
-const ContentItem = styled.div`
-  font-size: 0.875rem;
-  text-align: start;
-  h4 {
-    cursor: pointer;
-  }
-  p {
-    margin: 0.8rem 0;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-  }
+const ReviewIcon = styled.svg`
+  background: url("/assets/images/review/reviews-review.svg") no-repeat
+    center;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
 `;
 
 const Modal = styled.div`
@@ -191,12 +317,6 @@ const Modal = styled.div`
     max-height: 90%;
     object-fit: contain;
   }
-
-  @media (max-width: 768px) {
-    img {
-      max-width: 100%;
-    }
-  }
 `;
 
 function CastDetail() {
@@ -206,21 +326,15 @@ function CastDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
+
   const isActor = location.pathname.includes("actor");
   const isDirector = location.pathname.includes("director");
 
   useEffect(() => {
     const fetchData = async () => {
-      let url = "";
-
-      if (isActor) {
-        url = `${serverBaseUrl}/api/actor/${id}`;
-      } else if (isDirector) {
-        url = `${serverBaseUrl}/api/director/${id}`;
-      }
+      let url = isActor
+        ? `${serverBaseUrl}/api/actor/${id}`
+        : `${serverBaseUrl}/api/director/${id}`;
 
       try {
         const response = await axios.get(url);
@@ -243,25 +357,36 @@ function CastDetail() {
     setIsModalOpen(false);
   };
 
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
+
   if (!data) return null;
+
+  const movieList = isActor ? data.actorMovieList : data.directorMovieList;
+
+  const formatCount = (count) => {
+    return count >= 999 ? "999+" : count;
+  };
 
   return (
     <>
       <CastInfo>
-        <BackBtn onClick={() => handleNavigate(-1)}>
-          <FiChevronLeft />
-        </BackBtn>
-        <h2 className="info__title">🎬 {isActor ? "배우" : "감독"}</h2>
-        <DirecrtorInfoContainer>
-          <div className="info__director">
+        <HeaderContainer>
+          <PrevIcon onClick={()=>handleNavigate(-1)}></PrevIcon>
+          <span className="title">{data.name}</span>
+        </HeaderContainer>
+
+        <CastProfile>
+          <h2>{isActor ? "배우" : "감독"}</h2>
+          <DirectorInfoContainer>
             <img
-              className="info__director--img"
               src={
                 data.profileImage?.endsWith("/null")
                   ? "/images/default.png"
                   : data.profileImage || "/images/default.png"
               }
-              alt={isActor ? "Actor" : "Director"}
+              alt="profile"
               onClick={() =>
                 handleImageClick(
                   data.profileImage?.endsWith("/null")
@@ -270,48 +395,62 @@ function CastDetail() {
                 )
               }
             />
-            <div>
-              <h3>{data.name}</h3>
-              <p>{isActor ? "배우" : "감독"}</p>
-            </div>
-          </div>
-        </DirecrtorInfoContainer>
-        <h2 className="info__title">🎬 영화</h2>
-        <DirectorMovieInfo>
-          <TitleGrid>
-            <TitleItem />
-            <TitleItem>제목</TitleItem>
-            <TitleItem>평점</TitleItem>
-            <TitleItem>좋아요 수</TitleItem>
-            <TitleItem>리뷰 수</TitleItem>
-          </TitleGrid>
-          {(isActor ? data.actorMovieList : data.directorMovieList)?.map(
-            (movie) => (
-              <MovieContentGrid key={movie.id}>
-                <button onClick={() => handleNavigate(`/movie/${movie.id}`)}>
+          </DirectorInfoContainer>
+        </CastProfile>
+
+        <CastFilmography>
+          <h2>영화 필모그래피</h2>
+          
+          <TimelineContainer>
+            {movieList?.map((movie) => (
+              
+              <TimelineItem key={movie.id}>
+                <div className="date">
+                {(() => {
+                  const date = new Date(movie.releasedAt);
+                  const year = date.getFullYear();
+                  const month = String(date.getMonth() + 1).padStart(2, "0");
+                  return `${year}.${month}`;
+                })()}
+                </div>
+                <div className="card">
                   <img
-                    className="movieContent__poster"
                     src={movie.poster}
                     alt={`${movie.title} 포스터`}
+                    onClick={() => handleNavigate(`/movie/${movie.id}`)}
                   />
-                </button>
-                <ContentItem>
-                  <h4 onClick={() => handleNavigate(`/movie/${movie.id}`)}>
-                    {movie.title}
-                  </h4>
-                  <p>
-                    {new Date(movie.releasedAt).getFullYear()}﹒{movie.country}
-                  </p>
-                </ContentItem>
-                <ContentItem>{movie.score}점</ContentItem>
-                <ContentItem>{movie.likes}개</ContentItem>
-                <ContentItem>{movie.reviews}개</ContentItem>
-              </MovieContentGrid>
-            )
-          )}
-        </DirectorMovieInfo>
-      </CastInfo>
+                  <div className="details">
+                    <div className="first-details">
+                      <h4 onClick={() => handleNavigate(`/movie/${movie.id}`)}>
+                        {movie.title}
+                      </h4>
+                      <ScoreSection>
+                        <svg />
+                        <p>{(Math.round(movie.score * 10) / 10).toFixed(1)}</p>
+                      </ScoreSection>
+                    </div>
 
+
+                    <LikeAndReviewCount>
+                      <div className="likes">
+                        <LikeIcon />
+                        <span>{formatCount(movie.likes)}</span>
+                      </div>
+                      <div className="reviews">
+                        <ReviewIcon />
+                        <span>{formatCount(movie.reviews || 0)}</span>
+                      </div>
+                    </LikeAndReviewCount>
+                
+
+
+                  </div>
+                </div>
+              </TimelineItem>
+            ))}
+          </TimelineContainer>
+        </CastFilmography>
+      </CastInfo>
       <Modal isOpen={isModalOpen} onClick={closeModal}>
         <img src={selectedImage} alt="Enlarged view" />
       </Modal>
