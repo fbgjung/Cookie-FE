@@ -80,7 +80,7 @@ const ReviewTicket = styled.div`
   background-color: #fdf8fa;
   border-radius: 8px;
   margin: 0.4rem 0;
-  padding: 0.8rem;
+  padding: 1.5rem;
   height: auto;
 
   @media (max-width: 768px) {
@@ -113,33 +113,20 @@ const ReviewLeft = styled.div`
   }
 `;
 
-const ReviewInfoSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const ReviewInfoFirst = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
 const ReviewCenter = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-left: 1.2rem; /* 왼쪽 여백 줄이기 */
-  width: 19rem;
+  width: 16rem;
   height: 100%;
 
   @media (max-width: 768px) {
-    width: 14rem; /* 태블릿에서는 너비를 더 줄임 */
+    width: 13rem; /* 태블릿에서는 너비를 더 줄임 */
   }
 
   @media (max-width: 480px) {
-    width: 13rem; /* 모바일에서는 너비를 더욱 줄임 */
+    width: 12rem; /* 모바일에서는 너비를 더욱 줄임 */
   }
 
   .profile {
@@ -203,76 +190,68 @@ const ReviewRight = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 100%;
+  align-items: flex-end;
+  gap: 5px;
 
   .score img {
     width: 16px;
     height: 16px;
-    margin-top: 0.5rem;
     margin-right: 0.1rem;
 
     @media (max-width: 480px) {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
     }
   }
 
-  .score-text {
-    font-size: 0.8rem;
-    color: #888;
-    margin-right: 0.5rem;
-  }
-`;
+  .interactions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-const ReviewInfoSecond = styled.div`
-  display: flex;
-  justify-content: flex-end;
+    .likes,
+    .comments {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-top: 80px;
+
+      @media (max-width: 480px) {
+        padding-top: 40px;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+
+        @media (max-width: 480px) {
+          width: 14px;
+          height: 14px;
+        }
+      }
+
+      span {
+        font-size: 1rem;
+        color: #888;
+
+        @media (max-width: 480px) {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
 `;
 
 const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  margin-right: 0.3rem;
-  background: no-repeat center/cover
-    url("/assets/images/review/heart-review-feed.svg");
-
-  @media (max-width: 480px) {
-    width: 10px;
-    height: 10px;
-  }
-`;
-
-const ReviewLike = styled.p`
-  font-size: 0.9rem;
-  font-weight: normal;
-
-  @media (max-width: 480px) {
-    font-size: 0.6rem;
-  }
+  background: url("/assets/images/review/heart-review-feed.svg") no-repeat
+    center;
+  background-size: cover;
 `;
 
 const CommentIcon = styled.svg`
-  margin-left: 0.5rem;
-  width: 14px;
-  height: 14px;
-  margin-right: 0.3rem;
-  background: no-repeat center/cover
-    url("/assets/images/review/comment-review-feed.svg");
-
-  @media (max-width: 480px) {
-    margin-left: 0.3rem;
-    width: 10px;
-    height: 10px;
-  }
-`;
-
-const ReviewComment = styled.p`
-  font-size: 0.9rem;
-  font-weight: normal;
-
-  @media (max-width: 480px) {
-    font-size: 0.6rem;
-  }
+  background: url("/assets/images/review/comment-review-feed.svg") no-repeat
+    center;
+  background-size: cover;
 `;
 
 const ReviewFeed = () => {
@@ -403,8 +382,6 @@ const ReviewFeed = () => {
             <ReviewLeft>
               <img src={review.movie.poster} alt={review.movie.title} />
             </ReviewLeft>
-            <ReviewInfoSection>
-              <ReviewInfoFirst>
                 <ReviewCenter>
                   <div className="profile">
                     <img
@@ -440,33 +417,33 @@ const ReviewFeed = () => {
                     }`}
                   >
                     {review.content.length > 90
-                      ? `${review.content.slice(0, 92)}…`
+                      ? `${review.content.slice(0, 90)}…`
                       : review.content}
                   </div>
                 </ReviewCenter>
-
                 <ReviewRight>
-                  <div className="score">
-                    {Array.from({ length: Math.round(review.movieScore) }).map(
-                      (_, i) => (
-                        <img
-                          key={`${review.reviewId}-score-${i}`}
-                          src="/assets/images/review/score-macarong.png"
-                          alt="score"
-                        />
-                      )
-                    )}
-                  </div>
-                </ReviewRight>
-              </ReviewInfoFirst>
-
-              <ReviewInfoSecond>
-                <LikeIcon />
-                <ReviewLike>{review.reviewLike}</ReviewLike>
-                <CommentIcon />
-                <ReviewComment>{review.comments}</ReviewComment>
-              </ReviewInfoSecond>
-            </ReviewInfoSection>
+                <div className="score">
+                {Array.from({ length: Math.round(review.movieScore) }).map(
+                  (_, i) => (
+                    <img
+                      key={`${review.reviewId}-score-${i}`}
+                      src="/assets/images/review/score-macarong.png"
+                      alt="score"
+                    />
+                  )
+                )}
+              </div>
+              <div className="interactions">
+                <div className="likes">
+                  <LikeIcon />
+                  <span>{review.reviewLike}</span>
+                </div>
+                <div className="comments">
+                  <CommentIcon />
+                  <span>{review.comments || 0}</span>
+                </div>
+              </div>
+            </ReviewRight>
           </ReviewTicket>
         ))}
       </ReviewContainer>
