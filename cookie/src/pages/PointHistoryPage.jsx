@@ -11,6 +11,15 @@ const Container = styled.div`
   min-height: 100vh;
   color: #fff;
   position: relative;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 const Title = styled.h2`
@@ -42,17 +51,19 @@ const BackButton = styled.div`
     opacity 0.2s ease;
 `;
 
-const HistoryTable = styled.table`
+const HistoryTable = styled.div`
   width: 100%;
+  max-width: 800px;
   margin: 0 auto;
-  max-width: 1000px;
-  border-collapse: collapse;
   background-color: #222;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  overflow-x: auto;
 
-  @media (max-width: 768px) {
-    max-width: 100%;
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
   }
 `;
 
@@ -61,24 +72,20 @@ const TableHeader = styled.thead`
   color: white;
 
   th {
-    padding: 1rem;
+    padding: 0.8rem;
     text-align: left;
     font-weight: bold;
     white-space: nowrap;
-  }
 
-  @media (max-width: 768px) {
-    th {
-      font-size: 0.9rem;
-      padding: 0.8rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    th {
-      font-size: 0.8rem;
+    @media (max-width: 768px) {
       padding: 0.6rem;
+      font-size: 0.85rem;
       text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.5rem;
+      font-size: 0.75rem;
     }
   }
 `;
@@ -88,23 +95,32 @@ const TableRow = styled.tr`
   border-bottom: 1px solid #555;
   cursor: pointer;
   transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
 `;
+
 const TableData = styled.td`
-  padding: 1.2rem;
-  font-size: 1rem;
+  padding: 0.6rem;
+  font-size: 0.9rem;
   color: black;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 80px; /* 더 좁게 설정 */
 
   @media (max-width: 768px) {
-    font-size: 0.9rem;
-    padding: 1rem;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+    max-width: 60px; /* 모바일 최적화 */
   }
 
   @media (max-width: 480px) {
-    font-size: 0.8rem;
-    padding: 0.8rem;
+    padding: 0.4rem;
+    font-size: 0.75rem;
+    max-width: 50px; /* 작은 화면에서는 더 작게 */
   }
 `;
 
@@ -113,7 +129,22 @@ const EmptyMessage = styled.div`
   font-size: 1.2rem;
   color: #888;
   margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+  }
 `;
+
+const formatTextWithEllipsis = (text, maxLength = 8) => {
+  if (text.length > maxLength) {
+    return `${text.substring(0, maxLength)}...`;
+  }
+  return text;
+};
 
 const BadgeHistory = () => {
   const [badgeHistory, setBadgeHistory] = useState([]);
@@ -170,26 +201,32 @@ const BadgeHistory = () => {
       <Title>뱃지 포인트 내역</Title>
       {badgeHistory.length > 0 ? (
         <HistoryTable>
-          <TableHeader>
-            <tr>
-              <th>영화 제목</th>
-              <th>획득 출처</th>
-              <th>포인트</th>
-              <th>날짜</th>
-            </tr>
-          </TableHeader>
-          <tbody>
-            {badgeHistory.map((item, index) => (
-              <TableRow key={index} onClick={handleHistoryItemClick}>
-                <TableData>{item.movieName}</TableData>
-                <TableData>{formatActionName(item.actionName)}</TableData>
-                <TableData>+{item.point}P</TableData>
-                <TableData>
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </TableData>
-              </TableRow>
-            ))}
-          </tbody>
+          <table>
+            <TableHeader>
+              <tr>
+                <th>영화 제목</th>
+                <th>획득 출처</th>
+                <th>포인트</th>
+                <th>날짜</th>
+              </tr>
+            </TableHeader>
+            <tbody>
+              {badgeHistory.map((item, index) => (
+                <TableRow key={index} onClick={handleHistoryItemClick}>
+                  <TableData data-label="영화 제목">
+                    {formatTextWithEllipsis(item.movieName)}
+                  </TableData>
+                  <TableData data-label="획득 출처">
+                    {formatTextWithEllipsis(formatActionName(item.actionName))}
+                  </TableData>
+                  <TableData data-label="포인트">+{item.point}P</TableData>
+                  <TableData data-label="날짜">
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </TableData>
+                </TableRow>
+              ))}
+            </tbody>
+          </table>
         </HistoryTable>
       ) : (
         <EmptyMessage>뱃지 포인트를 획득한 내역이 없습니다.</EmptyMessage>

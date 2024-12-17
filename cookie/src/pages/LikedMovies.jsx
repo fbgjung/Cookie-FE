@@ -4,25 +4,24 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
-  padding: 10px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #000000;
+  background-color: #000;
   min-height: 100vh;
   width: 100%;
-  overflow-x: hidden;
   max-width: 1200px;
   margin: 0 auto;
-  position: relative;
+  overflow-x: hidden;
 `;
 
 const MoviesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
   width: 100%;
-  padding: 1rem 2rem 3rem;
+  padding: 1rem;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
@@ -30,79 +29,71 @@ const MoviesGrid = styled.div`
 `;
 
 const MovieCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #fdf8fa;
+  background: #fdf8fa;
   border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 
   &:hover {
-    border: 2px solid #f84b99;
-    transform: scale(1.05);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
 `;
 
 const Poster = styled.img`
   width: 100%;
-  height: 180px;
+  height: 250px;
   object-fit: cover;
 `;
 
 const MovieInfo = styled.div`
-  padding: 10px;
+  padding: 1rem;
   text-align: center;
 
   h2 {
     font-size: 1rem;
     font-weight: bold;
     color: #333;
-    margin: 8px 0 5px;
+    margin-bottom: 0.5rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
   }
 
   p {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: #666;
-    margin: 3px 0;
+    margin: 0.2rem 0;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-
-    @media (max-width: 768px) {
-      font-size: 0.75rem;
-    }
   }
 `;
 
 const EmptyMessage = styled.div`
-  font-size: 1rem;
-  color: #999999;
+  font-size: 1.2rem;
+  color: #999;
   text-align: center;
-  margin: 30px 0;
+  margin: 2rem 0;
 `;
 
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  margin: 1rem 0 1rem 3rem;
   width: 100%;
+  margin-bottom: 1.5rem;
 
   .title {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    color: #333;
-    margin-left: 0.4rem;
     color: #f84b99;
+    margin-left: 0.5rem;
   }
 `;
 
-const PrevIcon = styled.svg`
+const PrevIcon = styled.div`
   width: 32px;
   height: 32px;
   background: no-repeat center/cover url("/assets/images/prev-button.svg");
@@ -111,15 +102,14 @@ const PrevIcon = styled.svg`
 
 const CommentSection = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 `;
-const CommentIcon = styled.svg`
-  margin-left: 0.5rem;
-  width: 14px;
-  height: 14px;
+
+const CommentIcon = styled.div`
+  width: 16px;
+  height: 16px;
   background: no-repeat center/cover
     url("/assets/images/review/comment-review-feed.svg");
 `;
@@ -156,6 +146,7 @@ const LikedMovies = () => {
         <PrevIcon onClick={onBack}></PrevIcon>
         <span className="title">내가 좋아한 영화</span>
       </HeaderContainer>
+
       {movies.length > 0 ? (
         <MoviesGrid>
           {movies.map((movie, index) => (
