@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
+import likeHeart from "../../assets/images/main/like-heart2.svg";
+import reivew from "../../assets/images/main/reviews.svg";
 
 function SpecialMovie({ categorydata }) {
   const filteredCategoryData = categorydata.filter(
@@ -22,17 +24,28 @@ function SpecialMovie({ categorydata }) {
   const handleMainCategoryClick = (mainCategory) => {
     setSelectedMainCategory(mainCategory);
     setSelectedSubCategory(null);
+    setCurrentIndex(0);
   };
   const handleSubCategoryClick = (subCategory) => {
     setSelectedSubCategory(subCategory);
+    setCurrentIndex(0);
   };
 
   const fetchMoviesByCategory = async (mainCategory, subCategory) => {
     if (!mainCategory || !subCategory) return;
+
     const cacheKey = `${mainCategory}_${subCategory}`;
     const cachedMovies = localStorage.getItem(cacheKey);
-    setIsLoading(true);
-    if (cachedMovies) {
+    const cacheTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
+
+    const currentTime = new Date().getTime();
+    const cacheDuration = 60 * 60 * 1000;
+
+    if (
+      cachedMovies &&
+      cacheTimestamp &&
+      currentTime - cacheTimestamp < cacheDuration
+    ) {
       setMovies(JSON.parse(cachedMovies));
     } else {
       try {
@@ -50,10 +63,9 @@ function SpecialMovie({ categorydata }) {
 
         setMovies(response.data.movies);
         localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
+        localStorage.setItem(`${cacheKey}_timestamp`, currentTime.toString());
       } catch (error) {
         console.error("영화 불러오기 실패:", error);
-      } finally {
-        setIsLoading(false);
       }
     }
   };
@@ -115,7 +127,7 @@ function SpecialMovie({ categorydata }) {
   return (
     <>
       <SpecialMovieList>
-        <Title>영화 선택 시간을 덜어드려요</Title>
+        <Title>어떤 영화를 골라볼까요?</Title>
 
         <div>
           {mainCategories.map((mainCategory, index) => (
@@ -163,7 +175,7 @@ function SpecialMovie({ categorydata }) {
           <div
             className="specialMovie__list"
             style={{
-              transform: `translateX(-${currentIndex * 57}%)`,
+              transform: `translateX(-${currentIndex * 66.7}%)`,
             }}
           >
             {movies &&
@@ -176,14 +188,14 @@ function SpecialMovie({ categorydata }) {
                   <Poster src={movie.poster} alt={movie.title} />
 
                   <MovieInfo>
-                    <Review>
-                      <ReviewIcon alt="Review Icon" />
-                      <Count>{movie.reviews}</Count>
-                    </Review>
                     <Like>
                       <LikeIcon alt="Review Icon" />
                       <Count>{movie.likes}</Count>
                     </Like>
+                    <Review>
+                      <ReviewIcon alt="Review Icon" />
+                      <Count>{movie.reviews}</Count>
+                    </Review>
                   </MovieInfo>
                 </div>
               ))}
@@ -265,10 +277,12 @@ const ThemeBtn = styled.button`
   cursor: pointer;
   margin: 0 0.8rem 0 0;
   font-size: 1rem;
-  color: ${(props) => (props.$isSelected ? "#f84b99 " : "#afafaf")};
+  color: ${(props) => (props.$isSelected ? "#FF92BC " : "#afafaf")};
   font-weight: ${(props) => (props.$isSelected ? "bold" : "normal")};
   padding: 0 0 0 0.375rem;
-
+  &:hover {
+    color: #ffff;
+  }
   @media (max-width: 768px) {
     margin: 0 0.7rem 0.5rem 0;
     font-size: 0.9rem;
@@ -276,18 +290,18 @@ const ThemeBtn = styled.button`
 `;
 
 const CategoryBtn = styled.button`
-  background-color: ${(props) => (props.$isSelected ? "#f84b99" : "white")};
-  color: ${(props) => (props.$isSelected ? "black" : "var(--text)")};
+  background-color: ${(props) => (props.$isSelected ? "#FF92BC" : "white")};
+  color: ${(props) => (props.$isSelected ? "var(--text)" : "var(--text)")};
   font-size: 13px;
   font-weight: ${(props) => (props.$isSelected ? "bold" : "500")};
   border-radius: 0.3rem;
-  border: 1px solid #f84b99;
+  /* border: 1px solid #f84b99; */
   padding: 0.5rem 1rem;
   cursor: pointer;
-  &:hover {
+  /* &:hover {
     background-color: #ff0777;
     color: black;
-  }
+  } */
   white-space: nowrap;
 
   @media (max-width: 768px) {
@@ -316,9 +330,10 @@ const Review = styled.div`
 `;
 
 const ReviewIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover url("/assets/images/main/review.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${reivew});
   padding-right: 0.4rem;
 `;
 
@@ -334,14 +349,16 @@ const Like = styled.div`
 `;
 
 const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  background: no-repeat center/cover url("/assets/images/main/like.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${likeHeart});
 `;
 
 const MovieInfo = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: end;
 `;
 
 const Poster = styled.img`

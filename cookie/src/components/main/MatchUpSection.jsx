@@ -19,13 +19,10 @@ const MatchUpSection = () => {
         const response = await axios.get(
           `${serverBaseUrl}/api/movies/mainMatchUps`
         );
-        console.log("API Response:", response.data);
         const matchUpData = response.data.response.matchUps;
 
         if (matchUpData && matchUpData.length > 0) {
           setMatchUps(matchUpData);
-
-          // Update global state with the first matchUpId
           setUserInfo({ matchUpId: matchUpData[0].matchUpId });
         }
       } catch (error) {
@@ -37,7 +34,6 @@ const MatchUpSection = () => {
   }, [setUserInfo]);
 
   const handleMatchUpVotePage = (matchUpId) => {
-    // Update global state before navigating
     setUserInfo({ matchUpId });
     navigate(`/matchup/${matchUpId}`);
   };
@@ -144,6 +140,7 @@ const VoteButton = styled.button`
   cursor: pointer;
   margin-bottom: 8px;
   transition: transform 0.2s ease-in-out;
+  font-size: 18px;
 
   &:hover {
     transform: scale(1.05);

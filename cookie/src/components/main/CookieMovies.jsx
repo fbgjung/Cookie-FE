@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/auth/axiosInstance";
 import useAuthStore from "../../stores/useAuthStore";
 import { SkeletonOverlay } from "./AdminRecommend";
+import likeHeart from "../../assets/images/main/like-heart2.svg";
+import reivew from "../../assets/images/main/reviews.svg";
 
 function CookieMovies() {
   const navigate = useNavigate();
@@ -24,7 +26,6 @@ function CookieMovies() {
       try {
         const response = await axiosInstance.get(`/api/movies/recommendations`);
         const movies = response.data.response || [];
-        console.log(response);
         setRecommendedMovies(movies);
       } catch (error) {
         console.error("영화 추천 목록을 가져오는 데 실패했습니다.", error);
@@ -39,20 +40,36 @@ function CookieMovies() {
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
   };
+
+  const calculateSlidePercentage = (totalMovies) => {
+    const moviesPerPage = 4;
+    return (
+      (100 / Math.max(moviesPerPage, totalMovies)) *
+      Math.min(moviesPerPage, totalMovies)
+    );
+  };
+
   const handleNext = () => {
-    setCurrentIndex(currentIndex + 1);
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex + 1;
+      return newIndex < Math.ceil(recommendedMovies.length / 4)
+        ? newIndex
+        : prevIndex;
+    });
   };
+
   const handlePrev = () => {
-    console.log("Current Index:", currentIndex);
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex - 1;
+      return newIndex >= 0 ? newIndex : prevIndex;
+    });
   };
+
   return (
     <>
       <CookieMovieList>
         <Title>
-          <span>{userInfo.nickname}</span>님의 쿠키리즘
+          <span>{userInfo.nickname}</span>님의 맞춤 영화
         </Title>
         <div className="cookie__movie--wrapper">
           <button
@@ -65,7 +82,7 @@ function CookieMovies() {
           <div
             className="cookie__movie"
             style={{
-              transform: `translateX(-${currentIndex * 44.5}%)`,
+              transform: `translateX(-${currentIndex * calculateSlidePercentage(recommendedMovies.length)}%)`,
             }}
           >
             {recommendedMovies.map((movie, index) => (
@@ -80,14 +97,14 @@ function CookieMovies() {
                     <Poster src={movie.poster} alt={movie.title} />
                   )}
                   <MovieInfo>
-                    <Review>
-                      <ReviewIcon alt="Review Icon" />
-                      <Count>{movie.reviews}</Count>
-                    </Review>
                     <Like>
                       <LikeIcon alt="Review Icon" />
                       <Count>{movie.likes}</Count>
                     </Like>
+                    <Review>
+                      <ReviewIcon alt="Review Icon" />
+                      <Count>{movie.reviews}</Count>
+                    </Review>
                   </MovieInfo>
                 </div>
               </div>
@@ -96,7 +113,9 @@ function CookieMovies() {
           <button
             className="next"
             onClick={handleNext}
-            disabled={currentIndex === recommendedMovies.length - 1}
+            disabled={
+              currentIndex >= Math.ceil(recommendedMovies.length / 4) - 1
+            }
           >
             &gt;
           </button>
@@ -176,9 +195,10 @@ const Review = styled.div`
 `;
 
 const ReviewIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover url("/assets/images/main/review.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${reivew});
 `;
 
 const Count = styled.p`
@@ -193,14 +213,16 @@ const Like = styled.div`
 `;
 
 const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  background: no-repeat center/cover url("/assets/images/main/like.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${likeHeart});
 `;
 
 const MovieInfo = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: end;
 `;
 
 const Poster = styled.img`

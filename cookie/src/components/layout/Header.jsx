@@ -80,6 +80,9 @@ const Header = () => {
     navigate("/notifications");
   };
 
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
   return (
     <HeaderContainer isDarkGrayHeader={isDarkGrayHeader}>
       <Logo onClick={handleLogoClick}>
@@ -91,7 +94,7 @@ const Header = () => {
             <Notification />
           </div>
         ) : (
-          <button>로그인</button>
+          <button onClick={handleLoginClick}>로그인</button>
         )}
       </div>
     </HeaderContainer>

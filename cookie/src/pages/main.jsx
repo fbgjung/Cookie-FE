@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { FaPencilAlt } from "react-icons/fa";
+// import { FaPencilAlt } from "react-icons/fa";
+import Pencil from "../assets/images/main/edit-pencil.svg";
 import MatchUpSection from "../components/main/MatchUpSection";
 import AdminRecommend from "../components/main/AdminRecommend";
 import CookieMovies from "../components/main/CookieMovies";
@@ -47,7 +48,8 @@ const Main = () => {
         </Content>
         <LoginModal />
         <WriteReviewButton onClick={() => isLogined("/searchmov")}>
-          <FaPencilAlt className="icon" />
+          {/* <FaPencilAlt className="icon" /> */}
+          <img src={Pencil} className="icon" />
         </WriteReviewButton>
         <TopButton visible={showTopButton} onClick={scrollToTop} />
       </MainContainer>
@@ -97,27 +99,27 @@ const NavbarWrapper = styled(CommonContainer)`
 
 const WriteReviewButton = styled.button`
   position: fixed;
-  bottom: 9.375rem;
-  right: 28rem;
+  bottom: 5.7rem;
+  right: calc(50% - 280px);
   background-color: #f84b99;
   color: #fdf8fa;
   font-size: 1rem;
   font-weight: 700;
   padding: 0.8rem;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 2.625rem;
+  height: 2.625rem;
   border-radius: 50%;
   border: none;
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  z-index: 1000;
+  z-index: 100;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   &:hover {
-    background-color: #ff0777;
+    background-color: #ff73b2;
   }
 
   .icon {
@@ -125,8 +127,7 @@ const WriteReviewButton = styled.button`
   }
 
   @media (max-width: 600px) {
-    right: 1.5rem;
-    bottom: 8rem;
+    right: calc(50% - 200px);
     width: 4rem;
     height: 4rem;
     font-size: 0.9rem;
@@ -134,10 +135,10 @@ const WriteReviewButton = styled.button`
   }
 
   @media (max-width: 390px) {
-    right: 1rem;
-    bottom: 6rem;
-    width: 3.8rem;
-    height: 3.8rem;
+    right: calc(50% - 175px);
+    bottom: 5rem;
+    width: 3.5rem;
+    height: 3.5rem;
     font-size: 0.8rem;
     padding: 0.6rem;
   }
@@ -172,4 +173,11 @@ const categoryData = [
   { id: 27, mainCategory: "시즌", subCategory: "새해" },
   { id: 26, mainCategory: "시즌", subCategory: "크리스마스" },
   { id: 28, mainCategory: "시즌", subCategory: "명절" },
+  { id: 29, mainCategory: "테마", subCategory: "실화를 소재로 한" },
+  { id: 30, mainCategory: "테마", subCategory: "가족과 함께" },
+  { id: 31, mainCategory: "테마", subCategory: "연인과 함께" },
+  { id: 32, mainCategory: "테마", subCategory: "열린결말" },
+  { id: 33, mainCategory: "테마", subCategory: "비오는 날" },
+  { id: 34, mainCategory: "테마", subCategory: "킬링타임" },
+  { id: 35, mainCategory: "테마", subCategory: "디즈니" },
 ];

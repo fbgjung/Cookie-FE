@@ -230,8 +230,6 @@ function SignUpGenre() {
         const userResponse = response.data.response.user;
         const setUserInfo = useUserStore.getState().setUserInfo;
 
-        console.log("userResponse", userResponse);
-
         const userInfo = {
           userId: userResponse.userId,
           nickname: userResponse.nickname,
@@ -241,7 +239,6 @@ function SignUpGenre() {
         };
 
         setUserInfo(userInfo);
-        console.log("저장된 유저 정보:", userInfo);
 
         logIn();
         navigate("/");

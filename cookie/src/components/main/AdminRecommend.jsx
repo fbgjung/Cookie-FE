@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import serverBaseUrl from "../../config/apiConfig";
 import axios from "axios";
+import likeHeart from "../../assets/images/main/like-heart2.svg";
+import reivew from "../../assets/images/main/reviews.svg";
 
 function AdminRecommend() {
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ function AdminRecommend() {
         const recommendMovies = response.data.response;
         setRecommendMovies(recommendMovies);
       } catch (error) {
-        console.error("API 호출 오류 발생:", error);
+        console.error("추천영화를 불러오는 데 실패했습니다.:", error);
       } finally {
         setIsLoading(false);
       }
@@ -32,20 +34,46 @@ function AdminRecommend() {
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
   };
+
   const handleNext = () => {
-    setCurrentIndex(currentIndex + 1);
-  };
-  const handlePrev = () => {
-    console.log("Current Index:", currentIndex);
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+    if (currentIndex < recommendMovies.length - 4) {
+      setCurrentIndex((prev) => prev + 4);
     }
   };
 
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => Math.max(prev - 4, 0));
+    }
+  };
+
+  // 비율 계산
+  const translateValue =
+    recommendMovies.length > 0
+      ? currentIndex * (100 / recommendMovies.length)
+      : 0;
+
+  // const handleNext = () => {
+  //   if (currentIndex < recommendMovies.length - 4) {
+  //     setCurrentIndex((prev) => {
+  //       const newIndex = prev + 4;
+  //       return newIndex;
+  //     });
+  //   }
+  // };
+
+  // const handlePrev = () => {
+  //   if (currentIndex > 0) {
+  //     setCurrentIndex((prev) => {
+  //       const newIndex = Math.max(prev - 4, 0);
+  //       return newIndex;
+  //     });
+  //   }
+  // };
   return (
     <>
       <MovieRecommendList>
-        <Title>쿠키 추천 영화</Title>
+        <Title>쿠키가 직접 추천해요</Title>
         <div className="recommend__movie--wrapper">
           <button
             className="prev"
@@ -57,7 +85,7 @@ function AdminRecommend() {
           <div
             className="recommend__movie"
             style={{
-              transform: `translateX(-${currentIndex * 40}%)`,
+              transform: `translateX(-${translateValue}%)`,
             }}
           >
             {recommendMovies.map((movie, index) => (
@@ -74,14 +102,14 @@ function AdminRecommend() {
                     <Poster src={movie.poster} alt={movie.title} />
                   )}
                   <MovieInfo>
-                    <Review>
-                      <ReviewIcon alt="Review Icon" />
-                      <Count>{movie.reviews}</Count>
-                    </Review>
                     <Like>
                       <LikeIcon alt="Like Icon" />
                       <Count>{movie.likes}</Count>
                     </Like>
+                    <Review>
+                      <ReviewIcon alt="Review Icon" />
+                      <Count>{movie.reviews}</Count>
+                    </Review>
                   </MovieInfo>
                 </div>
               </div>
@@ -90,7 +118,7 @@ function AdminRecommend() {
           <button
             className="next"
             onClick={handleNext}
-            disabled={currentIndex === recommendMovies.length - 1}
+            disabled={currentIndex >= recommendMovies.length - 4}
           >
             &gt;
           </button>
@@ -109,6 +137,7 @@ const MovieRecommendList = styled.div`
     align-items: center;
     position: relative;
     overflow: hidden;
+    min-height: 212px;
   }
 
   .recommend__movie {
@@ -170,9 +199,10 @@ const Review = styled.div`
 `;
 
 const ReviewIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  background: no-repeat center/cover url("/assets/images/main/review.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${reivew});
 `;
 
 const Count = styled.p`
@@ -187,14 +217,16 @@ const Like = styled.div`
 `;
 
 const LikeIcon = styled.svg`
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  background: no-repeat center/cover url("/assets/images/main/like.svg");
+  width: 15px;
+  height: 15px;
+  margin-right: 2px;
+  background: no-repeat center/cover url(${likeHeart});
 `;
 
 const MovieInfo = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: end;
 `;
 
 const Poster = styled.img`

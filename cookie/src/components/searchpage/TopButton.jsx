@@ -3,25 +3,27 @@ import styled from "styled-components";
 
 const StyledButton = styled.button`
   position: fixed;
-  bottom: 90px;
+  bottom: 95px;
   right: calc(50% - 30px);
   display: ${({ visible }) => (visible ? "flex" : "none")};
   align-items: center;
   justify-content: center;
   background: #ffffff;
-  border: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  border: 0.5px solid #ff73b2;
+  background-color: #ffe6f2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 40px;
+  padding: 8px 12px;
+
+  height: 30px;
   cursor: pointer;
   z-index: 1000;
 
   &::after {
-    content: "↑";
-    font-size: 18px;
-    color: black;
-    font-weight: bold;
+    content: "맨위로↑";
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 400;
   }
 
   &:hover {
