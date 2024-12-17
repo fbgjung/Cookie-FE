@@ -156,9 +156,16 @@ const MatchUpInfo = styled.div`
 
 const MatchUpDescription = styled.p`
   margin: 0;
-  color: #fff;
+  color: #ffffff;
   font-weight: bold;
   font-size: 1.5rem;
+
+  @media (max-width: 390px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 430px) {
+    font-size: 1rem;
+  }
 `;
 
 const VsImage = styled.div`
@@ -190,5 +197,14 @@ const SkeletonOverlay = styled.div`
     100% {
       background-position: 200% 0;
     }
+  }
+
+  @media (max-width: 390px) {
+    width: 360px;
+    height: 404px;
+  }
+  @media (max-width: 430px) {
+    width: 400px;
+    height: 404px;
   }
 `;

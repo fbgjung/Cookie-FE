@@ -52,6 +52,16 @@ const StyledButton = styled.button`
       font-size: 14px;
     }
   }
+  @media (max-width: 393px) {
+    right: 11rem;
+    bottom: 60px;
+    width: 40px;
+    height: 40px;
+
+    &::after {
+      font-size: 14px;
+    }
+  }
 `;
 const TopButton = ({ visible, onClick }) => {
   return <StyledButton visible={visible} onClick={onClick} />;
