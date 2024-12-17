@@ -100,16 +100,17 @@ const CheckboxLabel = styled.span`
 `;
 
 const Popup = () => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [hideChecked, setHideChecked] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const hidePopupUntil = localStorage.getItem("hidePopupUntil");
     if (
-      hidePopupUntil &&
-      new Date().getTime() < new Date(hidePopupUntil).getTime()
+      !hidePopupUntil ||
+      new Date().getTime() > new Date(hidePopupUntil).getTime()
     ) {
-      setVisible(false);
+      setVisible(true);
     }
   }, []);
 
@@ -127,7 +128,10 @@ const Popup = () => {
 
   const handleHideToday = (e) => {
     e.stopPropagation();
-    localStorage.setItem("hidePopupUntil", new Date().toISOString());
+    setHideChecked(true);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999); // 오늘 자정까지
+    localStorage.setItem("hidePopupUntil", todayEnd.toISOString());
     setVisible(false);
   };
 
@@ -138,7 +142,7 @@ const Popup = () => {
       <PopupContent onClick={handleImageClick}>
         <PopupFooter>
           <CheckboxWrapper onClick={handleHideToday}>
-            <CircleCheckbox id="hideCheckbox" />
+            <CircleCheckbox id="hideCheckbox" checked={hideChecked} readOnly />
             <CheckboxLabel>오늘 하루 안보기</CheckboxLabel>
           </CheckboxWrapper>
           <CloseButton onClick={handleClose}>닫기</CloseButton>

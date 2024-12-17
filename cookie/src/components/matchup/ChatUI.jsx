@@ -13,7 +13,7 @@ const ChatWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 50vh;
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
   background-color: #ffffff;
   border-radius: 16px 16px 0 0;
