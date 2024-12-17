@@ -66,13 +66,9 @@ function GenreMovie({ categorydata }) {
 
   const handleGenreClick = (genre) => {
     setSelectedGenre(genre);
-    setCurrentPage(1);
-    setSelectedPage(1);
+    setCurrentIndex(0);
   };
-  const handlePageClick = (page) => {
-    setCurrentPage(page);
-    setSelectedPage(page);
-  };
+
   const handleMovieClick = (id) => {
     navigate(`/movie/${id}`);
   };
@@ -82,7 +78,8 @@ function GenreMovie({ categorydata }) {
   };
 
   const handleNext = () => {
-    if (currentIndex < genreMovies.length - 1) {
+    const maxIndex = Math.floor(genreMovies.length / 4) - 1;
+    if (currentIndex < maxIndex) {
       setCurrentIndex(currentIndex + 1);
     }
   };
@@ -92,6 +89,12 @@ function GenreMovie({ categorydata }) {
       setCurrentIndex(currentIndex - 1);
     }
   };
+  useEffect(() => {
+    const totalPages = Math.ceil(genreMovies.length / 4);
+    setTotalPages(totalPages);
+    console.log("totalPages updated:", totalPages);
+  }, [genreMovies]);
+
   return (
     <>
       <GenreMovieList>
@@ -152,7 +155,7 @@ function GenreMovie({ categorydata }) {
           <button
             className="next"
             onClick={handleNext}
-            disabled={currentIndex === totalPages}
+            disabled={currentIndex === totalPages - 1}
           >
             &gt;
           </button>
@@ -167,6 +170,7 @@ export default GenreMovie;
 const GenreMovieList = styled.div`
   position: relative;
   overflow: hidden;
+
   .genreBtn__contianer {
     margin-bottom: 0.8rem;
   }

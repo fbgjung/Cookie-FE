@@ -24,17 +24,28 @@ function SpecialMovie({ categorydata }) {
   const handleMainCategoryClick = (mainCategory) => {
     setSelectedMainCategory(mainCategory);
     setSelectedSubCategory(null);
+    setCurrentIndex(0);
   };
   const handleSubCategoryClick = (subCategory) => {
     setSelectedSubCategory(subCategory);
+    setCurrentIndex(0);
   };
 
   const fetchMoviesByCategory = async (mainCategory, subCategory) => {
     if (!mainCategory || !subCategory) return;
+
     const cacheKey = `${mainCategory}_${subCategory}`;
     const cachedMovies = localStorage.getItem(cacheKey);
-    setIsLoading(true);
-    if (cachedMovies) {
+    const cacheTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
+
+    const currentTime = new Date().getTime();
+    const cacheDuration = 60 * 60 * 1000;
+
+    if (
+      cachedMovies &&
+      cacheTimestamp &&
+      currentTime - cacheTimestamp < cacheDuration
+    ) {
       setMovies(JSON.parse(cachedMovies));
     } else {
       try {
@@ -52,10 +63,9 @@ function SpecialMovie({ categorydata }) {
 
         setMovies(response.data.movies);
         localStorage.setItem(cacheKey, JSON.stringify(response.data.movies));
+        localStorage.setItem(`${cacheKey}_timestamp`, currentTime.toString());
       } catch (error) {
         console.error("영화 불러오기 실패:", error);
-      } finally {
-        setIsLoading(false);
       }
     }
   };
@@ -165,7 +175,7 @@ function SpecialMovie({ categorydata }) {
           <div
             className="specialMovie__list"
             style={{
-              transform: `translateX(-${currentIndex * 57}%)`,
+              transform: `translateX(-${currentIndex * 66.7}%)`,
             }}
           >
             {movies &&

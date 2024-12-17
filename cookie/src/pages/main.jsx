@@ -97,15 +97,15 @@ const NavbarWrapper = styled(CommonContainer)`
 
 const WriteReviewButton = styled.button`
   position: fixed;
-  bottom: 5.3rem;
+  bottom: 5.7rem;
   right: calc(50% - 280px);
   background-color: #f84b99;
   color: #fdf8fa;
   font-size: 1rem;
   font-weight: 700;
   padding: 0.8rem;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 2.625rem;
+  height: 2.625rem;
   border-radius: 50%;
   border: none;
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
@@ -171,4 +171,11 @@ const categoryData = [
   { id: 27, mainCategory: "시즌", subCategory: "새해" },
   { id: 26, mainCategory: "시즌", subCategory: "크리스마스" },
   { id: 28, mainCategory: "시즌", subCategory: "명절" },
+  { id: 29, mainCategory: "테마", subCategory: "실화를 소재로 한" },
+  { id: 30, mainCategory: "테마", subCategory: "가족과 함께" },
+  { id: 31, mainCategory: "테마", subCategory: "연인과 함께" },
+  { id: 32, mainCategory: "테마", subCategory: "열린결말" },
+  { id: 33, mainCategory: "테마", subCategory: "비오는 날" },
+  { id: 34, mainCategory: "테마", subCategory: "킬링타임" },
+  { id: 35, mainCategory: "테마", subCategory: "디즈니" },
 ];

@@ -34,16 +34,42 @@ function AdminRecommend() {
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
   };
+
   const handleNext = () => {
-    setCurrentIndex(currentIndex + 1);
-  };
-  const handlePrev = () => {
-    console.log("Current Index:", currentIndex);
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+    if (currentIndex < recommendMovies.length - 4) {
+      setCurrentIndex((prev) => prev + 4);
     }
   };
 
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => Math.max(prev - 4, 0));
+    }
+  };
+
+  // 비율 계산
+  const translateValue =
+    recommendMovies.length > 0
+      ? currentIndex * (100 / recommendMovies.length)
+      : 0;
+
+  // const handleNext = () => {
+  //   if (currentIndex < recommendMovies.length - 4) {
+  //     setCurrentIndex((prev) => {
+  //       const newIndex = prev + 4;
+  //       return newIndex;
+  //     });
+  //   }
+  // };
+
+  // const handlePrev = () => {
+  //   if (currentIndex > 0) {
+  //     setCurrentIndex((prev) => {
+  //       const newIndex = Math.max(prev - 4, 0);
+  //       return newIndex;
+  //     });
+  //   }
+  // };
   return (
     <>
       <MovieRecommendList>
@@ -59,7 +85,7 @@ function AdminRecommend() {
           <div
             className="recommend__movie"
             style={{
-              transform: `translateX(-${currentIndex * 40}%)`,
+              transform: `translateX(-${translateValue}%)`,
             }}
           >
             {recommendMovies.map((movie, index) => (
@@ -92,7 +118,7 @@ function AdminRecommend() {
           <button
             className="next"
             onClick={handleNext}
-            disabled={currentIndex === recommendMovies.length - 1}
+            disabled={currentIndex >= recommendMovies.length - 4}
           >
             &gt;
           </button>
@@ -111,6 +137,7 @@ const MovieRecommendList = styled.div`
     align-items: center;
     position: relative;
     overflow: hidden;
+    min-height: 212px;
   }
 
   .recommend__movie {

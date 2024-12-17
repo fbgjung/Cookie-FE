@@ -138,12 +138,16 @@ const Modal = ({ onClose, onPushNotification, onNoNotification }) => {
           <h3>
             좋아하는 장르에 새로운 리뷰가 <br></br>등록될 때 알려드릴까요?
           </h3>
+
           <p>새로운 리뷰가 등록되면 빠르게 알려드릴게요!</p>
 
           <ButtonContainer>
             <ModalButton onClick={onPushNotification}>🔔 푸쉬알림</ModalButton>
           </ButtonContainer>
           <CloseBtn onClick={onNoNotification}>알림을 원하지 않습니다</CloseBtn>
+          <p style={{ fontSize: "12px" }}>
+            알림은 크롬브라우저에서만 지원됩니다
+          </p>
         </ModalContainer>
       </ModalBackground>
     </>

@@ -14,6 +14,9 @@ const FooterContainer = styled.footer`
   padding: 15px;
   font-size: 0.8rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 const FooterTop = styled.div`
@@ -64,7 +67,7 @@ const FooterDetails = styled.div`
 
 const FooterBottom = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: start;
   margin-top: 15px;
   gap: 15px;
 
@@ -72,6 +75,8 @@ const FooterBottom = styled.div`
     font-size: 1.5rem;
     color: white;
     cursor: pointer;
+    width: 22px;
+    height: 22px;
 
     &:hover {
       color: #f84b99;

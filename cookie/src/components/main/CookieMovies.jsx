@@ -40,15 +40,31 @@ function CookieMovies() {
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
   };
+
+  const calculateSlidePercentage = (totalMovies) => {
+    const moviesPerPage = 4;
+    return (
+      (100 / Math.max(moviesPerPage, totalMovies)) *
+      Math.min(moviesPerPage, totalMovies)
+    );
+  };
+
   const handleNext = () => {
-    setCurrentIndex(currentIndex + 1);
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex + 1;
+      return newIndex < Math.ceil(recommendedMovies.length / 4)
+        ? newIndex
+        : prevIndex;
+    });
   };
+
   const handlePrev = () => {
-    console.log("Current Index:", currentIndex);
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex - 1;
+      return newIndex >= 0 ? newIndex : prevIndex;
+    });
   };
+
   return (
     <>
       <CookieMovieList>
@@ -66,7 +82,7 @@ function CookieMovies() {
           <div
             className="cookie__movie"
             style={{
-              transform: `translateX(-${currentIndex * 44.5}%)`,
+              transform: `translateX(-${currentIndex * calculateSlidePercentage(recommendedMovies.length)}%)`,
             }}
           >
             {recommendedMovies.map((movie, index) => (
@@ -97,7 +113,9 @@ function CookieMovies() {
           <button
             className="next"
             onClick={handleNext}
-            disabled={currentIndex === recommendedMovies.length - 1}
+            disabled={
+              currentIndex >= Math.ceil(recommendedMovies.length / 4) - 1
+            }
           >
             &gt;
           </button>
