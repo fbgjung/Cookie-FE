@@ -6,7 +6,7 @@ const ChatContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   flex: 1;
-  background-color: #ffffff;
+  background-color: #222222;
   border-radius: 16px 16px 0 0;
   overflow: hidden;
   overflow-y: auto;

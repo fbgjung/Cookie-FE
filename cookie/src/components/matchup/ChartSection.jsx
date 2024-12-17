@@ -9,6 +9,7 @@ import {
   Radar,
 } from "recharts";
 
+// 스타일 정의
 const SectionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -101,36 +102,7 @@ const ChartWrapper = styled.div`
 `;
 
 const ChartLabel = styled.div`
-  color: #<RadarChart
-  width={chartSize}
-  height={chartSize}
-  data={emotionData}
-  margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
->
-  <PolarGrid stroke="#ffffff" />
-  <PolarAngleAxis
-    dataKey="subject"
-    tick={{
-      fill: "#ffffff", // 축 텍스트 색상
-      fontSize: chartSize <= 200 ? 8 : 10,
-    }}
-  />
-  <PolarRadiusAxis
-    angle={38}
-    domain={[0, 100]}
-    tick={{
-      fill: "#ffffff", // 반경 텍스트 색상
-      fontSize: chartSize <= 200 ? 8 : 10,
-    }}
-  />
-  <Radar
-    name="감정포인트"
-    dataKey="value"
-    stroke="#ffffff" // 선 색상
-    fill="#ffffff80" // 채우기 색상
-    strokeWidth={2}
-  />
-</RadarChart>;
+  color: #ffffff;
   font-size: 1rem;
   text-align: center;
   margin-top: -20px;
@@ -144,24 +116,52 @@ const ChartLabel = styled.div`
   }
 `;
 
+// ChartSection 컴포넌트 정의
 const ChartSection = ({ movie1, movie2 }) => {
   const [selectedMovie, setSelectedMovie] = useState(movie1.movieTitle);
 
-  const formatData = (data) =>
+  // subject 매핑 객체
+  const mapSubjectNames = {
+    ost: "OST",
+    direction: "감독연출",
+    story: "스토리",
+    dialogue: "대사",
+    visual: "영상미",
+    acting: "배우연기",
+    specialEffect: "특수효과",
+  };
+
+  const mapEmotionNames = {
+    touching: "감동",
+    angry: "분노",
+    joy: "즐거움",
+    immersion: "몰입감",
+    excited: "설렘",
+    empathy: "공감",
+    tension: "긴장감",
+  };
+
+  // 데이터 포맷 함수
+  const formatData = (data, map) =>
     Object.keys(data).map((key) => ({
-      subject: key,
+      subject: map[key] || key,
       value: data[key],
     }));
 
+  // 데이터 포맷 적용
   const charmData =
     selectedMovie === movie1.movieTitle
-      ? formatData(movie1.charmPoint)
-      : formatData(movie2.charmPoint);
+      ? formatData(movie1.charmPoint, mapSubjectNames)
+      : formatData(movie2.charmPoint, mapSubjectNames);
 
   const emotionData =
     selectedMovie === movie1.movieTitle
-      ? formatData(movie1.emotionPoint)
-      : formatData(movie2.emotionPoint);
+      ? formatData(movie1.emotionPoint, mapEmotionNames)
+      : formatData(movie2.emotionPoint, mapEmotionNames);
+
+  console.log("현재 선택된 영화:", selectedMovie);
+  console.log("매력 포인트 데이터:", charmData);
+  console.log("감정 포인트 데이터:", emotionData);
 
   const chartSize =
     window.innerWidth <= 480 ? 200 : window.innerWidth <= 1024 ? 250 : 300;
@@ -268,6 +268,7 @@ const ChartSection = ({ movie1, movie2 }) => {
   );
 };
 
+// PropTypes 설정
 ChartSection.propTypes = {
   movie1: PropTypes.shape({
     movieTitle: PropTypes.string.isRequired,

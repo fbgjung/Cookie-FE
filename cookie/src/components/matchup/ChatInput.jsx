@@ -9,7 +9,7 @@ const InputContainer = styled.div`
   padding: 10px;
   background-color: #ffffff;
   align-items: center;
-  border-radius: 20px;
+  border-radius: 10px 10px 0 0;
 
   input {
     flex: 1;
