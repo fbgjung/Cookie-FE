@@ -1,3 +1,5 @@
+// ManageProfile.jsx
+
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { toast } from "react-hot-toast";
@@ -37,11 +39,13 @@ const ManageProfileContent = styled.div`
     padding: 12px;
     margin-top: 10px;
   }
-
-  & > *:not(:last-child) {
-    margin-top: 2px;
-  }
 `;
+
+const badgeIdMapping = {
+  영화새싹: "1",
+  나쵸쟁이: "2",
+  영화매니아: "3",
+};
 
 const ManageProfile = () => {
   const [profileImage, setProfileImage] = useState("");
@@ -98,8 +102,9 @@ const ManageProfile = () => {
 
       formData.append("nickname", nickname);
 
-      if (selectedBadge) {
-        formData.append("mainBadgeId", selectedBadge);
+      const mainBadgeId = badgeIdMapping[selectedBadge];
+      if (mainBadgeId) {
+        formData.append("mainBadgeId", mainBadgeId);
       }
 
       formData.append("genreId", selectedGenreId);

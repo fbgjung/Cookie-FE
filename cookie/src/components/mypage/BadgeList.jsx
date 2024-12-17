@@ -45,15 +45,21 @@ const BadgeImage = styled.img`
 const BadgeLabel = styled.span`
   font-size: 0.9rem;
   color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70px;
+  text-align: center;
 `;
 
 const BadgeList = ({ badges }) => {
+  const filteredBadges = badges.filter((badge) => badge.main);
+
   return (
     <BadgeSection>
-      {/* <BadgeTitle>{title}</BadgeTitle> */}
       <BadgeContainer>
-        {badges.length > 0 ? (
-          badges.map((badge, index) => (
+        {filteredBadges.length > 0 ? (
+          filteredBadges.map((badge, index) => (
             <BadgeItem key={index}>
               <BadgeImage
                 src={badge.badgeImage || "https://ibb.co/QrbJCj0"}
@@ -71,17 +77,16 @@ const BadgeList = ({ badges }) => {
 };
 
 BadgeList.propTypes = {
-  title: PropTypes.string.isRequired,
   badges: PropTypes.arrayOf(
     PropTypes.shape({
       badgeImage: PropTypes.string,
       name: PropTypes.string,
+      main: PropTypes.bool,
     })
   ),
 };
 
 BadgeList.defaultProps = {
-  title: "배지 리스트",
   badges: [],
 };
 

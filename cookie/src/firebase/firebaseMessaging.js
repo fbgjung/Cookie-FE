@@ -9,7 +9,6 @@ export const requestNotificationPermission = async () => {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
       });
       if (token) {
-        console.log("FCM 토큰:", token);
         return token;
       } else {
         console.error("토큰 가져오기 실패");

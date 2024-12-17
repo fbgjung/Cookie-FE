@@ -77,7 +77,6 @@ const MessageBubble = styled.div`
         : "border-right-color: #388E3C;"}
   }
 
-  /* 반응형 스타일 */
   @media (max-width: 768px) {
     font-size: 0.9rem;
     padding: 7px 10px;

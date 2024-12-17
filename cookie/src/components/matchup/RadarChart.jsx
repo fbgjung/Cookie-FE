@@ -22,10 +22,10 @@ const RadarChart = ({ labels, data, backgroundColor, borderColor }) => {
         angleLines: { color: "transparent" },
         grid: { color: "#8b4513" },
         ticks: {
-          color: "#8b4513", // 숫자 색상 유지
+          color: "#8b4513",
         },
         pointLabels: {
-          color: "#8b4513", // 레이블 색상 유지
+          color: "#8b4513", 
           font: { size: 12 },
         },
         suggestedMin: 0,

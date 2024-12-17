@@ -45,14 +45,14 @@ const PopupContent = styled.div`
   @media (max-width: 768px) {
     width: 90%;
     height: 70vh;
-    margin-bottom: 5vh; /* 팝업이 더 위로 올라오게 조정 */
+    margin-bottom: 5vh;
   }
 
   @media (max-width: 480px) {
     width: 85%;
     height: 65vh;
     background-size: contain;
-    margin-bottom: 7vh; /* 모바일 화면에서 더 위로 */
+    margin-bottom: 7vh; 
   }
 `;
 

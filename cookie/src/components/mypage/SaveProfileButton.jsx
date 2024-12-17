@@ -5,6 +5,14 @@ const SaveButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 3rem;
+  }
 `;
 
 const SaveButton = styled.button`

@@ -186,7 +186,9 @@ function SignUpGenre() {
       if (requestFcmToken) {
         fcmToken = await requestNotificationPermission();
         if (!fcmToken) {
-          toast.error("FCM 토큰을 가져올 수 없습니다.");
+          toast.error(
+            "알림 설정이 비활성화되었습니다.\n원활한 서비스 이용을 위해\n 알림 권한을 허용해주세요."
+          );
           setShowSpinner(false);
           setIsSubmitting(false);
           return;
@@ -230,6 +232,8 @@ function SignUpGenre() {
         const userResponse = response.data.response.user;
         const setUserInfo = useUserStore.getState().setUserInfo;
 
+        console.log("userResponse", userResponse);
+
         const userInfo = {
           userId: userResponse.userId,
           nickname: userResponse.nickname,
@@ -239,12 +243,13 @@ function SignUpGenre() {
         };
 
         setUserInfo(userInfo);
+        console.log("저장된 유저 정보:", userInfo);
 
         logIn();
         navigate("/");
       }
     } catch (error) {
-      toast.error(`가입 실패: ${error.message}`);
+      // toast.error(`가입 실패: ${error.message}`);
     } finally {
       setIsSubmitting(false);
       setShowSpinner(false);

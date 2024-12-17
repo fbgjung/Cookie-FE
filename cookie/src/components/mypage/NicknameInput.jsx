@@ -10,9 +10,18 @@ const NicknameContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   align-items: center;
   margin: 0 auto;
+  padding: 1rem;
+
+  @media (max-width: 768px) {
+    padding: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
 `;
 
 const Label = styled.label`
@@ -20,52 +29,73 @@ const Label = styled.label`
   font-weight: bold;
   margin-top: 30px;
   margin-bottom: 8px;
-  /* margin-left: 2rem; */
   color: #f84b99;
   width: 100%;
-  margin-left: 4.6rem;
+  text-align: left;
+  padding-left: 0.3rem;
 
   @media (max-width: 768px) {
     font-size: 1rem;
-    margin-bottom: 8px;
+    padding-left: 1.2rem;
   }
 
   @media (max-width: 480px) {
     font-size: 0.9rem;
-    margin-bottom: 5px;
+    padding-left: 0.8rem;
   }
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 85%;
-  /* margin-left: 2rem; */
+  width: 100%;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    margin-left: 0.02rem;
+    width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    margin-left: 0.01rem;
+    width: 90%;
+  }
 `;
 
 const Input = styled.input`
   flex: 1;
-  padding: 10px;
+  padding: 0.8rem;
   font-size: 1rem;
   border: 1px solid ${(props) => (props.isValid ? "#ccc" : "#f84b99")};
   border-radius: 8px;
   outline: none;
+  width: 100%;
 
   &:focus {
     border: 2px solid #f84b99;
   }
+
+  @media (max-width: 768px) {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+    width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+    width: 80%;
+  }
 `;
 
 const CheckButton = styled.button`
-  padding: 10px 15px;
+  padding: 0.8rem 1rem;
   font-size: 1rem;
   background-color: #f84b99;
   color: #fdf8fa;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  margin-left: 2%;
 
   &:hover {
     background-color: #c33677;
@@ -75,13 +105,35 @@ const CheckButton = styled.button`
     background-color: #ccc;
     cursor: not-allowed;
   }
+
+  @media (max-width: 768px) {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.8rem;
+  }
 `;
 
 const ErrorMessage = styled.div`
   color: #f84b99;
   font-size: 0.9rem;
-  margin-left: 40px;
   margin-top: 5px;
+  text-align: left;
+  width: 100%;
+  padding-left: 1.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    padding-left: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+    padding-left: 0.8rem;
+  }
 `;
 
 const NicknameInput = ({ nickname, onChange, onResetCheck, isChecked }) => {
