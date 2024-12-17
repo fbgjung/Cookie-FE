@@ -40,6 +40,8 @@ const ResultItem = styled.div`
   justify-content: center;
   cursor: pointer;
   transition: transform 0.2s ease;
+  height: auto;
+  max-height: 214px;
   aspect-ratio: 2/3; /* 포스터 비율 유지 */
   overflow: hidden;
 
