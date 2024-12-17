@@ -12,24 +12,24 @@ const skeletonLoading = keyframes`
 
 const ResultsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 항상 3열 유지 */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 고정된 최소 너비 설정 */
   gap: 15px;
   width: 100%;
+  max-width: 1200px; /* 부모 너비 제한 */
+  margin: 0 auto; /* 가운데 정렬 */
   padding: 20px;
   box-sizing: border-box;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   @media (max-width: 768px) {
-    gap: 10px; /* 모바일 환경에서 간격 줄이기 */
-    padding: 10px; /* 여백 줄이기 */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    padding: 10px;
   }
 
   @media (max-width: 480px) {
-    gap: 8px; /* 더 좁은 화면에서 간격 더 줄이기 */
-    padding: 8px; /* 여백도 최소화 */
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    padding: 8px;
   }
 `;
 
@@ -40,7 +40,6 @@ const ResultItem = styled.div`
   justify-content: center;
   cursor: pointer;
   transition: transform 0.2s ease;
-  height: auto; /* 자동 높이 */
   aspect-ratio: 2/3; /* 포스터 비율 유지 */
   overflow: hidden;
 
