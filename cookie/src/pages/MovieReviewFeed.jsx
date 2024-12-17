@@ -85,7 +85,7 @@ const ReviewTicket = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 8px;
   background-color: #fdf8fa;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
