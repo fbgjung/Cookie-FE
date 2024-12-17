@@ -6,11 +6,13 @@ import axiosInstance from "../api/auth/axiosInstance";
 const ReviewFeedWrapper = styled.div`
   width: 100%;
   background-color: #000000;
-  padding: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
   min-height: 100vh;
 
   @media (max-width: 480px) {
-    padding: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `;
 
@@ -73,6 +75,10 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
 `;
 
 const ReviewTicket = styled.div`
@@ -88,6 +94,10 @@ const ReviewTicket = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
   }
+
+  @media (max-width: 480px) {
+    padding: 0.7rem;
+  }
 `;
 
 const ReviewLeft = styled.div`
@@ -95,19 +105,27 @@ const ReviewLeft = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  min-width: 80px;
 
   img {
     width: 60px;
     height: 60px;
     border-radius: 50%;
     border: 1.5px solid #b3afb1;
+
+    @media (max-width: 480px) {
+      width: 40px;
+      height: 40px;
+    }
   }
 
   .name {
     font-size: 0.8rem;
     font-weight: bold;
     text-align: center;
+
+    @media (max-width: 480px) {
+      font-size: 0.7rem;
+    }
   }
 `;
 
@@ -128,6 +146,10 @@ const ReviewCenter = styled.div`
       pointer-events: none;
       user-select: none;
     }
+
+    @media (max-width: 480px) {
+      font-size: 0.7rem;
+    } 
   }
 `;
 
@@ -142,6 +164,11 @@ const ReviewRight = styled.div`
     width: 16px;
     height: 16px;
     margin-right: 0.1rem;
+
+    @media (max-width: 480px) {
+      width: 12px;
+      height: 12px;
+    }
   }
 
   .interactions {
@@ -155,6 +182,10 @@ const ReviewRight = styled.div`
       align-items: center;
       gap: 4px;
       padding-top: 40px;
+
+      @media (max-width: 480px) {
+        padding-top: 20px;
+      }
 
       svg {
         width: 20px;
