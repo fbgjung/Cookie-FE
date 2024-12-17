@@ -9,6 +9,7 @@ const ReviewFeedWrapper = styled.div`
   padding-left: 40px;
   padding-right: 40px;
   min-height: 100vh;
+  padding-bottom: 40px;
 
   @media (max-width: 480px) {
     padding-left: 20px;
@@ -47,9 +48,9 @@ const HeaderSection = styled.div`
 
 const FilterButtons = styled.div`
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
-  width: 100%;
 
   button {
     font-size: 1rem;
@@ -67,6 +68,25 @@ const FilterButtons = styled.div`
     &.inactive {
       background-color: #000000;
       color: #ffffff;
+    }
+  }
+
+  .sort-toggle {
+    display: flex;
+    gap: 10px;
+
+    button {
+      font-size: 1rem;
+      border: none;
+      background: none;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: bold;
+
+      &.selected {
+        color: #f84b99;
+        border-bottom: 2px solid #f84b99;
+      }
     }
   }
 `;
@@ -229,6 +249,7 @@ const MovieReviewFeed = () => {
   const [poster, setPoster] = useState("");
   const [title, setTitle] = useState("");
   const [showSpoilerOnly, setShowSpoilerOnly] = useState(false);
+  const [sortOrder, setSortOrder] = useState("latest");
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -244,7 +265,7 @@ const MovieReviewFeed = () => {
         : `/api/movies/${movieId}/reviews`;
 
       const response = await axiosInstance.get(endpoint, {
-        params: { page, size: 10 },
+        params: { page, size: 10, sort: sortOrder },
       });
 
       const { poster: moviePoster, title: movieTitle } = response.data.response;
@@ -269,7 +290,7 @@ const MovieReviewFeed = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [movieId, showSpoilerOnly, page, isLoading, hasMore]);
+  }, [movieId, showSpoilerOnly, sortOrder, page, isLoading, hasMore]);
 
   useEffect(() => {
     fetchReviews();
@@ -287,6 +308,13 @@ const MovieReviewFeed = () => {
     fetchReviews();
   };
 
+  const changeSortOrder = (order) => {
+    setSortOrder(order);
+    setPage(0);
+    setReviews([]);
+    setHasMore(true);
+  };
+
   return (
     <ReviewFeedWrapper>
       <HeaderSection>
@@ -298,6 +326,7 @@ const MovieReviewFeed = () => {
       </HeaderSection>
 
       <FilterButtons>
+        <div>
         <button
           className={!showSpoilerOnly ? "active" : "inactive"}
           onClick={() => filterReviews(false)}
@@ -310,6 +339,21 @@ const MovieReviewFeed = () => {
         >
           스포일러 리뷰
         </button>
+        </div>
+        <div className="sort-toggle">
+          <button
+            className={sortOrder === "latest" ? "selected" : ""}
+            onClick={() => changeSortOrder("latest")}
+          >
+            최신순
+          </button>
+          <button
+            className={sortOrder === "popular" ? "selected" : ""}
+            onClick={() => changeSortOrder("popular")}
+          >
+            인기순
+          </button>
+        </div>
       </FilterButtons>
 
       <ReviewContainer>
