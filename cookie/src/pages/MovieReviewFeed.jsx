@@ -74,83 +74,106 @@ const ReviewContainer = styled.div`
 const ReviewTicket = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   padding: 1rem;
   border-radius: 8px;
   background-color: #fdf8fa;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const ReviewLeft = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
+  min-width: 80px;
 
-  .profile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    img {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: solid 1.5px #b3afb1;
-    }
-
-    .user-info {
-      .name {
-        font-size: 0.9rem;
-        font-weight: bold;
-      }
-
-      .date {
-        font-size: 0.8rem;
-        color: #888;
-      }
-    }
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1.5px solid #b3afb1;
   }
 
-  .comment {
-    margin-top: 0.5rem;
+  .name {
     font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+  }
+`;
+
+const ReviewCenter = styled.div`
+  flex: 1;
+  padding: 0 1rem;
+
+  .comment {
+    font-size: 0.9rem;
     line-height: 1.5;
+    color: #333;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-break: break-word;
 
-  &.blurred {
+    &.blurred {
       filter: blur(5px);
-      pointer-events: none; 
+      pointer-events: none;
       user-select: none;
     }
+  }
 `;
 
 const ReviewRight = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  text-align: right;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 5px;
 
-  .score {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #f84b99;
+  .score img {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.1rem;
   }
 
   .interactions {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
+    gap: 8px;
 
-    .likes {
-      font-size: 0.9rem;
-      margin-bottom: 5px;
-    }
-
+    .likes,
     .comments {
-      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      span {
+        font-size: 0.8rem;
+        color: #888;
+      }
     }
   }
+`;
+
+const LikeIcon = styled.svg`
+  background: url("/assets/images/review/heart-review-feed.svg") no-repeat
+    center;
+  background-size: cover;
+`;
+
+const CommentIcon = styled.svg`
+  background: url("/assets/images/review/comment-review-feed.svg") no-repeat
+    center;
+  background-size: cover;
 `;
 
 const MovieReviewFeed = () => {
@@ -222,7 +245,10 @@ const MovieReviewFeed = () => {
     <ReviewFeedWrapper>
       <HeaderSection>
         <img src={poster || "/default-poster.png"} alt={title} />
-        <p>{title} <br />리뷰 모아보기</p>
+        <p>
+          {title} <br />
+          리뷰 모아보기
+        </p>
       </HeaderSection>
 
       <FilterButtons>
@@ -242,21 +268,20 @@ const MovieReviewFeed = () => {
 
       <ReviewContainer>
         {reviews.map((review) => (
-          <ReviewTicket key={review.reviewId} onClick={() => handleReviewClick(review.reviewId)}>
+          <ReviewTicket
+            key={review.reviewId}
+            onClick={() => handleReviewClick(review.reviewId)}
+          >
             <ReviewLeft>
-              <div className="profile">
-                <img
-                  src={review.user?.profileImage || "/default-profile.png"}
-                  alt={review.user?.nickname || "Anonymous"}
-                />
-                <div className="user-info">
-                  <div className="name">{review.user?.nickname || "Anonymous"}</div>
-                  <div className="date">
-                    {new Date(review.createdAt).toLocaleDateString("ko-KR")}
-                  </div>
-                </div>
-              </div>
-              <div className={`comment ${
+              <img
+                src={review.user?.profileImage || "/default-profile.png"}
+                alt={review.user?.nickname || "Anonymous"}
+              />
+              <div className="name">{review.user?.nickname || "Anonymous"}</div>
+            </ReviewLeft>
+            <ReviewCenter>
+              <div
+                className={`comment ${
                   !showSpoilerOnly && review.spoiler ? "blurred" : ""
                 }`}
               >
@@ -264,13 +289,28 @@ const MovieReviewFeed = () => {
                   ? `${review.content.slice(0, 100)}...`
                   : review.content}
               </div>
-            </ReviewLeft>
-
+            </ReviewCenter>
             <ReviewRight>
-              <div className="score">평점: {review.movieScore.toFixed(1)}</div>
+              <div className="score">
+                {Array.from({ length: Math.round(review.movieScore) }).map(
+                  (_, i) => (
+                    <img
+                      key={`${review.reviewId}-score-${i}`}
+                      src="/assets/images/review/score-macarong.png"
+                      alt="score"
+                    />
+                  )
+                )}
+              </div>
               <div className="interactions">
-                <div className="likes">❤️ {review.reviewLike} likes</div>
-                <div className="comments">💬 {review.comments || 0} comments</div>
+                <div className="likes">
+                  <LikeIcon />
+                  <span>{review.reviewLike}</span>
+                </div>
+                <div className="comments">
+                  <CommentIcon />
+                  <span>{review.comments || 0}</span>
+                </div>
               </div>
             </ReviewRight>
           </ReviewTicket>
