@@ -40,10 +40,11 @@ const ResultItem = styled.div`
   justify-content: center;
   cursor: pointer;
   transition: transform 0.2s ease;
-  height: auto;
-  max-height: 214px;
-  aspect-ratio: 2/3; /* 포스터 비율 유지 */
-  overflow: hidden;
+  width: 100%; /* 부모 컨테이너 너비 */
+  aspect-ratio: 2/3; /* 비율 유지 */
+  border-radius: 8px; /* 둥근 모서리 적용 */
+  overflow: hidden; /* 이미지 넘치는 부분 잘라냄 */
+  position: relative;
 
   &:hover {
     transform: scale(1.05);
@@ -62,11 +63,9 @@ const PosterSkeleton = styled.div`
 `;
 
 const Poster = styled.img`
-  width: 100%; /* 부모 컨테이너의 너비에 맞춤 */
-  height: 100%
-  aspect-ratio: 2/3; /* 가로 세로 비율 유지 */
-  object-fit: cover; /* 이미지가 비율에 맞게 잘리도록 설정 */
-  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 비율 유지하며 잘라냄 */
   background-color: #2c2c2c; /* 로딩 중일 때 배경 색상 */
   display: ${(props) => (props.isLoading ? "none" : "block")};
 `;
