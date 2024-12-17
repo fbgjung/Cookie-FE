@@ -125,6 +125,13 @@ const WriteReviewButton = styled.button`
   .icon {
     font-size: 1.8rem;
   }
+  @media (max-width: 768px) {
+    right: calc(50% - 245px);
+    width: 2.625rem;
+    height: 2.625rem;
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
 
   @media (max-width: 600px) {
     right: calc(50% - 200px);
@@ -137,8 +144,16 @@ const WriteReviewButton = styled.button`
   @media (max-width: 390px) {
     right: calc(50% - 175px);
     bottom: 5rem;
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+  @media (max-width: 393px) {
+    right: calc(50% - 179px);
+    bottom: 5rem;
+    width: 3.2rem;
+    height: 3.2rem;
     font-size: 0.8rem;
     padding: 0.6rem;
   }
