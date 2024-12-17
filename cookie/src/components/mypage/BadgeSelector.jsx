@@ -15,7 +15,6 @@ const BadgeTitle = styled.h3`
   color: #f84b99;
   text-align: left;
   width: 100%;
-  /* max-width: 450px; */
   margin: 3rem 0 1rem 4.6rem;
 
   @media (max-width: 768px) {
@@ -32,30 +31,24 @@ const BadgeTitle = styled.h3`
 const BadgeList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")}; */
-  /* align-items: ${({ isEmpty }) => (isEmpty ? "center" : "flex-start")}; */
-  /* margin-left: ${({ isEmpty }) => (isEmpty ? "0" : "0")}; */
   align-items: center;
   justify-content: center;
-  /* margin-left: 2rem; */
   background-color: white;
-  border: 1px solid #F84B99;
+  border: 1px solid #f84b99;
   border-radius: 12px;
-  padding: ${({ isEmpty }) => (isEmpty ? "60px" : "60px")};
+  padding: 60px;
   width: 100%;
   max-width: 480px;
   gap: 20px;
 
   @media (max-width: 768px) {
-    padding: ${({ isEmpty }) => (isEmpty ? "30px" : "60px")};
-    justify-content: center;
+    padding: 30px;
     max-width: 400px;
     gap: 15px;
   }
 
   @media (max-width: 480px) {
-    padding: ${({ isEmpty }) => (isEmpty ? "20px" : "50px")};
-    justify-content: center;
+    padding: 20px;
     max-width: 300px;
     gap: 10px;
   }
@@ -65,9 +58,6 @@ const EmptyMessage = styled.div`
   font-size: 1rem;
   color: #666;
   text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
 
   @media (max-width: 768px) {
@@ -131,12 +121,16 @@ const BadgeItem = styled.div`
 `;
 
 const BadgeSelector = ({ badges, selectedBadge, onBadgeChange }) => {
-  const [currentSelectedBadge, setCurrentSelectedBadge] =
-    useState(selectedBadge);
+  const [currentSelectedBadge, setCurrentSelectedBadge] = useState(
+    selectedBadge || (badges.length > 0 ? badges[0].name : "")
+  );
 
   useEffect(() => {
-    setCurrentSelectedBadge(selectedBadge);
-  }, [selectedBadge]);
+    if (badges.length > 0 && !currentSelectedBadge) {
+      setCurrentSelectedBadge(badges[0].name);
+      onBadgeChange(badges, badges[0].name);
+    }
+  }, [badges, currentSelectedBadge, onBadgeChange]);
 
   const handleBadgeSelect = (badge) => {
     const updatedBadges = badges.map((b) => ({
@@ -158,14 +152,7 @@ const BadgeSelector = ({ badges, selectedBadge, onBadgeChange }) => {
               isSelected={currentSelectedBadge === badge.name}
               onClick={() => handleBadgeSelect(badge)}
             >
-              <img
-                src={
-                  currentSelectedBadge === badge.name
-                    ? badge.badgeImage
-                    : "/path/to/defaultBadge.png"
-                }
-                alt={badge.name}
-              />
+              <img src={badge.badgeImage} alt={badge.name} />
               <span>{badge.name}</span>
               <input
                 type="radio"

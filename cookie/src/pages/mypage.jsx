@@ -19,7 +19,6 @@ import WithdrawModal from "../components/mypage/WithdrawModal";
 
 import { FaChevronRight } from "react-icons/fa";
 
-
 const MypageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -42,7 +41,6 @@ const MypageContent = styled.div`
 
   border: 4px solid transparent;
 `;
-
 
 const MyPage = () => {
   const [userData, setUserData] = useState({ nickname: "", profileImage: "" });
@@ -135,10 +133,6 @@ const MyPage = () => {
 
     fetchUserData();
   }, [isLogined, openLoginModal]);
-
-  const handleReviewClick = (reviewId) => {
-    navigate(`/reviews/${reviewId}`, { state: { fromMyPage: true } });
-  };
 
   const mainBadge = badgeData.find((badge) => badge.main) || {};
   const favoriteItems = [{ label: "좋아한 영화" }, { label: "좋아한 리뷰" }];
@@ -235,11 +229,11 @@ const MyPage = () => {
           />
           <FavoriteList title="좋아요" items={favoriteItems} />
           <PushNotificationToggle pushEnabled={pushEnabled} />
-          
+
           <MyReviewList onClick={handleMyAllReviewClick}>
             <p>내가 작성한 리뷰</p>
             <FaChevronRight />
-          </MyReviewList>  
+          </MyReviewList>
 
           {isLogined() && (
             <LogoutAndWithdraw
@@ -272,4 +266,4 @@ const MyReviewList = styled.div`
   &:hover {
     background-color: #f84b99;
   }
-`
+`;
