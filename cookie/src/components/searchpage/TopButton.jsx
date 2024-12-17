@@ -59,7 +59,8 @@ const StyledButton = styled.button`
 
     &::after {
       font-size: 14px;
-
+    }
+  }
   @media (max-width: 390px) {
     right: 9.8rem;
     bottom: 80px;
