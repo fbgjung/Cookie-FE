@@ -255,6 +255,12 @@ const Poster = styled.img`
     width: 6.4rem;
     height: 9.5rem;
   }
+  @media (max-width: 393px) {
+    padding: 0.4rem 0.3rem;
+    width: 5.6rem;
+    height: 8.7rem;
+  }
+
   @media (max-width: 390px) {
     padding: 0.4rem 0.3rem;
     width: 5.6rem;
@@ -280,6 +286,10 @@ const GenreBtn = styled.button`
   @media (max-width: 768px) {
     margin: 0 0.7rem 0.5rem 0;
     font-size: 0.9rem;
+  }
+  @media (max-width: 393px) {
+    margin: 0 0.4rem 0.5rem 0;
+    font-size: 0.88rem;
   }
 `;
 

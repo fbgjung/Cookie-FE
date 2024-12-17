@@ -232,9 +232,15 @@ const Poster = styled.img`
 
   @media (max-width: 480px) {
     padding: 0.4rem 0.3rem;
-    width: 6.2rem;
-    height: 9.3rem;
+    width: 6rem;
+    height: 9.1rem;
   }
+  @media (max-width: 393px) {
+    padding: 0.4rem 0.3rem;
+    width: 5.6rem;
+    height: 8.7rem;
+  }
+
   @media (max-width: 390px) {
     padding: 0.4rem 0.3rem;
     width: 5.6rem;
@@ -277,6 +283,12 @@ export const SkeletonOverlay = styled.div`
     width: 5.6rem;
     height: 8.7rem;
   }
+  @media (max-width: 393px) {
+    padding: 0.4rem 0.3rem;
+    width: 5rem;
+    height: 8.7rem;
+  }
+
   @media (max-width: 390px) {
     width: 5.2rem;
     height: 8.3rem;

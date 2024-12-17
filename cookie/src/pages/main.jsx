@@ -157,6 +157,14 @@ const WriteReviewButton = styled.button`
     font-size: 0.8rem;
     padding: 0.6rem;
   }
+  @media (max-width: 393px) {
+    right: calc(50% - 179px);
+    bottom: 5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
 `;
 
 const categoryData = [
