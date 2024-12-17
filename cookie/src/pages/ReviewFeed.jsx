@@ -7,11 +7,13 @@ import axiosInstance from "../api/auth/axiosInstance";
 const ReviewFeedWrapper = styled.div`
   width: 100%;
   background-color: #000000;
-  padding: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
   min-height: 100vh;
 
   @media (max-width: 480px) {
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 `;
 
