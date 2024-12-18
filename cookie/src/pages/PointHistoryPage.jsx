@@ -24,13 +24,13 @@ const Container = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin-bottom: 2rem;
   font-weight: bold;
   color: #f84b99;
 
   @media (max-width: 768px) {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   @media (max-width: 480px) {
@@ -73,14 +73,13 @@ const TableHeader = styled.thead`
 
   th {
     padding: 0.8rem;
-    text-align: left;
+    text-align: center;
     font-weight: bold;
     white-space: nowrap;
 
     @media (max-width: 768px) {
       padding: 0.6rem;
       font-size: 0.85rem;
-      text-align: center;
     }
 
     @media (max-width: 480px) {
@@ -102,25 +101,22 @@ const TableRow = styled.tr`
 `;
 
 const TableData = styled.td`
-  padding: 0.6rem;
+  padding: 0.8rem;
   font-size: 0.9rem;
   color: black;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 80px; /* 더 좁게 설정 */
 
   @media (max-width: 768px) {
-    padding: 0.5rem;
+    padding: 0.6rem;
     font-size: 0.8rem;
-    text-align: center;
-    max-width: 60px; /* 모바일 최적화 */
   }
 
   @media (max-width: 480px) {
-    padding: 0.4rem;
+    padding: 0.5rem;
     font-size: 0.75rem;
-    max-width: 50px; /* 작은 화면에서는 더 작게 */
   }
 `;
 
@@ -144,6 +140,13 @@ const formatTextWithEllipsis = (text, maxLength = 8) => {
     return `${text.substring(0, maxLength)}...`;
   }
   return text;
+};
+
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+  return new Date(dateString)
+    .toLocaleDateString("ko-KR", options)
+    .replace(/\.$/, ""); // 마지막 점 제거
 };
 
 const BadgeHistory = () => {
@@ -213,16 +216,14 @@ const BadgeHistory = () => {
             <tbody>
               {badgeHistory.map((item, index) => (
                 <TableRow key={index} onClick={handleHistoryItemClick}>
-                  <TableData data-label="영화 제목">
+                  <TableData>
                     {formatTextWithEllipsis(item.movieName)}
                   </TableData>
-                  <TableData data-label="획득 출처">
+                  <TableData>
                     {formatTextWithEllipsis(formatActionName(item.actionName))}
                   </TableData>
-                  <TableData data-label="포인트">+{item.point}P</TableData>
-                  <TableData data-label="날짜">
-                    {new Date(item.createdAt).toLocaleDateString()}
-                  </TableData>
+                  <TableData>+{item.point}P</TableData>
+                  <TableData>{formatDate(item.createdAt)}</TableData>
                 </TableRow>
               ))}
             </tbody>
