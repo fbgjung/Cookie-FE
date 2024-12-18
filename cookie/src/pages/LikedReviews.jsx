@@ -4,45 +4,40 @@ import styled from "styled-components";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
-  padding: 20px 15px;
-  background-color: #000000;
+  padding: 10px 15px;
+  background-color: #000;
   width: 100%;
   margin: 0 auto;
   min-height: 100vh;
   overflow-x: hidden;
 
   @media (max-width: 768px) {
-    padding: 15px;
+    padding: 10px;
   }
 
   @media (max-width: 480px) {
-    padding: 10px;
+    padding: 8px;
   }
 `;
 
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* 좌측 정렬 */
-  margin: 0;
-  padding: 1rem 1.5rem;
-
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
+  justify-content: flex-start;
+  padding: 0.8rem 1rem;
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: bold;
     color: #f84b99;
-    margin-left: 0.5rem; /* 백버튼과 텍스트 사이 간격 */
+    margin-left: 0.4rem;
 
     @media (max-width: 768px) {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
     }
 
     @media (max-width: 480px) {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
   }
 `;
