@@ -57,7 +57,6 @@ const Header = () => {
       "/point-history",
       "/notifications",
       "/manageprofile",
-      "/reviews/write",
     ].includes(location.pathname) ||
     location.pathname.match(/^\/reviews\/\d+$/);
 
