@@ -8,12 +8,14 @@ const ReviewFeedWrapper = styled.div`
   background-color: #000000;
   padding-left: 40px;
   padding-right: 40px;
+  padding-top: 40px;
   min-height: 100vh;
   padding-bottom: 40px;
 
   @media (max-width: 480px) {
     padding-left: 20px;
     padding-right: 20px;
+    padding-top: 20px;
   }
 `;
 
@@ -136,7 +138,6 @@ const ReviewLeft = styled.div`
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    border: 1.5px solid #b3afb1;
 
     @media (max-width: 480px) {
       width: 40px;
@@ -152,6 +153,37 @@ const ReviewLeft = styled.div`
     @media (max-width: 480px) {
       font-size: 0.7rem;
     }
+  }
+`;
+
+const ProfileImageWrapper = styled.div`
+  position: relative; /* BadgeIcon의 기준이 되는 부모 컨테이너 */
+  display: inline-block;
+`;
+
+const ProfileImage = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 8px;
+
+  @media (max-width: 480px) {
+    width: 40px;
+    height: 40px;
+  }
+`;
+
+const BadgeIcon = styled.img`
+  position: absolute;
+  bottom: -5px; /* 프로필 이미지 우측 하단에 배치 */
+  right: 0px;
+  width: 40px !important; /* 뱃지 크기 명확히 조정 */
+  height: 40px !important;
+  z-index: 2;
+
+  @media (max-width: 480px) {
+    width: 26px !important;
+    height: 26px !important;
   }
 `;
 
@@ -258,6 +290,12 @@ const MovieReviewFeed = () => {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const badgeImages = {
+    영화새싹: "/assets/images/mypage/lv1.svg",
+    나쵸쟁이: "/assets/images/mypage/lv2.svg",
+    영화매니아: "/assets/images/mypage/lv3.svg",
+  };
 
   const buildEndpoint = () => {
     let endpoint = `/api/movies/${movieId}/reviews`;
@@ -379,10 +417,22 @@ const MovieReviewFeed = () => {
             onClick={() => handleReviewClick(review.reviewId)}
           >
             <ReviewLeft>
-              <img
-                src={review.user?.profileImage || "/default-profile.png"}
-                alt={review.user?.nickname || "Anonymous"}
-              />
+            <ProfileImageWrapper>
+                  <ProfileImage
+                    src={review.user.profileImage}
+                    alt={review.user.nickname}
+                  />
+                  {review.user.mainBadgeImage && (
+                    <BadgeIcon
+                      className="badge-icon"
+                      src={
+                        badgeImages[review.user.mainBadgeImage] ||
+                        review.user.mainBadgeImage
+                      }
+                      alt={review.user.mainBadgeImage}
+                    />
+                  )}
+                </ProfileImageWrapper>
               <div className="name">{review.user?.nickname || "Anonymous"}</div>
             </ReviewLeft>
             <ReviewCenter>
