@@ -167,7 +167,7 @@ const ReviewCenter = styled.div`
     text-overflow: ellipsis;
     word-break: break-word;
 
-    .blurred {
+    &.blurred {
       filter: blur(5px);
       pointer-events: none;
       user-select: none;

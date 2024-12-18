@@ -171,7 +171,7 @@ const ReviewCenter = styled.div`
     margin-top: 0.5rem;
     line-height: 1.5;
 
-    .blurred {
+    &.blurred {
       filter: blur(5px);
       pointer-events: none; 
       user-select: none;
