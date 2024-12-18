@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../api/auth/axiosInstance";
 
 const Container = styled.div`
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -98,11 +98,13 @@ const PrevIcon = styled.div`
   height: 32px;
   background: no-repeat center/cover url("/assets/images/prev-button.svg");
   cursor: pointer;
+  margin-left: 1rem;
 `;
 
 const CommentSection = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
 `;
@@ -114,23 +116,39 @@ const CommentIcon = styled.div`
     url("/assets/images/review/comment-review-feed.svg");
 `;
 
+const LikeIcon = styled.div`
+  width: 16px;
+  height: 16px;
+  background: no-repeat center/cover
+    url("/assets/images/review/heart-review-feed.svg");
+`;
+
 const LikedMovies = () => {
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  const fetchLikedMovies = async () => {
+  const fetchLikedMovies = async (page = 0, size = 5) => {
     try {
-      const response = await axiosInstance.get("/api/users/likedMovieList");
+      setLoading(true);
+      const response = await axiosInstance.get(
+        `/api/users/likedMovieList?userId=1&page=${page}&size=${size}`
+      );
       const fetchedMovies = response.data.response.movies || [];
-      setMovies(fetchedMovies);
+      setMovies((prevMovies) => [...prevMovies, ...fetchedMovies]);
+      setTotalPages(response.data.response.totalPages || 1);
+      setLoading(false);
     } catch (error) {
       console.error("좋아하는 영화 목록 불러오기 실패:", error);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchLikedMovies();
-  }, []);
+    fetchLikedMovies(currentPage);
+  }, [currentPage]);
 
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
@@ -140,6 +158,24 @@ const LikedMovies = () => {
     navigate(-1);
   };
 
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 50
+    ) {
+      if (!loading && currentPage < totalPages - 1) {
+        setCurrentPage((prev) => prev + 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [loading, currentPage, totalPages]);
+
   return (
     <Container>
       <HeaderContainer>
@@ -148,21 +184,26 @@ const LikedMovies = () => {
       </HeaderContainer>
 
       {movies.length > 0 ? (
-        <MoviesGrid>
-          {movies.map((movie, index) => (
-            <MovieCard key={index} onClick={() => handleMovieClick(movie.id)}>
-              <Poster src={movie.poster} alt={movie.title} />
-              <MovieInfo>
-                <h2>{movie.title}</h2>
-                <p>{movie.releasedAt}</p>
-                <CommentSection>
-                  <CommentIcon />
-                  <p>{movie.reviews}</p>
-                </CommentSection>
-              </MovieInfo>
-            </MovieCard>
-          ))}
-        </MoviesGrid>
+        <>
+          <MoviesGrid>
+            {movies.map((movie, index) => (
+              <MovieCard key={index} onClick={() => handleMovieClick(movie.id)}>
+                <Poster src={movie.poster} alt={movie.title} />
+                <MovieInfo>
+                  <h2>{movie.title}</h2>
+                  <p>{movie.releasedAt}</p>
+                  <CommentSection>
+                    <LikeIcon />
+                    <p>{movie.likes || 0}</p>
+                    <CommentIcon />
+                    <p>{movie.reviews || 0}</p>
+                  </CommentSection>
+                </MovieInfo>
+              </MovieCard>
+            ))}
+          </MoviesGrid>
+          {loading && <EmptyMessage>로딩 중...</EmptyMessage>}
+        </>
       ) : (
         <EmptyMessage>좋아하는 영화를 선택해보세요!</EmptyMessage>
       )}

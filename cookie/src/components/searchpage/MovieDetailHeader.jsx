@@ -4,7 +4,9 @@ import PropTypes from "prop-types";
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  padding-top: 18px;
+  margin-left: -8px;
+  margin-bottom: 22px;
 `;
 
 const PrevIcon = styled.div`
@@ -25,7 +27,7 @@ const PrevIcon = styled.div`
 `;
 
 const Title = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: #f84b99;
   margin-left: 10px;

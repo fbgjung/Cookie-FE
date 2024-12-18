@@ -72,24 +72,26 @@ const ReviewContainer = styled.div`
 
 const ReviewTicket = styled.div`
   display: flex;
-  padding: 1rem;
+  padding: 1.5rem 2rem;
+  margin: 0 auto;
   border-radius: 0.5rem;
   background-color: #fdf8fa;
   transition: transform 0.2s ease;
   cursor: pointer;
+  width: calc(100% - 4rem);
 
   &:active {
     transform: scale(0.98);
   }
 
   @media (max-width: 768px) {
-    flex-direction: row;
-    padding: 0.8rem;
+    padding: 1.2rem 1.5rem;
+    width: calc(100% - 3rem);
   }
 
   @media (max-width: 480px) {
-    flex-direction: row;
-    padding: 0.6rem;
+    padding: 1rem 1rem;
+    width: calc(100% - 2rem);
   }
 `;
 
@@ -303,75 +305,60 @@ const ReviewComment = styled.p`
   }
 `;
 
+const EmptyMessage = styled.p`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #f84b99;
+  margin-top: 2rem;
+`;
+
 const LikedReviews = () => {
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const observer = useRef();
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
+  const handleBackClick = () => navigate(-1);
 
-  const fetchLikedReviews = async () => {
-    if (loading || page > totalPages) return;
+  const fetchLikedReviews = useCallback(async () => {
+    if (loading || page >= totalPages) return;
+
     setLoading(true);
-
     try {
       const response = await axiosInstance.get("/api/users/likedReviewList", {
-        params: {
-          page: page - 1,
-          size: 10,
-        },
+        params: { page, size: 10 },
       });
 
-      const { reviews = [], totalPages = 1 } = response.data.response || {};
+      const {
+        reviews: fetchedReviews = [],
+        totalPages: fetchedTotalPages = 1,
+      } = response.data.response || {};
 
-      const newReviews = reviews.map((review) => ({
-        reviewId: review.reviewId,
-        content: review.content,
-        movieScore: review.movieScore,
-        reviewLike: review.reviewLike,
-        createdAt: new Date(review.createdAt).toLocaleDateString(),
-        updatedAt: new Date(review.updatedAt).toLocaleDateString(),
-        movie: {
-          title: review.movie.title,
-          poster:
-            review.movie.poster || "/src/assets/images/default-poster.jpg",
-        },
-        user: {
-          nickname: review.user.nickname,
-          profileImage: review.user.profileImage,
-          mainBadgeImage: review.user.mainBadgeImage,
-        },
-      }));
+      setReviews((prev) => {
+        const uniqueReviews = fetchedReviews.filter(
+          (review) => !prev.some((r) => r.reviewId === review.reviewId)
+        );
+        return [...prev, ...uniqueReviews];
+      });
 
-      setReviews((prev) => [...prev, ...newReviews]);
-      setTotalPages(totalPages);
+      setTotalPages(fetchedTotalPages);
     } catch (error) {
       console.error("리뷰 데이터를 가져오는 데 실패했습니다:", error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const EmptyMessage = styled.p`
-    text-align: center;
-    font-size: 1.2rem;
-    color: #f84b99;
-    margin-top: 2rem;
-  `;
+  }, [loading, page, totalPages]);
 
   const lastReviewRef = useCallback(
     (node) => {
-      if (loading) return;
+      if (loading || page + 1 >= totalPages) return;
 
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && page < totalPages) {
+        if (entries[0].isIntersecting) {
           setPage((prev) => prev + 1);
         }
       });
@@ -397,82 +384,89 @@ const LikedReviews = () => {
         <PrevIcon onClick={handleBackClick}></PrevIcon>
         <span className="title">내가 좋아한 리뷰</span>
       </HeaderContainer>
+
       {reviews.length > 0 ? (
         <ReviewContainer>
-          {reviews.map((review, index) => (
-            <ReviewTicket
-              key={`${review.reviewId}-${index}`}
-              onClick={() => handleReviewClick(review.reviewId)}
-            >
-              <ReviewLeft>
-                <img src={review.movie.poster} alt={review.movie.title} />
-              </ReviewLeft>
-              <ReviewInfoSection>
-                <ReviewInfoFirst>
-                  <ReviewCenter>
-                    <div className="profile">
-                      <img
-                        src={review.user.profileImage}
-                        alt={review.user.nickname}
-                      />
-                      <div className="user-info">
-                        <div className="name">{review.user.nickname}</div>
-                        <div className="date">
-                          {new Date(review.createdAt)
-                            .toLocaleDateString("ko-KR", {
-                              year: "numeric",
-                              month: "2-digit",
-                              day: "2-digit",
-                            })
-                            .replace(/\./g, "-")
-                            .replace(/-$/, "")
-                            .replace(/-\s/g, "-")}{" "}
-                          {new Date(review.createdAt).toLocaleTimeString(
-                            "ko-KR",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
+          {reviews.map((review, index) => {
+            const isLastReview = index === reviews.length - 1;
+
+            return (
+              <ReviewTicket
+                key={`${review.reviewId}-${index}`} // 고유 키 생성
+                ref={isLastReview ? lastReviewRef : null}
+                onClick={() => handleReviewClick(review.reviewId)}
+              >
+                <ReviewLeft>
+                  <img
+                    src={
+                      review.movie.poster || "/assets/images/default-poster.jpg"
+                    }
+                    alt={review.movie.title}
+                  />
+                </ReviewLeft>
+                <ReviewInfoSection>
+                  <ReviewInfoFirst>
+                    <ReviewCenter>
+                      <div className="profile">
+                        <img
+                          src={review.user.profileImage}
+                          alt={review.user.nickname}
+                        />
+                        <div className="user-info">
+                          <div className="name">{review.user.nickname}</div>
+                          <div className="date">
+                            {new Date(review.createdAt)
+                              .toLocaleDateString("ko-KR", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              })
+                              .replace(/\./g, "-")
+                              .replace(/-$/, "")
+                              .replace(/-\s/g, "-")}{" "}
+                            {new Date(review.createdAt).toLocaleTimeString(
+                              "ko-KR",
+                              { hour: "2-digit", minute: "2-digit" }
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <p className="movie-title">{review.movie.title}</p>
-                    <div className="comment">
-                      {review.content.length > 100
-                        ? `${review.content.slice(0, 105)}...`
-                        : review.content}
-                    </div>
-                  </ReviewCenter>
+                      <p className="movie-title">{review.movie.title}</p>
+                      <div className="comment">
+                        {review.content.length > 100
+                          ? `${review.content.slice(0, 105)}...`
+                          : review.content}
+                      </div>
+                    </ReviewCenter>
+                    <ReviewRight>
+                      <div className="score">
+                        {Array.from({
+                          length: Math.round(review.movieScore),
+                        }).map((_, i) => (
+                          <img
+                            key={`${review.reviewId}-score-${i}`}
+                            src="/assets/images/review/score-macarong.png"
+                            alt="score"
+                          />
+                        ))}
+                      </div>
+                    </ReviewRight>
+                  </ReviewInfoFirst>
 
-                  <ReviewRight>
-                    <div className="score">
-                      {Array.from({
-                        length: Math.round(review.movieScore),
-                      }).map((_, i) => (
-                        <img
-                          key={`${review.reviewId}-score-${i}`}
-                          src="/assets/images/review/score-macarong.png"
-                          alt="score"
-                        />
-                      ))}
-                    </div>
-                  </ReviewRight>
-                </ReviewInfoFirst>
-
-                <ReviewInfoSecond>
-                  <IconWrapper>
-                    <LikeIcon />
-                    <ReviewLike>{review.reviewLike}</ReviewLike>
-                  </IconWrapper>
-                  <IconWrapper>
-                    <CommentIcon />
-                    <ReviewComment>{review.comments || 0}</ReviewComment>
-                  </IconWrapper>
-                </ReviewInfoSecond>
-              </ReviewInfoSection>
-            </ReviewTicket>
-          ))}
+                  <ReviewInfoSecond>
+                    <IconWrapper>
+                      <LikeIcon />
+                      <ReviewLike>{review.reviewLike}</ReviewLike>
+                    </IconWrapper>
+                    <IconWrapper>
+                      <CommentIcon />
+                      <ReviewComment>{review.comments || 0}</ReviewComment>
+                    </IconWrapper>
+                  </ReviewInfoSecond>
+                </ReviewInfoSection>
+              </ReviewTicket>
+            );
+          })}
         </ReviewContainer>
       ) : (
         <EmptyMessage>좋아하는 리뷰를 선택해보세요!</EmptyMessage>
