@@ -81,7 +81,7 @@ const TextArea = styled.textarea`
 
   &:focus {
     outline: none;
-    border-color: #FF0777;
+    border-color: #ff0777;
   }
 
   @media (max-width: 768px) {
@@ -107,7 +107,7 @@ const SpoilerWrapper = styled.div`
 
   label {
     font-size: 14px;
-    color: #FF0777;
+    color: #ff0777;
     font-weight: 500;
   }
 
@@ -136,15 +136,14 @@ const ButtonWrapper = styled.div`
   justify-content: center;
 
   &.submit {
-    background-color: #F84B99;
+    background-color: #f84b99;
     color: #fff;
     border: none;
 
     &:hover {
-      background-color: #FF0777;
+      background-color: #ff0777;
     }
   }
-  
 
   @media (max-width: 768px) {
     button {
@@ -193,7 +192,7 @@ const ReviewForm = () => {
     }
 
     if (!token) {
-      openLoginModal(); 
+      openLoginModal();
       return null;
     }
 
@@ -271,13 +270,14 @@ const ReviewForm = () => {
             .map((_, index) => (
               <img
                 key={index}
-                src={
-                  index < movieScore
-                    ? "/assets/images/review/cookiescore.svg"
-                    : "/assets/images/review/cookieinactive.svg"
-                }
+                src="/assets/images/review/score-macarong.png"
                 alt="Cookie"
-                className={index >= movieScore ? "inactive" : ""}
+                style={{
+                  filter: index >= movieScore ? "grayscale(100%)" : "none",
+                  opacity: index >= movieScore ? 0.5 : 1,
+                  transition: "filter 0.3s ease, opacity 0.3s ease",
+                  cursor: "pointer",
+                }}
                 onClick={() => setMovieScore(index + 1)}
               />
             ))}
@@ -301,7 +301,7 @@ const ReviewForm = () => {
         </span>
       </SpoilerWrapper>
       <ButtonWrapper className="submit" onClick={handleSubmit}>
-          등록
+        등록
       </ButtonWrapper>
     </FormWrapper>
   );

@@ -223,13 +223,14 @@ const MovieReviewForm = () => {
             .map((_, index) => (
               <img
                 key={index}
-                src={
-                  index < movieScore
-                    ? "/assets/images/mypage/cookiescore.svg"
-                    : "/assets/images/mypage/cookieinactive.svg"
-                }
+                src="/assets/images/review/score-macarong.png"
                 alt="Cookie"
-                className={index >= movieScore ? "inactive" : ""}
+                style={{
+                  filter: index >= movieScore ? "grayscale(100%)" : "none",
+                  opacity: index >= movieScore ? 0.5 : 1,
+                  transition: "filter 0.3s ease, opacity 0.3s ease",
+                  cursor: "pointer",
+                }}
                 onClick={() => handleRatingClick(index)}
               />
             ))}
