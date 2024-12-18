@@ -158,6 +158,9 @@ const SpoilerWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
+    input {
+      margin-right: 5px;
+    }
     margin-bottom: 10px;
     label {
       font-size: 12px;
@@ -165,17 +168,22 @@ const SpoilerWrapper = styled.div`
 
     .description {
       font-size: 10px;
+      margin-left: 5px;
     }
   }
   
   @media (max-width: 480px) {
-    margin-bottom: 5px;
+    input {
+      margin-right: 5px;
+    }
+    margin-bottom: 10px;
     label {
-      font-size: 8px;
+      font-size: 12px;
     }
 
     .description {
-      font-size: 6px;
+      font-size: 10px;
+      margin-left: 5px;
     }
   }
 `;
