@@ -31,8 +31,8 @@ export const TableTitle = styled.div`
   width: 1175px;
   height: 32px;
   border: none;
-  background-color: var(--sub);
-  color: var(--text);
+  background-color: #000000;
+  color: #ffffff;
   border-radius: 12px;
   margin: 0 1rem;
   padding: 0 1.4rem;
@@ -77,7 +77,7 @@ const MatchUpListContainer = styled.div`
     justify-content: center;
   }
   p {
-    color: var(--text);
+    color: #333;
     text-align: center;
   }
   div input[type="checkbox"] {
@@ -87,12 +87,12 @@ const MatchUpListContainer = styled.div`
     appearance: none;
     border-radius: 4px;
     background-color: #ffff;
-    border: 2px solid #ccc;
+    border: 2px solid #333;
     cursor: pointer;
   }
 
   div input[type="checkbox"]:checked {
-    background-color: var(--sub);
+    background-color: #333;
   }
 `;
 const DeleteBtn = styled.button`
@@ -165,7 +165,7 @@ const MovieTitle = styled.p`
 const MatchUpTime = styled.div`
   text-align: center;
   font-size: 14px;
-  color: var(--text);
+  color: #333;
 `;
 
 const Winner = styled.p`

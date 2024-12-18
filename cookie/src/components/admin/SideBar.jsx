@@ -4,14 +4,16 @@ import styled from "styled-components";
 import CookieLogo from "/assets/images/cookie-logo.png";
 import logout from "../../assets/images/admin/logout.svg";
 import setting from "../../assets/images/admin/setting.svg";
-import movie from "../../assets/images/admin/movie.svg";
+// import movie from "../../assets/images/admin/movie.svg";
 import award from "../../assets/images/admin/award.svg";
 import cookie from "../../assets/images/admin/cookie.svg";
-import GlobalStyle from "../../styles/global";
+import movie from "../../assets/images/admin/movies.svg";
 
 const PageNav = styled.div`
   width: 409px;
-  background-color: var(--sub);
+  position: fixed;
+  left: 0;
+  background-color: #000000;
   margin-right: 2rem;
   padding: 1.5rem;
   color: white;
@@ -28,15 +30,15 @@ const SideBarTitle = styled.div`
   .title__logo {
     margin-right: auto;
     margin-left: 20px;
-    width: 160px;
-    height: 130px;
+    width: 130px;
+    height: 100px;
     object-fit: cover;
   }
 
   span {
     margin-right: 0.8rem;
     font-weight: bold;
-    color: var(--text);
+    color: #ffffff;
   }
   button {
     background: none;
@@ -68,14 +70,14 @@ const SideBarContainer = styled.div`
     cursor: pointer;
   }
   .sidebar__menu:hover {
-    color: var(--text);
+    color: #000000;
   }
   img {
     margin-right: 0.5rem;
-    width: 40px;
+    width: 30px;
   }
   .active {
-    color: var(--text);
+    color: #000000;
   }
   .inactive {
     color: var(--sub-text);
@@ -122,7 +124,6 @@ function SideBar() {
 
   return (
     <PageNav>
-      <GlobalStyle />
       <SideBarTitle>
         <img src={CookieLogo} className="title__logo" alt="logo_icon" />
         <span> Admin</span>

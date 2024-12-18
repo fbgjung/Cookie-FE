@@ -33,16 +33,22 @@ const ModalContent = styled.div`
 `;
 
 const CloseButton = styled.button`
-  background: #aad6e7;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
   cursor: pointer;
   margin-top: 20px;
   align-items: center;
-  width: 58px;
+  width: 66px;
   font-weight: bold;
+  padding: 10px 20px;
+  background-color: white;
+  color: #000000;
+  border: 1px solid #000000;
+  cursor: pointer;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
 `;
 
 const CommentsList = styled.div`
@@ -76,7 +82,7 @@ const CommentActions = styled.div`
 
   button {
     background: none;
-    color: var(--text);
+    color: #000000;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;

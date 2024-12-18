@@ -33,8 +33,8 @@ const ModalContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  width: 1650px;
-  height: 800px;
+  width: 1700px;
+  height: 1000px;
   z-index: 1000;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(35, 35, 35, 0.1);

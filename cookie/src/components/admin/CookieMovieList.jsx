@@ -30,10 +30,10 @@ export const TableTitle = styled.div`
   width: 1175px;
   height: 32px;
   border: none;
-  background-color: var(--sub);
-  color: var(--text);
+  background-color: #000000;
+  color: #ffffff;
   border-radius: 12px;
-  margin: 0.5rem 1rem 0 1rem;
+  margin: 0rem 1rem 0 1rem;
   padding: 0 1.4rem;
   display: grid;
   grid-template-columns: 0.5fr 1.77fr 0.5fr 1fr 2fr 3fr 0.8fr;
@@ -67,7 +67,7 @@ export const MovieListContainer = styled.div`
   p {
     height: 38px;
     overflow: hidden;
-    color: var(--text);
+    color: #333;
   }
 `;
 
@@ -91,6 +91,20 @@ const IconButton = styled.button`
   }
 `;
 export const UnderlinedButton = styled.button`
+  padding: 3px 25px;
+  background: none;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    color: var(--sub-text);
+  }
+`;
+const UnderlinedAddButton = styled.button`
   padding: 3px 33px;
   background: none;
   color: #ffffff;
@@ -110,10 +124,10 @@ const DeleteCheckBox = styled.input`
   border-radius: 3px;
   background-color: white;
   appearance: none;
-  border: 1px solid var(--sub);
+  border: 1px solid #333;
   cursor: pointer;
   &:checked {
-    background-color: var(--sub);
+    background-color: #333;
   }
 `;
 export const TitleSection = styled.div`
@@ -158,6 +172,9 @@ const AdminRecomendList = styled.div`
     border-radius: 10px;
     width: 177px;
     height: 245px;
+  }
+  h3 {
+    text-align: center;
   }
 `;
 const CookieMovieList = () => {
@@ -243,7 +260,6 @@ const CookieMovieList = () => {
   };
 
   useEffect(() => {
-    console.log("useEffect 호출");
     fetchRecommendList();
   }, []);
 
@@ -313,8 +329,10 @@ const CookieMovieList = () => {
               (movie) => !selectedMovieId.includes(movie.movieId)
             )
           );
-          setSelectedMovieId([]);
-          alert("선택한 영화가 삭제되었습니다.");
+          if (response.status === 200) {
+            setSelectedMovieId([]);
+            alert("선택한 영화가 삭제되었습니다.");
+          }
         } catch (error) {
           console.error("영화를 삭제하는 데 실패했습니다.", error);
           alert("영화 삭제에 실패했습니다.");
@@ -335,8 +353,10 @@ const CookieMovieList = () => {
         `/api/admin/recommend`,
         movieIds
       );
-      alert("삭제가 완료되었어요!");
-      setRecommendList([]);
+      if (response.status === 200) {
+        alert("삭제가 완료되었어요!");
+        setRecommendList([]);
+      }
     } catch (error) {
       console.error("추천 리스트 삭제 실패", error);
     }
@@ -369,11 +389,12 @@ const CookieMovieList = () => {
         `/api/admin/recommend`,
         movieIds
       );
-
-      fetchRecommendList();
-      setRecommendList((prevList) => [...prevList, ...addMovieIds]);
-      alert("추천 영화가 추가되었어요!");
-      setAddMovieIds([]);
+      if (response.status === 200) {
+        fetchRecommendList();
+        setRecommendList((prevList) => [...prevList, ...addMovieIds]);
+        alert("추천 영화가 추가되었어요!");
+        setAddMovieIds([]);
+      }
     } catch (error) {
       console.error("추천 영화 추가 실패", error);
     }
@@ -482,13 +503,13 @@ const CookieMovieList = () => {
         </RecommendTitle>
 
         {recommendList.length > 0 ? (
-          <UnderlinedButton onClick={handlRecommendDeleteAll}>
+          <UnderlinedAddButton onClick={handlRecommendDeleteAll}>
             삭제
-          </UnderlinedButton>
+          </UnderlinedAddButton>
         ) : (
-          <UnderlinedButton onClick={handleAddRecommendMovie}>
+          <UnderlinedAddButton onClick={handleAddRecommendMovie}>
             추가
-          </UnderlinedButton>
+          </UnderlinedAddButton>
         )}
       </TitleSection>
       <AdminRecomendList>

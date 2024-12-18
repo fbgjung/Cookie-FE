@@ -22,6 +22,10 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  h2 {
+    text-align: center;
+    margin-top: 10px;
+  }
 `;
 const Form = styled.form`
   display: flex;
@@ -82,8 +86,8 @@ const ImagePreview = styled.img`
 
 const UploadButton = styled.label`
   padding: 5px 12px;
-  color: var(--text);
-  border: 1px solid var(--sub);
+  color: #333;
+  border: 1px solid #333;
   border-radius: 12px;
   cursor: pointer;
 `;
@@ -94,14 +98,18 @@ const ButtonGroup = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  padding: 8px 12px;
-  background-color: var(--sub);
-  color: white;
-  border: none;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 25px;
   font-weight: bold;
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
 `;
 
 const CancelButton = styled.button`

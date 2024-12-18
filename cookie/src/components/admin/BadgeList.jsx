@@ -5,7 +5,7 @@ import deleteBtn from "../../assets/images/admin/delete_btn.svg";
 import Edit from "../../assets/images/admin/Edit.svg";
 import styled from "styled-components";
 import EditBadgeModal from "./EditBadgeModal";
-import Addcookie from "../../assets/images/admin/empty_cookie.svg";
+import cookieList from "../../assets/images/admin/cookie.svg";
 
 const TitleContainer = styled.div`
   display: flex;
@@ -17,8 +17,8 @@ export const TableTitle = styled.div`
   width: 1130px;
   height: 32px;
   border: none;
-  background-color: var(--sub);
-  color: var(--text);
+  background-color: #000000;
+  color: #ffffff;
   border-radius: 12px;
   margin: 20px 16px 16px 16px;
   padding: 0 16px;
@@ -149,7 +149,7 @@ function BadgeList() {
     <>
       <DefalutContainer>
         <TitleContainer>
-          <img src={Addcookie} />
+          <img src={cookieList} />
           <h2>배지관리</h2>
         </TitleContainer>
         <BadgeContainer>

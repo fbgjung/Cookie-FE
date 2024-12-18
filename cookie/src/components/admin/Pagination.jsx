@@ -10,10 +10,10 @@ const NumberBtn = styled.button`
   cursor: pointer;
 
   &:hover {
-    color: var(--sub);
+    color: var(--sub-text);
   }
   &.active {
-    color: var(--sub);
+    color: #000000;
     font-weight: bold;
   }
 `;
