@@ -15,7 +15,7 @@ const ChatWrapper = styled.div`
   height: 50vh;
   max-width: 100%;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: black;
   border-radius: 16px 16px 0 0;
   overflow: hidden;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);

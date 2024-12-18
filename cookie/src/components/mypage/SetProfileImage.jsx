@@ -124,32 +124,33 @@ const SetProfileImage = ({ profileImage, onChange }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
-    if (!file) return;
-
-    if (file) {
-      const validFileTypes = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/svg+xml",
-      ];
-
-      if (!validFileTypes.includes(file.type)) {
-        toast.error(
-          "지원하지 않는 파일 형식입니다. jpg, jpeg, png, svg 파일만 업로드 가능합니다."
-        );
-        return;
-      }
-
-      const maxSize = 5 * 1024 * 1024;
-      if (file.size > maxSize) {
-        toast.error("파일 크기는 5MB 이하로 업로드 가능합니다.");
-        return;
-      }
-
-      const imageUrl = URL.createObjectURL(file);
-      onChange({ file, preview: imageUrl });
+    if (!file) {
+      setShowModal(false);
+      return;
     }
+
+    const validFileTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/svg+xml",
+    ];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (!validFileTypes.includes(file.type)) {
+      toast.error(
+        "지원하지 않는 파일 형식입니다. jpg, jpeg, png, svg 파일만 업로드 가능합니다."
+      );
+      return;
+    }
+
+    if (file.size > maxSize) {
+      toast.error("파일 크기는 5MB 이하로 업로드 가능합니다.");
+      return;
+    }
+
+    const imageUrl = URL.createObjectURL(file);
+    onChange({ file, preview: imageUrl });
     setShowModal(false);
   };
 

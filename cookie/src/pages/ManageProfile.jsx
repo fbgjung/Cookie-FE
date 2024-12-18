@@ -97,12 +97,13 @@ const ManageProfile = () => {
 
       if (profileImage.file) {
         formData.append("profileImage", profileImage.file);
-      } else if (
-        profileImage.preview &&
-        profileImage.preview !== "/assets/images/mypage/setdefaultImage.svg" &&
-        profileImage.preview !== "/assets/images/mypage/defaultimage.jpeg"
-      ) {
+        formData.append("profileImageUrl", "");
+      } else if (profileImage.preview) {
+        formData.append("profileImage", "");
         formData.append("profileImageUrl", profileImage.preview);
+      } else {
+        formData.append("profileImage", "");
+        formData.append("profileImageUrl", "");
       }
 
       formData.append("nickname", nickname);
@@ -113,6 +114,11 @@ const ManageProfile = () => {
       }
 
       formData.append("genreId", selectedGenreId);
+
+      // 페이로드 확인
+      formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
 
       const response = await axiosInstance.post("/api/users", formData, {
         headers: {
@@ -129,14 +135,13 @@ const ManageProfile = () => {
         }
         toast.success("프로필 저장이 완료되었습니다!");
       } else {
-        throw new Error("오류 발생");
+        throw new Error("서버 오류 발생");
       }
     } catch (error) {
       toast.error("프로필 저장에 실패했습니다.");
       console.error("프로필 저장 실패:", error);
     }
   };
-
   const handleResetCheck = (value) => {
     setIsNicknameChecked(value);
   };
