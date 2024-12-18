@@ -106,7 +106,6 @@ function CommentsModal({ comments, closeModal, reviewId }) {
       const response = await axiosInstance.get(
         `/api/admin/reviews/detail/${reviewId}/comments`
       );
-      console.log("댓글목록", response.data.response);
       setUpdatedComments(response.data.response);
     } catch (err) {
       console.error("댓글을 가져오는 데 실패했습니다.", err);
@@ -124,8 +123,6 @@ function CommentsModal({ comments, closeModal, reviewId }) {
       await axiosInstance.delete(
         `/api/admin/reviews/detail/${commentId}/comments`
       );
-
-      console.log("댓글 삭제 성공");
       alert("해당 리뷰의 댓글이 삭제되었어요.");
       fetchComments(reviewId);
     } catch (err) {

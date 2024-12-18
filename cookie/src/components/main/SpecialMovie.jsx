@@ -47,7 +47,6 @@ function SpecialMovie({ categorydata }) {
           },
         }
       );
-      console.log(response);
       setMovies(response.data.movies);
     } catch (error) {
       console.error("영화 불러오기 실패:", error);
@@ -104,11 +103,7 @@ function SpecialMovie({ categorydata }) {
   };
 
   useEffect(() => {
-    console.log("currentIndex:", currentIndex);
-    console.log("movies.length:", movies.length);
     const totalPages = Math.ceil(movies.length / 4);
-    console.log("전체 페이지:", totalPages);
-    console.log("슬라이드 이동 비율:", (currentIndex * 100) / (totalPages - 1));
   }, [currentIndex, movies]);
 
   return (
@@ -272,11 +267,11 @@ const ThemeBtn = styled.button`
   }
   @media (max-width: 768px) {
     margin: 0 0.7rem 0.5rem 0;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   @media (max-width: 393px) {
-    margin: 0 0.4rem 0.5rem 0;
-    font-size: 0.88rem;
+    margin: 0 0.3rem 0.5rem 0;
+    font-size: 1rem;
   }
 `;
 
@@ -309,11 +304,7 @@ const Title = styled.h2`
   padding: 2rem 0 0.7rem 0.375rem;
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 `;
 
@@ -398,4 +389,5 @@ const MoreViewText = styled.p`
   justify-content: flex-end;
   cursor: pointer;
   font-size: 0.8rem;
+  margin-bottom: 5px;
 `;

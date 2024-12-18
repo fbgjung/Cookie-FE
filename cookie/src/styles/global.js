@@ -4,7 +4,7 @@ import styled from "styled-components";
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Pretendard';
-    src: url('/fonts/Pretendard-Regular.otf') format('truetype'); /* Regular */
+    src: url('/font/Pretendard-Regular.otf') format('truetype'); /* Regular */
     font-weight: 400;
     font-style: normal;
   }

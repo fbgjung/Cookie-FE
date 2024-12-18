@@ -7,26 +7,35 @@ const TermsContainer = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
-  background-color: white;
-  color: #333;
+  background-color: black;
+  color: white;
   font-size: 1rem;
   line-height: 1.8;
   position: relative;
 `;
 
-const BackButton = styled.button`
+const BackButton = styled.div`
   position: absolute;
   top: 20px;
   left: 20px;
-  background: none;
-  border: none;
-  color: #f84b99;
-  font-size: 2rem;
+  width: 32px;
+  height: 32px;
+  background: url("/assets/images/prev-button.svg") no-repeat center/cover;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: transform 0.2s ease;
 
   &:hover {
-    color: #ff0777;
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    width: 28px;
+    height: 28px;
+  }
+
+  @media (max-width: 480px) {
+    width: 24px;
+    height: 24px;
   }
 `;
 
@@ -45,10 +54,12 @@ const Section = styled.section`
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 10px;
+    color: white; /* 글씨 하얀색 */
   }
 
   p {
     margin: 5px 0;
+    color: white; /* 글씨 하얀색 */
   }
 `;
 
@@ -57,9 +68,7 @@ const Terms = () => {
 
   return (
     <TermsContainer>
-      <BackButton onClick={() => navigate(-1)}>
-        <FaArrowLeft />
-      </BackButton>
+      <BackButton onClick={() => navigate(-1)}></BackButton>
 
       <Title>이용약관</Title>
 

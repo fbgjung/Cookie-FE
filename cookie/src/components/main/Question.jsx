@@ -10,14 +10,14 @@ const Question = () => {
 
   const questions = [
     {
-      question: "쿠키리즘이 뭔가요?",
-      answer:
-        "쿠키리즘은 사용자 맞춤형 콘텐츠 추천 시스템입니다. \n사용자의 서비스 활동을 기반으로 매일매일 새로운 맞춤형 영화를 추천받을 수 있어요!",
-    },
-    {
       question: "쿠키 추천 영화는 어떻게 선정되나요?",
       answer:
         "쿠키 자체 추천 시스템으로 전체 사용자의 선호 영화 데이터를 바탕으로 선정돼요!",
+    },
+    {
+      question: "사용자 맞춤영화가 무엇인가요?",
+      answer:
+        "사용자의 다양한 서비스 활동을 기반으로 선정 되는 영화로 매일매일 새로운 맞춤형 영화를 \n추천받을 수 있어요!",
     },
     {
       question: "회원가입 시 선택한 장르는 어떻게 사용되나요?",
@@ -27,7 +27,7 @@ const Question = () => {
     {
       question: "포인트는 어떻게 모을 수 있나요?",
       answer:
-        "매치업, 리뷰 작성 등 활동을 통해 포인트를 획득할 수 있어요! \n일정 포인트 이상 모으면 뱃지가 부여되고 단계별로 업그레이드 된답니다.",
+        "매치업 참여, 리뷰 작성 등 활동을 통해 포인트를 획득할 수 있어요! \n일정 포인트 이상 모으면 뱃지가 부여되고 단계별로 업그레이드 된답니다.",
     },
     {
       question: "매치업 참여 방식을 알려주세요?",
@@ -62,6 +62,9 @@ const QuestionContainer = styled.div`
 const Title = styled.h2`
   color: #f84b99;
   padding: 2rem 0 0 0.375rem;
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const QuestionSection = styled.div`
@@ -93,6 +96,16 @@ const QuestionButton = styled.button`
 
   &:hover {
     background-color: #2d2c2c;
+  }
+
+  @media (max-width: 768px) {
+    height: 40px;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    height: 48px;
+    font-size: 0.9rem;
   }
 `;
 

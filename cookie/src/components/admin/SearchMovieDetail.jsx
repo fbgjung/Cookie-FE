@@ -130,7 +130,7 @@ export const SubmitBtn = styled.button`
 `;
 export const MovieInfoSection = ({ label, children }) => {
   return (
-    <div style={{ display: "flex", marginBottom: "0.6rem" }}>
+    <div style={{ display: "flex", marginBottom: "1rem" }}>
       <Label>{label}</Label>
       <div style={{ display: "flex", flexDirection: "row", width: "780px" }}>
         {children}
@@ -144,14 +144,14 @@ export const ActorItem = ({ actor }) => (
     style={{
       display: "flex",
       flexDirection: "column",
-      alignItems: "start",
+      gap: "5px",
       marginRight: "4px",
-      height: "95px",
+      height: "97px",
       width: "80px",
     }}
   >
     <ActorProfile src={actor.profilePath} alt={actor.name} />
-    <span>{actor.name}</span>
+    <span style={{ textAlign: "center", width: "70px" }}>{actor.name}</span>
   </div>
 );
 

@@ -4,6 +4,7 @@ import { SearchBarContainer, SearchIconButton, SearchInput } from "./Addmovie";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
+import TitleLike from "../../assets/images/admin/like.svg";
 import Like from "../../assets/images/admin/like3.svg";
 import Edit from "../../assets/images/admin/Edit.svg";
 import More from "../../assets/images/admin/more2.svg";
@@ -92,29 +93,28 @@ const IconButton = styled.button`
 export const UnderlinedButton = styled.button`
   padding: 3px 33px;
   background: none;
-  color: #ffff;
+  color: #ffffff;
   border: none;
   border-radius: 5px;
-  font-size: 20px;
+  font-size: 18px;
   cursor: pointer;
   position: relative;
 
   &:hover {
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 30px;
-      width: 45%;
-      height: 1px;
-      background-color: #ffff;
-    }
+    color: var(--sub-text);
   }
 `;
 const DeleteCheckBox = styled.input`
   width: 20px;
   height: 20px;
-  border-radius: 12px;
+  border-radius: 3px;
+  background-color: white;
+  appearance: none;
+  border: 1px solid var(--sub);
+  cursor: pointer;
+  &:checked {
+    background-color: var(--sub);
+  }
 `;
 export const TitleSection = styled.div`
   display: flex;
@@ -190,8 +190,6 @@ const CookieMovieList = () => {
       const response = await axiosInstance.get(
         `/api/admin/movies/${searchKeyword}/${currentPage}`
       );
-      console.log("검색된 정보", response.data.response);
-      console.log("검색된 영화", response.data.response.results);
       setSearchResults(response.data.response.results);
       setTotalPages(response.data.response.totalPages);
     } catch (error) {
@@ -212,7 +210,6 @@ const CookieMovieList = () => {
         const response = await axiosInstance.get(
           `/api/admin/movies/${currentPage}`
         );
-        console.log(response);
         setTotalPages(response.data.response.totalPages);
         setRegisteredMovies(response.data.response.results);
       } catch (error) {
@@ -239,7 +236,6 @@ const CookieMovieList = () => {
   const fetchRecommendList = async () => {
     try {
       const response = await axiosInstance.get("/api/admin/recommend");
-      console.log("추천영화리스트", response.data.response);
       setRecommendList(response.data.response);
     } catch (error) {
       console.error("추천 리스트를 가져오는 데 실패했습니다.", error);
@@ -260,7 +256,7 @@ const CookieMovieList = () => {
           break;
         case "edit":
           setSelectedMovie(movie);
-          setIsEditOpen(true);
+          setIsEditOpen((prev) => !prev);
           setIsModalOpen(false);
           break;
         case "more":
@@ -312,8 +308,6 @@ const CookieMovieList = () => {
           const response = await axiosInstance.delete(`/api/admin/movies`, {
             data: selectedMovieId,
           });
-          console.log("삭제 완료:", response.data);
-
           setRegisteredMovies((prevMovies) =>
             prevMovies.filter(
               (movie) => !selectedMovieId.includes(movie.movieId)
@@ -341,7 +335,6 @@ const CookieMovieList = () => {
         `/api/admin/recommend`,
         movieIds
       );
-      console.log("삭제 성공", response);
       alert("삭제가 완료되었어요!");
       setRecommendList([]);
     } catch (error) {
@@ -371,14 +364,13 @@ const CookieMovieList = () => {
     }
     const movieIds = addMovieIds.map((movie) => movie.movieId);
 
-    console.log("Sending movie IDs:", movieIds);
-
     try {
       const response = await axiosInstance.post(
         `/api/admin/recommend`,
         movieIds
       );
-      console.log("추천 영화 추가 성공", response);
+
+      fetchRecommendList();
       setRecommendList((prevList) => [...prevList, ...addMovieIds]);
       alert("추천 영화가 추가되었어요!");
       setAddMovieIds([]);
@@ -485,7 +477,7 @@ const CookieMovieList = () => {
       )}
       <TitleSection>
         <RecommendTitle>
-          <img src={Like} />
+          <img src={TitleLike} />
           <h1>추천리스트</h1>
         </RecommendTitle>
 

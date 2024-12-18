@@ -5,7 +5,7 @@ const StyledButton = styled.button`
   position: fixed;
   bottom: 95px;
   right: calc(50% - 34px);
-  display: ${({ visible }) => (visible ? "flex" : "none")};
+  display: ${({ $visible }) => ($visible ? "flex" : "none")};
   align-items: center;
   justify-content: center;
   background: #ffffff;
@@ -32,7 +32,16 @@ const StyledButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    right: 18rem;
+    right: 26rem;
+    bottom: 95px;
+    height: 30px;
+
+    &::after {
+      font-size: 16px;
+    }
+  }
+  @media (max-width: 620px) {
+    right: 15.3rem;
     bottom: 95px;
     height: 30px;
 
@@ -52,10 +61,10 @@ const StyledButton = styled.button`
     }
   }
   @media (max-width: 393px) {
-    right: 11rem;
-    bottom: 60px;
-    width: 40px;
-    height: 40px;
+    right: 9.8rem;
+    bottom: 82px;
+    width: 90px;
+    height: 35px;
 
     &::after {
       font-size: 14px;
@@ -73,7 +82,7 @@ const StyledButton = styled.button`
   }
 `;
 const TopButton = ({ visible, onClick }) => {
-  return <StyledButton visible={visible} onClick={onClick} />;
+  return <StyledButton $visible={visible} onClick={onClick} />;
 };
 
 TopButton.propTypes = {
