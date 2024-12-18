@@ -131,7 +131,8 @@ const CharCounter = styled.div`
 
   @media (max-width: 768px) {
     font-size: 12px;
-    top: 250px;
+    top: 245px;
+    right: 0px;
   }
 `;
 
