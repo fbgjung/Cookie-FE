@@ -36,6 +36,7 @@
     "sockjs-client": "^1.6.1",
     "styled-components": "^6.1.13",
     "vite-plugin-pwa": "^0.21.1",
+    "vite-plugin-remove-console": "^2.2.0",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
