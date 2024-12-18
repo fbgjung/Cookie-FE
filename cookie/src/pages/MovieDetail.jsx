@@ -39,7 +39,7 @@ const MovieDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
-  
+
   useEffect(() => {
     const fetchMovieData = async () => {
       setIsLoading(true);
@@ -76,7 +76,7 @@ const MovieDetail = () => {
 
   return (
     <ContentWrapper>
-      <MovieDetailHeader onBack={() => navigate(-1)} />
+      <MovieDetailHeader onBack={() => navigate(-1)} title={movieData.title} />
       {movieData.images && movieData.images.length > 0 && (
         <HeaderSection
           title={movieData.title}

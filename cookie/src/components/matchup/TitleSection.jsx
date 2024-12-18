@@ -36,7 +36,7 @@ const TitleImage = styled.img`
 const Title = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
-  color: #006400;
+  color: #ffffff;
   text-align: center;
 
   @media (max-width: 768px) {
@@ -62,7 +62,7 @@ const InfoContainer = styled.div`
 const DDay = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
-  color: #006400;
+  color: #ffffff;
   text-align: center;
 
   @media (max-width: 768px) {
