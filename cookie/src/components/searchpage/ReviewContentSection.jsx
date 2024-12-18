@@ -45,6 +45,7 @@ const ProfileImage = styled.img`
   width: 52px;
   height: 52px;
   border-radius: 50%;
+  margin-right: 10px;
 
   @media (max-width: 480px) {
     width: 30px;
