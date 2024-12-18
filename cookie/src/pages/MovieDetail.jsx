@@ -23,11 +23,13 @@ const ContentWrapper = styled.div`
   min-height: 100vh;
 
   @media (max-width: 768px) {
-    padding: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   @media (max-width: 480px) {
-    padding: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `;
 
