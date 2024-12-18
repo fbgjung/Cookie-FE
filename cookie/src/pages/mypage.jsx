@@ -178,7 +178,11 @@ const MyPage = () => {
   };
 
   const handleMyAllReviewClick = () => {
-    navigate("/myAllReviewList");
+    if (!isLogined()) {
+      openLoginModal();
+    } else {
+      navigate("/myAllReviewList");
+    }
   };
 
   const handlePointHistoryClick = () => {
