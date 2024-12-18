@@ -42,7 +42,7 @@ const BarContainer = styled.div`
 const FilledBarLeft = styled.div`
   height: 100%;
   width: ${(props) => props.percentage}%;
-  background-color: rgb(229, 9, 20);
+  background-color: #f44336;
   border-radius: 15px 0 0 15px;
   transition: width 0.5s ease;
 `;
@@ -50,7 +50,7 @@ const FilledBarLeft = styled.div`
 const FilledBarRight = styled.div`
   height: 100%;
   width: ${(props) => 100 - props.percentage}%;
-  background-color: #006400;
+  background-color: #4caf50;
   border-radius: 0 15px 15px 0;
   transition: width 0.5s ease;
 `;

@@ -17,7 +17,7 @@ const TimerContainer = styled.div`
 
 const TimerBox = styled.div`
   background-color: rgb(229, 9, 20);
-  color: #006400;
+  color: #ffffff;
   font-size: 2.5rem;
   font-weight: bold;
   width: 75px;

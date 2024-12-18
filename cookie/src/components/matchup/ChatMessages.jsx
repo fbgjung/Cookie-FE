@@ -49,7 +49,7 @@ const Nickname = styled.span`
 `;
 
 const MessageBubble = styled.div`
-  background-color: ${(props) => (props.isUser ? "#D32F2F" : "#388E3C")};
+  background-color: ${(props) => (props.isUser ? "#F44336" : "#4CAF50")};
   color: #ffffff;
   padding: 8px 12px;
   border-radius: 15px;
@@ -95,7 +95,7 @@ const ChatMessages = ({ messages, currentUserId, messagesEndRef }) => {
 
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-    const nearBottom = scrollHeight - scrollTop <= clientHeight + 30;
+    const nearBottom = scrollHeight - scrollTop <= clientHeight + 10;
     setIsScrolledToBottom(nearBottom);
   };
 

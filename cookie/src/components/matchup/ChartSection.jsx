@@ -79,6 +79,7 @@ const ChartContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+
   overflow-x: auto;
   padding-bottom: 10px;
 
@@ -116,11 +117,9 @@ const ChartLabel = styled.div`
   }
 `;
 
-// ChartSection 컴포넌트 정의
 const ChartSection = ({ movie1, movie2 }) => {
   const [selectedMovie, setSelectedMovie] = useState(movie1.movieTitle);
 
-  // subject 매핑 객체
   const mapSubjectNames = {
     ost: "OST",
     direction: "감독연출",
@@ -141,14 +140,12 @@ const ChartSection = ({ movie1, movie2 }) => {
     tension: "긴장감",
   };
 
-  // 데이터 포맷 함수
   const formatData = (data, map) =>
     Object.keys(data).map((key) => ({
       subject: map[key] || key,
       value: data[key],
     }));
 
-  // 데이터 포맷 적용
   const charmData =
     selectedMovie === movie1.movieTitle
       ? formatData(movie1.charmPoint, mapSubjectNames)
@@ -164,27 +161,27 @@ const ChartSection = ({ movie1, movie2 }) => {
   console.log("감정 포인트 데이터:", emotionData);
 
   const chartSize =
-    window.innerWidth <= 480 ? 200 : window.innerWidth <= 1024 ? 250 : 300;
+    window.innerWidth <= 480 ? 200 : window.innerWidth <= 1024 ? 250 : 250;
 
   const isMovie1Selected = selectedMovie === movie1.movieTitle;
-  const chartColorLeft = isMovie1Selected ? "#E50914" : "#006400";
-  const chartColorRight = isMovie1Selected ? "#E50914" : "#006400";
+  const chartColorLeft = isMovie1Selected ? "#F44336" : "#4CAF50";
+  const chartColorRight = isMovie1Selected ? "#F44336" : "#4CAF50";
 
   return (
     <SectionContainer>
       <ButtonContainer>
         <SelectButton
           active={isMovie1Selected}
-          activeColor="#E50914"
-          hoverColor="#E50914"
+          activeColor="#F44336"
+          hoverColor="#F44336"
           onClick={() => setSelectedMovie(movie1.movieTitle)}
         >
           {movie1.movieTitle}
         </SelectButton>
         <SelectButton
           active={!isMovie1Selected}
-          activeColor="#006400"
-          hoverColor="#006400"
+          activeColor="#4CAF50"
+          hoverColor=" #4CAF50"
           onClick={() => setSelectedMovie(movie2.movieTitle)}
         >
           {movie2.movieTitle}
@@ -205,7 +202,7 @@ const ChartSection = ({ movie1, movie2 }) => {
                 dataKey="subject"
                 tick={{
                   fill: "#ffffff",
-                  fontSize: chartSize <= 200 ? 8 : 10,
+                  fontSize: chartSize <= 200 ? 7 : 9,
                 }}
               />
               <PolarRadiusAxis
@@ -213,7 +210,7 @@ const ChartSection = ({ movie1, movie2 }) => {
                 domain={[0, 100]}
                 tick={{
                   fill: "#ffffff",
-                  fontSize: chartSize <= 200 ? 8 : 10,
+                  fontSize: chartSize <= 200 ? 7 : 9,
                 }}
               />
               <Radar
@@ -241,7 +238,7 @@ const ChartSection = ({ movie1, movie2 }) => {
                 dataKey="subject"
                 tick={{
                   fill: "#ffffff",
-                  fontSize: chartSize <= 200 ? 8 : 10,
+                  fontSize: chartSize <= 200 ? 7 : 9,
                 }}
               />
               <PolarRadiusAxis
@@ -249,7 +246,7 @@ const ChartSection = ({ movie1, movie2 }) => {
                 domain={[0, 100]}
                 tick={{
                   fill: "#ffffff",
-                  fontSize: chartSize <= 200 ? 8 : 10,
+                  fontSize: chartSize <= 200 ? 7 : 9,
                 }}
               />
               <Radar
