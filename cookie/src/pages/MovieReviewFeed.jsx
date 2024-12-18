@@ -52,11 +52,17 @@ const FilterButtons = styled.div`
   align-items: center;
   margin-bottom: 20px;
 
+  .filter-toggle {
+    display: flex;
+    gap: 10px; /* 전체 리뷰와 스포일러 리뷰 사이 간격 추가 */
+  }
+
   button {
     font-size: 1rem;
     border-radius: 8px;
     cursor: pointer;
     border: none;
+    gap: 10px;
     font-weight: bold;
     transition: background-color 0.3s ease;
 
@@ -85,7 +91,6 @@ const FilterButtons = styled.div`
 
       &.selected {
         color: #f84b99;
-        border-bottom: 2px solid #f84b99;
       }
     }
   }
@@ -337,7 +342,7 @@ const MovieReviewFeed = () => {
       </HeaderSection>
 
       <FilterButtons>
-        <div>
+        <div className="filter-toggle">
           <button
             className={!showSpoilerOnly ? "active" : "inactive"}
             onClick={() => filterReviews(false)}
