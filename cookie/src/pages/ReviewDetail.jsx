@@ -404,7 +404,8 @@ const ReviewDetail = () => {
   };
 
   if (isLoading) {
-    return <Spinner />; // 페이지 전체 로딩 시 스피너 표시
+    // return <Spinner />; // 페이지 전체 로딩 시 스피너 표시
+    return <Container>Loading...</Container>;
   }
 
   if (!reviewData) {
