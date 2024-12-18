@@ -11,6 +11,7 @@ const FormWrapper = styled.div`
   width: 100%;
   padding-left: 40px;
   padding-right: 40px;
+  padding-top: 40px;
   background-color: #000000;
   min-height: 100vh;
   overflow-y: auto;
@@ -20,11 +21,13 @@ const FormWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
+    padding-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
   }
 
   @media (max-width: 480px) {
+    padding-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -125,7 +128,8 @@ const CharCounter = styled.div`
   color: #ffffff;
 
   @media (max-width: 768px) {
-    font-size: 12px;
+    font-size: 8px;
+    top: 143px;
   }
 `;
 
@@ -150,9 +154,15 @@ const SpoilerWrapper = styled.div`
     color: #ffffff;
     margin-left: 10px;
   }
-
+  
   @media (max-width: 480px) {
-    font-size: 8px;
+    label {
+      font-size: 8px;
+    }
+
+    .description {
+      font-size: 6px;
+    }
   }
 `;
 
