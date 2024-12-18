@@ -14,6 +14,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 40px;
   padding-left: 40px;
   padding-right: 40px;
   background-color: black;
@@ -21,11 +22,15 @@ const Container = styled.div`
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 60px 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 30px;
   }
 
   @media (max-width: 480px) {
-    padding: 0px 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
   }
 `;
 

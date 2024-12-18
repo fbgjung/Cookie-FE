@@ -9,11 +9,13 @@ const ReviewFeedWrapper = styled.div`
   background-color: #000000;
   padding-left: 40px;
   padding-right: 40px;
+  padding-top: 40px;
   min-height: 100vh;
 
   @media (max-width: 480px) {
     padding-left: 20px;
     padding-right: 20px;
+    padding-top: 20px;
   }
 `;
 
