@@ -357,6 +357,13 @@ const LikedReviews = () => {
     }
   };
 
+  const EmptyMessage = styled.p`
+    text-align: center;
+    font-size: 1.2rem;
+    color: #f84b99;
+    margin-top: 2rem;
+  `;
+
   const lastReviewRef = useCallback(
     (node) => {
       if (loading) return;
