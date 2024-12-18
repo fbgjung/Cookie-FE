@@ -248,6 +248,8 @@ const Modal = ({
       if (response.data.response === "SUCCESS") {
         toast.success("투표가 성공적으로 완료되었습니다!");
         onClose();
+
+        window.location.reload();
       }
     } catch (error) {
       console.error("투표 요청 실패:", error);
