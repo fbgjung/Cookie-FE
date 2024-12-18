@@ -147,7 +147,7 @@ const NoticeItem = styled.div`
 
       .read-status {
         font-size: 0.8rem;
-        color: #4caf50;
+        color: #FF0777;
         margin-left: 10px;
       }
     }
@@ -174,7 +174,7 @@ const NoticeItem = styled.div`
   }
 
   &:hover {
-    border: 2px solid #00D6E8;
-    background-color: #e9f5f9;
+    border: 2px solid #F84B99;
+    background-color: #FDF8FA;
   }
 `;
