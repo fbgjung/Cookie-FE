@@ -28,8 +28,8 @@ const Container = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
     padding-top: 20px;
   }
 `;
