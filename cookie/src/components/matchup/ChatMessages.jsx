@@ -62,21 +62,6 @@ const MessageBubble = styled.div`
   font-family: "Arial", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   position: relative;
 
-  &::after {
-    content: "";
-    position: absolute;
-    top: 35%;
-    ${(props) => (props.isUser ? "right: -12px" : "left: -12px")};
-    transform: translateY(-50%);
-    border-width: 8px;
-    border-style: solid;
-    border-color: transparent;
-    ${(props) =>
-      props.isUser
-        ? "border-left-color: #D32F2F;"
-        : "border-right-color: #388E3C;"}
-  }
-
   @media (max-width: 768px) {
     font-size: 0.9rem;
     padding: 7px 10px;

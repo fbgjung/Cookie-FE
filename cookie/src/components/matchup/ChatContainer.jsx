@@ -11,6 +11,7 @@ const ChatContainer = styled.div`
   border-radius: 16px 16px 0 0;
   overflow-y: auto;
   overflow-x: hidden;
+  touch-action: pan-y;
 
   &::-webkit-scrollbar {
     width: 5px;
