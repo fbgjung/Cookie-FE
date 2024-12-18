@@ -85,7 +85,7 @@ const ReviewTicket = styled.div`
   height: auto;
 
   @media (max-width: 768px) {
-    padding: 1.0rem;
+    padding: 1rem;
   }
 
   @media (max-width: 480px) {
@@ -122,6 +122,7 @@ const ReviewCenter = styled.div`
   padding-left: 1rem; /* 왼쪽 여백 줄이기 */
   width: 14rem;
   height: 100%;
+  position: relative;
 
   @media (max-width: 768px) {
     width: 12rem; /* 태블릿에서는 너비를 더 줄임 */
@@ -135,7 +136,7 @@ const ReviewCenter = styled.div`
     display: flex;
     align-items: center;
 
-    img {
+    img:not(.badge-icon) {
       width: 44px;
       height: 44px;
       border-radius: 50%;
@@ -173,7 +174,7 @@ const ReviewCenter = styled.div`
 
     &.blurred {
       filter: blur(5px);
-      pointer-events: none; 
+      pointer-events: none;
       user-select: none;
     }
 
@@ -191,6 +192,37 @@ const ReviewCenter = styled.div`
     @media (max-width: 480px) {
       font-size: 0.5rem;
     }
+  }
+`;
+
+const ProfileImageWrapper = styled.div`
+  position: relative; /* BadgeIcon의 기준이 되는 부모 컨테이너 */
+  display: inline-block;
+`;
+
+const ProfileImage = styled.img`
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin-right: 8px;
+
+  @media (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+const BadgeIcon = styled.img`
+  position: absolute;
+  bottom: -5px; /* 프로필 이미지 우측 하단에 배치 */
+  right: 0px;
+  width: 30px !important; /* 뱃지 크기 명확히 조정 */
+  height: 30px !important;
+  z-index: 2;
+
+  @media (max-width: 480px) {
+    width: 25px !important;
+    height: 25px !important;
   }
 `;
 
@@ -271,6 +303,12 @@ const ReviewFeed = () => {
   const [hasMore, setHasMore] = useState(true); // 추가 로딩 가능 여부
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
   const [initialLoad, setInitialLoad] = useState(true); // 초기 로딩 여부
+
+  const badgeImages = {
+    영화새싹: "/assets/images/mypage/lv1.svg",
+    나쵸쟁이: "/assets/images/mypage/lv2.svg",
+    영화매니아: "/assets/images/mypage/lv3.svg",
+  };
 
   // 초기 데이터 로드 및 페이지네이션
   const fetchReviews = useCallback(async () => {
@@ -397,47 +435,56 @@ const ReviewFeed = () => {
             <ReviewLeft>
               <img src={review.movie.poster} alt={review.movie.title} />
             </ReviewLeft>
-                <ReviewCenter>
-                  <div className="profile">
-                    <img
-                      src={review.user.profileImage}
-                      alt={review.user.nickname}
+            <ReviewCenter>
+              <div className="profile">
+                <ProfileImageWrapper>
+                  <ProfileImage
+                    src={review.user.profileImage}
+                    alt={review.user.nickname}
+                  />
+                  {review.user.mainBadgeImage && (
+                    <BadgeIcon
+                      className="badge-icon"
+                      src={
+                        badgeImages[review.user.mainBadgeImage] ||
+                        review.user.mainBadgeImage
+                      }
+                      alt={review.user.mainBadgeImage}
                     />
-                    <div className="user-info">
-                      <div className="name">{review.user.nickname}</div>
-                      <div className="date">
-                        {toKST(review.createdAt)
-                          .toLocaleDateString("ko-KR", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                          })
-                          .replace(/\./g, "-")
-                          .replace(/-$/, "")
-                          .replace(/-\s/g, "-")}{" "}
-                        {toKST(review.createdAt).toLocaleTimeString(
-                          "ko-KR",
-                          {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )}
-                      </div>
-                    </div>
+                  )}
+                </ProfileImageWrapper>
+                <div className="user-info">
+                  <div className="name">{review.user.nickname}</div>
+                  <div className="date">
+                    {toKST(review.createdAt)
+                      .toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })
+                      .replace(/\./g, "-")
+                      .replace(/-$/, "")
+                      .replace(/-\s/g, "-")}{" "}
+                    {toKST(review.createdAt).toLocaleTimeString("ko-KR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </div>
-                  <p className="movie-title">{review.movie.title}</p>
-                  <div
-                    className={`comment ${
-                      !showSpoilerOnly && review.spoiler ? "blurred" : ""
-                    }`}
-                  >
-                    {review.content.length > 90
-                      ? `${review.content.slice(0, 90)}…`
-                      : review.content}
-                  </div>
-                </ReviewCenter>
-                <ReviewRight>
-                <div className="score">
+                </div>
+              </div>
+              <p className="movie-title">{review.movie.title}</p>
+              <div
+                className={`comment ${
+                  !showSpoilerOnly && review.spoiler ? "blurred" : ""
+                }`}
+              >
+                {review.content.length > 90
+                  ? `${review.content.slice(0, 90)}…`
+                  : review.content}
+              </div>
+            </ReviewCenter>
+            <ReviewRight>
+              <div className="score">
                 {Array.from({ length: Math.round(review.movieScore) }).map(
                   (_, i) => (
                     <img
@@ -466,4 +513,4 @@ const ReviewFeed = () => {
   );
 };
 
-export default ReviewFeed;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+export default ReviewFeed;
