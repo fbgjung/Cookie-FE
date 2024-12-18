@@ -66,6 +66,11 @@ const RatingWrapper = styled.div`
   }
 `;
 
+const TextAreaWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
 const TextArea = styled.textarea`
   width: 100%;
   height: 300px;
@@ -92,6 +97,19 @@ const TextArea = styled.textarea`
   @media (max-width: 480px) {
     font-size: 14px;
     height: 120px;
+  }
+`;
+
+const CharCounter = styled.div`
+  position: absolute;
+  margin-top: 10px;
+  bottom: 10px;
+  right: 10px;
+  font-size: 14px;
+  color: #888;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
   }
 `;
 
@@ -259,6 +277,13 @@ const ReviewForm = () => {
     }
   };
 
+  const handleContentChange = (e) => {
+    const text = e.target.value;
+    if (text.length <= 500) {
+      setContent(text);
+    }
+  };
+
   return (
     <FormWrapper>
       <ReviewHeader movieTitle={movieTitle} onBack={() => navigate(-1)} />
@@ -283,11 +308,14 @@ const ReviewForm = () => {
             ))}
         </div>
       </RatingWrapper>
-      <TextArea
-        placeholder="이 작품에 대한 생각을 자유롭게 표현해주세요"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
+      <TextAreaWrapper>
+        <TextArea
+          placeholder="이 작품에 대한 생각을 자유롭게 표현해주세요"
+          value={content}
+          onChange={handleContentChange}
+        />
+        <CharCounter>{content.length}/500</CharCounter>
+      </TextAreaWrapper>
       <SpoilerWrapper>
         <input
           type="checkbox"
