@@ -16,7 +16,7 @@ const ManageProfileContainer = styled.div`
   min-height: 100vh;
   background-color: var(--dark-gray);
   position: relative;
-  overflow-y: auto;
+  overflow: hidden;
 `;
 
 const ManageProfileContent = styled.div`

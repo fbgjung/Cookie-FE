@@ -8,7 +8,7 @@ const Container = styled.div`
   background-color: #000000;
   width: 100%;
   margin: 0 auto;
-  min-height: 80vh;
+  min-height: 100vh;
   overflow-x: hidden;
 
   @media (max-width: 768px) {
