@@ -9,8 +9,10 @@ import { jwtDecode } from "jwt-decode";
 
 const FormWrapper = styled.div`
   width: 100%;
-  padding: 2rem;
-  background-color: #ffffff;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 40px;
+  background-color: #000000;
   min-height: 100vh;
   overflow-y: auto;
 
@@ -19,11 +21,15 @@ const FormWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 20px 15px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   @media (max-width: 480px) {
-    padding: 20px 10px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `;
 
@@ -33,7 +39,7 @@ const RatingWrapper = styled.div`
   margin: 2rem 0 1rem 0;
 
   span {
-    color: #444444;
+    color: #ffffff;
     font-size: 20px;
     font-weight: bold;
     margin-right: 10px;
@@ -55,6 +61,19 @@ const RatingWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
+    margin: 1rem 0 0.5rem 0;
+    span {
+      font-size: 14px;
+    }
+
+    .rating-icons img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    margin: 1rem 0 0.5rem 0;
     span {
       font-size: 14px;
     }
@@ -90,26 +109,29 @@ const TextArea = styled.textarea`
   }
 
   @media (max-width: 768px) {
+    margin-bottom: 10px;
     font-size: 16px;
-    height: 150px;
+    height: 240px;
   }
 
   @media (max-width: 480px) {
+    margin-bottom: 5px;
     font-size: 14px;
-    height: 120px;
+    height: 240px;
   }
 `;
 
 const CharCounter = styled.div`
   position: absolute;
-  top: 10px;
+  top: 323px;
   bottom: 10px;
   right: 10px;
   font-size: 14px;
-  color: #888;
+  color: #ffffff;
 
   @media (max-width: 768px) {
     font-size: 12px;
+    top: 250px;
   }
 `;
 
@@ -131,12 +153,30 @@ const SpoilerWrapper = styled.div`
 
   .description {
     font-size: 12px;
-    color: #666;
+    color: #ffffff;
     margin-left: 10px;
   }
 
   @media (max-width: 768px) {
-    font-size: 13px;
+    margin-bottom: 10px;
+    label {
+      font-size: 12px;
+    }
+
+    .description {
+      font-size: 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 5px;
+    label {
+      font-size: 8px;
+    }
+
+    .description {
+      font-size: 6px;
+    }
   }
 `;
 
