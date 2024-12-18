@@ -102,7 +102,7 @@ const TextArea = styled.textarea`
 
 const CharCounter = styled.div`
   position: absolute;
-  top: 10px;
+  top: 310px;
   bottom: 10px;
   right: 10px;
   font-size: 14px;
