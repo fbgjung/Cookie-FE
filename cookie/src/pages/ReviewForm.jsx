@@ -9,7 +9,8 @@ import { jwtDecode } from "jwt-decode";
 
 const FormWrapper = styled.div`
   width: 100%;
-  padding: 2rem;
+  padding-left: 40px;
+  padding-right: 40px;
   background-color: #000000;
   min-height: 100vh;
   overflow-y: auto;
@@ -19,11 +20,13 @@ const FormWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 20px 15px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   @media (max-width: 480px) {
-    padding: 20px 10px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `;
 
@@ -55,6 +58,19 @@ const RatingWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
+    margin: 1rem 0 0.5rem 0;
+    span {
+      font-size: 14px;
+    }
+
+    .rating-icons img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    margin: 1rem 0 0.5rem 0;
     span {
       font-size: 14px;
     }
@@ -135,8 +151,8 @@ const SpoilerWrapper = styled.div`
     margin-left: 10px;
   }
 
-  @media (max-width: 768px) {
-    font-size: 13px;
+  @media (max-width: 480px) {
+    font-size: 8px;
   }
 `;
 
