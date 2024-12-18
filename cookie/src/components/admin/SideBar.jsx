@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import cookieLogo from "../../assets/images/admin/cookieLogo.svg";
+import CookieLogo from "/assets/images/cookie-logo.png";
 import logout from "../../assets/images/admin/logout.svg";
 import setting from "../../assets/images/admin/setting.svg";
 import movie from "../../assets/images/admin/movie.svg";
@@ -12,11 +12,12 @@ import GlobalStyle from "../../styles/global";
 const PageNav = styled.div`
   width: 409px;
   background-color: var(--sub);
-  height: 100vh;
   margin-right: 2rem;
   padding: 1.5rem;
   color: white;
   font-size: 22px;
+  height: 100vh;
+  box-sizing: border-box;
 `;
 
 const SideBarTitle = styled.div`
@@ -26,6 +27,10 @@ const SideBarTitle = styled.div`
 
   .title__logo {
     margin-right: auto;
+    margin-left: 20px;
+    width: 160px;
+    height: 130px;
+    object-fit: cover;
   }
 
   span {
@@ -119,7 +124,7 @@ function SideBar() {
     <PageNav>
       <GlobalStyle />
       <SideBarTitle>
-        <img src={cookieLogo} className="title__logo" alt="logo_icon" />
+        <img src={CookieLogo} className="title__logo" alt="logo_icon" />
         <span> Admin</span>
         <button onClick={handleLogout} type="button">
           <img src={logout} />

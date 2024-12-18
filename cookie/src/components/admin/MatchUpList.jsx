@@ -99,6 +99,12 @@ const DeleteBtn = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  img {
+    transition: transform 0.2s ease;
+  }
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 const CheckDeleteBtn = styled.button`
   background: none;
@@ -116,6 +122,13 @@ const IconButton = styled.button`
   border: none;
   background: none;
   cursor: pointer;
+
+  img {
+    transition: transform 0.2s ease;
+  }
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 const MatchUpTitle = styled.p`
   font-weight: bold;
@@ -177,7 +190,6 @@ function MatchUpList() {
       const { nowMatchUps, pendingMatchUps, expireMatchUps } =
         response.data.response;
 
-      console.log(response.data.response);
       setNowMatchUp(nowMatchUps[0]);
       setPedingNowMatchUp(pendingMatchUps[0]);
       setEndMatchUp(expireMatchUps);
@@ -200,7 +212,7 @@ function MatchUpList() {
       const response = await axiosInstance.delete(
         `/api/admin/match-up/${matchId}`
       );
-      console.log("Match-up deleted successfully:", response.data);
+
       alert("해당 매치업이 삭제되었어요.");
 
       setNowMatchUp((prevState) => ({
@@ -279,7 +291,6 @@ function MatchUpList() {
   };
 
   const closeModal = () => {
-    // setShowEditModal(false);
     setShowMoreModal(false);
     setMatchUpId(null);
   };
@@ -305,6 +316,7 @@ function MatchUpList() {
       return <p>영화 정보가 없습니다.</p>;
     }
   };
+  useEffect(() => {}, [selectedMatchUp]);
 
   const MatchUpSection = ({ matchUpData, title }) => (
     <>
@@ -420,7 +432,11 @@ function MatchUpList() {
         )}
       </DefalutContainer>
       {selectedMatchUp && (
-        <EditMatchUp matchUpData={selectedMatchUp} closeModal={closeModal} />
+        <EditMatchUp
+          matchUpData={selectedMatchUp}
+          closeModal={closeModal}
+          fetchMatchUpData={fetchMatchUpData}
+        />
       )}
     </>
   );

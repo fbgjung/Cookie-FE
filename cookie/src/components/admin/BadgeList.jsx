@@ -65,23 +65,17 @@ const ButtonGroup = styled.div`
   justify-content: center;
 `;
 const BadgeName = styled.div`
-  margin-right: 20px;
   font-weight: bold;
 `;
 
-const Genre = styled.div`
-  margin-right: 20px;
-`;
+const Genre = styled.div``;
 
 const BadgeImage = styled.img`
-  margin-right: 20px;
   width: 50px;
   height: 50px;
 `;
 
-const NeedPoint = styled.div`
-  margin-right: 20px;
-`;
+const NeedPoint = styled.div``;
 
 const DeleteIcon = styled.img`
   transition: transform 0.3s ease;
@@ -119,7 +113,6 @@ function BadgeList() {
   const fetchBadgeList = async () => {
     try {
       const response = await axiosInstance.get("/api/admin/reward");
-      console.log("Badge Info:", response.data.response);
       setBadgeList(response.data.response);
     } catch (error) {
       console.error("Error fetching badge info:", error);

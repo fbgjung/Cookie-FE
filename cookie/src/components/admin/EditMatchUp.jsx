@@ -137,34 +137,41 @@ const CloseButton = styled.button`
   margin-left: auto;
 `;
 
-const EditMatchUp = ({ matchUpData, closeModal }) => {
+const EditMatchUp = ({ matchUpData, closeModal, fetchMatchUpData }) => {
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return "";
+    const dateParts = dateString.split("-");
+    if (dateParts.length < 3) return "";
+    const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2].slice(0, 2)}T${dateParts[3].slice(0, 5)}`;
+    return formattedDate;
+  };
   const {
     matchId,
     matchUpTitle,
     startTime,
     endTime,
-    matchUpMovies,
+    movieMatchInfo = [],
     matchUpType,
   } = matchUpData;
-
-  const [matchTitle, setMatchTitle] = useState(matchUpTitle);
-  const [startDate, setStartDate] = useState(startTime);
-  const [endDate, setEndDate] = useState(endTime);
-  const [selectedPoster1, setSelectedPoster1] = useState(
-    matchUpMovies ? matchUpMovies[0] : null
-  );
-  const [selectedPoster2, setSelectedPoster2] = useState(
-    matchUpMovies ? matchUpMovies[1] : null
-  );
-  const [matchType, setMatchType] = useState(matchUpType);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [matchTitle, setMatchTitle] = useState(matchUpTitle || "");
+  const [selectedPoster1, setSelectedPoster1] = useState(
+    movieMatchInfo[0] || null // 첫 번째 영화의 정보로 초기화
+  );
+  const [selectedPoster2, setSelectedPoster2] = useState(
+    movieMatchInfo[1] || null // 두 번째 영화의 정보로 초기화
+  );
+  const [matchType, setMatchType] = useState(matchUpType || "");
+  const [startDate, setStartDate] = useState(formatDateForInput(startTime));
+  const [endDate, setEndDate] = useState(formatDateForInput(endTime));
 
   useEffect(() => {
     if (matchUpData) {
       setMatchTitle(matchUpData.matchUpTitle || "");
-      setStartDate(matchUpData.startTime || "");
-      setEndDate(matchUpData.endTime || "");
+      setStartDate(formatDateForInput(matchUpData.startTime) || "");
+      setEndDate(formatDateForInput(matchUpData.endTime) || "");
       setSelectedPoster1(
         matchUpData.matchUpMovies && matchUpData.matchUpMovies[0]
           ? matchUpData.matchUpMovies[0]
@@ -178,6 +185,10 @@ const EditMatchUp = ({ matchUpData, closeModal }) => {
       setMatchType(matchUpData.matchUpType || "");
     }
   }, [matchUpData]);
+
+  const formatDate = (date) => {
+    return date ? date.replace("T", "-") + ":00" : "";
+  };
 
   const handleEditSave = async () => {
     try {
@@ -196,8 +207,8 @@ const EditMatchUp = ({ matchUpData, closeModal }) => {
         matchTitle,
         matchUpMovies,
         matchUpType: matchType,
-        startTime: startDate,
-        endTime: endDate,
+        startTime: formatDate(startDate),
+        endTime: formatDate(endDate),
       };
 
       const response = await axiosInstance.put(
@@ -206,23 +217,22 @@ const EditMatchUp = ({ matchUpData, closeModal }) => {
       );
       console.log("Match-Up Updated:", response.data);
       alert("매치업이 수정되었어요!");
+      fetchMatchUpData();
+      setMatchTitle("");
+      setSelectedPoster1(null);
+      setSelectedPoster2(null);
+      setMatchType("");
+      setStartDate("");
+      setEndDate("");
+      setSearchTerm("");
       closeModal();
     } catch (error) {
       console.error("Error updating match-up:", error);
     }
   };
 
-  const handleOpenModal = (posterNumber) => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSelectMovie = (posterNumber, movie) => {
-    console.log("Selected movie:", movie);
-    if (posterNumber === 1) {
+  const handleSelectMovie = (movie) => {
+    if (selectedPoster1 === null) {
       setSelectedPoster1(movie);
     } else {
       setSelectedPoster2(movie);
@@ -235,7 +245,7 @@ const EditMatchUp = ({ matchUpData, closeModal }) => {
       {isModalOpen && (
         <SearchModal
           isOpen={isModalOpen}
-          onClose={handleCloseModal}
+          onClose={() => setIsModalOpen(false)}
           onSelectMovie={handleSelectMovie}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -265,7 +275,7 @@ const EditMatchUp = ({ matchUpData, closeModal }) => {
                   <PosterUpload>
                     <button
                       className="upload_btn1"
-                      onClick={() => handleOpenModal(1)}
+                      onClick={() => setIsModalOpen(true)}
                     >
                       선택
                     </button>
@@ -283,7 +293,7 @@ const EditMatchUp = ({ matchUpData, closeModal }) => {
                   <PosterUpload>
                     <button
                       className="upload_btn2"
-                      onClick={() => handleOpenModal(2)}
+                      onClick={() => setIsModalOpen(true)}
                     >
                       선택
                     </button>
@@ -331,7 +341,6 @@ const EditMatchUp = ({ matchUpData, closeModal }) => {
             </InfoRow>
           </MatchUpForm>
           <CloseButton onClick={handleEditSave}>수정하기</CloseButton>
-          {/* <CloseButton onClick={onClose}>닫기</CloseButton> */}
         </AddMatchUpContainer>
       </DefalutContainer>
     </>

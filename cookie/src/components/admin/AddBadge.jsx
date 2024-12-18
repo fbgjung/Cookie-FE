@@ -16,7 +16,7 @@ export const AddContainer = styled.div`
   height: 500px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  padding: 30px;
+  padding: 5px 30px;
   display: flex;
   flex-direction: column;
   margin-bottom: auto;

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axiosInstance from "../../api/auth/axiosInstance";
 import badge from "../../assets/images/admin/recookie.svg";
-import like from "../../assets/images/admin/like_heart.svg";
-import comment from "../../assets/images/admin/comment.svg";
+// import like from "../../assets/images/admin/like_heart.svg";
+// import comment from "../../assets/images/admin/comment.svg";
+import comment from "/assets/images/review/comment-review-feed.svg";
+import score from "/assets/images/review/score-macarong.png";
 import CommentsModal from "./CommentsModal";
 import LikesModal from "./LikesModal";
-
+import like from "/assets/images/main/like-heart2.svg";
 export const DefaultReviewContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -167,11 +169,11 @@ const CommentIcon = styled.div`
 const ToggleContainer = styled.div`
   width: 55px;
   height: 30px;
-  background-color: ${(props) => (props.isOn ? "#50bdeb" : "#ccc")};
+  background-color: ${(props) => (props.$isOn ? "#50bdeb" : "#ccc")};
   border-radius: 20px;
   display: flex;
   align-items: center;
-  justify-content: ${(props) => (props.isOn ? "flex-end" : "flex-start")};
+  justify-content: ${(props) => (props.$isOn ? "flex-end" : "flex-start")};
   padding: 5px;
   cursor: pointer;
   position: relative;
@@ -211,10 +213,11 @@ const DetailContainer = styled.div`
   .review-content {
     border: none;
     overflow-y: auto;
-    margin: 10px 0;
+    margin: 20px 0;
     border-radius: 12px;
     font-size: 20px;
     min-height: 550px;
+    width: 522px;
   }
   .poster {
     width: 120px;
@@ -336,12 +339,6 @@ function ReviewList({ movieId }) {
             },
           }
         );
-        console.log({
-          dateOrder: dateOrder,
-          likesOrder: likesOrder,
-          movieScoreFilter: movieScoreFilter,
-        });
-        console.log(response.data.response);
         setReviews(response.data.response);
 
         const hideStates = response.data.response.reduce((acc, review) => {
@@ -369,7 +366,6 @@ function ReviewList({ movieId }) {
       const response = await axiosInstance.get(
         `/api/admin/reviews/detail/${reviewId}`
       );
-      console.log("리뷰 상세 정보:", response.data.response);
       setReviewDetail(response.data.response);
       return response.data.response;
     } catch (err) {
@@ -378,7 +374,6 @@ function ReviewList({ movieId }) {
   };
 
   const openModal = (reviewId) => {
-    console.log("Open Modal with Review ID: ", reviewId);
     setIsModalOpen(true);
   };
 
@@ -559,9 +554,11 @@ function ReviewList({ movieId }) {
                           onClick={() =>
                             toggleHideReview(review.reviewId, review.isHidden)
                           }
-                          isOn={isOn[review.reviewId] || false}
+                          $isOn={isOn[review.reviewId] || false}
                         >
-                          <ToggleCircle isOn={isOn[review.reviewId] || false} />
+                          <ToggleCircle
+                            $isOn={isOn[review.reviewId] || false}
+                          />
                           <ToggleLabel>
                             {review.isHidden ? "ON" : "OFF"}
                           </ToggleLabel>
@@ -576,10 +573,10 @@ function ReviewList({ movieId }) {
                               review.isSpoiler
                             )
                           }
-                          isOn={isSpoilerOn[review.reviewId] || false}
+                          $isOn={isSpoilerOn[review.reviewId] || false}
                         >
                           <ToggleCircle
-                            isOn={isSpoilerOn[review.reviewId] || false}
+                            $isOn={isSpoilerOn[review.reviewId] || false}
                           />
                           <ToggleLabel>
                             {review.isSpoiler ? "ON" : "OFF"}
@@ -596,7 +593,7 @@ function ReviewList({ movieId }) {
                         .map((_, index) => (
                           <img
                             key={index}
-                            src={badge}
+                            src={score}
                             alt="star"
                             style={{
                               width: "26px",
@@ -664,7 +661,7 @@ function ReviewList({ movieId }) {
                     .map((_, index) => (
                       <img
                         key={index}
-                        src={badge}
+                        src={score}
                         alt="star"
                         style={{
                           width: "26px",
