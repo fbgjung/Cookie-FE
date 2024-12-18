@@ -111,13 +111,13 @@ const TextArea = styled.textarea`
   @media (max-width: 768px) {
     margin-bottom: 10px;
     font-size: 16px;
-    height: 150px;
+    height: 240px;
   }
 
   @media (max-width: 480px) {
     margin-bottom: 5px;
     font-size: 14px;
-    height: 120px;
+    height: 240px;
   }
 `;
 
@@ -130,8 +130,8 @@ const CharCounter = styled.div`
   color: #ffffff;
 
   @media (max-width: 768px) {
-    font-size: 8px;
-    top: 143px;
+    font-size: 12px;
+    top: 250px;
   }
 `;
 
@@ -160,11 +160,11 @@ const SpoilerWrapper = styled.div`
   @media (max-width: 768px) {
     margin-bottom: 10px;
     label {
-      font-size: 10px;
+      font-size: 12px;
     }
 
     .description {
-      font-size: 8px;
+      font-size: 10px;
     }
   }
   
