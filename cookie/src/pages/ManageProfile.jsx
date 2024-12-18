@@ -64,7 +64,6 @@ const ManageProfile = () => {
         const { profileImage, badges, nickname, genreId } =
           response.data.response;
 
-        setProfileImage(profileImage);
         setBadges(badges);
         setNickname(nickname);
         setSelectedGenreId(genreId);
@@ -98,6 +97,12 @@ const ManageProfile = () => {
 
       if (profileImage.file) {
         formData.append("profileImage", profileImage.file);
+      } else if (
+        profileImage.preview &&
+        profileImage.preview !== "/assets/images/mypage/setdefaultImage.svg" &&
+        profileImage.preview !== "/assets/images/mypage/defaultimage.jpeg"
+      ) {
+        formData.append("profileImageUrl", profileImage.preview);
       }
 
       formData.append("nickname", nickname);

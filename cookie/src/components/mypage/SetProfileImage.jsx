@@ -124,6 +124,8 @@ const SetProfileImage = ({ profileImage, onChange }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
+    if (!file) return;
+
     if (file) {
       const validFileTypes = [
         "image/jpeg",
