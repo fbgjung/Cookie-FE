@@ -126,7 +126,7 @@ const ReviewLeft = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  
+
   img {
     width: 60px;
     height: 60px;
@@ -170,7 +170,7 @@ const ReviewCenter = styled.div`
 
     @media (max-width: 480px) {
       font-size: 0.7rem;
-    } 
+    }
   }
 `;
 
@@ -254,18 +254,30 @@ const MovieReviewFeed = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  const buildEndpoint = () => {
+    let endpoint = `/api/movies/${movieId}/reviews`;
+
+    if (showSpoilerOnly) {
+      endpoint += "/spoiler";
+    }
+
+    if (sortOrder === "popular") {
+      endpoint += "/most-liked";
+    }
+
+    return endpoint;
+  };
+
   const fetchReviews = useCallback(async () => {
     if (isLoading || !hasMore) return;
 
     try {
       setIsLoading(true);
 
-      const endpoint = showSpoilerOnly
-        ? `/api/movies/${movieId}/reviews/spoiler`
-        : `/api/movies/${movieId}/reviews`;
+      const endpoint = buildEndpoint();
 
       const response = await axiosInstance.get(endpoint, {
-        params: { page, size: 10, sort: sortOrder },
+        params: { page, size: 10 },
       });
 
       const { poster: moviePoster, title: movieTitle } = response.data.response;
@@ -305,7 +317,6 @@ const MovieReviewFeed = () => {
     setPage(0);
     setReviews([]);
     setHasMore(true);
-    fetchReviews();
   };
 
   const changeSortOrder = (order) => {
@@ -327,18 +338,18 @@ const MovieReviewFeed = () => {
 
       <FilterButtons>
         <div>
-        <button
-          className={!showSpoilerOnly ? "active" : "inactive"}
-          onClick={() => filterReviews(false)}
-        >
-          전체 리뷰
-        </button>
-        <button
-          className={showSpoilerOnly ? "active" : "inactive"}
-          onClick={() => filterReviews(true)}
-        >
-          스포일러 리뷰
-        </button>
+          <button
+            className={!showSpoilerOnly ? "active" : "inactive"}
+            onClick={() => filterReviews(false)}
+          >
+            전체 리뷰
+          </button>
+          <button
+            className={showSpoilerOnly ? "active" : "inactive"}
+            onClick={() => filterReviews(true)}
+          >
+            스포일러 리뷰
+          </button>
         </div>
         <div className="sort-toggle">
           <button
