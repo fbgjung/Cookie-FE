@@ -13,6 +13,8 @@ function AdminRecommend() {
   const [recommendMovies, setRecommendMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [startX, setStartX] = useState(0);
+  const [isTouching, setIsTouching] = useState(false);
 
   useEffect(() => {
     const fetchMainPageMovies = async () => {
@@ -53,6 +55,39 @@ function AdminRecommend() {
     recommendMovies.length > 0
       ? currentIndex * (100 / recommendMovies.length)
       : 0;
+
+  const handleTouchStart = (e) => {
+    const touchStart = e.touches[0].clientX;
+    setStartX(touchStart);
+    setIsTouching(true);
+    e.stopPropagation();
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isTouching) return;
+    const touchMove = e.touches[0].clientX;
+    const delta = touchMove - startX;
+    const percentage = (delta / window.innerWidth) * 100;
+    const currentPercentage = currentIndex * (100 / recommendMovies.length);
+    e.currentTarget.style.transform = `translateX(-${currentPercentage - percentage}%)`;
+    e.stopPropagation();
+  };
+
+  const handleTouchEnd = (e) => {
+    setIsTouching(false);
+    const deltaX = startX - e.changedTouches[0].clientX;
+    const moveThreshold = 50;
+    const maxIndex = Math.floor(recommendMovies.length / 4) * 4;
+
+    if (deltaX > moveThreshold && currentIndex < maxIndex) {
+      setCurrentIndex((prev) => Math.min(prev + 4, maxIndex));
+    } else if (deltaX < -moveThreshold && currentIndex > 0) {
+      setCurrentIndex((prev) => Math.max(prev - 4, 0));
+    }
+    e.currentTarget.style.transform = `translateX(-${currentIndex * (100 / recommendMovies.length)}%)`;
+    e.stopPropagation();
+  };
+
   return (
     <>
       <MovieRecommendList>
@@ -67,36 +102,45 @@ function AdminRecommend() {
           </button>
           <div
             className="recommend__movie"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
             style={{
               transform: `translateX(-${translateValue}%)`,
+              touchAction: "none",
             }}
           >
-            {recommendMovies.map((movie, index) => (
-              <div key={index} className="recommend__movie--info">
-                <div
-                  onClick={() => handleMovieClick(movie.id)}
-                  style={{
-                    cursor: "pointer",
-                  }}
-                >
-                  {isLoading ? (
-                    <SkeletonOverlay />
-                  ) : (
-                    <Poster src={movie.poster} alt={movie.title} />
-                  )}
-                  <MovieInfo>
-                    <Like>
-                      <LikeIcon alt="Like Icon" />
-                      <Count>{movie.likes}</Count>
-                    </Like>
-                    <Review>
-                      <ReviewIcon alt="Review Icon" />
-                      <Count>{movie.reviews}</Count>
-                    </Review>
-                  </MovieInfo>
+            {recommendMovies.length === 0 ? (
+              <p className="no-movie-message">아직 추천영화가 없어요</p>
+            ) : (
+              recommendMovies.map((movie, index) => (
+                <div key={index} className="recommend__movie--info">
+                  <div
+                    onClick={() => handleMovieClick(movie.id)}
+                    style={{
+                      cursor: "pointer",
+                      pointerEvents: isTouching ? "none" : "auto",
+                    }}
+                  >
+                    {isLoading ? (
+                      <SkeletonOverlay />
+                    ) : (
+                      <Poster src={movie.poster} alt={movie.title} />
+                    )}
+                    <MovieInfo>
+                      <Like>
+                        <LikeIcon alt="Like Icon" />
+                        <Count>{movie.likes}</Count>
+                      </Like>
+                      <Review>
+                        <ReviewIcon alt="Review Icon" />
+                        <Count>{movie.reviews}</Count>
+                      </Review>
+                    </MovieInfo>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           <button
             className="next"
@@ -120,7 +164,6 @@ const MovieRecommendList = styled.div`
     align-items: center;
     position: relative;
     overflow: hidden;
-    /* min-height: 212px; */
   }
 
   .recommend__movie {
@@ -128,6 +171,7 @@ const MovieRecommendList = styled.div`
     flex-direction: row;
     align-items: start;
     transition: transform 1s ease;
+    touch-action: none;
   }
 
   .prev,
@@ -169,6 +213,12 @@ const Title = styled.h2`
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
+  /* @media (max-width: 430px) {
+    padding: 1.2rem 0 0 0.375rem;
+  }
+  @media (max-width: 393px) {
+    font-size: 1.5rem;
+  } */
 `;
 
 const Review = styled.div`
@@ -233,7 +283,7 @@ const Poster = styled.img`
   }
   @media (max-width: 393px) {
     padding: 0.4rem 0.3rem;
-    width: 5.6rem;
+    width: 5.68rem;
     height: 8.7rem;
   }
 
@@ -259,7 +309,7 @@ export const SkeletonOverlay = styled.div`
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
   margin-right: 0.7rem;
-  z-index: 100;
+
   @keyframes shimmer {
     0% {
       background-position: -200% 0;

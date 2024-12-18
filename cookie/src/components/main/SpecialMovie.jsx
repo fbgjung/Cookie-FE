@@ -19,6 +19,8 @@ function SpecialMovie({ categorydata }) {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [startX, setStartX] = useState(0);
+  const [isTouching, setIsTouching] = useState(false);
 
   const navigate = useNavigate();
 
@@ -102,9 +104,45 @@ function SpecialMovie({ categorydata }) {
     }
   };
 
-  useEffect(() => {
-    const totalPages = Math.ceil(movies.length / 4);
-  }, [currentIndex, movies]);
+  // useEffect(() => {
+  //   const totalPages = Math.ceil(movies.length / 4);
+  // }, [currentIndex, movies]);
+
+  const handleTouchStart = (e) => {
+    const touchStart = e.touches[0].clientX;
+    setStartX(touchStart);
+    setIsTouching(true);
+    e.stopPropagation();
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isTouching) return;
+    const touchMove = e.touches[0].clientX;
+    const delta = touchMove - startX;
+    const percentage = (delta / window.innerWidth) * 100;
+    const currentPercentage =
+      (currentIndex * 100) / Math.ceil(movies.length / 4);
+    e.currentTarget.style.transform = `translateX(-${currentPercentage - percentage}%)`;
+    e.stopPropagation();
+  };
+
+  const handleTouchEnd = (e) => {
+    setIsTouching(false);
+    const deltaX = startX - e.changedTouches[0].clientX;
+    const moveThreshold = 50;
+    const maxIndex = Math.ceil(movies.length / 4) - 1;
+
+    const slider = e.currentTarget;
+
+    if (deltaX > moveThreshold && currentIndex < maxIndex) {
+      setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, maxIndex));
+    } else if (deltaX < -moveThreshold && currentIndex > 0) {
+      setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    }
+
+    slider.style.transform = `translateX(-${(currentIndex * 100) / Math.ceil(movies.length / 4)}%)`;
+    e.stopPropagation();
+  };
 
   return (
     <>
@@ -147,48 +185,63 @@ function SpecialMovie({ categorydata }) {
         </MoreViewText>
 
         <div className="specialMovie__movie--wrapper">
-          <button
-            className="prev"
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-          >
-            &lt;
-          </button>
-          <div
-            className="specialMovie__list"
-            style={{
-              transform: `translateX(-${(currentIndex * 100) / Math.ceil(movies.length / 4)}%)`,
-            }}
-          >
-            {movies &&
-              movies.map((movie, index) => (
-                <div
-                  key={index}
-                  className="specialMovie__list--info"
-                  onClick={() => handleMovieClick(movie.id)}
-                >
-                  <Poster src={movie.poster} alt={movie.title} />
+          {movies.length === 0 ? (
+            <p style={{ color: "#ffffff", paddingLeft: "7px" }}>
+              해당 영화가 없어요
+            </p>
+          ) : (
+            <>
+              <button
+                className="prev"
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+              >
+                &lt;
+              </button>
+              <div
+                className="specialMovie__list"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                style={{
+                  touchAction: "none",
+                  transform: `translateX(-${(currentIndex * 100) / Math.ceil(movies.length / 4)}%)`,
+                }}
+              >
+                {movies.map((movie, index) => (
+                  <div
+                    key={index}
+                    className="specialMovie__list--info"
+                    onClick={() => handleMovieClick(movie.id)}
+                    style={{
+                      cursor: "pointer",
+                      pointerEvents: isTouching ? "none" : "auto",
+                    }}
+                  >
+                    <Poster src={movie.poster} alt={movie.title} />
 
-                  <MovieInfo>
-                    <Like>
-                      <LikeIcon alt="Review Icon" />
-                      <Count>{movie.likes}</Count>
-                    </Like>
-                    <Review>
-                      <ReviewIcon alt="Review Icon" />
-                      <Count>{movie.reviews}</Count>
-                    </Review>
-                  </MovieInfo>
-                </div>
-              ))}
-          </div>
-          <button
-            className="next"
-            onClick={handleNext}
-            disabled={currentIndex >= Math.ceil(movies.length / 4) - 1}
-          >
-            &gt;
-          </button>
+                    <MovieInfo>
+                      <Like>
+                        <LikeIcon alt="Like Icon" />
+                        <Count>{movie.likes}</Count>
+                      </Like>
+                      <Review>
+                        <ReviewIcon alt="Review Icon" />
+                        <Count>{movie.reviews}</Count>
+                      </Review>
+                    </MovieInfo>
+                  </div>
+                ))}
+              </div>
+              <button
+                className="next"
+                onClick={handleNext}
+                disabled={currentIndex >= Math.ceil(movies.length / 4) - 1}
+              >
+                &gt;
+              </button>
+            </>
+          )}
         </div>
       </SpecialMovieList>
     </>

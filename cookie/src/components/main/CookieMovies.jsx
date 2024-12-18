@@ -17,6 +17,8 @@ function CookieMovies() {
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [startX, setStartX] = useState(0);
+  const [isTouching, setIsTouching] = useState(false);
 
   if (!userInfo?.nickname) {
     return null;
@@ -67,6 +69,41 @@ function CookieMovies() {
     });
   };
 
+  const handleTouchStart = (e) => {
+    const touchStart = e.touches[0].clientX;
+    setStartX(touchStart);
+    setIsTouching(true);
+    e.stopPropagation();
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isTouching) return;
+    const touchMove = e.touches[0].clientX;
+    const delta = touchMove - startX;
+    const percentage = (delta / window.innerWidth) * 100;
+    const currentPercentage =
+      currentIndex * calculateSlidePercentage(recommendedMovies.length);
+    e.currentTarget.style.transform = `translateX(-${currentPercentage - percentage}%)`;
+    e.stopPropagation();
+  };
+
+  const handleTouchEnd = (e) => {
+    setIsTouching(false);
+    const deltaX = startX - e.changedTouches[0].clientX;
+    const moveThreshold = 50;
+    const maxIndex = Math.ceil(recommendedMovies.length / 4) - 1;
+    const slider = e.currentTarget;
+
+    if (deltaX > moveThreshold && currentIndex < maxIndex) {
+      setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, maxIndex));
+    } else if (deltaX < -moveThreshold && currentIndex > 0) {
+      setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    }
+
+    slider.style.transform = `translateX(-${currentIndex * calculateSlidePercentage(recommendedMovies.length)}%)`;
+    e.stopPropagation();
+  };
+
   return (
     <>
       <CookieMovieList>
@@ -74,53 +111,66 @@ function CookieMovies() {
           <span>{userInfo.nickname}</span>님의 맞춤 영화
         </Title>
         <div className="cookie__movie--wrapper">
-          <button
-            className="prev"
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-          >
-            &lt;
-          </button>
-          <div
-            className="cookie__movie"
-            style={{
-              transform: `translateX(-${currentIndex * calculateSlidePercentage(recommendedMovies.length)}%)`,
-            }}
-          >
-            {recommendedMovies.map((movie, index) => (
-              <div key={index} className="cookie__movie--list">
-                <div
-                  onClick={() => handleMovieClick(movie.id)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {isLoading ? (
-                    <SkeletonOverlay />
-                  ) : (
-                    <Poster src={movie.poster} alt={movie.title} />
-                  )}
-                  <MovieInfo>
-                    <Like>
-                      <LikeIcon alt="Review Icon" />
-                      <Count>{movie.likes}</Count>
-                    </Like>
-                    <Review>
-                      <ReviewIcon alt="Review Icon" />
-                      <Count>{movie.reviews}</Count>
-                    </Review>
-                  </MovieInfo>
-                </div>
+          {recommendedMovies.length === 0 ? (
+            <p>맞춤 추천영화가 없어요</p>
+          ) : (
+            <>
+              <button
+                className="prev"
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+              >
+                &lt;
+              </button>
+              <div
+                className="cookie__movie"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                style={{
+                  touchAction: "none",
+                  transform: `translateX(-${currentIndex * calculateSlidePercentage(recommendedMovies.length)}%)`,
+                }}
+              >
+                {recommendedMovies.map((movie, index) => (
+                  <div key={index} className="cookie__movie--list">
+                    <div
+                      onClick={() => handleMovieClick(movie.id)}
+                      style={{
+                        cursor: "pointer",
+                        pointerEvents: isTouching ? "none" : "auto",
+                      }}
+                    >
+                      {isLoading ? (
+                        <SkeletonOverlay />
+                      ) : (
+                        <Poster src={movie.poster} alt={movie.title} />
+                      )}
+                      <MovieInfo>
+                        <Like>
+                          <LikeIcon alt="Like Icon" />
+                          <Count>{movie.likes}</Count>
+                        </Like>
+                        <Review>
+                          <ReviewIcon alt="Review Icon" />
+                          <Count>{movie.reviews}</Count>
+                        </Review>
+                      </MovieInfo>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <button
-            className="next"
-            onClick={handleNext}
-            disabled={
-              currentIndex >= Math.ceil(recommendedMovies.length / 4) - 1
-            }
-          >
-            &gt;
-          </button>
+              <button
+                className="next"
+                onClick={handleNext}
+                disabled={
+                  currentIndex >= Math.ceil(recommendedMovies.length / 4) - 1
+                }
+              >
+                &gt;
+              </button>
+            </>
+          )}
         </div>
       </CookieMovieList>
     </>
@@ -142,6 +192,7 @@ const CookieMovieList = styled.div`
     flex-direction: row;
     align-items: start;
     transition: transform 1s ease;
+    touch-action: none;
   }
   .prev,
   .next {
@@ -184,6 +235,9 @@ const Title = styled.h2`
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
+  /* @media (max-width: 430px) {
+    padding: 1.2rem 0 0 0.375rem;
+  } */
 `;
 
 const Review = styled.div`
