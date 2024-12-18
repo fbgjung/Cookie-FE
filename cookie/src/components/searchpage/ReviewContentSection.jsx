@@ -36,6 +36,35 @@ const MovieSection = styled.div`
   }
 `;
 
+const ProfileWrapper = styled.div`
+  position: relative; /* 뱃지 배치를 위한 기준 */
+  display: inline-block;
+`;
+
+const ProfileImage = styled.img`
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+
+  @media (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+const BadgeIcon = styled.img`
+  position: absolute;
+  bottom: -5px; /* 프로필 이미지 우측 하단 배치 */
+  right: -5px;
+  width: 35px;
+  height: 35px;
+
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
 const ScoreSection = styled.div`
   display: flex;
   gap: 0.4rem;
@@ -266,6 +295,7 @@ const Divider = styled.div`
 const ReviewContentSection = ({
   posterSrc,
   profileSrc,
+  badgeSrc,
   name,
   date,
   reviewLikeCount,
@@ -298,7 +328,7 @@ const ReviewContentSection = ({
     const previousLiked = liked;
     const previousLikeCount = currentLikeCount;
 
-    if(! loggedInUserId) {
+    if (!loggedInUserId) {
       openLoginModal();
       return;
     }
@@ -394,7 +424,10 @@ const ReviewContentSection = ({
               <>
                 <div className="profile">
                   <Left>
-                    <Profile src={profileSrc} alt="Profile" />
+                    <ProfileWrapper>
+                      <ProfileImage src={profileSrc} alt={name} />
+                      {badgeSrc && <BadgeIcon src={badgeSrc} alt="대표 뱃지" />}
+                    </ProfileWrapper>
                     <div className="user-info">
                       <span className="name">{name}</span>
                       <span className="date">{date}</span>

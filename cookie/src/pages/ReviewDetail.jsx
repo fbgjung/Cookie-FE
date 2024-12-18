@@ -219,6 +219,12 @@ const ReviewDetail = () => {
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
+  const badgeImages = {
+    영화새싹: "/assets/images/mypage/lv1.svg",
+    나쵸쟁이: "/assets/images/mypage/lv2.svg",
+    영화매니아: "/assets/images/mypage/lv3.svg",
+  };
+
   useEffect(() => {
     const fetchReviewData = async () => {
       try {
@@ -435,6 +441,12 @@ const ReviewDetail = () => {
       <ReviewContentSection
         posterSrc={reviewData.movie?.poster || "/default-poster.png"}
         profileSrc={reviewData.user?.profileImage || "/default-profile.png"}
+        badgeSrc={
+          reviewData.user?.mainBadgeImage
+            ? badgeImages[reviewData.user.mainBadgeImage] ||
+              reviewData.user.mainBadgeImage
+            : null
+        }
         name={reviewData.user?.nickname || "Unknown User"}
         date={`${toKST(reviewData.createdAt)
           .toLocaleDateString("ko-KR", {
