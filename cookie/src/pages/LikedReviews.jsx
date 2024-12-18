@@ -322,6 +322,12 @@ const LikedReviews = () => {
 
   const handleBackClick = () => navigate(-1);
 
+  const toKST = (utcDate) => {
+    const date = new Date(utcDate);
+    date.setHours(date.getHours() + 9);
+    return date;
+  };
+
   const fetchLikedReviews = useCallback(async () => {
     if (loading || page >= totalPages) return;
 
@@ -415,7 +421,7 @@ const LikedReviews = () => {
                         <div className="user-info">
                           <div className="name">{review.user.nickname}</div>
                           <div className="date">
-                            {new Date(review.createdAt)
+                            {toKST(review.createdAt)
                               .toLocaleDateString("ko-KR", {
                                 year: "numeric",
                                 month: "2-digit",
@@ -424,7 +430,7 @@ const LikedReviews = () => {
                               .replace(/\./g, "-")
                               .replace(/-$/, "")
                               .replace(/-\s/g, "-")}{" "}
-                            {new Date(review.createdAt).toLocaleTimeString(
+                            {toKST(review.createdAt).toLocaleTimeString(
                               "ko-KR",
                               { hour: "2-digit", minute: "2-digit" }
                             )}
