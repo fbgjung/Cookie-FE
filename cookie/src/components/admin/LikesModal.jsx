@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/auth/axiosInstance";
 import styled from "styled-components";
-import likeIcon from "../../assets/images/admin/like_heart.svg";
+import likeIcon from "/assets/images/main/like-heart2.svg";
 import { UserProfile } from "./LikeList";
 
 const ModalOverlay = styled.div`
@@ -87,7 +87,6 @@ const LikesModal = ({ reviewId, onClose }) => {
         );
         if (response.status === 200) {
           setLikes(response.data.response);
-          console.log("좋아요 목록 조회:", response.data.response);
         }
       } catch (error) {
         console.error("좋아요 목록 요청 실패", error);

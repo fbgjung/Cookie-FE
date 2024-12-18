@@ -27,6 +27,10 @@ const IconButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 function Likes() {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -45,13 +49,12 @@ function Likes() {
       const response = await axiosInstance.get(
         `/api/admin/movies/${searchKeyword}/${currentPage}`
       );
-      console.log("검색된 영화", response.data.response);
       setRegisteredMovies(response.data.response.results);
       setTotalPages(response.data.response.totalPages);
     } catch (error) {
       console.error("검색 에러:", error);
       if (error.response && error.response.data) {
-        console.log(error.response.data);
+        alert(error.response.data);
       }
     } finally {
       setLoading(false);
@@ -73,7 +76,11 @@ function Likes() {
   }, [currentPage]);
 
   const handleIconClick = (movieId) => {
-    setSelectedMovieId(movieId);
+    if (selectedMovieId === movieId) {
+      setSelectedMovieId(null);
+    } else {
+      setSelectedMovieId(movieId);
+    }
   };
   return (
     <>

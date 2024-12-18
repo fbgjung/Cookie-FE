@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../api/auth/axiosInstance";
 import styled from "styled-components";
 import { DefaultReviewContainer } from "./ReviewList";
-import likeIcon from "../../assets/images/admin/like_heart.svg";
+import likeIcon from "/assets/images/main/like-heart2.svg";
 const MovieInfoContainer = styled.div`
   height: 800px;
   max-height: 1000px;

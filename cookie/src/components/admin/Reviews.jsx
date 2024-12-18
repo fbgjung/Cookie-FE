@@ -13,6 +13,10 @@ const IconButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 export const DefalutContainer = styled.div`
   width: 1239px;
@@ -50,8 +54,9 @@ function Reviews() {
       setTotalPages(response.data.response.totalPages);
     } catch (error) {
       console.error("검색 에러:", error);
+
       if (error.response && error.response.data) {
-        console.log(error.response.data);
+        alert(error.response.data);
       }
     } finally {
       setLoading(false);
@@ -80,7 +85,11 @@ function Reviews() {
   }, [searchKeyword, currentPage]);
 
   const handleIconClick = (movieId) => {
-    setSelectedMovieId(movieId);
+    if (selectedMovieId === movieId) {
+      setSelectedMovieId(null);
+    } else {
+      setSelectedMovieId(movieId);
+    }
   };
   return (
     <>
