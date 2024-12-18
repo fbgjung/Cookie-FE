@@ -241,9 +241,9 @@ const GenreMovieList = styled.div`
     align-items: start;
     pointer-events: auto;
   }
-  .genre__movie--list {
+  /* .genre__movie--list {
     pointer-events: none;
-  }
+  } */
   .prev,
   .next {
     position: absolute;
@@ -305,8 +305,8 @@ const Poster = styled.img`
 
   @media (max-width: 480px) {
     padding: 0.4rem 0.3rem;
-    width: 6.4rem;
-    height: 9.5rem;
+    width: 6.2rem;
+    height: 9.3rem;
   }
   @media (max-width: 393px) {
     padding: 0.4rem 0.3rem;

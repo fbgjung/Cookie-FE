@@ -213,12 +213,6 @@ const Title = styled.h2`
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
-  /* @media (max-width: 430px) {
-    padding: 1.2rem 0 0 0.375rem;
-  }
-  @media (max-width: 393px) {
-    font-size: 1.5rem;
-  } */
 `;
 
 const Review = styled.div`
@@ -278,12 +272,12 @@ const Poster = styled.img`
 
   @media (max-width: 480px) {
     padding: 0.4rem 0.3rem;
-    width: 6rem;
-    height: 9.1rem;
+    width: 6.2rem;
+    height: 9.3rem;
   }
   @media (max-width: 393px) {
     padding: 0.4rem 0.3rem;
-    width: 5.68rem;
+    width: 5.6rem;
     height: 8.7rem;
   }
 

@@ -235,9 +235,6 @@ const Title = styled.h2`
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
-  /* @media (max-width: 430px) {
-    padding: 1.2rem 0 0 0.375rem;
-  } */
 `;
 
 const Review = styled.div`
