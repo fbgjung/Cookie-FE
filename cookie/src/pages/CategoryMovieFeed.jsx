@@ -21,7 +21,6 @@ const CategoryMovieFeed = () => {
   const fetchMovies = async (page) => {
     if (isLoading || page >= totalPages) return;
     setIsLoading(true);
-    console.log(`Fetching movies for page: ${page}`);
 
     try {
       const response = await axiosInstance.get("/api/movies/categoryMovies", {
@@ -102,6 +101,14 @@ const Container = styled.div`
   min-height: 1245px;
   margin: 0 auto;
   background-color: #000000;
+  @media (max-width: 430px) {
+    min-width: 430px;
+    padding: 0px;
+  }
+  @media (max-width: 393px) {
+    min-width: 390px;
+    padding: 0px;
+  }
 `;
 const GoBackBtn = styled.button`
   background: none;
@@ -109,12 +116,24 @@ const GoBackBtn = styled.button`
   cursor: pointer;
   padding: 0 1rem;
   margin-bottom: 1.5rem;
+  @media (max-width: 430px) {
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 393px) {
+    margin: 1.5rem 0;
+  }
 `;
 const Header = styled.h2`
   font-size: 24px;
   margin-bottom: 1.25rem;
   text-align: center;
   color: white;
+  @media (max-width: 430px) {
+    font-size: 22px;
+  }
+  @media (max-width: 393px) {
+    font-size: 22px;
+  }
 `;
 
 const CategoryTitle = styled.div`
@@ -135,6 +154,12 @@ const MovieList = styled.div`
     align-items: center;
     padding: 0 2em;
   }
+  @media (max-width: 430px) {
+    padding: 0rem;
+  }
+  @media (max-width: 393px) {
+    padding: 0rem;
+  }
 `;
 
 const MovieItem = styled.div`
@@ -144,6 +169,13 @@ const MovieItem = styled.div`
   align-items: center;
   text-align: center;
   cursor: pointer;
+
+  @media (max-width: 430px) {
+    width: 107px;
+  }
+  @media (max-width: 393px) {
+    width: 94px;
+  }
 `;
 
 const Poster = styled.img`

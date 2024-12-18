@@ -94,7 +94,6 @@ function GenreMovie({ categorydata }) {
   useEffect(() => {
     const totalPages = Math.ceil(genreMovies.length / 4);
     setTotalPages(totalPages);
-    console.log("totalPages updated:", totalPages);
   }, [genreMovies]);
 
   return (
@@ -296,6 +295,7 @@ const MoreViewText = styled.p`
   justify-content: flex-end;
   cursor: pointer;
   font-size: 0.8rem;
+  margin-bottom: 5px;
 `;
 
 const Review = styled.div`

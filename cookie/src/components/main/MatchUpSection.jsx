@@ -134,10 +134,10 @@ const Image = styled.img`
   border-radius: 8px;
 
   @media (max-width: 480px) {
-    height: 420px;
+    height: 300px;
   }
-  @media (max-width: 390px) {
-    height: 420px;
+  @media (max-width: 393px) {
+    height: 280px;
   }
 `;
 
@@ -155,11 +155,17 @@ const VoteButton = styled.button`
 
   @media (max-width: 480px) {
     color: #000000;
-    font-weight: 600;
+    font-weight: 550;
+    width: 250px;
+    height: 36px;
+    font-size: 16px;
   }
-  @media (max-width: 390px) {
+  @media (max-width: 393px) {
     color: #000000;
-    font-weight: 600;
+    font-weight: 510;
+    width: 230px;
+    height: 32px;
+    font-size: 15px;
   }
 
   &:hover {
@@ -181,13 +187,11 @@ const MatchUpDescription = styled.p`
   font-size: 1.5rem;
 
   @media (max-width: 480px) {
-    font-size: 1.4rem;
-  }
-  @media (max-width: 390px) {
-    font-size: 1.3rem;
-  }
-  @media (max-width: 393px) {
     font-size: 1.2rem;
+  }
+
+  @media (max-width: 393px) {
+    font-size: 1.1rem;
   }
 `;
 

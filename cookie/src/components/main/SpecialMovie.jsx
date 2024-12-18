@@ -47,7 +47,6 @@ function SpecialMovie({ categorydata }) {
           },
         }
       );
-      console.log(response);
       setMovies(response.data.movies);
     } catch (error) {
       console.error("영화 불러오기 실패:", error);
@@ -104,11 +103,7 @@ function SpecialMovie({ categorydata }) {
   };
 
   useEffect(() => {
-    console.log("currentIndex:", currentIndex);
-    console.log("movies.length:", movies.length);
     const totalPages = Math.ceil(movies.length / 4);
-    console.log("전체 페이지:", totalPages);
-    console.log("슬라이드 이동 비율:", (currentIndex * 100) / (totalPages - 1));
   }, [currentIndex, movies]);
 
   return (
@@ -394,4 +389,5 @@ const MoreViewText = styled.p`
   justify-content: flex-end;
   cursor: pointer;
   font-size: 0.8rem;
+  margin-bottom: 5px;
 `;
