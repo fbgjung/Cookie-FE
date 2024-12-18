@@ -171,6 +171,12 @@ const ReviewCenter = styled.div`
     margin-top: 0.5rem;
     line-height: 1.5;
 
+    .blurred {
+      filter: blur(5px);
+      pointer-events: none; 
+      user-select: none;
+    }
+
     @media (max-width: 480px) {
       font-size: 0.6rem;
       margin-top: 0.3rem;
