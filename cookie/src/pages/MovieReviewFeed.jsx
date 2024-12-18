@@ -2,20 +2,19 @@ import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../api/auth/axiosInstance";
+import MovieDetailHeader from "../components/searchpage/MovieDetailHeader";
 
 const ReviewFeedWrapper = styled.div`
   width: 100%;
   background-color: #000000;
   padding-left: 40px;
   padding-right: 40px;
-  padding-top: 40px;
   min-height: 100vh;
   padding-bottom: 40px;
 
   @media (max-width: 480px) {
     padding-left: 20px;
     padding-right: 20px;
-    padding-top: 20px;
   }
 `;
 
@@ -371,6 +370,7 @@ const MovieReviewFeed = () => {
 
   return (
     <ReviewFeedWrapper>
+      <MovieDetailHeader onBack={() => navigate(-1)} title={title} />
       <HeaderSection>
         <img src={poster || "/default-poster.png"} alt={title} />
         <p>
