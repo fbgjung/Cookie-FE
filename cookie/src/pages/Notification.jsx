@@ -105,7 +105,7 @@ const NotificationContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #f9f9f9;
+  background-color: var(--dark-gray);
   height: 100vh;
 `;
 
