@@ -14,26 +14,18 @@ const Logo = styled.div`
     height: 120px;
     object-fit: cover;
   }
-
-  span {
-    font-size: 24px;
-    font-weight: bold;
-    color: inherit;
-    margin-left: 10px;
-  }
 `;
 
 const HeaderContainer = styled.header`
   width: 100vw;
-  display: flex;
   max-width: 600px;
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: ${(props) => (props.isDarkGrayHeader ? "#1e1e1e" : "black")};
-  color: ${(props) => (props.isWhiteHeader ? "#000000" : "#ffffff")};
+  background-color: ${({ isDarkGray }) => (isDarkGray ? "#1e1e1e" : "black")};
+  color: ${({ isWhite }) => (isWhite ? "#000" : "#fff")};
   padding: 15px 20px;
   height: 70px;
-  box-sizing: border-box;
   position: fixed;
   top: 0;
   z-index: 100;
@@ -42,15 +34,15 @@ const HeaderContainer = styled.header`
     display: flex;
     align-items: center;
     gap: 10px;
-  }
 
-  .header-right button {
-    cursor: pointer;
-    border-radius: 0.7rem;
-    padding: 0.4rem 1rem;
-    border: none;
-    background-color: ${(props) => (props.isWhiteHeader ? "#f5f5f5" : "#333")};
-    color: ${(props) => (props.isWhiteHeader ? "#000" : "#fff")};
+    button {
+      cursor: pointer;
+      border-radius: 0.7rem;
+      padding: 0.4rem 1rem;
+      border: none;
+      background-color: ${({ isWhite }) => (isWhite ? "#f5f5f5" : "#333")};
+      color: ${({ isWhite }) => (isWhite ? "#000" : "#fff")};
+    }
   }
 `;
 
@@ -59,32 +51,22 @@ const Header = () => {
   const location = useLocation();
   const userInfo = useUserStore((state) => state.getUserInfo());
 
-  const isReviewDetailPage = location.pathname.match(/^\/reviews\/\d+$/);
-
   const isDarkGrayHeader =
-    location.pathname === "/mypage" ||
-    // location.pathname === "/myAllReviewList" ||
-    location.pathname === "/point-history" ||
-    location.pathname === "/notifications" ||
-    // location.pathname === "/likemovies" ||
-    // location.pathname === "/likereviews" ||
-    location.pathname === "/manageprofile" ||
-    location.pathname === "/reviews/write" ||
-    isReviewDetailPage;
+    [
+      "/mypage",
+      "/point-history",
+      "/notifications",
+      "/manageprofile",
+      "/reviews/write",
+    ].includes(location.pathname) ||
+    location.pathname.match(/^\/reviews\/\d+$/);
 
-  const handleLogoClick = () => {
-    navigate("/");
-  };
+  const handleLogoClick = () => navigate("/");
+  const handleNotificationClick = () => navigate("/notifications");
+  const handleLoginClick = () => navigate("/login");
 
-  const handleNotificationClick = () => {
-    navigate("/notifications");
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
   return (
-    <HeaderContainer isDarkGrayHeader={isDarkGrayHeader}>
+    <HeaderContainer isDarkGray={isDarkGrayHeader}>
       <Logo onClick={handleLogoClick}>
         <img src={CookieLogo} alt="로고 이미지" />
       </Logo>

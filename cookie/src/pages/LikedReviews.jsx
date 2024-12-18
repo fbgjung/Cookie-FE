@@ -64,21 +64,6 @@ const PrevIcon = styled.svg`
   }
 `;
 
-const EmptyMessage = styled.div`
-  font-size: 1rem;
-  color: #999;
-  text-align: center;
-  margin-top: 2rem;
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.8rem;
-  }
-`;
-
 const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;

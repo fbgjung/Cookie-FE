@@ -20,11 +20,11 @@ const NavContainer = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background-color: white;
+  background-color: black; /* 배경 블랙 */
   padding: 5px 20px;
   height: 60px;
   box-sizing: border-box;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #444; /* 어두운 회색 경계선 */
   position: fixed;
   bottom: 0;
   z-index: 100;

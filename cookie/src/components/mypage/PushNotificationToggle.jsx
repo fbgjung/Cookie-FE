@@ -39,9 +39,6 @@ const PushItem = styled.div`
   &:last-child {
     border-bottom: none;
   }
-
-  &:hover {
-  }
 `;
 
 const PushText = styled.span`
@@ -54,7 +51,7 @@ const ToggleSwitch = styled.div`
   position: relative;
   width: 50px;
   height: 24px;
-  background: ${(props) => (props.enabled ? "#f84b99" : "#ccc")};
+  background: ${(props) => (props.$enabled ? "#f84b99" : "#ccc")};
   border-radius: 12px;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -67,7 +64,7 @@ const ToggleSwitch = styled.div`
     background: #ffffff;
     border-radius: 50%;
     top: 2px;
-    left: ${(props) => (props.enabled ? "26px" : "2px")};
+    left: ${(props) => (props.$enabled ? "26px" : "2px")};
     transition: left 0.3s ease;
   }
 `;
@@ -78,8 +75,6 @@ const PushNotificationToggle = ({ pushEnabled }) => {
   useEffect(() => {
     setIsEnabled(pushEnabled);
   }, [pushEnabled]);
-
-  console.log("부모에서 전달된 pushEnabled:", pushEnabled);
 
   const handleToggle = async () => {
     const token = sessionStorage.getItem("accessToken");
@@ -121,7 +116,7 @@ const PushNotificationToggle = ({ pushEnabled }) => {
       <PushContainer>
         <PushItem onClick={handleToggle}>
           <PushText>푸시 알림 여부</PushText>
-          <ToggleSwitch enabled={isEnabled} />
+          <ToggleSwitch $enabled={isEnabled} />
         </PushItem>
       </PushContainer>
     </PushSection>
