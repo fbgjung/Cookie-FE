@@ -277,7 +277,7 @@ const DetailsSection = ({
           <PosterImage src={posterUrl} alt="포스터" onClick={handlePosterClick} />
           <ScoreSection>
             <ScoreIcon></ScoreIcon>
-            <ScoreText>평점 {roundedScore}</ScoreText>
+            <ScoreText>평점 {roundedScore.toFixed(1)}</ScoreText>
           </ScoreSection>   
         </MovieDetailLeft>
         
