@@ -153,7 +153,7 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background: white;
+  background: #f8e9f5;
   border-radius: 8px;
   padding: 20px;
   width: 400px;
@@ -183,10 +183,10 @@ const ModalContent = styled.div`
       cursor: pointer;
       transition: background-color 0.3s;
       &.save {
-        background-color: #66beff;
+        background-color: #f84b99;
         color: white;
         &:hover {
-          background-color: #005faa;
+          background-color: var(--acc-pink);
         }
       }
       &.cancel {
@@ -404,8 +404,7 @@ const ReviewDetail = () => {
   };
 
   if (isLoading) {
-    // return <Spinner />; // 페이지 전체 로딩 시 스피너 표시
-    return <Container>Loading...</Container>;
+    return <Spinner />; // 페이지 전체 로딩 시 스피너 표시
   }
 
   if (!reviewData) {
