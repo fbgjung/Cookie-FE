@@ -10,7 +10,7 @@ import { jwtDecode } from "jwt-decode";
 const FormWrapper = styled.div`
   width: 100%;
   padding: 2rem;
-  background-color: #ffffff;
+  background-color: #000000;
   min-height: 100vh;
   overflow-y: auto;
 
@@ -33,7 +33,7 @@ const RatingWrapper = styled.div`
   margin: 2rem 0 1rem 0;
 
   span {
-    color: #444444;
+    color: #ffffff;
     font-size: 20px;
     font-weight: bold;
     margin-right: 10px;
@@ -106,7 +106,7 @@ const CharCounter = styled.div`
   bottom: 10px;
   right: 10px;
   font-size: 14px;
-  color: #888;
+  color: #ffffff;
 
   @media (max-width: 768px) {
     font-size: 12px;
@@ -131,7 +131,7 @@ const SpoilerWrapper = styled.div`
 
   .description {
     font-size: 12px;
-    color: #666;
+    color: #ffffff;
     margin-left: 10px;
   }
 
