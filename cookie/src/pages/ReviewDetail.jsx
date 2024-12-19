@@ -21,6 +21,24 @@ const Container = styled.div`
   background-color: var(--dark-gray);
 `;
 
+const CommentProfileWrapper = styled.div`
+  position: relative; /* 뱃지 배치를 위한 기준 */
+  display: inline-block;
+`;
+
+const CommentBadgeIcon = styled.img`
+  position: absolute;
+  bottom: -5px; /* 프로필 이미지 우측 하단 배치 */
+  right: -5px;
+  width: 15px;
+  height: 15px;
+
+  @media (max-width: 480px) {
+    width: 12px;
+    height: 12px;
+  }
+`;
+
 const CommentsSectionContainer = styled.div`
   padding: 0 2rem;
 
@@ -103,7 +121,7 @@ const CommentsSectionContainer = styled.div`
 
         .nickname {
           margin-right: 0.5rem;
-          font-size: 0.7rem;
+          font-size: 0.8rem;
         }
 
         .text {
@@ -114,7 +132,7 @@ const CommentsSectionContainer = styled.div`
         }
 
         .date {
-          font-size: 0.6rem;
+          font-size: 0.8rem;
           color: #666;
         }
       }
@@ -507,10 +525,21 @@ const ReviewDetail = () => {
         {reviewData.comments.map((comment) => (
           <div className="comment" key={comment.id}>
             <div className="comment-left">
-              <img
-                src={comment.user.profileImage}
-                alt={`${comment.user.nickname} 프로필`}
-              />
+              <CommentProfileWrapper>
+                <img
+                  src={comment.user.profileImage}
+                  alt={`${comment.user.nickname} 프로필`}
+                />
+                {comment.user.mainBadgeImage && (
+                  <CommentBadgeIcon
+                    src={
+                      badgeImages[comment.user.mainBadgeImage] ||
+                      comment.user.mainBadgeImage
+                    }
+                    alt="댓글 작성자 뱃지"
+                  />
+                )}
+              </CommentProfileWrapper>
 
               <div className="comment-content">
                 <div className="comment-user-info">
