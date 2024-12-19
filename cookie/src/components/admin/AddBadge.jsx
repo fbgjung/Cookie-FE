@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DefalutContainer } from "./Likes";
 import styled from "styled-components";
 import axiosInstance from "../../api/auth/axiosInstance";
-import Addcookie from "../../assets/images/admin/empty_cookie.svg";
+import Addcookie from "../../assets/images/admin/empty_cookie2.svg";
 
 const TitleContainer = styled.div`
   display: flex;
@@ -48,8 +48,11 @@ const Row = styled.div`
 
 const Label = styled.label`
   width: 280px;
-  font-weight: bold;
+
   font-size: 24px;
+  height: 45px;
+  display: flex;
+  align-items: center;
 `;
 
 const Input = styled.input`
@@ -59,6 +62,7 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 8px;
   height: 45px;
+  font-size: 18px;
 `;
 
 const Select = styled.select`
@@ -67,7 +71,8 @@ const Select = styled.select`
   margin-left: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 20px;
+  font-size: 18px;
+  height: 45px;
 `;
 
 const FileInput = styled.input`
@@ -76,8 +81,8 @@ const FileInput = styled.input`
 
 const UploadButton = styled.label`
   cursor: pointer;
-  color: #000000;
-  border: 1px solid var(--sub);
+  color: #333;
+  border: 1px solid #333;
   padding: 5px 10px;
   text-align: center;
   width: 100%;
@@ -91,17 +96,21 @@ const ImagePreview = styled.img`
 
 const SubmitButton = styled.button`
   padding: 10px;
-  background-color: var(--sub);
-  color: white;
-  border: none;
-  border-radius: 5px;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 50px;
-  font-size: 16px;
-  width: 80px;
+  margin-top: 60px;
+  font-size: 18px;
+  width: 100px;
   margin-left: auto;
   margin-right: auto;
-  font-weight: bold;
+
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
 `;
 const ImgContainer = styled.div`
   display: flex;
@@ -172,10 +181,6 @@ function AddBadge() {
   return (
     <>
       <DefalutContainer>
-        <TitleContainer>
-          <img src={Addcookie} />
-          <h2>배지 등록</h2>
-        </TitleContainer>
         <AddContainer>
           <FormContainer>
             <Form onSubmit={handleFormSubmit}>

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axiosInstance from "../../api/auth/axiosInstance";
-import badge from "../../assets/images/admin/recookie.svg";
-// import like from "../../assets/images/admin/like_heart.svg";
-// import comment from "../../assets/images/admin/comment.svg";
 import comment from "/assets/images/review/comment-review-feed.svg";
 import score from "/assets/images/review/score-macarong.png";
 import CommentsModal from "./CommentsModal";
@@ -44,7 +41,7 @@ const FilterContainer = styled.div`
     margin-right: 5px;
   }
   select {
-    border: 1px solid #aad6e7;
+    border: 1px solid #000000;
     border-radius: 8px;
     font-size: 18px;
     cursor: pointer;
@@ -55,8 +52,8 @@ const FilterContainer = styled.div`
   }
   select:focus {
     outline: none;
-    border-color: #aad6e7;
-    box-shadow: 0 0 5px rgba(131, 238, 248, 0.5);
+    border-color: #000000;
+    box-shadow: 0 0 5px rgba(106, 106, 106, 0.274);
   }
 `;
 const DateFilter = styled.div`
@@ -80,7 +77,7 @@ const ScoreFilter = styled.div`
 const ReviewTicket = styled.div`
   margin: 20px 0;
   padding: 20px;
-  border: 2px solid #aad6e7;
+  border: 2px solid #000000;
   border-radius: 8px;
   box-sizing: border-box;
   width: 570px;
@@ -169,7 +166,7 @@ const CommentIcon = styled.div`
 const ToggleContainer = styled.div`
   width: 55px;
   height: 30px;
-  background-color: ${(props) => (props.$isOn ? "#50bdeb" : "#ccc")};
+  background-color: ${(props) => (props.$isOn ? "#FF92BC" : "#ccc")};
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -218,6 +215,7 @@ const DetailContainer = styled.div`
     font-size: 20px;
     min-height: 550px;
     width: 522px;
+    font-family: "Pretendard", sans-serif;
   }
   .poster {
     width: 120px;
@@ -240,7 +238,7 @@ const DetailContainer = styled.div`
       .deleteBtn {
         background: none;
         border: none;
-        color: var(--text);
+        color: #000000;
         flex: 1;
         cursor: pointer;
         display: flex;
@@ -249,7 +247,7 @@ const DetailContainer = styled.div`
         padding: 0 10px;
       }
       .deleteBtn:hover {
-        color: black;
+        color: var(--sub-text);
       }
       img {
         width: 40px;

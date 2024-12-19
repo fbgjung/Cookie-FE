@@ -56,7 +56,7 @@ function Reviews() {
       console.error("검색 에러:", error);
 
       if (error.response && error.response.data) {
-        alert(error.response.data);
+        // alert(error.response.data);
       }
     } finally {
       setLoading(false);
@@ -65,6 +65,7 @@ function Reviews() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       setCurrentPage(1);
       handleSearchSubmit();
     }
@@ -74,15 +75,12 @@ function Reviews() {
       setCurrentPage(page);
     }
   };
-  useEffect(() => {
-    handleSearchSubmit();
-  }, [currentPage]);
 
   useEffect(() => {
     if (searchKeyword.trim()) {
-      setSearchKeyword(searchKeyword);
+      handleSearchSubmit();
     }
-  }, [searchKeyword, currentPage]);
+  }, [currentPage]);
 
   const handleIconClick = (movieId) => {
     if (selectedMovieId === movieId) {

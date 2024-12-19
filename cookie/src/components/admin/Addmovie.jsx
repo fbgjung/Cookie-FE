@@ -7,7 +7,7 @@ import serverBaseUrl from "../../config/apiConfig";
 
 export const DefalutContainer = styled.div`
   width: 1239px;
-  min-height: 1130px;
+  min-height: 840px;
   border: none;
   padding: 1rem;
   border-radius: 12px;
@@ -71,8 +71,8 @@ export const SearchTitle = styled.div`
   width: 1175px;
   height: 32px;
   border: none;
-  background-color: var(--sub);
-  color: var(--text);
+  background-color: #000000;
+  color: #ffffff;
   border-radius: 12px;
   margin: 3rem 1rem 0 1rem;
   padding: 0.8rem 2rem;
@@ -92,7 +92,7 @@ const SearchedMovie = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   justify-content: center;
-  margin: 0 3rem;
+  margin: 0 4rem;
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 790px;
@@ -112,17 +112,18 @@ const SearchedMovie = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 5px;
-    width: 125px;
+    width: 130px;
   }
 
   h3 {
     margin: 8px 0 0 0;
-    color: var(--text);
+    color: #000000;
+    text-align: center;
   }
   img {
     border-radius: 10px;
-    width: 124px;
-    height: 177px;
+    width: 130px;
+    height: 183px;
   }
   button {
     background: none;
@@ -226,9 +227,6 @@ function AddMovie() {
                   >
                     <img src={movie.posterPath} alt={movie.title} />
                     <h3>{movie.title}</h3>
-                    {/* <p>
-                      {movie.releaseDate} | {movie.country}
-                    </p> */}
                   </div>
                 </div>
               ))
@@ -236,12 +234,6 @@ function AddMovie() {
               <p>검색한 영화가 없어요</p>
             )}
           </SearchedMovie>
-
-          {/* {movies.length > visibleCount && (
-            <button onClick={onShowMore} className="show-more-button">
-              더 보기
-            </button>
-          )} */}
         </>
       )}
     </DefalutContainer>

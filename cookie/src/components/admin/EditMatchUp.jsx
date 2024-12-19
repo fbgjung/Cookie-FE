@@ -13,7 +13,7 @@ const DefalutContainer = styled.div`
 
 const MatchUpType = styled.div`
   margin-bottom: 20px;
-  padding: 0 20px;
+  padding: 0 40px;
   display: flex;
   flex-direction: row;
   gap: 5px;
@@ -110,31 +110,35 @@ const PosterUpload = styled.div`
     border: 1px solid var(--sub-text);
     padding: 5px 20px;
     cursor: pointer;
-    background-color: white;
-    color: var(--text);
+    background-color: var(--sub-tex);
+    color: #000000;
     border-radius: 12px;
     position: absolute;
     right: 12px;
     transform: translateX(-50%);
     z-index: 10;
     &:hover {
-      background-color: var(--sub);
-      color: var(--text);
+      background-color: #ffffff;
+      color: #000000;
     }
   }
 `;
 
 const CloseButton = styled.button`
-  background-color: var(--sub);
-  color: var(--text);
-  border: 1px solid var(--sub);
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 8px;
   margin-top: 30px;
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 18px;
   margin-left: auto;
+
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
 `;
 
 const EditMatchUp = ({ matchUpData, closeModal, fetchMatchUpData }) => {

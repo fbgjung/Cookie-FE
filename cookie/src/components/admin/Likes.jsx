@@ -54,7 +54,7 @@ function Likes() {
     } catch (error) {
       console.error("검색 에러:", error);
       if (error.response && error.response.data) {
-        alert(error.response.data);
+        console.log(error.response.data);
       }
     } finally {
       setLoading(false);

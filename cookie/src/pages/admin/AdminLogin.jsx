@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import SideBar from "../../components/admin/SideBar";
-import CookieLogo from "../../assets/images/admin/CookieAdmin.svg";
-import CookieImg from "../../assets/images/admin/cookie_img.svg";
+import CookieLogo from "/assets/images/cookie-logo.png";
+import CookieImg from "../../assets/images/admin/badge3.svg";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axiosInstance from "../../api/auth/axiosInstance";
 
 const Viewport = styled.div`
+  margin: 200px 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -22,6 +23,11 @@ const Viewport = styled.div`
     align-items: center;
     font-weight: bold;
     font-size: 1.6rem;
+  }
+
+  .Login__logo {
+    width: 250px;
+    height: 150px;
   }
 `;
 
@@ -98,10 +104,8 @@ function AdminLogin() {
     } catch (error) {
       console.error("로그인 오류:", error);
       if (error.response) {
-        const { message } = error.response.data;
-        toast.error(
-          message || "로그인 실패: 아이디 또는 비밀번호를 확인하세요"
-        );
+        alert("로그인 실패: 아이디 또는 비밀번호를 확인하세요");
+        navigate("/admin");
       }
     }
   };
@@ -110,7 +114,7 @@ function AdminLogin() {
       <SideBar />
       <Viewport>
         <div>
-          <img src={CookieLogo} />
+          <img className="Login__logo" src={CookieLogo} />
           <img src={CookieImg} />
         </div>
         <form action="/submit" method="POST" onSubmit={handleLoginClick}>

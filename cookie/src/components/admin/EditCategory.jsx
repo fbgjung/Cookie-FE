@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import useMovieCategoryStore from "../../stores/useMovieGategoryStore";
 import Edit from "../../assets/images/admin/Edit.svg";
 import axiosInstance from "../../api/auth/axiosInstance";
 
@@ -63,7 +62,7 @@ const CategoryItem = styled.div`
 
   input[type="checkbox"] {
     margin-right: 10px;
-    border: 1px solid var(--sub);
+    border: 1px solid #333;
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -73,7 +72,7 @@ const CategoryItem = styled.div`
     border-radius: 3px;
   }
   input[type="checkbox"]:checked {
-    background-color: var(--sub);
+    background-color: #333;
   }
   input[type="checkbox"]:checked::after {
     content: "";
@@ -131,18 +130,17 @@ const MovieCategoryContainer = styled.div`
   button {
     position: absolute;
     bottom: 15px;
-    right: 35px;
+    right: 25px;
     padding: 10px 20px;
     background-color: white;
-    color: var(--text);
-    border: 1px solid var(--sub);
-    border-radius: 5px;
+    color: #000000;
+    border: 1px solid #000000;
     cursor: pointer;
-    border-radius: 18px;
+    border-radius: 8px;
 
     &:hover {
-      background-color: var(--sub);
-      color: var(--text);
+      background-color: #000000;
+      color: #ffffff;
     }
   }
 `;

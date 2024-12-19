@@ -2,8 +2,6 @@ import styled from "styled-components";
 import SideBar from "../../components/admin/SideBar";
 import { useState } from "react";
 import Addmovie from "../../components/admin/Addmovie";
-import movie from "../../assets/images/admin/cookieMovie.svg";
-import cookieSm from "../../assets/images/admin/cookie_sm.svg";
 import CookieMovieList from "../../components/admin/CookieMovieList";
 
 export const Viewport = styled.div`
@@ -11,13 +9,14 @@ export const Viewport = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-left: 440px;
 `;
 
 export const TabBtnContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  margin: 2rem 0 -0.9rem 0;
+  margin: 2rem 0 -0.8rem 0;
 `;
 export const TabBtn = styled.button`
   padding: 0.5rem 1.25rem;
@@ -33,9 +32,13 @@ export const TabBtn = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background-color: ${({ $isActive }) =>
-    $isActive ? "var(--sub)" : "var(--ticket-bg)"};
-  color: ${({ $isActive }) => ($isActive ? "var(--text)" : "var(--text)")};
+  background-color: ${({ $isActive }) => ($isActive ? "#Ffffff" : "#000000")};
+  color: ${({ $isActive }) => ($isActive ? "#000000" : "#ffffff")};
+
+  img {
+    width: 29px;
+    height: 29px;
+  }
 `;
 
 function AdminMovie() {
@@ -46,12 +49,10 @@ function AdminMovie() {
       <Viewport>
         <TabBtnContainer>
           <TabBtn onClick={() => setActiveTab(1)} $isActive={activeTab === 1}>
-            <img src={movie} />
-            영화등록
+            영화 등록
           </TabBtn>
           <TabBtn onClick={() => setActiveTab(2)} $isActive={activeTab === 2}>
-            <img src={cookieSm} />
-            쿠키영화
+            쿠키 영화
           </TabBtn>
         </TabBtnContainer>
         {activeTab === 1 && <Addmovie />}

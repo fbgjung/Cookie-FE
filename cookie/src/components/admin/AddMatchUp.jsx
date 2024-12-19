@@ -5,13 +5,6 @@ import addMatchup from "../../assets/images/admin/award.svg";
 import styled from "styled-components";
 import SearchModal from "./SearchModal";
 
-const MatchUpType = styled.div`
-  margin-bottom: 20px;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-`;
 export const AddContainer = styled.div`
   margin: 20px auto;
   background-color: #f9f9f9;
@@ -37,7 +30,6 @@ const InfoRow = styled.div`
 `;
 
 const Label = styled.label`
-  font-weight: bold;
   flex-basis: 15%;
   text-align: left;
   font-size: 24px;
@@ -74,16 +66,21 @@ const MoviePosters = styled.div`
   }
 `;
 const CloseButton = styled.button`
-  background-color: var(--sub);
-  color: #ffff;
-  border: 1px solid var(--sub);
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 8px;
   margin-top: 60px;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 18px;
   margin-left: auto;
+  background-color: white;
+  color: #000000;
+  border: 1px solid #000000;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
 `;
 const PosterUpload = styled.div`
   border: 1px solid var(--sub-text);
@@ -150,8 +147,6 @@ function AddMatchUp() {
   const [matchType, setMatchType] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  // const [registrationDate, setRegistrationDate] = useState("");
-  // const [status, setStatus] = useState("");
 
   const formatDate = (date) => {
     return date ? date.replace("T", "-") + ":00" : "";
@@ -231,10 +226,6 @@ function AddMatchUp() {
   return (
     <>
       <DefalutContainer>
-        <MatchUpType>
-          <img src={addMatchup} />
-          <h2>매치업 등록</h2>
-        </MatchUpType>
         <AddContainer>
           <MatchUpForm>
             <InfoRow>
@@ -322,30 +313,6 @@ function AddMatchUp() {
                 required
               />
             </InfoRow>
-
-            {/* <InfoRow>
-              <Label>등록일:</Label>
-              <Input
-                type="datetime-local"
-                value={registrationDate}
-                onChange={(e) => setRegistrationDate(e.target.value)}
-                required
-              />
-            </InfoRow>
-
-            <InfoRow>
-              <Label>진행상태:</Label>
-              <Select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                required
-              >
-                <option value="">선택</option>
-                <option value="NOW">NOW</option>
-                <option value="PENDING">PENDING</option>
-                <option value="EXPIRATION">EXPIRATION</option>
-              </Select>
-            </InfoRow> */}
           </MatchUpForm>
           <CloseButton onClick={createMatchUp}>등록하기</CloseButton>
         </AddContainer>

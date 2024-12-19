@@ -2,10 +2,8 @@ import styled from "styled-components";
 import frame from "../../assets/images/admin/frame.svg";
 import back from "../../assets/images/admin/goBack.svg";
 import AddLinkStillCut from "./AddLinkStillCut";
-import useAdminMovieStore from "../../stores/useAdminMovieStore";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/auth/axiosInstance";
-import serverBaseUrl from "../../config/apiConfig";
 
 const flexRowCenter = `
   display: flex;
@@ -17,7 +15,7 @@ const flexRowCenter = `
 const AddMovieDetail = styled.div`
   margin: 1rem;
   min-height: 1200px;
-  border: 1px solid var(--sub);
+  border: 1px solid #000000;
   border-radius: 12px;
   position: relative;
   display: flex;
@@ -27,14 +25,14 @@ const AddMovieDetail = styled.div`
 const TitleContainer = styled.div`
   position: absolute;
   padding: 0.8rem 1rem;
-  background-color: var(--sub);
+  background-color: #000000;
   height: 32px;
   border-radius: 11px;
   width: 1175px;
   display: flex;
   justify-content: start;
   align-items: center;
-  color: var(--text);
+  color: #ffffff;
   font-weight: 700;
 
   button {
@@ -58,7 +56,7 @@ export const MovieDetail = styled.div`
   margin: 40px 10px;
   height: 600px;
   background-color: white;
-  color: var(--text);
+  color: #333;
 `;
 
 export const MovieContainer = styled.div`
@@ -116,23 +114,29 @@ export const ButtonWrapper = styled.div`
 
 export const SubmitBtn = styled.button`
   background-color: white;
-  color: var(--text);
-  border-radius: 18px;
-  padding: 0.625rem 1rem;
-  border: 1px solid var(--sub);
-  font-size: 1.25rem;
+  color: #000000;
+  border-radius: 12px;
+  padding: 5px 10px;
+  border: 1px solid #000000;
+  font-size: 18px;
 
   cursor: pointer;
   &:hover {
-    background-color: var(--sub);
-    color: var(--text);
+    background-color: #000000;
+    color: #ffffff;
   }
 `;
 export const MovieInfoSection = ({ label, children }) => {
   return (
     <div style={{ display: "flex", marginBottom: "1rem" }}>
       <Label>{label}</Label>
-      <div style={{ display: "flex", flexDirection: "row", width: "780px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "800px",
+        }}
+      >
         {children}
       </div>
     </div>
@@ -151,7 +155,11 @@ export const ActorItem = ({ actor }) => (
     }}
   >
     <ActorProfile src={actor.profilePath} alt={actor.name} />
-    <span style={{ textAlign: "center", width: "70px" }}>{actor.name}</span>
+    <span
+      style={{ textAlign: "center", width: "70px", wordBreak: "break-word" }}
+    >
+      {actor.name}
+    </span>
   </div>
 );
 
