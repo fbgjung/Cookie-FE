@@ -10,6 +10,7 @@ import { FaPaperPlane } from "react-icons/fa";
 import useAuthStore from "../stores/useAuthStore";
 import { jwtDecode } from "jwt-decode";
 import Spinner from "../components/common/Spinner";
+import useUserStore from "../../stores/useUserStore";
 
 const Container = styled.div`
   width: 100%;
@@ -234,6 +235,8 @@ const ReviewDetail = () => {
   const location = useLocation();
   const fromLikedReviews = location.state?.fromLikedReviews || false;
   const fromMyPage = location.state?.fromMyPage || false;
+  const { userInfo } = useUserStore(); // 전역 상태의 유저 정보 가져오기
+  const loggedInUserId = userInfo?.userId; // 로그인된 유저 ID 추출
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -283,7 +286,6 @@ const ReviewDetail = () => {
       toast.error("좋아요 처리에 실패했습니다.");
     }
   };
-  */
 
   const getUserIdFromToken = () => {
     let token = sessionStorage.getItem("accessToken");
@@ -305,6 +307,8 @@ const ReviewDetail = () => {
       return null;
     }
   };
+
+  */
 
   const toKST = (utcDate) => {
     const date = new Date(utcDate);
@@ -390,7 +394,7 @@ const ReviewDetail = () => {
   const handleAddComment = async () => {
     if (isSubmitting || !newComment.trim()) return;
 
-    const userId = getUserIdFromToken();
+    const userId = loggedInUserId;
     if (!userId) {
       openLoginModal();
       return;
@@ -559,7 +563,7 @@ const ReviewDetail = () => {
                 <div className="text">{comment.comment}</div>
 
                 {(() => {
-                  const userId = getUserIdFromToken();
+                  const userId = loggedInUserId;
                   return (
                     comment.user.userId === userId && (
                       <div className="comment-actions">
