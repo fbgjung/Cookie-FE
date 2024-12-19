@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Edit from "../../assets/images/admin/Edit.svg";
+import Edit_title from "../../assets/images/admin/Edit_white.svg";
 import axiosInstance from "../../api/auth/axiosInstance";
 
 const CategoryTitle = styled.div`
@@ -258,7 +259,7 @@ const EditCategory = ({ movie, onUpdateCategories }) => {
   return (
     <>
       <CategoryTitle>
-        <img src={Edit} />
+        <img src={Edit_title} />
         <h1>카테고리 수정</h1>
       </CategoryTitle>
       <CategoryWrapper>

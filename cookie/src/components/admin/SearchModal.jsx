@@ -129,6 +129,7 @@ const SearchModal = ({
       );
       console.log(response.data.response);
       setMovies(response.data.response);
+      setSearchTerm("");
     } catch (error) {
       console.error("영화 검색 오류:", error);
     }
