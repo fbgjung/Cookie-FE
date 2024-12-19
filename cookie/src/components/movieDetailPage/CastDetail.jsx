@@ -7,8 +7,8 @@ import serverBaseUrl from "../../config/apiConfig";
 const CastInfo = styled.div`
   padding: 1.25rem;
   background-color: black;
-  height: 100vh;
   color: white;
+  min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
 
