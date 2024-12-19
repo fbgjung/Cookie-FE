@@ -58,6 +58,7 @@ const Input = styled.input`
   border-radius: 8px;
   font-size: 20px;
   width: 20px;
+  height: 45px;
 `;
 
 const Select = styled.select`
@@ -67,6 +68,7 @@ const Select = styled.select`
   border-radius: 8px;
   font-size: 20px;
   width: 20px;
+  height: 45px;
 `;
 
 const MoviePosters = styled.div`
@@ -88,6 +90,8 @@ const MovieIonfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
+
   gap: 10px;
 `;
 
@@ -110,7 +114,7 @@ const PosterUpload = styled.div`
     border: 1px solid var(--sub-text);
     padding: 5px 20px;
     cursor: pointer;
-    background-color: var(--sub-tex);
+    background-color: #ffffff;
     color: #000000;
     border-radius: 12px;
     position: absolute;
@@ -118,7 +122,7 @@ const PosterUpload = styled.div`
     transform: translateX(-50%);
     z-index: 10;
     &:hover {
-      background-color: #ffffff;
+      background-color: #ccc;
       color: #000000;
     }
   }
@@ -149,46 +153,39 @@ const EditMatchUp = ({ matchUpData, closeModal, fetchMatchUpData }) => {
     const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2].slice(0, 2)}T${dateParts[3].slice(0, 5)}`;
     return formattedDate;
   };
-  const {
-    matchId,
-    matchUpTitle,
-    startTime,
-    endTime,
-    movieMatchInfo = [],
-    matchUpType,
-  } = matchUpData;
+  const { matchId, matchUpTitle, startTime, endTime, matchUpType } =
+    matchUpData;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [matchTitle, setMatchTitle] = useState(matchUpTitle || "");
-  const [selectedPoster1, setSelectedPoster1] = useState(
-    movieMatchInfo[0] || null // 첫 번째 영화의 정보로 초기화
-  );
-  const [selectedPoster2, setSelectedPoster2] = useState(
-    movieMatchInfo[1] || null // 두 번째 영화의 정보로 초기화
-  );
   const [matchType, setMatchType] = useState(matchUpType || "");
   const [startDate, setStartDate] = useState(formatDateForInput(startTime));
   const [endDate, setEndDate] = useState(formatDateForInput(endTime));
+  const [selectedMovieIndex, setSelectedMovieIndex] = useState(null);
+  const [selectedPosters, setSelectedPosters] = useState([null, null]);
 
   useEffect(() => {
-    if (matchUpData) {
-      setMatchTitle(matchUpData.matchUpTitle || "");
-      setStartDate(formatDateForInput(matchUpData.startTime) || "");
-      setEndDate(formatDateForInput(matchUpData.endTime) || "");
-      setSelectedPoster1(
-        matchUpData.matchUpMovies && matchUpData.matchUpMovies[0]
-          ? matchUpData.matchUpMovies[0]
-          : null
-      );
-      setSelectedPoster2(
-        matchUpData.matchUpMovies && matchUpData.matchUpMovies[1]
-          ? matchUpData.matchUpMovies[1]
-          : null
-      );
-      setMatchType(matchUpData.matchUpType || "");
+    if (matchUpData?.movieMatchInfo) {
+      const posters = matchUpData.movieMatchInfo.map((movie) => ({
+        posterPath: movie.poster,
+        title: movie.movieTitle,
+      }));
+      setSelectedPosters(posters);
     }
   }, [matchUpData]);
+
+  const handleSelectMovie = (movie) => {
+    if (selectedMovieIndex !== null) {
+      setSelectedPosters((prev) => {
+        const newPosters = [...prev];
+        newPosters[selectedMovieIndex] = movie;
+        return newPosters;
+      });
+    }
+    setIsModalOpen(false);
+    setSelectedMovieIndex(null);
+  };
 
   const formatDate = (date) => {
     return date ? date.replace("T", "-") + ":00" : "";
@@ -196,17 +193,10 @@ const EditMatchUp = ({ matchUpData, closeModal, fetchMatchUpData }) => {
 
   const handleEditSave = async () => {
     try {
-      const matchUpMovies = [
-        {
-          poster: selectedPoster1 ? selectedPoster1.posterPath : "",
-          movieTitle: selectedPoster1 ? selectedPoster1.title : "",
-        },
-        {
-          poster: selectedPoster2 ? selectedPoster2.posterPath : "",
-          movieTitle: selectedPoster2 ? selectedPoster2.title : "",
-        },
-      ];
-
+      const matchUpMovies = selectedPosters.map((poster) => ({
+        poster: poster?.posterPath || "",
+        movieTitle: poster?.title || "",
+      }));
       const data = {
         matchTitle,
         matchUpMovies,
@@ -223,8 +213,7 @@ const EditMatchUp = ({ matchUpData, closeModal, fetchMatchUpData }) => {
       alert("매치업이 수정되었어요!");
       fetchMatchUpData();
       setMatchTitle("");
-      setSelectedPoster1(null);
-      setSelectedPoster2(null);
+      setSelectedPosters([]);
       setMatchType("");
       setStartDate("");
       setEndDate("");
@@ -233,15 +222,6 @@ const EditMatchUp = ({ matchUpData, closeModal, fetchMatchUpData }) => {
     } catch (error) {
       console.error("Error updating match-up:", error);
     }
-  };
-
-  const handleSelectMovie = (movie) => {
-    if (selectedPoster1 === null) {
-      setSelectedPoster1(movie);
-    } else {
-      setSelectedPoster2(movie);
-    }
-    setIsModalOpen(false);
   };
 
   return (
@@ -279,37 +259,44 @@ const EditMatchUp = ({ matchUpData, closeModal, fetchMatchUpData }) => {
                   <PosterUpload>
                     <button
                       className="upload_btn1"
-                      onClick={() => setIsModalOpen(true)}
+                      onClick={() => {
+                        setSelectedMovieIndex(0);
+                        setIsModalOpen(true);
+                      }}
                     >
                       선택
                     </button>
-                    {selectedPoster1 && (
+                    {selectedPosters[0] && (
                       <img
                         className="upload__poster"
-                        src={selectedPoster1.posterPath}
-                        alt={selectedPoster1.title}
+                        src={selectedPosters[0].posterPath}
+                        alt={selectedPosters[0].title}
                       />
                     )}
                   </PosterUpload>
-                  <p>{selectedPoster1 ? selectedPoster1.title : ""}</p>
+                  <p>{selectedPosters[0]?.title || ""}</p>
                 </MovieIonfo>
+
                 <MovieIonfo>
                   <PosterUpload>
                     <button
                       className="upload_btn2"
-                      onClick={() => setIsModalOpen(true)}
+                      onClick={() => {
+                        setSelectedMovieIndex(1);
+                        setIsModalOpen(true);
+                      }}
                     >
                       선택
                     </button>
-                    {selectedPoster2 && (
+                    {selectedPosters[1] && (
                       <img
                         className="upload__poster"
-                        src={selectedPoster2.posterPath}
-                        alt={selectedPoster2.title}
+                        src={selectedPosters[1].posterPath}
+                        alt={selectedPosters[1].title}
                       />
                     )}
                   </PosterUpload>
-                  <p>{selectedPoster2 ? selectedPoster2.title : ""}</p>
+                  <p>{selectedPosters[1]?.title || ""}</p>
                 </MovieIonfo>
               </MoviePosters>
             </InfoRow>

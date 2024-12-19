@@ -67,8 +67,8 @@ export const SitllCut = styled.img`
 `;
 
 export const Button = styled.button`
-  background-color: var(--sub);
-  color: var(--text);
+  background-color: #000000;
+  color: #ffffff;
   border-radius: 18px;
   padding: 0.5rem 1rem;
   border: none;

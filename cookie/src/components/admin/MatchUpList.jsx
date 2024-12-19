@@ -293,6 +293,7 @@ function MatchUpList() {
   const closeModal = () => {
     setShowMoreModal(false);
     setMatchUpId(null);
+    setSelectedMatchUp(null);
   };
 
   const openMoreModal = (matchId) => {
