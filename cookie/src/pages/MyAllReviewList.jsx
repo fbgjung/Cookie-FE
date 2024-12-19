@@ -260,11 +260,6 @@ const ReviewInfoSecond = styled.div`
   }
 `;
 
-const IconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const LikeIcon = styled.svg`
   width: 14px;
   height: 14px;
@@ -305,6 +300,14 @@ const ReviewComment = styled.p`
   }
 `;
 
+const LoadingIndicator = styled.div`
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #f84b99;
+  margin: 20px 0;
+`;
+
 const MyAllReviewList = () => {
   const [reviews, setReviews] = useState([]);
   const [page, setPage] = useState(0);
@@ -316,10 +319,6 @@ const MyAllReviewList = () => {
   useEffect(() => {
     fetchReviews();
   }, []);
-
-  const handleBack = () => {
-    navigate(-1); // 이전 페이지로 이동
-  };
 
   const fetchReviews = async () => {
     if (loading || page >= totalPages) return;
@@ -339,7 +338,7 @@ const MyAllReviewList = () => {
       setReviews((prevReviews) => [...prevReviews, ...newReviews]);
       setTotalPages(fetchedTotalPages);
     } catch (error) {
-      console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
+      console.error("리뷰 데이터 로딩 실패:", error);
       toast.error("리뷰 데이터를 가져오는 데 실패했습니다.");
     } finally {
       setLoading(false);
@@ -377,12 +376,17 @@ const MyAllReviewList = () => {
     });
   };
 
+  const handleBack = () => {
+    navigate(-1); // 뒤로 가기
+  };
+
   return (
     <ReviewSection>
       <HeaderContainer>
         <PrevIcon onClick={handleBack} />
         <span className="title">내가 작성한 리뷰</span>
       </HeaderContainer>
+
       <ReviewContainer>
         {reviews.map((review, index) => (
           <ReviewTicket
@@ -454,7 +458,10 @@ const MyAllReviewList = () => {
             </ReviewInfoSection>
           </ReviewTicket>
         ))}
+        <div ref={observer} />
       </ReviewContainer>
+
+      {loading && <LoadingIndicator>로딩 중...</LoadingIndicator>}
     </ReviewSection>
   );
 };

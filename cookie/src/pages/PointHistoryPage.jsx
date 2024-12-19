@@ -146,7 +146,7 @@ const formatDate = (dateString) => {
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
   return new Date(dateString)
     .toLocaleDateString("ko-KR", options)
-    .replace(/\.$/, ""); // 마지막 점 제거
+    .replace(/\.$/, "");
 };
 
 const BadgeHistory = () => {
