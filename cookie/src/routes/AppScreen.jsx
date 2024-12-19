@@ -49,6 +49,41 @@ const ViewArea = styled.div`
   }
 `;
 
+const QrBox = styled.div`
+  position: fixed;
+  bottom: 100px;
+  right: 260px;
+  background: #ffffff;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  text-align: center;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`;
+
+const QrCode = styled.img`
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+`;
+
+const QrText = styled.p`
+  font-size: 0.7rem;
+  color: #333;
+  margin: 0;
+  line-height: 1.2;
+  text-align: center;
+`;
+
 const AppScreen = () => {
   const location = useLocation();
   const hideHeaderFooterPages = [
@@ -60,27 +95,42 @@ const AppScreen = () => {
   const isAuthPage = hideHeaderFooterPages.includes(location.pathname);
 
   return (
-    <Container>
-      <ViewArea>
-        <Toaster
-          toastOptions={{
-            style: {
-              background: "#ffffff",
-              color: "#333333",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              padding: "10px",
-            },
-          }}
-        />
-        {!isAuthPage && <Header />}
-        <MainContent isAuthPage={isAuthPage}>
-          <ScrollToTop />
-          <AppPages />
-        </MainContent>
-        {!isAuthPage && <Footer />}
-      </ViewArea>
-    </Container>
+    <>
+      <QrBox>
+        <QrCode src="/assets/images/qrcode.png" alt="QR Code" />
+        <QrText>
+          쿠키를 태블릿과
+          <br />
+          모바일에서도 즐겨보세요!
+        </QrText>
+        <QrText>
+          QR 코드를
+          <br />
+          스캔해주세요.
+        </QrText>
+      </QrBox>
+      <Container>
+        <ViewArea>
+          <Toaster
+            toastOptions={{
+              style: {
+                background: "#ffffff",
+                color: "#333333",
+                border: "1px solid #ddd",
+                borderRadius: "10px",
+                padding: "10px",
+              },
+            }}
+          />
+          {!isAuthPage && <Header />}
+          <MainContent isAuthPage={isAuthPage}>
+            <ScrollToTop />
+            <AppPages />
+          </MainContent>
+          {!isAuthPage && <Footer />}
+        </ViewArea>
+      </Container>
+    </>
   );
 };
 

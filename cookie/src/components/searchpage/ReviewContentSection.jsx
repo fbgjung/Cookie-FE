@@ -45,26 +45,24 @@ const ProfileImage = styled.img`
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  margin-right: 15px;
+  margin-right: 10px;
 
   @media (max-width: 480px) {
-    width: 40px;
-    height: 40px;
-    margin-right: 8px;
+    width: 30px;
+    height: 30px;
   }
 `;
 
 const BadgeIcon = styled.img`
   position: absolute;
-  bottom: -5px;
-  right: 0px;
+  bottom: -5px; /* 프로필 이미지 우측 하단 배치 */
+  right: -5px;
   width: 35px;
   height: 35px;
 
   @media (max-width: 480px) {
-    bottom: 0px;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -109,25 +107,16 @@ const ReviewSection = styled.div`
         justify-content: center;
 
         .name {
-          font-size: 16px;
+          font-size: 0.9rem;
           color: var(--text-wh);
           font-weight: bold;
         }
 
         .date {
-          font-size: 14px;
-          color: var(--text-wh); 
+          font-size: 0.8rem;
+          color: var(--text-wh);
         }
-
-        @media (max-width: 480px) {
-          .name {
-            font-size: 14px;
-          }
-
-          .date {
-            font-size: 12px;
-          }
-        }
+      }
 
       .edit-or-delete {
         cursor: pointer;
