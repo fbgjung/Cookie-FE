@@ -44,7 +44,7 @@ const Title = styled.h1`
   }
 
   @media (max-width: 480px) {
-    font-size: 1.2rem;
+    font-size: 0.8rem;
   }
 `;
 
@@ -70,7 +70,7 @@ const DDay = styled.div`
   }
 
   @media (max-width: 480px) {
-    font-size: 1.1rem;
+    font-size: 0.8rem;
     margin-left: 0.1rem;
   }
 `;
