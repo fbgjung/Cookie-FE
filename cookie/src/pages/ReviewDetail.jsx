@@ -24,6 +24,8 @@ const Container = styled.div`
 const CommentProfileWrapper = styled.div`
   position: relative; /* 뱃지 배치를 위한 기준 */
   display: inline-block;
+  width: 40px !important;
+  height: 40px !important;
 `;
 
 const CommentBadgeIcon = styled.img`
