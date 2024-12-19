@@ -32,6 +32,7 @@ const CommentBadgeIcon = styled.img`
   right: 0px;
   width: 30px !important;
   height: 30px !important;
+  z-index: 1;
 `;
 
 const CommentsSectionContainer = styled.div`
