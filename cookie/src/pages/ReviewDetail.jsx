@@ -26,7 +26,7 @@ const CommentProfileWrapper = styled.div`
   display: inline-block;
   width: 40px !important;
   height: 40px !important;
-  marin-right: 10px;
+  marin-right: 10px !important;
 `;
 
 const CommentBadgeIcon = styled.img`
@@ -92,6 +92,7 @@ const CommentsSectionContainer = styled.div`
 
   .comment {
     margin-bottom: 15px;
+
 
     .comment-left {
       display: flex;
