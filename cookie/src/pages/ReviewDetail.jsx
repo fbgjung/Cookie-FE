@@ -10,7 +10,7 @@ import { FaPaperPlane } from "react-icons/fa";
 import useAuthStore from "../stores/useAuthStore";
 import { jwtDecode } from "jwt-decode";
 import Spinner from "../components/common/Spinner";
-import useUserStore from "../../stores/useUserStore";
+import useUserStore from "../stores/useUserStore";
 
 const Container = styled.div`
   width: 100%;
