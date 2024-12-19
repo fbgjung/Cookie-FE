@@ -112,7 +112,7 @@ const CommentsSectionContainer = styled.div`
         box-sizing: border-box;
         position: relative;
         flex: 1;
-        margin-left: 10px;
+        margin-left: 20px;
 
         .comment-user-info {
           display: flex;
