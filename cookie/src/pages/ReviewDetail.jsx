@@ -26,12 +26,13 @@ const CommentProfileWrapper = styled.div`
   display: inline-block;
   width: 40px !important;
   height: 40px !important;
+  marin-right: 10px;
 `;
 
 const CommentBadgeIcon = styled.img`
   position: absolute;
-  bottom: 0px; /* 프로필 이미지 우측 하단 배치 */
-  right: 0px;
+  bottom: -5px; /* 프로필 이미지 우측 하단 배치 */
+  right: -20px;
   width: 30px !important;
   height: 30px !important;
   z-index: 1;
