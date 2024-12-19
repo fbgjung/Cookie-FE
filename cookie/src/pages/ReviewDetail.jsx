@@ -30,12 +30,12 @@ const CommentBadgeIcon = styled.img`
   position: absolute;
   bottom: -5px; /* 프로필 이미지 우측 하단 배치 */
   right: -5px;
-  width: 15px;
-  height: 15px;
+  width: 15px !important;
+  height: 15px !important;
 
   @media (max-width: 480px) {
-    width: 12px;
-    height: 12px;
+    width: 12px !important;
+    height: 12px !important;
   }
 `;
 
@@ -121,7 +121,7 @@ const CommentsSectionContainer = styled.div`
 
         .nickname {
           margin-right: 0.5rem;
-          font-size: 0.8rem;
+          font-size: 0.9rem;
         }
 
         .text {
