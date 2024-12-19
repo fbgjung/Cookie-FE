@@ -65,14 +65,20 @@ const Message = styled.p`
 `;
 
 const CloseButton = styled.button`
-  background: #aad6e7;
-  color: white;
-  border: none;
-  padding: 10px 15px;
+  padding: 10px 20px;
+  background-color: white;
+  color: #000000;
+  border: 1px solid #000000;
+  cursor: pointer;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
+
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
 `;
 
 const LikesModal = ({ reviewId, onClose }) => {

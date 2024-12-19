@@ -1,6 +1,7 @@
 // useAuthStore.js (전역 상태)
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import useUserStore from "./useUserStore";
 
 const useAuthStore = create(
   persist(
@@ -39,6 +40,7 @@ const useAuthStore = create(
       logOut: () => {
         sessionStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        useUserStore.getState().logout();
         set({ isLoggedIn: false });
         console.log("로그아웃 되었습니다.");
       },

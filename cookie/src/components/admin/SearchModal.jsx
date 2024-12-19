@@ -94,13 +94,18 @@ const MovieItem = styled.div`
 `;
 
 const CloseButton = styled.button`
-  background-color: var(--sub);
-  color: var(--text);
-  border: none;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 8px;
   margin-top: auto;
+  font-size: 18px;
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
 `;
 
 const SearchModal = ({

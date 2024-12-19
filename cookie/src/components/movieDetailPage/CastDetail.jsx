@@ -4,10 +4,10 @@ import styled from "styled-components";
 import axios from "axios";
 import serverBaseUrl from "../../config/apiConfig";
 
-
 const CastInfo = styled.div`
   padding: 1.25rem;
   background-color: black;
+  height: 100vh;
   color: white;
   width: 100%;
   box-sizing: border-box;
@@ -36,7 +36,7 @@ const PrevIcon = styled.svg`
   height: 32px;
   background: no-repeat center/cover url("/assets/images/prev-button.svg");
   cursor: pointer;
-`
+`;
 const CastProfile = styled.div`
   margin: 1rem;
   h2 {
@@ -102,7 +102,7 @@ const CastFilmography = styled.div`
   h2 {
     margin: 2rem 0 0.8rem 0;
   }
-`
+`;
 
 const TimelineContainer = styled.div`
   display: flex;
@@ -122,7 +122,8 @@ const ScoreSection = styled.div`
   svg {
     width: 14px;
     height: 14px;
-    background: no-repeat center/cover url("/assets/images/review/score-macarong.png");
+    background: no-repeat center/cover
+      url("/assets/images/review/score-macarong.png");
   }
 
   p {
@@ -136,7 +137,8 @@ const ScoreSection = styled.div`
     svg {
       width: 10px;
       height: 10px;
-      background: no-repeat center/cover url("/assets/images/review/score-macarong.png");
+      background: no-repeat center/cover
+        url("/assets/images/review/score-macarong.png");
     }
 
     p {
@@ -146,7 +148,6 @@ const ScoreSection = styled.div`
     }
   }
 `;
-
 
 const TimelineItem = styled.div`
   display: flex;
@@ -161,7 +162,6 @@ const TimelineItem = styled.div`
     justify-content: flex-end;
     display: flex;
     width: 4rem;
-  
   }
 
   .card {
@@ -276,25 +276,23 @@ const LikeAndReviewCount = styled.div`
   align-items: center;
   gap: 0.5rem;
 
-  .likes, .reviews {
+  .likes,
+  .reviews {
     display: flex;
     align-items: center;
     gap: 0.2rem;
   }
-  
-`
+`;
 
 const LikeIcon = styled.svg`
-  background: url("/assets/images/review/heart-review.svg") no-repeat
-    center;
+  background: url("/assets/images/review/heart-review.svg") no-repeat center;
   background-size: cover;
   width: 20px;
   height: 20px;
 `;
 
 const ReviewIcon = styled.svg`
-  background: url("/assets/images/review/reviews-review.svg") no-repeat
-    center;
+  background: url("/assets/images/review/reviews-review.svg") no-repeat center;
   background-size: cover;
   width: 20px;
   height: 20px;
@@ -373,7 +371,7 @@ function CastDetail() {
     <>
       <CastInfo>
         <HeaderContainer>
-          <PrevIcon onClick={()=>handleNavigate(-1)}></PrevIcon>
+          <PrevIcon onClick={() => handleNavigate(-1)}></PrevIcon>
           <span className="title">{data.name}</span>
         </HeaderContainer>
 
@@ -400,18 +398,17 @@ function CastDetail() {
 
         <CastFilmography>
           <h2>영화 필모그래피</h2>
-          
+
           <TimelineContainer>
             {movieList?.map((movie) => (
-              
               <TimelineItem key={movie.id}>
                 <div className="date">
-                {(() => {
-                  const date = new Date(movie.releasedAt);
-                  const year = date.getFullYear();
-                  const month = String(date.getMonth() + 1).padStart(2, "0");
-                  return `${year}.${month}`;
-                })()}
+                  {(() => {
+                    const date = new Date(movie.releasedAt);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, "0");
+                    return `${year}.${month}`;
+                  })()}
                 </div>
                 <div className="card">
                   <img
@@ -430,7 +427,6 @@ function CastDetail() {
                       </ScoreSection>
                     </div>
 
-
                     <LikeAndReviewCount>
                       <div className="likes">
                         <LikeIcon />
@@ -441,9 +437,6 @@ function CastDetail() {
                         <span>{formatCount(movie.reviews || 0)}</span>
                       </div>
                     </LikeAndReviewCount>
-                
-
-
                   </div>
                 </div>
               </TimelineItem>

@@ -83,6 +83,12 @@ const Content = styled.div`
   @media (max-width: 600px) {
     padding: 1rem;
   }
+  @media (max-width: 430px) {
+    gap: 0.5rem;
+  }
+  @media (max-width: 393px) {
+    gap: 0.3em;
+  }
 `;
 
 const NavbarWrapper = styled(CommonContainer)`
@@ -192,7 +198,7 @@ const categoryData = [
   { id: 30, mainCategory: "테마", subCategory: "가족과 함께" },
   { id: 31, mainCategory: "테마", subCategory: "연인과 함께" },
   { id: 32, mainCategory: "테마", subCategory: "열린결말" },
-  { id: 33, mainCategory: "테마", subCategory: "비오는 날" },
+  { id: 33, mainCategory: "테마", subCategory: "비 오는 날" },
   { id: 34, mainCategory: "테마", subCategory: "킬링타임" },
   { id: 35, mainCategory: "테마", subCategory: "디즈니" },
 ];

@@ -17,6 +17,9 @@ function GenreMovie({ categorydata }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalPages, setTotalPages] = useState();
   const [selectedPage, setSelectedPage] = useState(1);
+  const [startX, setStartX] = useState(0);
+  const [isTouching, setIsTouching] = useState(false);
+
   const navigate = useNavigate();
 
   const fetchMoviesByGenre = async (genre) => {
@@ -96,6 +99,39 @@ function GenreMovie({ categorydata }) {
     setTotalPages(totalPages);
   }, [genreMovies]);
 
+  const handleTouchStart = (e) => {
+    const touchStart = e.touches[0].clientX;
+    setStartX(touchStart);
+    setIsTouching(true);
+    e.stopPropagation();
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isTouching) return;
+    const touchMove = e.touches[0].clientX;
+    const delta = touchMove - startX;
+    const percentage = (delta / window.innerWidth) * 100;
+    e.currentTarget.style.transform = `translateX(-${currentIndex * 100 - percentage}%)`;
+    e.stopPropagation();
+  };
+
+  const handleTouchEnd = (e) => {
+    setIsTouching(false);
+    const deltaX = startX - e.changedTouches[0].clientX;
+    const moveThreshold = 50;
+
+    const slider = e.currentTarget;
+
+    if (deltaX > moveThreshold && currentIndex < totalPages - 1) {
+      setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, totalPages - 1));
+    } else if (deltaX < -moveThreshold && currentIndex > 0) {
+      setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    }
+
+    slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+    e.stopPropagation();
+  };
+
   return (
     <>
       <GenreMovieList>
@@ -119,47 +155,64 @@ function GenreMovie({ categorydata }) {
         >
           {selectedGenre} 더보기 {">"}
         </MoreViewText>
-        <div className="genre__movie--wrapper">
-          <button
-            className="prev"
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-          >
-            &lt;
-          </button>
-          <div
-            className="genre__movie"
-            style={{
-              transform: `translateX(-${currentIndex * 100}%)`,
-            }}
-          >
-            {genreMovies.map((movie, index) => (
-              <div
-                key={index}
-                className="genre__movie--list"
-                onClick={() => handleMovieClick(movie.id)}
+        <div
+          className="genre__movie--wrapper"
+          style={{ touchAction: "none", position: "relative" }}
+        >
+          {genreMovies.length === 0 ? (
+            <p style={{ color: "#ffffff", paddingLeft: "7px" }}>
+              해당 영화가 없어요
+            </p>
+          ) : (
+            <>
+              <button
+                className="prev"
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
               >
-                <Poster src={movie.poster} alt={movie.title} />
-                <MovieInfo>
-                  <Like>
-                    <LikeIcon alt="Review Icon" />
-                    <Count>{movie.likes}</Count>
-                  </Like>
-                  <Review>
-                    <ReviewIcon alt="Review Icon" />
-                    <Count>{movie.reviews}</Count>
-                  </Review>
-                </MovieInfo>
+                &lt;
+              </button>
+              <div
+                className="genre__movie"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                style={{
+                  transform: `translateX(-${currentIndex * 100}%)`,
+                }}
+              >
+                {genreMovies.map((movie, index) => (
+                  <div
+                    key={index}
+                    className="genre__movie--list"
+                    onClick={() => handleMovieClick(movie.id)}
+                    style={{
+                      pointerEvents: isTouching ? "none" : "auto",
+                    }}
+                  >
+                    <Poster src={movie.poster} alt={movie.title} />
+                    <MovieInfo>
+                      <Like>
+                        <LikeIcon alt="Like Icon" />
+                        <Count>{movie.likes}</Count>
+                      </Like>
+                      <Review>
+                        <ReviewIcon alt="Review Icon" />
+                        <Count>{movie.reviews}</Count>
+                      </Review>
+                    </MovieInfo>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <button
-            className="next"
-            onClick={handleNext}
-            disabled={currentIndex === totalPages - 1}
-          >
-            &gt;
-          </button>
+              <button
+                className="next"
+                onClick={handleNext}
+                disabled={currentIndex === totalPages - 1}
+              >
+                &gt;
+              </button>
+            </>
+          )}
         </div>
       </GenreMovieList>
     </>
@@ -172,24 +225,29 @@ const GenreMovieList = styled.div`
   position: relative;
   overflow: hidden;
 
-  .genreBtn__contianer {
+  /* .genreBtn__contianer {
     margin-bottom: 0.8rem;
-  }
+  } */
 
   .genr__movie--wrapper {
     display: flex;
     align-items: center;
     position: relative;
   }
+
   .genre__movie {
     display: flex;
     transition: transform 1s ease;
     align-items: start;
+    pointer-events: auto;
   }
+  /* .genre__movie--list {
+    pointer-events: none;
+  } */
   .prev,
   .next {
     position: absolute;
-    top: 69%;
+    top: 50%;
     width: 50px;
     height: 50px;
     transform: translateY(-50%);
@@ -247,8 +305,8 @@ const Poster = styled.img`
 
   @media (max-width: 480px) {
     padding: 0.4rem 0.3rem;
-    width: 6.4rem;
-    height: 9.5rem;
+    width: 6.2rem;
+    height: 9.3rem;
   }
   @media (max-width: 393px) {
     padding: 0.4rem 0.3rem;

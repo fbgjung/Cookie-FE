@@ -15,7 +15,7 @@ const useUserStore = create(
         set((state) => ({
           userInfo: { ...state.userInfo, ...info },
         })),
-      logout: () =>
+      logout: () => {
         set(() => ({
           userInfo: {
             userId: null,
@@ -24,7 +24,8 @@ const useUserStore = create(
             genreId: null,
             matchUpId: null,
           },
-        })),
+        }));
+      },
       getUserInfo: () => get().userInfo,
     }),
     {

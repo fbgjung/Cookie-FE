@@ -91,18 +91,25 @@ const MoviePoster = styled.img`
 `;
 
 const CloseButton = styled.button`
-  background-color: var(--sub);
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
   font-weight: bold;
   border: none;
-  padding: 10px;
+  padding: 10px 20px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px;
   margin-top: 20px;
-  width: 58px;
+  width: 67px;
   display: block;
   margin-left: auto;
   margin-right: auto;
+
+  border: 1px solid #000000;
+
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
 `;
 
 const MatchUpDetailModal = ({ matchId, closeModal }) => {
@@ -147,7 +154,7 @@ const MatchUpDetailModal = ({ matchId, closeModal }) => {
                     <p>{movie.movieTitle}</p>
                     <img src={vote} />
                     <p>
-                      <strong style={{ color: "var(--text)" }}>
+                      <strong style={{ color: "#FF73B2" }}>
                         {movie.voteCount}
                       </strong>
                       표
