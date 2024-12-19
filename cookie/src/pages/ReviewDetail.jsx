@@ -28,15 +28,10 @@ const CommentProfileWrapper = styled.div`
 
 const CommentBadgeIcon = styled.img`
   position: absolute;
-  bottom: -5px; /* 프로필 이미지 우측 하단 배치 */
-  right: -5px;
-  width: 15px !important;
-  height: 15px !important;
-
-  @media (max-width: 480px) {
-    width: 12px !important;
-    height: 12px !important;
-  }
+  bottom: 0px; /* 프로필 이미지 우측 하단 배치 */
+  right: 0px;
+  width: 30px !important;
+  height: 30px !important;
 `;
 
 const CommentsSectionContainer = styled.div`
