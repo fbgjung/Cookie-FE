@@ -1,11 +1,12 @@
 <div align="center">
   <br />
-  <img src="https://github.com/user-attachments/assets/87a7c9bf-8cbc-4e1d-8c7f-71b3b430e110" alt="Cookie" width="200px" height="200px" />
+  <img src="https://github.com/user-attachments/assets/bf4a5af3-a51d-4288-a682-92c9724e29cf" alt="Cookie" width="200px" height="200px" />
   <br />
   <h2>게이미피케이션을 결합한 영화 리뷰 소셜 반응형 웹 앱, 쿠키</h2>
 </div>
 
 ## 🍿 웹 서비스 소개
+
 **쿠키(Cookie)** 는 영화 정보를 확인하고 리뷰를 작성하며, 다른 사용자들과 소통할 수 있는 영화 리뷰 소셜 플랫폼입니다.  
 영화의 쿠키영상처럼, 여운을 나누는 공간이라는 의미를 담아 쿠키라는 이름을 지었습니다.  
 
